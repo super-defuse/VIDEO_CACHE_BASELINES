@@ -1,0 +1,2 @@
+cache_root: artifacts/cache
+max_cache_bytes: 5368709120

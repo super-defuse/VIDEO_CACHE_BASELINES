@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9782367177307606,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": 0.9782367177307606
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9671407063802083,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": 0.9671407063802083,
+                "video_sim": 116.056884765625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9931014779042339,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": 0.9931014779042339
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5883556604385376,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": 0.5883556604385376
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.76564869526004,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/TeaCache/videos/video.mp4",
+                "video_results": 76.564869526004
+            }
+        ]
+    ]
+}

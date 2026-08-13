@@ -1,0 +1,247 @@
+{
+  "status": "completed",
+  "baseline": "Carnator_new_B1",
+  "config": {
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "seed": 20260218,
+    "steps": 50,
+    "reuse_start_step": 10,
+    "fast_steps": 8,
+    "chai_source_steps": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "chai_cache_block": 0,
+    "chai_cache_steps": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "sparse_layers": "10-20",
+    "outer_attn_backend": "flashinfer",
+    "outer_sparse_layers": "1-9,21-29",
+    "outer_flashinfer_wrapper": "variable",
+    "ffn_backend": "fp"
+  },
+  "source": {
+    "prepared_in_run": false,
+    "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source",
+    "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/manifest.json",
+    "chai_token_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/chai_block0_tokens",
+    "chai_token_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/chai_cache_attention.json"
+  },
+  "target": {
+    "label": "Carnator_new_B1",
+    "prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-new-baseline-20260814/B1/videos/target_Carnator_new_B1.mp4",
+    "cache_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-new-baseline-20260814/B1/cache/target_Carnator_new_B1",
+    "mode": "T2V",
+    "steps": 8,
+    "scheduler_steps": 50,
+    "scheduler_indices": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "resume": {
+      "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/latents_step_009.pt",
+      "resume_start_step": 10
+    },
+    "chai_cache_attention": {
+      "block": 0,
+      "source_model_steps": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "target_global_steps": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "configured_local_steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "activated_local_steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "cached_tokens": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/chai_block0_tokens",
+      "cached_token_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/chai_cache_attention.json"
+    },
+    "masked_injection": {
+      "enabled": true,
+      "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
+      "calls": 8,
+      "total_seconds": 0.020854433765634894,
+      "avg_ms": 2.606804220704362,
+      "mask_steps": {
+        "10": 4,
+        "15": 4
+      }
+    },
+    "sparse_blocks": {
+      "enabled": true,
+      "layers": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "sparse_call_count": 176,
+      "dense_fallback_count": 0,
+      "sparse_forward_elapsed_seconds": 2.7943516788072884,
+      "calls_by_layer": {
+        "10": 16,
+        "11": 16,
+        "12": 16,
+        "13": 16,
+        "14": 16,
+        "15": 16,
+        "16": 16,
+        "17": 16,
+        "18": 16,
+        "19": 16,
+        "20": 16
+      },
+      "index_cache": [
+        {
+          "mask_source_step": 10,
+          "token_count": 27280,
+          "query_count": 9583,
+          "context_count": 18483,
+          "query_ratio": 0.351282991202346,
+          "context_ratio": 0.6775293255131964
+        },
+        {
+          "mask_source_step": 15,
+          "token_count": 27280,
+          "query_count": 9583,
+          "context_count": 18483,
+          "query_ratio": 0.351282991202346,
+          "context_ratio": 0.6775293255131964
+        }
+      ]
+    },
+    "outer_sparse": {
+      "backend": "flashinfer",
+      "execution_dtype": "torch.float16",
+      "source_mask_cache_id": "real-wan-new-baseline-20260814/source",
+      "source_mask_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/real-wan-new-baseline-20260814/source/cache/source_dense/outer_block_masks",
+      "quantization": null,
+      "runs": 288,
+      "cache_hits": 288,
+      "cache_misses": 0,
+      "planned_masks": 288,
+      "plan_seconds": 6.705189024563879,
+      "mask_load_seconds": 0.20862765330821276,
+      "routing_time_ms": 0.0,
+      "avg_runtime_density": 0.3375009706036912,
+      "avg_source_per_head_density": 0.3375009706036912,
+      "avg_source_gt_coverage": 0.9604387604114082,
+      "avg_head_density_min": 0.10974065840451254,
+      "avg_head_density_max": 0.8304974377776185,
+      "avg_head_density_cv": 0.7061826915790638,
+      "flashinfer_plan_cache": "layer",
+      "flashinfer_wrapper_policy": "variable",
+      "flashinfer_execution_modes": [
+        "variable_block"
+      ],
+      "use_fp16_qk_reduction": false,
+      "sparge_smooth_k": null,
+      "sparge_pvthreshd": null,
+      "enabled": true,
+      "layers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "dense_fallback_count": 0
+    },
+    "ffn": {
+      "enabled": false,
+      "backend": "fp"
+    },
+    "timing": {
+      "denoising_seconds": 36.612817941000685,
+      "finalize_output_seconds": 18.990464737871662,
+      "end_to_end_seconds": 60.448768209898844
+    },
+    "profile": {
+      "self_attn": {
+        "calls": 304,
+        "total_ms": 19399.057956695557,
+        "avg_ms": 63.81269064702486
+      },
+      "cross_attn": {
+        "calls": 480,
+        "total_ms": 2027.5894050598145,
+        "avg_ms": 4.224144593874613
+      },
+      "ffn": {
+        "calls": 480,
+        "total_ms": 4286.35720539093,
+        "avg_ms": 8.929910844564438
+      },
+      "denoising": {
+        "calls": 16,
+        "total_ms": 36496.1630859375,
+        "avg_ms": 2281.0101928710938
+      }
+    },
+    "latent_shape": [
+      48,
+      31,
+      44,
+      80
+    ],
+    "token_grid": [
+      31,
+      22,
+      40
+    ],
+    "peak_gpu_memory_gib": {
+      "allocated": 50.40277576446533,
+      "reserved": 69.919921875
+    },
+    "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-new-baseline-20260814/B1/cache/target_Carnator_new_B1/manifest.json"
+  }
+}

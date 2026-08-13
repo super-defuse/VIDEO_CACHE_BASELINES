@@ -1,0 +1,138 @@
+{
+  "status": "completed",
+  "created_at": "2026-08-13T10:25:34+00:00",
+  "profile": "ti2v-5b",
+  "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history",
+  "baselines": [
+    {
+      "status": "completed",
+      "baseline": "C0",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/videos/target_dense.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "fp"
+      },
+      "timing": {
+        "denoising_seconds": 278.8981972190086,
+        "end_to_end_seconds": 302.0892767768819
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B0",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B0/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "fp"
+      },
+      "timing": {
+        "denoising_seconds": 178.66233902517706,
+        "end_to_end_seconds": 201.28044274402782
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B0/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B1",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B1/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "flashinfer",
+        "ffn": "fp"
+      },
+      "timing": {
+        "denoising_seconds": 229.57328937388957,
+        "end_to_end_seconds": 253.01670983899385
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B1/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B2",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B2/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "sparge-sage2",
+        "ffn": "fp"
+      },
+      "timing": {
+        "denoising_seconds": 130.27019435702823,
+        "end_to_end_seconds": 153.12371584004723
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B2/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B3",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B3/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "w8a8"
+      },
+      "timing": {
+        "denoising_seconds": 175.30965549405664,
+        "end_to_end_seconds": 199.72562690498307
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B3/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B4",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B4/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "flashinfer",
+        "ffn": "w8a8"
+      },
+      "timing": {
+        "denoising_seconds": 171.51201359787956,
+        "end_to_end_seconds": 199.82088901707903
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B4/summary.json"
+    },
+    {
+      "status": "completed",
+      "baseline": "B5",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "sparge-sage2",
+        "ffn": "w8a8"
+      },
+      "timing": {
+        "denoising_seconds": 123.16195073910058,
+        "end_to_end_seconds": 146.88281741994433
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B5/summary.json"
+    }
+  ],
+  "quality_metrics": [
+    "clip_t",
+    "vbench_q"
+  ]
+}

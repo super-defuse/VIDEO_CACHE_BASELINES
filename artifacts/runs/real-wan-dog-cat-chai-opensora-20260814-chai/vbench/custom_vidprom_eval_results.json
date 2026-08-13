@@ -1,0 +1,84 @@
+{
+    "subject_consistency": [
+        0.9811636672665676,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": 0.9786379498740038
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": 0.9836893846591314
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9843516031901042,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": 0.9821512858072917,
+                "video_sim": 117.858154296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": 0.9865519205729166,
+                "video_sim": 118.38623046875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9899828614997825,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": 0.9891642878791747
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": 0.9908014351203905
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6042868494987488,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": 0.5607552528381348
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": 0.6478184461593628
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7118673116510564,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0001_target-000.mp4",
+                "video_results": 67.51559082535672
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-dog-cat-chai-opensora-20260814-chai/videos/0000_source-000.mp4",
+                "video_results": 74.85787150485457
+            }
+        ]
+    ]
+}

@@ -1,0 +1,26 @@
+# Python bytecode and test tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environments and editor files
+.venv/
+venv/
+.env
+.env.*
+.idea/
+.vscode/
+
+# Downloaded model weights and large tensor/checkpoint payloads
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.latent
+
+# Regenerable runtime caches. Keep run outputs, reports, and videos tracked.
+artifacts/cache/
+**/cache/
+artifacts/vbench-cache/
