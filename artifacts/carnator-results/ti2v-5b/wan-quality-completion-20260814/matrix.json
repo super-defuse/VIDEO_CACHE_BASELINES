@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "profile": "Wan2.2-TI2V-5B",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "baselines": [
+    {
+      "baseline": "Carnator_B1",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4-flashinfer-20260813/B1/videos/target_latent_reuse.mp4"
+    },
+    {
+      "baseline": "Carnator_B3",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b3-20260814/B3/videos/target_latent_reuse.mp4"
+    },
+    {
+      "baseline": "Carnator_B4",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4-flashinfer-20260813/B4/videos/target_latent_reuse.mp4"
+    },
+    {
+      "baseline": "NIRVANA-VID",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-source-target-20260814-nirvana_vid-nirvana_vid/videos/0001_target-000.mp4"
+    },
+    {
+      "baseline": "TeaCache",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-source-target-20260814-teacache-teacache/videos/0000_target-000.mp4"
+    }
+  ]
+}

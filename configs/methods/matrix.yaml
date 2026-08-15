@@ -1,0 +1,29 @@
+methods:
+  baseline:
+    environment: vcb-baseline
+    wan22: supported
+    cogvideox15: supported
+  chai:
+    environment: vcb-chai
+    wan22: supported
+    cogvideox15: supported
+  teacache:
+    environment: vcb-teacache
+    wan22: supported
+    cogvideox15: supported
+  nirvana_vid:
+    environment: vcb-nirvana-vid
+    wan22: supported
+    cogvideox15: supported
+  carnator:
+    environment: vcb-carnator
+    wan22: supported-via-matrix-cli
+    cogvideox15: supported-source-latent-reuse
+  carnator_new_baseline:
+    environment: vcb-carnator
+    wan22: supported-via-native-new-baseline-cli
+    cogvideox15: N/A
+  chorus:
+    environment: N/A
+    wan22: N/A
+    cogvideox15: N/A

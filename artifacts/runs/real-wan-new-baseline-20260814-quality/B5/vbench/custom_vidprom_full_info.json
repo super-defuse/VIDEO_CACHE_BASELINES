@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a cat is sleeping on a grassland, focus on the cat",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-new-baseline-20260814-quality/B5/videos/video.mp4"
+        ]
+    }
+]

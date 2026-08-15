@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9857820734381676,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": 0.9857820734381676
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.978961181640625,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": 0.978961181640625,
+                "video_sim": 117.475341796875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9903083817165992,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": 0.9903083817165992
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6939669251441956,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": 0.6939669251441956
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7525114579634233,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-baselines-quality-20260814/Carnator_B1/videos/video.mp4",
+                "video_results": 75.25114579634233
+            }
+        ]
+    ]
+}
