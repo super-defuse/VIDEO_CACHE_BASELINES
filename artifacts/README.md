@@ -6,11 +6,9 @@
 - `runs/`: CHAI、TeaCache、NIRVANA-VID 和质量评估运行目录。
 - `carnator/`: Wan source trajectory、mask、latent 和 target 视频。
 - `carnator-results/`: Carnator summaries、reports、matrix 和质量补跑记录。
+- `chai-carnator/`: CHAI-Carnator 的 8-step source trajectory、block-0 token、step-5 mask 和 CC-B0--CC-B5 视频。
+- `chai-carnator-results/`: CHAI-Carnator matrix JSON。
 - `cache/Wan2.2/`: 当前 Wan 方法的持久缓存；CHAI 载荷为 source steps 1--4。
 
-`carnator/ti2v-5b/real-wan-c0-b4/history` 是指向
-`carnator/real-wan-new-baseline-20260814/source` 的兼容符号链接，供原生
-Carnator 结果中的历史 manifest 继续解析；source cache 只保留一份。
-
 CogVideoX1.5 本轮按要求不运行，因此不在 `artifacts` 中保留 CogVideo 运行目录或缓存。
-新的运行应复用以上目录和现有 run name，不要在 `artifacts` 根目录创建临时结果目录。
+新运行应使用上面的稳定方法目录和明确 run name；不要在 `artifacts` 根目录创建无归属的临时结果目录。

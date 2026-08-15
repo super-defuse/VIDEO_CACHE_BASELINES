@@ -46,7 +46,7 @@ def main() -> None:
             "uuid": entry["baseline"],
             "prompt": entry.get("prompt") or matrix.get("target_prompt", ""),
             "model": "Wan2.2",
-            "method": "carnator",
+            "method": matrix.get("method", "carnator"),
             "status": "ok",
             "output_path": str(staged),
             "baseline": entry["baseline"],

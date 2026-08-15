@@ -1,6 +1,6 @@
 # Video Cache Baselines
 
-统一承载 NIRVANA-VID、TeaCache、CHAI 和 Carnator 的 T2V 集成骨架，模型入口为 Wan2.2 与 CogVideoX1.5。Chorus 暂不实现，也不把 Carnator 对 Chorus2 的引用当作 Chorus。
+统一承载 NIRVANA-VID、TeaCache、CHAI、Carnator 和 CHAI-Carnator 的 T2V 集成骨架，模型入口为 Wan2.2 与 CogVideoX1.5。Chorus 暂不实现，也不把 Carnator 对 Chorus2 的引用当作 Chorus。
 
 ## 运行
 
@@ -28,7 +28,7 @@ python scripts/benchmark/quality.py artifacts/runs/smoke
 | TeaCache | 支持，adapter 内 transformer 输出复用 | 支持，adapter 内 transformer 输出复用 | 已真实验收 |
 | NIRVANA-VID | 支持，原生扩散 latent restart | 支持，Diffusers latent restart | 已真实验收 |
 | Carnator | 原生 C0/B0--B5 矩阵入口 | source-latent-restart adapter | 已真实验收 |
-| Carnator + CHAI 新基线 | Wan block-0 Cache Attention + B0--B5 后端组合 | N/A（Wan 专用） | 已真实验收，见 `docs/ACCEPTANCE.md` |
+| CHAI-Carnator | 原生 CC-B0--CC-B5 matrix；8-step block-0 Cache Attention + Carnator 其余 blocks | N/A（Wan block/mask/FFN 拓扑） | 已真实验收 |
 | Chorus | N/A | N/A | 本阶段不实现 |
 
 N/A 会保留在结果汇总中，不静默跳过。所有结果逐请求写入 JSONL，再由 `scripts/aggregate/results.py` 自动汇总。
@@ -56,6 +56,21 @@ conda run -n wan env PYTHONPATH=. python scripts/run/carnator_wan_matrix.py \
 
 真实运行与质量验收结果见 `docs/ACCEPTANCE.md`。Carnator 矩阵可用
 `scripts/benchmark/carnator_quality.py <matrix.json> --output-dir <dir>` 评测。
+
+CHAI-Carnator 使用独立的 8-step source/target 协议。source 保存全部八步 latent、
+block-0 source steps 1--4 token，并在 completed step 5 生成固定 mask；target 的
+block 0 在 steps 1--4 走 Cache Attention，其余 blocks 按 CC-B0--CC-B5 后端执行。
+
+```bash
+conda run --no-capture-output -n wan python scripts/run/chai_carnator_matrix.py \
+  --model-dir ../../models/Wan2.2-TI2V-5B \
+  --source-prompt "a dog is sleeping on a grassland, focus on the dog" \
+  --target-prompt "a cat is sleeping on a grassland, focus on the cat" \
+  --source-positive dog --seed 20260218 --run-id chai-carnator-matrix
+```
+
+其 matrix JSON 同样可交给 `scripts/benchmark/carnator_quality.py`；该脚本会保留
+matrix 中的 `chai-carnator` 方法标识。
 
 跨请求 source/target 运行 CHAI、NIRVANA-VID 和 Carnator：
 

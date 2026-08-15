@@ -19,9 +19,9 @@ methods:
     environment: vcb-carnator
     wan22: supported-via-matrix-cli
     cogvideox15: supported-source-latent-reuse
-  carnator_new_baseline:
-    environment: vcb-carnator
-    wan22: supported-via-native-new-baseline-cli
+  chai_carnator:
+    environment: wan
+    wan22: supported-via-chai-carnator-matrix-cli
     cogvideox15: N/A
   chorus:
     environment: N/A

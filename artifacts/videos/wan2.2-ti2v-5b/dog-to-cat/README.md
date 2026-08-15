@@ -5,8 +5,7 @@
 
 | 方法 | 视频 |
 | --- | --- |
-| Carnator C0 / dense reference | `carnator-c0.mp4` |
-| 新基线 C0 / dense reference | `carnator-c0.mp4`（与 C0 共用同一 target reference） |
+| Dense baseline（Carnator C0） | `carnator-c0.mp4` |
 | NIRVANA-VID | `nirvana-vid.mp4` |
 | CHAI | `chai.mp4` |
 | TeaCache | `teacache.mp4` |
@@ -16,17 +15,14 @@
 | Carnator B3 | `carnator-b3.mp4` |
 | Carnator B4 | `carnator-b4.mp4` |
 | Carnator B5 | `carnator-b5.mp4` |
-| 新基线 B0 | `new-baseline-b0.mp4` |
-| 新基线 B1 | `new-baseline-b1.mp4` |
-| 新基线 B2 | `new-baseline-b2.mp4` |
-| 新基线 B3 | `new-baseline-b3.mp4` |
-| 新基线 B4 | `new-baseline-b4.mp4` |
-| 新基线 B5 | `new-baseline-b5.mp4` |
+| CHAI-Carnator CC-B0 | `chai-carnator-b0.mp4` |
+| CHAI-Carnator CC-B1 | `chai-carnator-b1.mp4` |
+| CHAI-Carnator CC-B2 | `chai-carnator-b2.mp4` |
+| CHAI-Carnator CC-B3 | `chai-carnator-b3.mp4` |
+| CHAI-Carnator CC-B4 | `chai-carnator-b4.mp4` |
+| CHAI-Carnator CC-B5 | `chai-carnator-b5.mp4` |
 
-CHAI 的历史请求缓存现在保存 source steps 1--4 的四份 block-0 token；新基线保存
-source steps 11--14，并在 target 全局 steps 11--14（local 1--4）逐步读取。
-
-原始路径和运行元数据仍保留在 `artifacts/carnator/`、`artifacts/runs/` 以及
-`artifacts/carnator-results/ti2v-5b/` 下；质量指标汇总见
-`artifacts/runs/real-wan-baselines-quality-20260814/metrics.json`，新基线六项见
-`artifacts/runs/real-wan-new-baseline-20260814-quality/metrics.json`。
+原始路径和运行元数据仍保留在 `artifacts/carnator/`、`artifacts/chai-carnator/`、
+`artifacts/runs/`、`artifacts/carnator-results/ti2v-5b/` 以及
+`artifacts/chai-carnator-results/` 下；CHAI-Carnator 质量指标见
+`artifacts/runs/real-wan-chai-carnator-20260814-quality/metrics.json`。

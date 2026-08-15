@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT))
 from adapters import make_adapter
 from core import Request, Runner
 from core.registry import make_method
+from scripts.run import chai_carnator_matrix
 
 
 def run(tmp_path: Path, method_name: str):
@@ -68,3 +69,13 @@ def test_chai_model_configs_match_the_opensora_eight_step_schedule():
         config = yaml.safe_load((ROOT / "configs" / "models" / f"{model}.yaml").read_text())
         assert config["fast_steps"] == 8
         assert config["cache_attention"] == {"blocks": [0], "steps": [1, 2, 3, 4]}
+
+
+def test_chai_carnator_protocol_is_fixed_to_eight_steps_and_step_five_masks():
+    assert chai_carnator_matrix.NAME == "CHAI-Carnator"
+    assert chai_carnator_matrix.CC_STEPS == tuple(range(1, 9))
+    assert chai_carnator_matrix.CC_CACHE_STEPS == (1, 2, 3, 4)
+    assert chai_carnator_matrix.CC_MASK_PROBE_STEP == 5
+    assert [item["baseline"] for item in chai_carnator_matrix._variant_specs()] == [
+        "CC-B0", "CC-B1", "CC-B2", "CC-B3", "CC-B4", "CC-B5",
+    ]
