@@ -16,4 +16,4 @@ vcb-run = "scripts.run.run:main"
 py-modules = []
 
 [tool.setuptools.packages.find]
-include = ["core*", "adapters*", "methods*", "scripts*"]
+include = ["core*", "adapters*", "methods*", "carnator*", "scripts*"]

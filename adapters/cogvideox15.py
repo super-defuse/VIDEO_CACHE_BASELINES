@@ -4,7 +4,6 @@ from pathlib import Path
 
 from core.protocol import ModelAdapter
 from core.types import Generation, Request
-from ._chai_source import load_chai_source
 from .teacache import TeaCacheController
 
 
@@ -17,8 +16,7 @@ class CogVideoX15Adapter(ModelAdapter):
 
     def _load_delegate(self):
         if self._delegate is None:
-            load_chai_source()
-            from chai.adapters.cogvideo_t2v import CogVideoT2VAdapter
+            from methods.chai.adapters.cogvideo_t2v import CogVideoT2VAdapter
             self._delegate = CogVideoT2VAdapter(self.config)
         return self._delegate
 

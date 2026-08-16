@@ -5,7 +5,6 @@ from typing import Any
 
 from core.protocol import ModelAdapter
 from core.types import Generation, Request
-from ._chai_source import load_chai_source
 from .teacache import TeaCacheController
 
 
@@ -18,8 +17,7 @@ class Wan22Adapter(ModelAdapter):
 
     def _load_delegate(self):
         if self._delegate is None:
-            load_chai_source()
-            from chai.adapters.wan_t2v import WanT2VAdapter
+            from methods.chai.adapters.wan_t2v import WanT2VAdapter
             self._delegate = WanT2VAdapter(self.config)
         return self._delegate
 

@@ -108,3 +108,21 @@ def test_chai_carnator_protocol_is_fixed_to_eight_steps_and_step_five_masks():
     assert [item["baseline"] for item in chai_carnator_matrix._variant_specs()] == [
         "CC-B0", "CC-B1", "CC-B2", "CC-B3", "CC-B4", "CC-B5",
     ]
+
+
+def test_external_sources_are_repository_local_and_locked():
+    from core.external import external_path, locked_sources
+
+    sources = locked_sources()
+    assert {"wan22", "cogvideo", "lightx2v", "spargeattn", "grounded_sam2"} <= set(sources)
+    for name in ("wan22", "cogvideo", "lightx2v", "spargeattn", "grounded_sam2"):
+        assert sources[name]["path"].startswith("external/")
+        assert external_path(name).is_dir()
+
+
+def test_runtime_code_has_no_sibling_repository_imports():
+    legacy_roots = ("../CHAI", "../CARNATOR_ICLR2027", "../Grounded-SAM-2")
+    for directory in (ROOT / "adapters", ROOT / "core", ROOT / "methods", ROOT / "carnator", ROOT / "scripts"):
+        for source in directory.rglob("*.py"):
+            content = source.read_text(encoding="utf-8")
+            assert not any(legacy in content for legacy in legacy_roots), source

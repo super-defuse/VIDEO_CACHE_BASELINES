@@ -9,18 +9,24 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def commit(path: Path) -> str | None:
     try:
+        top_level = Path(
+            subprocess.check_output(["git", "-C", str(path), "rev-parse", "--show-toplevel"], text=True).strip()
+        ).resolve()
+        if top_level != path.resolve():
+            return None
         return subprocess.check_output(["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
     except (OSError, subprocess.CalledProcessError):
         return None
 
 
 def main() -> None:
-    lock = json.loads((ROOT / "external.lock.json").read_text())
+    lock = json.loads((ROOT / "external" / "lock.json").read_text(encoding="utf-8"))
     failures = []
     for name, source in lock["sources"].items():
-        if source.get("subdir"):
+        path = ROOT / source["path"]
+        actual = commit(path)
+        if source.get("optional") and actual is None:
             continue
-        actual = commit((ROOT / source["path"]).resolve())
         if actual != source["commit"]:
             failures.append(f"{name}: {actual} != {source['commit']}")
     if failures:

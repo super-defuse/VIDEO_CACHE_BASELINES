@@ -24,3 +24,11 @@ models/
 artifacts/cache/
 **/cache/
 artifacts/vbench-cache/
+
+# Third-party sources are pinned as Git submodules.  Keep their build outputs
+# and local evaluator checkout out of the parent repository.
+external/*/__pycache__/
+external/*/.pytest_cache/
+external/*/build/
+external/*/dist/
+external/vbench/

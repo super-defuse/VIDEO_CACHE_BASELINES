@@ -1,0 +1,26 @@
+# VBench classic six-dimension evaluator. scripts/create_environments.sh
+# installs torch/torchvision from PYTORCH_INDEX_URL first.
+Pillow==10.2.0
+numpy==1.26.4
+matplotlib==3.10.0
+scipy==1.15.3
+scikit-learn==1.7.2
+scikit-image==0.25.2
+opencv-python-headless==4.11.0.86
+openai-clip==1.0.1
+decord==0.6.0
+requests==2.32.3
+PyYAML==6.0.3
+easydict==1.13
+pyiqa==0.1.13
+lvis==0.5.3
+pycocotools==2.0.10
+fairscale==0.4.13
+fvcore==0.1.5.post20221221
+omegaconf==2.3.0
+transformers==4.37.2
+tokenizers==0.15.2
+tensorboard==2.19.0
+wheel
+cython
+boto3==1.38.27

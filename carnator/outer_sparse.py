@@ -1,0 +1,1035 @@
+"""Reusable source block masks and runtime outer self-attention backends."""
+
+from __future__ import annotations
+
+import json
+import math
+import os
+import sys
+import time
+import types
+from contextlib import AbstractContextManager
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any
+
+import torch
+
+
+class BlockMaskCacheError(RuntimeError):
+    """A cached source mask cannot safely be applied to the target attention."""
+
+
+@dataclass(frozen=True)
+class BlockMaskConfig:
+    q_block_size: int = 64
+    k_block_size: int = 128
+    top_p: float = 0.95
+    min_top_k: float = 0.1
+
+    def __post_init__(self) -> None:
+        if self.q_block_size <= 0 or self.k_block_size <= 0:
+            raise ValueError("block sizes must be positive")
+        if not 0.0 < self.top_p <= 1.0:
+            raise ValueError("top_p must be in (0, 1]")
+        if not 0.0 <= self.min_top_k <= 1.0:
+            raise ValueError("min_top_k must be in [0, 1]")
+
+
+def build_flashinfer_packed_bsr(
+    block_mask: torch.Tensor,
+    seq_len: int,
+    q_block_size: int,
+    k_block_size: int,
+    device: torch.device,
+) -> tuple[torch.Tensor, torch.Tensor, int]:
+    """Pack independent per-head masks into FlashInfer's single BSR pattern.
+
+    ``BlockSparseAttentionWrapper`` accepts one BSR matrix.  Concatenating the
+    original heads along sequence space preserves each head's mask while
+    retaining block-level indices.  This is the A14B FlashInfer layout used by
+    Chorus2.
+    """
+
+    if block_mask.ndim != 3 or block_mask.dtype != torch.bool:
+        raise ValueError("FlashInfer packed BSR expects a [heads, q_blocks, k_blocks] bool mask")
+    if seq_len % q_block_size or seq_len % k_block_size:
+        raise ValueError(
+            "FlashInfer packed BSR requires seq_len divisible by both block sizes; "
+            f"got seq_len={seq_len}, Q_block_size={q_block_size}, K_block_size={k_block_size}"
+        )
+
+    num_heads, q_blocks, k_blocks = block_mask.shape
+    expected_q_blocks = seq_len // q_block_size
+    expected_k_blocks = seq_len // k_block_size
+    if (q_blocks, k_blocks) != (expected_q_blocks, expected_k_blocks):
+        raise ValueError(
+            "cached mask geometry does not match FlashInfer packed BSR: "
+            f"mask=({q_blocks}, {k_blocks}), expected=({expected_q_blocks}, {expected_k_blocks})"
+        )
+
+    row_counts = block_mask.sum(dim=-1, dtype=torch.int32).reshape(-1)
+    indptr = torch.cat(
+        [
+            torch.zeros(1, dtype=torch.int32, device=block_mask.device),
+            torch.cumsum(row_counts, dim=0, dtype=torch.int32),
+        ]
+    )
+    head_idx, _q_idx, key_block_idx = block_mask.nonzero(as_tuple=True)
+    indices = key_block_idx.to(torch.int32)
+    indices.add_(head_idx.to(torch.int32) * k_blocks)
+    return (
+        indptr.to(device=device, non_blocking=True),
+        indices.to(device=device, non_blocking=True),
+        num_heads * seq_len,
+    )
+
+
+def flashinfer_block_layout(config: BlockMaskConfig, seq_len: int) -> tuple[int, int]:
+    if seq_len % config.q_block_size == 0 and seq_len % config.k_block_size == 0:
+        return config.q_block_size, config.k_block_size
+    if (
+        seq_len % 16 == 0
+        and config.q_block_size % 16 == 0
+        and config.k_block_size % 16 == 0
+    ):
+        return 16, 16
+    return config.q_block_size, config.k_block_size
+
+
+def refine_block_mask(
+    block_mask: torch.Tensor,
+    seq_len: int,
+    source_q_block_size: int,
+    source_k_block_size: int,
+    target_q_block_size: int,
+    target_k_block_size: int,
+) -> torch.Tensor:
+    if (source_q_block_size, source_k_block_size) == (target_q_block_size, target_k_block_size):
+        return block_mask
+    if source_q_block_size % target_q_block_size or source_k_block_size % target_k_block_size:
+        raise ValueError("FlashInfer runtime blocks must evenly refine cached source blocks")
+    q_repeat = source_q_block_size // target_q_block_size
+    k_repeat = source_k_block_size // target_k_block_size
+    expected = (math.ceil(seq_len / source_q_block_size), math.ceil(seq_len / source_k_block_size))
+    if tuple(block_mask.shape[1:]) != expected:
+        raise ValueError(f"cached block mask shape {tuple(block_mask.shape[1:])} != expected {expected}")
+    return block_mask.repeat_interleave(q_repeat, dim=1).repeat_interleave(k_repeat, dim=2)[
+        :, : seq_len // target_q_block_size, : seq_len // target_k_block_size
+    ]
+
+
+def cfg_branches(guidance_scale: float) -> int:
+    return 1 if float(guidance_scale) == 1.0 else 2
+
+
+def _mean(values: list[float]) -> float | None:
+    return sum(values) / len(values) if values else None
+
+
+def _prepare_flashinfer_build_tools() -> None:
+    """Expose the active Conda toolchain to FlashInfer's lazy JIT planner."""
+
+    def prepend_paths(name: str, paths: list[Path]) -> None:
+        existing = os.environ.get(name, "")
+        values = [str(path) for path in paths if path.exists()]
+        if existing:
+            values.extend(value for value in existing.split(os.pathsep) if value)
+        unique: list[str] = []
+        seen: set[str] = set()
+        for value in values:
+            if value not in seen:
+                unique.append(value)
+                seen.add(value)
+        if unique:
+            os.environ[name] = os.pathsep.join(unique)
+
+    binary_dir = Path(sys.executable).resolve().parent
+    current_path = os.environ.get("PATH", "")
+    if str(binary_dir) not in current_path.split(os.pathsep):
+        os.environ["PATH"] = os.pathsep.join([str(binary_dir), current_path]) if current_path else str(binary_dir)
+    nvcc = binary_dir / "nvcc"
+    if nvcc.exists():
+        os.environ.setdefault("CUDA_HOME", str(binary_dir.parent))
+        os.environ.setdefault("CUDA_PATH", str(binary_dir.parent))
+        os.environ.setdefault("CUDACXX", str(nvcc))
+    nvidia_root = binary_dir.parent / "lib" / f"python{sys.version_info.major}.{sys.version_info.minor}" / "site-packages" / "nvidia"
+    includes = [path for path in sorted(nvidia_root.glob("*/include")) if path.exists()]
+    for name in ("CPATH", "CPLUS_INCLUDE_PATH"):
+        prepend_paths(name, includes)
+    libraries = [binary_dir.parent / "lib", binary_dir.parent / "targets" / "x86_64-linux" / "lib"]
+    libraries.extend(path for path in sorted(nvidia_root.glob("*/lib")) if path.exists())
+    for name in ("LIBRARY_PATH", "LD_LIBRARY_PATH"):
+        prepend_paths(name, libraries)
+
+
+_TRITON_BLOCK_MASS: Any = None
+
+
+def _triton_block_attention_mass(
+    q: torch.Tensor,
+    k: torch.Tensor,
+    q_block_size: int,
+    k_block_size: int,
+) -> torch.Tensor:
+    """Exact block mass with online softmax, avoiding a full attention matrix."""
+
+    global _TRITON_BLOCK_MASS
+    if _TRITON_BLOCK_MASS is None:
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(
+            q_ptr,
+            k_ptr,
+            out_ptr,
+            q_stride_s: tl.constexpr,
+            q_stride_h: tl.constexpr,
+            q_stride_d: tl.constexpr,
+            k_stride_s: tl.constexpr,
+            k_stride_h: tl.constexpr,
+            k_stride_d: tl.constexpr,
+            out_stride_h: tl.constexpr,
+            out_stride_q: tl.constexpr,
+            out_stride_k: tl.constexpr,
+            seq_len: tl.constexpr,
+            head_dim: tl.constexpr,
+            q_block_size: tl.constexpr,
+            k_block_size: tl.constexpr,
+            k_blocks: tl.constexpr,
+            block_dim: tl.constexpr,
+            softmax_scale: tl.constexpr,
+        ):
+            q_block = tl.program_id(0)
+            head = tl.program_id(1)
+            q_start = q_block * q_block_size
+            q_offsets = q_start + tl.arange(0, q_block_size)
+            d_offsets = tl.arange(0, block_dim)
+            q_valid = q_offsets < seq_len
+            q_values = tl.load(
+                q_ptr + q_offsets[:, None] * q_stride_s + head * q_stride_h + d_offsets[None, :] * q_stride_d,
+                mask=q_valid[:, None] & (d_offsets[None, :] < head_dim),
+                other=0.0,
+            )
+            row_max = tl.where(q_valid, -float("inf"), 0.0)
+            row_sum = tl.where(q_valid, 0.0, 1.0)
+            for k_block in tl.range(0, k_blocks):
+                k_offsets = k_block * k_block_size + tl.arange(0, k_block_size)
+                k_values = tl.load(
+                    k_ptr + k_offsets[:, None] * k_stride_s + head * k_stride_h + d_offsets[None, :] * k_stride_d,
+                    mask=(k_offsets[:, None] < seq_len) & (d_offsets[None, :] < head_dim),
+                    other=0.0,
+                )
+                scores = tl.dot(q_values, tl.trans(k_values)) * softmax_scale
+                valid = q_valid[:, None] & (k_offsets[None, :] < seq_len)
+                scores = tl.where(valid, scores, -float("inf"))
+                block_max = tl.max(scores, axis=1)
+                next_max = tl.maximum(row_max, block_max)
+                next_sum = row_sum * tl.exp(row_max - next_max) + tl.sum(tl.exp(scores - next_max[:, None]), axis=1)
+                row_max = tl.where(q_valid, next_max, 0.0)
+                row_sum = tl.where(q_valid, next_sum, 1.0)
+
+            q_count = tl.sum(tl.where(q_valid, 1.0, 0.0), axis=0)
+            for k_block in tl.range(0, k_blocks):
+                k_offsets = k_block * k_block_size + tl.arange(0, k_block_size)
+                k_values = tl.load(
+                    k_ptr + k_offsets[:, None] * k_stride_s + head * k_stride_h + d_offsets[None, :] * k_stride_d,
+                    mask=(k_offsets[:, None] < seq_len) & (d_offsets[None, :] < head_dim),
+                    other=0.0,
+                )
+                scores = tl.dot(q_values, tl.trans(k_values)) * softmax_scale
+                valid = q_valid[:, None] & (k_offsets[None, :] < seq_len)
+                probs = tl.exp(scores - row_max[:, None]) / row_sum[:, None]
+                probs = tl.where(valid, probs, 0.0)
+                mass = tl.sum(tl.sum(probs, axis=1), axis=0) / q_count
+                tl.store(out_ptr + head * out_stride_h + q_block * out_stride_q + k_block * out_stride_k, mass)
+
+        _TRITON_BLOCK_MASS = (triton, kernel)
+
+    triton, kernel = _TRITON_BLOCK_MASS
+    seq_len, heads, head_dim = q.shape
+    q_blocks = math.ceil(seq_len / q_block_size)
+    k_blocks = math.ceil(seq_len / k_block_size)
+    block_dim = 1 << (head_dim - 1).bit_length()
+    output = torch.empty((heads, q_blocks, k_blocks), dtype=torch.float32, device=q.device)
+    kernel[(q_blocks, heads)](
+        q,
+        k,
+        output,
+        q.stride(0),
+        q.stride(1),
+        q.stride(2),
+        k.stride(0),
+        k.stride(1),
+        k.stride(2),
+        output.stride(0),
+        output.stride(1),
+        output.stride(2),
+        seq_len,
+        head_dim,
+        q_block_size,
+        k_block_size,
+        k_blocks,
+        block_dim,
+        head_dim**-0.5,
+        num_warps=8,
+        num_stages=3,
+    )
+    return output
+
+
+def block_attention_mass(
+    q: torch.Tensor,
+    k: torch.Tensor,
+    q_block_size: int,
+    k_block_size: int,
+) -> torch.Tensor:
+    """Return source attention mass by ``[head, q_block, k_block]``.
+
+    Q and K are RoPE-applied tensors in NHD layout.  The implementation is
+    deliberately chunked by query block: it is exact, has a small peak memory
+    footprint, and remains useful as a correctness reference for accelerator
+    capture kernels.
+    """
+
+    if q.ndim != 3 or k.ndim != 3:
+        raise ValueError("q and k must have NHD layout")
+    if q.shape != k.shape:
+        raise ValueError(f"q shape {tuple(q.shape)} != k shape {tuple(k.shape)}")
+    seq_len, heads, head_dim = q.shape
+    if not seq_len:
+        raise ValueError("attention sequence must be non-empty")
+
+    use_triton = (
+        q.is_cuda
+        and q_block_size >= 16
+        and k_block_size >= 16
+        and not q_block_size & (q_block_size - 1)
+        and not k_block_size & (k_block_size - 1)
+    )
+    if use_triton:
+        return _triton_block_attention_mass(q.contiguous(), k.contiguous(), q_block_size, k_block_size)
+
+    qh = q.float().transpose(0, 1).contiguous()
+    kh = k.float().transpose(0, 1).contiguous()
+    q_blocks = math.ceil(seq_len / q_block_size)
+    k_blocks = math.ceil(seq_len / k_block_size)
+    result = torch.empty((heads, q_blocks, k_blocks), dtype=torch.float32, device=q.device)
+    scale = head_dim**-0.5
+    for q_block in range(q_blocks):
+        q_start = q_block * q_block_size
+        q_stop = min(seq_len, q_start + q_block_size)
+        scores = torch.matmul(qh[:, q_start:q_stop], kh.transpose(-1, -2)).mul_(scale)
+        probs = scores.softmax(dim=-1)
+        for k_block in range(k_blocks):
+            k_start = k_block * k_block_size
+            k_stop = min(seq_len, k_start + k_block_size)
+            result[:, q_block, k_block] = probs[:, :, k_start:k_stop].sum(dim=-1).mean(dim=-1)
+    return result
+
+
+def block_mass_to_mask(
+    block_mass: torch.Tensor,
+    top_p: float,
+    min_top_k: float = 0.0,
+) -> tuple[torch.Tensor, float]:
+    """Keep the smallest per-head block set covering ``top_p`` mass."""
+
+    if block_mass.ndim != 3:
+        raise ValueError("block_mass must have shape [heads, q_blocks, k_blocks]")
+    heads, q_blocks, k_blocks = block_mass.shape
+    if not heads or not q_blocks or not k_blocks:
+        raise ValueError("block_mass dimensions must be non-empty")
+    sorted_mass, sorted_idx = torch.sort(block_mass, dim=-1, descending=True)
+    floor = max(1, min(k_blocks, math.ceil(k_blocks * min_top_k)))
+    keep_counts = (sorted_mass.cumsum(dim=-1) < top_p).sum(dim=-1) + 1
+    keep_counts = keep_counts.clamp(min=floor, max=k_blocks)
+    ranks = torch.arange(k_blocks, device=block_mass.device).view(1, 1, -1)
+    mask = torch.zeros_like(block_mass, dtype=torch.bool)
+    mask.scatter_(-1, sorted_idx, ranks < keep_counts.unsqueeze(-1))
+    total_mass = block_mass.sum()
+    coverage = (block_mass * mask).sum() / total_mass if total_mass.item() else total_mass
+    return mask, float(coverage.item())
+
+
+def dense_block_masked_attention(
+    q: torch.Tensor,
+    k: torch.Tensor,
+    v: torch.Tensor,
+    block_mask: torch.Tensor,
+    q_block_size: int,
+    k_block_size: int,
+) -> torch.Tensor:
+    """Dense masked reference for probes and small-shape tests, using NHD layout."""
+
+    if q.shape != k.shape or k.shape != v.shape:
+        raise ValueError("q, k and v must share NHD shape")
+    seq_len, heads, head_dim = q.shape
+    expected = (heads, math.ceil(seq_len / q_block_size), math.ceil(seq_len / k_block_size))
+    if tuple(block_mask.shape) != expected:
+        raise ValueError(f"block mask {tuple(block_mask.shape)} != expected {expected}")
+    token_mask = torch.zeros((heads, seq_len, seq_len), dtype=torch.bool, device=q.device)
+    for q_block in range(expected[1]):
+        q_start, q_stop = q_block * q_block_size, min(seq_len, (q_block + 1) * q_block_size)
+        for k_block in range(expected[2]):
+            k_start, k_stop = k_block * k_block_size, min(seq_len, (k_block + 1) * k_block_size)
+            token_mask[:, q_start:q_stop, k_start:k_stop] = block_mask[:, q_block, k_block].view(-1, 1, 1)
+    qh, kh, vh = (tensor.float().transpose(0, 1) for tensor in (q, k, v))
+    scores = torch.matmul(qh, kh.transpose(-1, -2)).mul_(head_dim**-0.5)
+    probs = scores.masked_fill(~token_mask, float("-inf")).softmax(dim=-1)
+    return torch.matmul(probs, vh).transpose(0, 1).to(dtype=q.dtype)
+
+
+class SourceBlockMaskCache:
+    """Disk-backed source masks keyed by denoising step, CFG branch and layer."""
+
+    FORMAT = "carnator-source-block-mask-v1"
+
+    def __init__(
+        self,
+        root: Path,
+        config: BlockMaskConfig,
+        *,
+        source_run_id: str | None = None,
+        cfg_branch_count: int | None = None,
+        create: bool = False,
+    ) -> None:
+        self.root = Path(root)
+        self.config = config
+        self.metadata_path = self.root / "metadata.json"
+        self.entries: dict[tuple[int, str, int], dict[str, Any]] = {}
+        self.metadata: dict[str, Any] = {}
+        self.capture_seconds = 0.0
+        self.write_seconds = 0.0
+        self.configuration_error: str | None = None
+        if create:
+            if source_run_id is None or cfg_branch_count is None:
+                raise ValueError("source_run_id and cfg_branch_count are required to create a cache")
+            self.root.mkdir(parents=True, exist_ok=True)
+            self.metadata = {
+                "format": self.FORMAT,
+                "source_run_id": source_run_id,
+                "cfg_branches": int(cfg_branch_count),
+                "mask": asdict(config),
+                "entries": [],
+            }
+            self._write_metadata()
+        else:
+            self._load_metadata()
+
+    def _load_metadata(self) -> None:
+        if not self.metadata_path.exists():
+            raise BlockMaskCacheError(f"missing source block-mask metadata: {self.metadata_path}")
+        self.metadata = json.loads(self.metadata_path.read_text(encoding="utf-8"))
+        if self.metadata.get("format") != self.FORMAT:
+            raise BlockMaskCacheError("unsupported source block-mask cache format")
+        cached_config = self.metadata.get("mask", {})
+        if cached_config != asdict(self.config):
+            self.configuration_error = "source block-mask parameters do not match this run"
+        for entry in self.metadata.get("entries", []):
+            self.entries[(int(entry["step"]), str(entry["cfg_branch"]), int(entry["layer"]))] = entry
+
+    def expect_cfg_branches(self, expected: int) -> None:
+        if int(self.metadata.get("cfg_branches", 0)) != int(expected):
+            self.configuration_error = (
+                f"source cache cfg_branches={self.metadata.get('cfg_branches')} does not match target={expected}"
+            )
+
+    def _write_metadata(self) -> None:
+        self.metadata["entries"] = [
+            self.entries[key] for key in sorted(self.entries, key=lambda value: (value[0], value[1], value[2]))
+        ]
+        self.metadata_path.write_text(json.dumps(self.metadata, indent=2) + "\n", encoding="utf-8")
+
+    def capture(self, step: int, branch: str, layer: int, q: torch.Tensor, k: torch.Tensor) -> None:
+        started = time.perf_counter()
+        mass = block_attention_mass(q, k, self.config.q_block_size, self.config.k_block_size)
+        mask, coverage = block_mass_to_mask(mass, self.config.top_p, self.config.min_top_k)
+        if q.is_cuda:
+            torch.cuda.synchronize(q.device)
+        self.capture_seconds += time.perf_counter() - started
+
+        seq_len, heads, head_dim = q.shape
+        key = (int(step), str(branch), int(layer))
+        rel_path = Path("masks") / f"step{step:03d}_{branch}_layer{layer:02d}.pt"
+        write_started = time.perf_counter()
+        (self.root / rel_path).parent.mkdir(parents=True, exist_ok=True)
+        torch.save(mask.cpu(), self.root / rel_path)
+        self.write_seconds += time.perf_counter() - write_started
+        head_densities = mask.float().mean(dim=(1, 2))
+        self.entries[key] = {
+            "step": int(step),
+            "cfg_branch": str(branch),
+            "layer": int(layer),
+            "path": str(rel_path),
+            "shape": [int(seq_len), int(heads), int(head_dim)],
+            "dtype": str(q.dtype),
+            "q_blocks": int(mask.shape[1]),
+            "k_blocks": int(mask.shape[2]),
+            "density": float(mask.float().mean().item()),
+            "coverage": coverage,
+            "head_density_min": float(head_densities.min().item()),
+            "head_density_max": float(head_densities.max().item()),
+            "head_density_cv": float(
+                (head_densities.std(unbiased=False) / head_densities.mean()).item()
+                if head_densities.mean().item()
+                else 0.0
+            ),
+        }
+        self._write_metadata()
+
+    def get(self, step: int, branch: str, layer: int, q: torch.Tensor) -> tuple[torch.Tensor, dict[str, Any], float]:
+        if self.configuration_error is not None:
+            raise BlockMaskCacheError(self.configuration_error)
+        if int(self.metadata.get("cfg_branches", 0)) == 1 and branch != "cond":
+            raise BlockMaskCacheError("single-branch source cache cannot serve an unconditional branch")
+        key = (int(step), str(branch), int(layer))
+        entry = self.entries.get(key)
+        if entry is None:
+            raise BlockMaskCacheError(f"missing source mask for step={step}, branch={branch}, layer={layer}")
+        expected_shape = [int(value) for value in q.shape]
+        if entry["shape"] != expected_shape or entry["dtype"] != str(q.dtype):
+            raise BlockMaskCacheError(
+                f"mask metadata mismatch for step={step}, branch={branch}, layer={layer}: "
+                f"cached shape/dtype={entry['shape']}/{entry['dtype']}, target={expected_shape}/{q.dtype}"
+            )
+        started = time.perf_counter()
+        mask = torch.load(self.root / entry["path"], map_location="cpu", weights_only=True)
+        elapsed = time.perf_counter() - started
+        if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool:
+            raise BlockMaskCacheError("source block mask is not a boolean tensor")
+        return mask.to(device=q.device, non_blocking=True), entry, elapsed
+
+    def prewarm(self, *, chunk_size: int = 8 * 1024 * 1024) -> dict[str, Any]:
+        """Read every mask file sequentially into the OS page cache."""
+
+        if self.configuration_error is not None:
+            raise BlockMaskCacheError(self.configuration_error)
+        if chunk_size <= 0:
+            raise ValueError("prewarm chunk_size must be positive")
+        started = time.perf_counter()
+        buffer = bytearray(chunk_size)
+        file_bytes = 0
+        for key in sorted(self.entries, key=lambda value: (value[0], value[1], value[2])):
+            path = self.root / self.entries[key]["path"]
+            try:
+                with path.open("rb", buffering=0) as stream:
+                    while read_bytes := stream.readinto(buffer):
+                        file_bytes += read_bytes
+            except FileNotFoundError as exc:
+                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
+        return {
+            "entries": len(self.entries),
+            "file_bytes": file_bytes,
+            "elapsed_seconds": time.perf_counter() - started,
+        }
+
+    def summary(self) -> dict[str, Any]:
+        entries = list(self.entries.values())
+        return {
+            "source_mask_cache_id": self.metadata.get("source_run_id"),
+            "path": str(self.root),
+            "format": self.metadata.get("format"),
+            "cfg_branches": self.metadata.get("cfg_branches"),
+            "entries": len(entries),
+            "capture_seconds": self.capture_seconds,
+            "write_seconds": self.write_seconds,
+            "avg_density": _mean([float(entry["density"]) for entry in entries]),
+            "avg_coverage": _mean([float(entry["coverage"]) for entry in entries]),
+        }
+
+
+class OuterSparseState:
+    """Shared step/branch position and statistics for capture or target execution."""
+
+    def __init__(self, *, cfg_branch_count: int, start_completed_step: int = 1) -> None:
+        self.cfg_branch_count = int(cfg_branch_count)
+        self.start_completed_step = int(start_completed_step)
+        self.enabled = False
+        self.current_completed_step = 0
+        self._forward_index = -1
+        self.branch = "cond"
+        self._summary_callback: Any = None
+
+    def reset(self) -> None:
+        self._forward_index = -1
+        self.branch = "cond"
+
+    def set_step(self, completed_step: int) -> None:
+        self.current_completed_step = int(completed_step)
+        self.enabled = self.current_completed_step >= self.start_completed_step
+
+    def begin_model_forward(self) -> None:
+        self._forward_index += 1
+        self.branch = "cond" if self.cfg_branch_count == 1 or self._forward_index % 2 == 0 else "uncond"
+
+    def summary(self) -> dict[str, Any]:
+        if self._summary_callback is not None:
+            return self._summary_callback()
+        return {"enabled": False}
+
+
+class OuterSparseExecutor:
+    """Apply source block masks to target Q/K/V using an actual sparse backend."""
+
+    def __init__(
+        self,
+        cache: SourceBlockMaskCache,
+        backend: str,
+        *,
+        flashinfer_wrapper: str = "auto",
+        workspace_mib: int = 256,
+        execution_dtype: torch.dtype = torch.float16,
+        use_fp16_qk_reduction: bool = False,
+        flashinfer_plan_cache: str = "layer",
+        sparge_smooth_k: bool = True,
+        sparge_pv_threshold: float = 50.0,
+    ) -> None:
+        if backend not in {"flashinfer", "sparge-sage2"}:
+            raise ValueError(f"unsupported outer attention backend: {backend}")
+        self.cache = cache
+        self.backend = backend
+        self.workspace_mib = int(workspace_mib)
+        if execution_dtype not in (torch.float16, torch.bfloat16):
+            raise ValueError(f"outer sparse execution dtype must be FP16 or BF16, got {execution_dtype}")
+        if flashinfer_plan_cache not in {"layer", "all", "none"}:
+            raise ValueError(f"unsupported FlashInfer plan cache mode: {flashinfer_plan_cache}")
+        if flashinfer_wrapper not in {"auto", "block", "variable"}:
+            raise ValueError(f"unsupported FlashInfer wrapper policy: {flashinfer_wrapper}")
+        self.execution_dtype = execution_dtype
+        self.flashinfer_wrapper = flashinfer_wrapper
+        self.use_fp16_qk_reduction = bool(use_fp16_qk_reduction)
+        self.flashinfer_plan_cache = flashinfer_plan_cache
+        self.sparge_smooth_k = bool(sparge_smooth_k)
+        self.sparge_pv_threshold = float(sparge_pv_threshold)
+        self.workspace: torch.Tensor | None = None
+        self.wrappers: dict[tuple[Any, ...], Any] = {}
+        self.flashinfer_execution_modes: set[str] = set()
+        self.stats: dict[str, float | int] = {
+            "runs": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "planned_masks": 0,
+            "plan_seconds": 0.0,
+            "mask_load_seconds": 0.0,
+            "density_sum": 0.0,
+            "source_density_sum": 0.0,
+            "source_coverage_sum": 0.0,
+            "head_density_min_sum": 0.0,
+            "head_density_max_sum": 0.0,
+            "head_density_cv_sum": 0.0,
+        }
+
+    def _workspace(self, device: torch.device) -> torch.Tensor:
+        if self.workspace is None or self.workspace.device != device:
+            self.workspace = torch.empty(self.workspace_mib * 1024 * 1024, dtype=torch.uint8, device=device)
+        return self.workspace
+
+    @staticmethod
+    def _block_sizes(
+        seq_len: int, blocks: int, block_size: int, num_heads: int, device: torch.device
+    ) -> torch.Tensor:
+        tail = seq_len - (blocks - 1) * block_size
+        if blocks < 1 or tail < 1 or tail > block_size:
+            raise ValueError(
+                "cached block geometry is incompatible with the runtime sequence length: "
+                f"seq_len={seq_len}, blocks={blocks}, block_size={block_size}"
+            )
+        sizes = torch.full((blocks,), block_size, dtype=torch.int32, device=device)
+        sizes[-1] = tail
+        return sizes.unsqueeze(0).expand(num_heads, -1).contiguous()
+
+    def _flashinfer(
+        self,
+        q: torch.Tensor,
+        k: torch.Tensor,
+        v: torch.Tensor,
+        mask: torch.Tensor,
+        *,
+        step: int,
+        branch: str,
+        layer: int,
+    ) -> torch.Tensor:
+        try:
+            _prepare_flashinfer_build_tools()
+            from flashinfer import sparse
+        except ImportError as exc:
+            raise RuntimeError("flashinfer backend requested but flashinfer is unavailable") from exc
+        seq_len, heads, head_dim = q.shape
+        if self.flashinfer_wrapper == "variable":
+            q_block_size, k_block_size = self.cache.config.q_block_size, self.cache.config.k_block_size
+            runtime_mask = mask
+            aligned = False
+        elif self.flashinfer_wrapper == "block":
+            q_block_size, k_block_size = self.cache.config.q_block_size, self.cache.config.k_block_size
+            if seq_len % q_block_size or seq_len % k_block_size:
+                raise ValueError(
+                    "FlashInfer block wrapper requires a sequence length divisible by the cached block sizes; "
+                    f"got seq_len={seq_len}, Q_block_size={q_block_size}, K_block_size={k_block_size}"
+                )
+            runtime_mask = mask
+            aligned = True
+        else:
+            q_block_size, k_block_size = flashinfer_block_layout(self.cache.config, seq_len)
+            runtime_mask = refine_block_mask(
+                mask,
+                seq_len,
+                self.cache.config.q_block_size,
+                self.cache.config.k_block_size,
+                q_block_size,
+                k_block_size,
+            )
+            aligned = seq_len % q_block_size == 0 and seq_len % k_block_size == 0
+        full_key = (
+            "flashinfer",
+            step,
+            branch,
+            layer,
+            seq_len,
+            heads,
+            head_dim,
+            q_block_size,
+            k_block_size,
+            str(q.device),
+            str(self.execution_dtype),
+        )
+        if self.flashinfer_plan_cache == "all":
+            wrapper_key: tuple[Any, ...] | None = full_key
+        elif self.flashinfer_plan_cache == "layer":
+            wrapper_key = (
+                "flashinfer",
+                layer,
+                seq_len,
+                heads,
+                head_dim,
+                q_block_size,
+                k_block_size,
+                str(q.device),
+                str(self.execution_dtype),
+            )
+        else:
+            wrapper_key = None
+        wrapper = self.wrappers.get(wrapper_key) if wrapper_key is not None else None
+        # ``layer`` reuses the allocated wrapper/workspace, but each source
+        # mask still needs a fresh plan.  FlashInfer binds the sparse layout
+        # in ``plan``; skipping it would silently execute a stale mask.  This
+        # mirrors Chorus2's wrapper reuse semantics.
+        plan_required = wrapper is None or self.flashinfer_plan_cache != "all"
+        self.flashinfer_execution_modes.add("packed_bsr" if aligned else "variable_block")
+        if wrapper is None:
+            wrapper = (
+                sparse.BlockSparseAttentionWrapper(self._workspace(q.device))
+                if aligned
+                else sparse.VariableBlockSparseAttentionWrapper(self._workspace(q.device))
+            )
+        if plan_required:
+            started = time.perf_counter()
+            if aligned:
+                indptr, indices, packed_seq_len = build_flashinfer_packed_bsr(
+                    runtime_mask,
+                    seq_len,
+                    q_block_size,
+                    k_block_size,
+                    q.device,
+                )
+                wrapper.plan(
+                    indptr,
+                    indices,
+                    packed_seq_len,
+                    packed_seq_len,
+                    q_block_size,
+                    k_block_size,
+                    1,
+                    1,
+                    head_dim,
+                    sm_scale=head_dim**-0.5,
+                    q_data_type=self.execution_dtype,
+                    kv_data_type=self.execution_dtype,
+                    o_data_type=self.execution_dtype,
+                    use_fp16_qk_reduction=self.use_fp16_qk_reduction,
+                )
+            else:
+                runtime_mask = runtime_mask.to(device=q.device, dtype=torch.bool, non_blocking=True)
+                wrapper.plan(
+                    runtime_mask,
+                    self._block_sizes(seq_len, runtime_mask.size(1), q_block_size, heads, q.device),
+                    self._block_sizes(seq_len, runtime_mask.size(2), k_block_size, heads, q.device),
+                    heads,
+                    heads,
+                    head_dim,
+                    sm_scale=head_dim**-0.5,
+                    q_data_type=self.execution_dtype,
+                    kv_data_type=self.execution_dtype,
+                    use_fp16_qk_reduction=self.use_fp16_qk_reduction,
+                )
+            if torch.cuda.is_available():
+                torch.cuda.synchronize(q.device)
+            self.stats["plan_seconds"] = float(self.stats["plan_seconds"]) + time.perf_counter() - started
+            self.stats["planned_masks"] = int(self.stats["planned_masks"]) + 1
+            if wrapper_key is not None:
+                self.wrappers[wrapper_key] = wrapper
+        if k.shape != q.shape or v.shape != q.shape:
+            raise ValueError("FlashInfer packed BSR expects Q/K/V with the same [sequence, heads, head_dim] shape")
+        if not aligned:
+            return wrapper.run(
+                q.transpose(0, 1).contiguous(),
+                k.transpose(0, 1).contiguous(),
+                v.transpose(0, 1).contiguous(),
+            ).transpose(0, 1).contiguous()
+        packed_seq_len = seq_len * heads
+        q_packed = q.transpose(0, 1).contiguous().reshape(packed_seq_len, 1, head_dim)
+        k_packed = k.transpose(0, 1).contiguous().reshape(packed_seq_len, 1, head_dim)
+        v_packed = v.transpose(0, 1).contiguous().reshape(packed_seq_len, 1, head_dim)
+        output = wrapper.run(q_packed, k_packed, v_packed)
+        return output.reshape(heads, seq_len, head_dim).transpose(0, 1).contiguous()
+
+    def _sparge(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        if not torch.cuda.is_available():
+            raise RuntimeError("sparge-sage2 backend requires CUDA")
+        capability = torch.cuda.get_device_capability(q.device)
+        if capability != (9, 0):
+            raise RuntimeError(f"sparge-sage2 requires sm90, got capability={capability}")
+        if (self.cache.config.q_block_size, self.cache.config.k_block_size) != (64, 128):
+            raise ValueError("sparge-sage2 requires Q=64 and K=128 block sizes")
+        try:
+            from spas_sage_attn import block_sparse_sage2_attn_cuda
+        except ImportError as exc:
+            raise RuntimeError("sparge-sage2 backend requested but SpargeAttn is unavailable") from exc
+        self.stats["planned_masks"] = int(self.stats["planned_masks"]) + 1
+        mask = mask.to(device=q.device, dtype=torch.bool, non_blocking=True)
+        return block_sparse_sage2_attn_cuda(
+            q.transpose(0, 1).unsqueeze(0).contiguous(),
+            k.transpose(0, 1).unsqueeze(0).contiguous(),
+            v.transpose(0, 1).unsqueeze(0).contiguous(),
+            mask_id=mask.unsqueeze(0).contiguous(),
+            smooth_k=self.sparge_smooth_k,
+            pvthreshd=self.sparge_pv_threshold,
+            tensor_layout="HND",
+        )[0].transpose(0, 1).contiguous()
+
+    def run(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, *, step: int, branch: str, layer: int) -> torch.Tensor:
+        output_dtype = q.dtype
+        q = q.to(dtype=self.execution_dtype)
+        k = k.to(dtype=self.execution_dtype)
+        v = v.to(dtype=self.execution_dtype)
+        try:
+            mask, entry, load_seconds = self.cache.get(step, branch, layer, q)
+        except BlockMaskCacheError:
+            self.stats["cache_misses"] = int(self.stats["cache_misses"]) + 1
+            raise
+        self.stats["cache_hits"] = int(self.stats["cache_hits"]) + 1
+        self.stats["mask_load_seconds"] = float(self.stats["mask_load_seconds"]) + load_seconds
+        out = (
+            self._flashinfer(q, k, v, mask, step=step, branch=branch, layer=layer)
+            if self.backend == "flashinfer"
+            else self._sparge(q, k, v, mask)
+        )
+        self.stats["runs"] = int(self.stats["runs"]) + 1
+        density = float(entry["density"])
+        for stat, field in (
+            ("density_sum", "density"),
+            ("source_density_sum", "density"),
+            ("source_coverage_sum", "coverage"),
+            ("head_density_min_sum", "head_density_min"),
+            ("head_density_max_sum", "head_density_max"),
+            ("head_density_cv_sum", "head_density_cv"),
+        ):
+            default = density if field.startswith("head_density_") and field != "head_density_cv" else 0.0
+            self.stats[stat] = float(self.stats[stat]) + float(entry.get(field, default))
+        return out.to(dtype=output_dtype)
+
+    def summary(self) -> dict[str, Any]:
+        runs = int(self.stats["runs"])
+        return {
+            "backend": self.backend,
+            "execution_dtype": str(self.execution_dtype),
+            "source_mask_cache_id": self.cache.metadata.get("source_run_id"),
+            "source_mask_cache_path": str(self.cache.root),
+            "quantization": "QK INT8 and PV FP8" if self.backend == "sparge-sage2" else None,
+            "runs": runs,
+            "cache_hits": self.stats["cache_hits"],
+            "cache_misses": self.stats["cache_misses"],
+            "planned_masks": self.stats["planned_masks"],
+            "plan_seconds": self.stats["plan_seconds"],
+            "mask_load_seconds": self.stats["mask_load_seconds"],
+            "routing_time_ms": 0.0,
+            "avg_runtime_density": float(self.stats["density_sum"]) / runs if runs else None,
+            "avg_source_per_head_density": float(self.stats["source_density_sum"]) / runs if runs else None,
+            "avg_source_gt_coverage": float(self.stats["source_coverage_sum"]) / runs if runs else None,
+            "avg_head_density_min": float(self.stats["head_density_min_sum"]) / runs if runs else None,
+            "avg_head_density_max": float(self.stats["head_density_max_sum"]) / runs if runs else None,
+            "avg_head_density_cv": float(self.stats["head_density_cv_sum"]) / runs if runs else None,
+            "flashinfer_plan_cache": self.flashinfer_plan_cache if self.backend == "flashinfer" else None,
+            "flashinfer_wrapper_policy": self.flashinfer_wrapper if self.backend == "flashinfer" else None,
+            "flashinfer_execution_modes": sorted(self.flashinfer_execution_modes) if self.backend == "flashinfer" else [],
+            "use_fp16_qk_reduction": self.use_fp16_qk_reduction if self.backend == "flashinfer" else None,
+            "sparge_smooth_k": self.sparge_smooth_k if self.backend == "sparge-sage2" else None,
+            "sparge_pvthreshd": self.sparge_pv_threshold if self.backend == "sparge-sage2" else None,
+        }
+
+
+class OuterSparseCaptureHooks(AbstractContextManager):
+    """Capture source RoPE Q/K masks while retaining the native dense output."""
+
+    def __init__(
+        self,
+        model: Any,
+        model_module: Any,
+        state: OuterSparseState,
+        cache: SourceBlockMaskCache,
+        layers: list[int],
+        *,
+        execution_dtype: torch.dtype,
+    ) -> None:
+        self.model = model
+        self.model_module = model_module
+        self.state = state
+        self.cache = cache
+        self.layers = list(layers)
+        self.execution_dtype = execution_dtype
+        self.originals: list[tuple[Any, Any]] = []
+        self.position_handle: Any = None
+
+    def __enter__(self):
+        self.state.reset()
+        self.state._summary_callback = lambda: {
+            "enabled": True,
+            "mode": "source_capture",
+            "layers": self.layers,
+            **self.cache.summary(),
+        }
+        self.position_handle = self.model.blocks[0].self_attn.register_forward_pre_hook(
+            lambda _module, _args: self.state.begin_model_forward()
+        )
+        for layer in self.layers:
+            attn = self.model.blocks[layer].self_attn
+            original = attn.forward
+            self.originals.append((attn, original))
+
+            def capture_forward(attn_self, x, seq_lens, grid_sizes, freqs, *, layer_index=layer, original_forward=original):
+                if not self.state.enabled:
+                    return original_forward(x, seq_lens, grid_sizes, freqs)
+                batch, seq_len = x.shape[:2]
+                if batch != 1 or int(seq_lens[0].item()) != seq_len:
+                    raise ValueError("source block-mask capture requires an unpadded batch of one")
+                heads, head_dim = attn_self.num_heads, attn_self.head_dim
+                q = attn_self.norm_q(attn_self.q(x)).view(batch, seq_len, heads, head_dim)
+                k = attn_self.norm_k(attn_self.k(x)).view(batch, seq_len, heads, head_dim)
+                v = attn_self.v(x).view(batch, seq_len, heads, head_dim)
+                q = self.model_module.rope_apply(q, grid_sizes, freqs)
+                k = self.model_module.rope_apply(k, grid_sizes, freqs)
+                out = self.model_module.flash_attention(q=q, k=k, v=v, k_lens=seq_lens, window_size=attn_self.window_size)
+                self.cache.capture(
+                    self.state.current_completed_step,
+                    self.state.branch,
+                    layer_index,
+                    q[0].to(dtype=self.execution_dtype),
+                    k[0].to(dtype=self.execution_dtype),
+                )
+                return attn_self.o(out.flatten(2))
+
+            attn.forward = types.MethodType(capture_forward, attn)
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if self.position_handle is not None:
+            self.position_handle.remove()
+            self.position_handle = None
+        for attn, original in reversed(self.originals):
+            attn.forward = original
+        self.originals.clear()
+        return False
+
+
+class OuterSparseAttentionHooks(AbstractContextManager):
+    """Replace only configured outer Wan self-attention layers during a target run."""
+
+    def __init__(self, model: Any, model_module: Any, state: OuterSparseState, executor: OuterSparseExecutor, layers: list[int]) -> None:
+        self.model = model
+        self.model_module = model_module
+        self.state = state
+        self.executor = executor
+        self.layers = list(layers)
+        self.originals: list[tuple[Any, Any]] = []
+        self.position_handle: Any = None
+        self.dense_fallbacks = 0
+
+    def __enter__(self):
+        self.state.reset()
+        self.state._summary_callback = self.summary
+        self.position_handle = self.model.blocks[0].self_attn.register_forward_pre_hook(
+            lambda _module, _args: self.state.begin_model_forward()
+        )
+        for layer in self.layers:
+            attn = self.model.blocks[layer].self_attn
+            original = attn.forward
+            self.originals.append((attn, original))
+
+            def sparse_forward(attn_self, x, seq_lens, grid_sizes, freqs, *, layer_index=layer, original_forward=original):
+                if not self.state.enabled:
+                    return original_forward(x, seq_lens, grid_sizes, freqs)
+                batch, seq_len = x.shape[:2]
+                if batch != 1 or int(seq_lens[0].item()) != seq_len:
+                    raise ValueError("outer sparse attention requires an unpadded batch of one")
+                heads, head_dim = attn_self.num_heads, attn_self.head_dim
+                q = attn_self.norm_q(attn_self.q(x)).view(batch, seq_len, heads, head_dim)
+                k = attn_self.norm_k(attn_self.k(x)).view(batch, seq_len, heads, head_dim)
+                v = attn_self.v(x).view(batch, seq_len, heads, head_dim)
+                q = self.model_module.rope_apply(q, grid_sizes, freqs)[0].contiguous()
+                k = self.model_module.rope_apply(k, grid_sizes, freqs)[0].contiguous()
+                try:
+                    out = self.executor.run(
+                        q,
+                        k,
+                        v[0].contiguous(),
+                        step=self.state.current_completed_step,
+                        branch=self.state.branch,
+                        layer=layer_index,
+                    )
+                except BlockMaskCacheError:
+                    self.dense_fallbacks += 1
+                    return original_forward(x, seq_lens, grid_sizes, freqs)
+                return attn_self.o(out.unsqueeze(0).flatten(2))
+
+            attn.forward = types.MethodType(sparse_forward, attn)
+        return self
+
+    def summary(self) -> dict[str, Any]:
+        payload = self.executor.summary()
+        payload.update({"enabled": True, "layers": self.layers, "dense_fallback_count": self.dense_fallbacks})
+        return payload
+
+    def __exit__(self, exc_type, exc, tb):
+        if self.position_handle is not None:
+            self.position_handle.remove()
+            self.position_handle = None
+        for attn, original in reversed(self.originals):
+            attn.forward = original
+        self.originals.clear()
+        return False
+
+
+def dependency_status(backend: str, device: torch.device | None = None) -> dict[str, Any]:
+    """Report optional sparse backend availability without importing it at module load."""
+
+    status: dict[str, Any] = {"backend": backend, "available": False}
+    try:
+        if backend == "flashinfer":
+            import flashinfer
+
+            status.update({"available": True, "version": getattr(flashinfer, "__version__", "unknown")})
+        elif backend == "sparge-sage2":
+            from spas_sage_attn import block_sparse_sage2_attn_cuda  # noqa: F401
+
+            status["available"] = True
+            if torch.cuda.is_available():
+                status["capability"] = list(torch.cuda.get_device_capability(device))
+                status["sm90"] = tuple(status["capability"]) == (9, 0)
+        elif backend == "dense":
+            status["available"] = True
+        else:
+            status["error"] = f"unsupported backend: {backend}"
+    except Exception as exc:
+        status["error"] = f"{type(exc).__name__}: {exc}"
+    return status

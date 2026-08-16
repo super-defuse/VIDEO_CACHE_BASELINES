@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "scope": "Third-party model runtimes and evaluators; baseline implementations live in this repository.",
+  "sources": {
+    "wan22": {
+      "path": "external/wan2.2",
+      "url": "https://github.com/super-defuse/Wan2.2.git",
+      "commit": "3b8c4f3ade605b9e71cb907cbecf284853cae936"
+    },
+    "cogvideo": {
+      "path": "external/cogvideo",
+      "url": "https://github.com/THUDM/CogVideo.git",
+      "commit": "7a1af7154511e0ce4e4be8d62faa8c5e5a3532d2"
+    },
+    "lightx2v": {
+      "path": "external/lightx2v",
+      "url": "https://github.com/ModelTC/LightX2V.git",
+      "commit": "d477caa5b0fe05c49521191b53435621494580d2"
+    },
+    "spargeattn": {
+      "path": "external/spargeattn",
+      "url": "https://github.com/thu-ml/SpargeAttn.git",
+      "commit": "ae5b629ebb41e41f86b3ea2ab5a3283f13ac151a"
+    },
+    "grounded_sam2": {
+      "path": "external/grounded-sam2",
+      "url": "https://github.com/IDEA-Research/Grounded-SAM-2.git",
+      "commit": "dd4c5141b75e4838dd486c64f773c43b4db3a07b"
+    },
+    "vbench": {
+      "path": "external/vbench",
+      "url": "https://github.com/Vchitect/VBench.git",
+      "commit": "c2dd0593fb913a24bc4f4ebd8803fd8c49c7db2d",
+      "optional": true,
+      "note": "The existing evaluator snapshot came from the pinned CHAI source tree; install the compatible VBench checkout here before quality evaluation."
+    }
+  }
+}

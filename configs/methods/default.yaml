@@ -15,7 +15,7 @@ chorus:
   grounded_sam2:
     release: v1.0
     commit: dd4c514
-    root: ../Grounded-SAM-2
+    root: external/grounded-sam2
     checkpoint_dir: ../../models/Grounded-SAM-2-v1.0
     device: cuda
     hf_endpoint: https://hf-mirror.com

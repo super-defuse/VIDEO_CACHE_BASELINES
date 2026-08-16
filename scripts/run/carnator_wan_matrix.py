@@ -11,7 +11,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CARNATOR_ROOT = ROOT.parent / "CARNATOR_ICLR2027"
 DEFAULT_MODEL = ROOT.parent.parent / "models" / "Wan2.2-TI2V-5B"
 
 
@@ -28,9 +27,9 @@ def main() -> None:
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
 
-    wan_root = CARNATOR_ROOT / "external" / "Wan2.2"
+    wan_root = ROOT / "external" / "wan2.2"
     if not (wan_root / "wan").is_dir():
-        raise SystemExit(f"Carnator Wan submodule is missing: {wan_root}; run git submodule update --init external/Wan2.2")
+        raise SystemExit(f"Carnator Wan submodule is missing: {wan_root}; run git submodule update --init external/wan2.2")
     if not args.model_path.is_dir():
         raise SystemExit(f"Wan2.2 TI2V-5B checkpoint is missing: {args.model_path}")
 
@@ -38,7 +37,7 @@ def main() -> None:
     results_root = ROOT / "artifacts" / "carnator-results"
     command = [
         sys.executable,
-        str(CARNATOR_ROOT / "scripts" / "run_t2v_matrix.py"),
+        str(ROOT / "scripts" / "run" / "carnator_matrix.py"),
         "--profile", "ti2v-5b",
         "--source-prompt", args.source_prompt,
         "--target-prompt", args.target_prompt,
@@ -58,9 +57,9 @@ def main() -> None:
         "CARNATOR_ENV_READY": "1",
         "CARNATOR_DEVICE": args.device,
         "CARNATOR_TI2V_5B_MODEL_DIR": str(args.model_path.resolve()),
-        "PYTHONPATH": os.pathsep.join((str(CARNATOR_ROOT), str(wan_root), environment.get("PYTHONPATH", ""))),
+        "PYTHONPATH": os.pathsep.join((str(ROOT), str(wan_root), environment.get("PYTHONPATH", ""))),
     })
-    subprocess.run(command, cwd=CARNATOR_ROOT, env=environment, check=True)
+    subprocess.run(command, cwd=ROOT, env=environment, check=True)
 
 
 if __name__ == "__main__":

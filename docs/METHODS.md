@@ -7,11 +7,11 @@ latent 和 FFN hook。
 | 插件 | capability | 来源 |
 | --- | --- | --- |
 | `baseline` | dense fallback | 公共协议 |
-| `chai` | 跨请求缓存、跳步、Cache Attention | `../CHAI/chai` |
-| `teacache` | adapter 内跳步 | `../CHAI/teacache` |
-| `nirvana_vid` | 跨请求扩散 latent、跳步、source trajectory | `../CHAI/nirvana-strawman` |
-| `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；CogVideoX1.5 使用 source latent restart 适配 | `../CARNATOR_ICLR2027/carnator` |
-| `chai_carnator` | Wan 专用 `CHAI-Carnator`：8-step source/target；block 0 在 CHAI local steps 1--4 读取对应 source token，其余 block 按 CC-B0--CC-B5 使用 Carnator sparse attention、latent injection 和可选 W8A8 FFN | `scripts/run/chai_carnator_matrix.py` + `../CARNATOR_ICLR2027/carnator` |
+| `chai` | 跨请求缓存、跳步、Cache Attention | `methods/chai/` |
+| `teacache` | adapter 内跳步 | `adapters/teacache.py` |
+| `nirvana_vid` | 跨请求扩散 latent、跳步、source trajectory | `adapters/{wan22,cogvideox15}.py` |
+| `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；CogVideoX1.5 使用 source latent restart 适配 | `carnator/` + `scripts/run/carnator_matrix.py` |
+| `chai_carnator` | Wan 专用 `CHAI-Carnator`：8-step source/target；block 0 在 CHAI local steps 1--4 读取对应 source token，其余 block 按 CC-B0--CC-B5 使用 Carnator sparse attention、latent injection 和可选 W8A8 FFN | `scripts/run/chai_carnator_matrix.py` + `carnator/` |
 | `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、SRD（Medit/Msee）、LLM prompt diff、Grounded-SAM-2 v1.0 mask、TGAA；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
 
 Chorus 当前真实产物的 mask 后端为官方 Grounded-SAM-2 v1.0：Grounding DINO 在 source

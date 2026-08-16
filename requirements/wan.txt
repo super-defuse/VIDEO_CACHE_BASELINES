@@ -1,0 +1,28 @@
+# Wan2.2 methods: baseline, CHAI, TeaCache, NIRVANA-VID, Carnator and Chorus.
+# scripts/create_environments.sh installs torch/torchvision from
+# PYTORCH_INDEX_URL before applying this model-specific list.
+accelerate==1.11.0
+diffusers==0.35.2
+easydict==1.13
+einops==0.8.1
+ftfy==6.3.1
+imageio==2.37.2
+imageio-ffmpeg==0.6.0
+numpy==1.26.4
+opencv-python==4.11.0.86
+Pillow==11.3.0
+PyYAML==6.0.3
+safetensors==0.6.2
+sentencepiece==0.2.1
+tokenizers==0.21.1
+transformers==4.51.3
+tqdm==4.67.1
+scipy
+protobuf<6
+ninja
+
+# Carnator B1/B4 and B2/B5 runtime packages. FlashAttention and SpargeAttn
+# must still be built for the active CUDA/PyTorch combination when needed.
+triton>=3.4,<3.5
+flashinfer-python==0.6.15
+nvidia-cuda-nvcc-cu12==12.8.93

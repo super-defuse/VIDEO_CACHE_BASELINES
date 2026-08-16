@@ -8,6 +8,8 @@ from typing import Any
 import cv2
 import numpy as np
 
+from core.external import ROOT as REPOSITORY_ROOT
+
 # Set this before transformers/huggingface_hub is imported by Wan/CHAI.
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 
@@ -20,12 +22,12 @@ class GroundedSam2Segmenter:
         self._models: tuple[Any, Any, Any] | None = None
 
     def _paths(self) -> tuple[Path, Path, Path, Path]:
-        root = Path(self.config.get("root", "../Grounded-SAM-2")).expanduser()
+        root = Path(self.config.get("root", "external/grounded-sam2")).expanduser()
         if not root.is_absolute():
-            root = (Path.cwd() / root).resolve()
-        checkpoint_dir = Path(self.config.get("checkpoint_dir", "../models/Grounded-SAM-2-v1.0"))
+            root = (REPOSITORY_ROOT / root).resolve()
+        checkpoint_dir = Path(self.config.get("checkpoint_dir", "models/Grounded-SAM-2-v1.0"))
         if not checkpoint_dir.is_absolute():
-            checkpoint_dir = (Path.cwd() / checkpoint_dir).resolve()
+            checkpoint_dir = (REPOSITORY_ROOT / checkpoint_dir).resolve()
         sam_config = root / "sam2" / self.config.get("sam_config", "configs/sam2.1/sam2.1_hiera_l.yaml")
         sam_checkpoint = checkpoint_dir / "checkpoints" / self.config.get("sam_checkpoint", "sam2.1_hiera_large.pt")
         gdino_config = root / "grounding_dino" / "groundingdino" / "config" / self.config.get(
@@ -68,7 +70,7 @@ class GroundedSam2Segmenter:
         if local_text_encoder:
             text_path = Path(local_text_encoder).expanduser()
             if not text_path.is_absolute():
-                text_path = (Path.cwd() / text_path).resolve()
+                text_path = (REPOSITORY_ROOT / text_path).resolve()
         else:
             cache_root = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface"))
             snapshots = sorted((cache_root / "hub" / "models--bert-base-uncased" / "snapshots").glob("*"))

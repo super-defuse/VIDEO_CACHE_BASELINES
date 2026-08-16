@@ -23,9 +23,8 @@ from typing import Any, Iterable
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CARNATOR_ROOT = ROOT.parent / "CARNATOR_ICLR2027"
-if str(CARNATOR_ROOT) not in sys.path:
-    sys.path.insert(0, str(CARNATOR_ROOT))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 NAME = "CHAI-Carnator"

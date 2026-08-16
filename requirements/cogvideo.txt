@@ -1,0 +1,16 @@
+# scripts/create_environments.sh installs torch/torchvision from
+# PYTORCH_INDEX_URL before applying this model-specific list.
+accelerate==1.11.0
+diffusers==0.35.2
+einops==0.8.1
+imageio==2.37.2
+imageio-ffmpeg==0.6.0
+numpy==1.26.4
+opencv-python==4.11.0.86
+Pillow==11.3.0
+PyYAML==6.0.3
+safetensors==0.6.2
+sentencepiece==0.2.1
+tokenizers==0.22.1
+transformers==4.57.1
+tqdm==4.67.1

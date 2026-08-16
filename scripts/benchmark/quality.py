@@ -12,7 +12,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run VBench in the shared vbench environment.")
     parser.add_argument("run_dir", type=Path)
     parser.add_argument("--quality-env", default=os.environ.get("VCB_QUALITY_ENV", "vbench"))
-    parser.add_argument("--vbench-root", type=Path, default=ROOT.parent / "CHAI" / "vbench")
+    parser.add_argument("--vbench-root", type=Path, default=ROOT / "external" / "vbench")
     parser.add_argument("--dimension", nargs="+", default=[
         "subject_consistency", "background_consistency", "motion_smoothness",
         "dynamic_degree", "aesthetic_quality", "imaging_quality",
@@ -41,13 +41,15 @@ def main() -> None:
     quality_input.write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in quality_rows), encoding="utf-8"
     )
-    chai_root = ROOT.parent / "CHAI"
+    if not (args.vbench_root / "vbench").is_dir():
+        raise SystemExit(f"VBench source is missing: {args.vbench_root}; see external/README.md for setup.")
+    vbench_cache = ROOT / "artifacts" / "vbench-cache"
     command = [
         "conda", "run", "--no-capture-output", "-n", args.quality_env, "env",
-        f"PYTHONPATH={chai_root}{os.pathsep}{args.vbench_root}",
-        f"VBENCH_CACHE_DIR={chai_root / 'artifacts' / 'vbench-cache'}",
-        "python", "-m", "chai.evaluation.quality", "--results", str(quality_input),
-        "--clip-weights", str(chai_root / "artifacts" / "vbench-cache" / "clip_model" / "ViT-B-32.pt"),
+        f"PYTHONPATH={ROOT}{os.pathsep}{args.vbench_root}",
+        f"VBENCH_CACHE_DIR={vbench_cache}",
+        "python", "-m", "scripts.benchmark.quality_runner", "--results", str(quality_input),
+        "--clip-weights", str(vbench_cache / "clip_model" / "ViT-B-32.pt"),
         "--vbench-dimensions", *args.dimension,
     ]
     print(" ".join(command))

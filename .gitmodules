@@ -1,0 +1,15 @@
+[submodule "wan22"]
+	path = external/wan2.2
+	url = https://github.com/super-defuse/Wan2.2.git
+[submodule "cogvideo"]
+	path = external/cogvideo
+	url = https://github.com/THUDM/CogVideo.git
+[submodule "lightx2v"]
+	path = external/lightx2v
+	url = https://github.com/ModelTC/LightX2V.git
+[submodule "spargeattn"]
+	path = external/spargeattn
+	url = https://github.com/thu-ml/SpargeAttn.git
+[submodule "grounded_sam2"]
+	path = external/grounded-sam2
+	url = https://github.com/IDEA-Research/Grounded-SAM-2.git
