@@ -1,6 +1,6 @@
 # CARNATOR Latent Reuse Report
 
-Updated: `2026-08-13 10:11:28 UTC`
+Updated: `2026-08-15 07:25:01 UTC`
 Status: `completed`
 
 ## Config
@@ -18,13 +18,13 @@ Status: `completed`
 
 | Run | Self-attn | Cross-attn | FFN | Outer sparse density | Outer mask mass coverage | Latency denoising | Speed Up denoising | Latency End2End | Speed Up End2End | Peak reserved |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Source dense | 280.248 s | 16.463 s | 35.997 s | n/a | n/a | 376.712 s | n/a | 399.631 s | n/a | 52.94 GiB |
-| C0 full dense target | 182.564 s | 16.553 s | 35.334 s | 100.000% | 100.000% | 278.898 s | 1.00x | 302.089 s | 1.00x | 52.93 GiB |
-| Target latent reuse | 92.638 s | 10.256 s | 21.662 s | 100.000% | 100.000% | 178.662 s | 1.56x | 201.280 s | 1.50x | 52.94 GiB |
+| Source dense | 279.671 s | 16.407 s | 36.134 s | n/a | n/a | 376.208 s | n/a | 398.931 s | n/a | 52.93 GiB |
+| C0 full dense target | 181.546 s | 16.459 s | 34.977 s | 100.000% | 100.000% | 277.363 s | 1.00x | 300.641 s | 1.00x | 52.93 GiB |
+| Target latent reuse | 92.282 s | 10.206 s | 21.457 s | 100.000% | 100.000% | 178.138 s | 1.56x | 208.881 s | 1.44x | 52.93 GiB |
 
 ## Artifacts
 
-- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/videos/source_dense.mp4`
+- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/videos/source_dense.mp4`
 - Source first frame: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B0/frames/source_dense_first_frame.png`
 - Target dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/videos/target_dense.mp4`
 - Target first frame: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B0/frames/target_dense_first_frame.png`
@@ -37,15 +37,15 @@ Status: `completed`
 - Dense fallback calls: `0`
 - Avg Medit query ratio: `35.128%`
 - Avg Msee context ratio: `67.753%`
-- Latent injection: `{'enabled': True, 'formula': 'L_new = Medit * L_target + (1 - Medit) * L_source_cache', 'calls': 40, 'total_seconds': 0.1260375170968473, 'avg_ms': 3.1509379274211824, 'mask_steps': {'10': 4, '15': 5, '20': 5, '25': 26}}`
+- Latent injection: `{'enabled': True, 'formula': 'L_new = Medit * L_target + (1 - Medit) * L_source_cache', 'calls': 40, 'total_seconds': 0.12409462640061975, 'avg_ms': 3.1023656600154936, 'mask_source_completed_step': 5}`
 - attention mask variant: `self_contrast_cross_attention_fusion`
-- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/fusion_masks`
-- attention mask avg token area: `{'mbase': 0.1690615862607956, 'medit': 0.3512829840183258, 'msee': 0.6775293350219727}`
-- attention mask avg latent area: `{'medit': 0.3512829840183258, 'msee': 0.6775293350219727}`
+- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/fusion_masks`
+- attention mask token area: `{'mbase': 0.1690615862607956, 'medit': 0.3512829840183258, 'msee': 0.6775293350219727, 'original_mbase': 0.22192081809043884}`
+- attention mask latent area: `{'medit': 0.3512829840183258, 'msee': 0.6775293350219727}`
 
 ## Environment
 
-- Python: `/data/shared/conda_envs/chai-wan/bin/python`
+- Python: `/data/shared/conda_envs/wan/bin/python`
 - Model dir: `/home/tangxuebin/models/Wan2.2-TI2V-5B`
 - Wan root: `/home/tangxuebin/project/CARNATOR_ICLR2027/external/Wan2.2`
 - CUDA available: `True`

@@ -1,7 +1,7 @@
 {
   "status": "completed",
   "error": null,
-  "updated_at": "2026-08-13 11:03:42 UTC",
+  "updated_at": "2026-08-15 07:29:57 UTC",
   "config": {
     "model_family": "Wan2.2-TI2V-5B",
     "backend": "native Wan2.2",
@@ -53,7 +53,7 @@
     ]
   },
   "environment": {
-    "python": "/data/shared/conda_envs/chai-wan/bin/python",
+    "python": "/data/shared/conda_envs/wan/bin/python",
     "model_dir": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
     "wan_root": "/home/tangxuebin/project/CARNATOR_ICLR2027/external/Wan2.2",
     "model_layout": {
@@ -110,13 +110,13 @@
     "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/videos/target_dense_w8a8.mp4",
     "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/videos/target_latent_reuse.mp4",
     "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/source_dense",
-    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/outer_block_masks",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/outer_block_masks",
     "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/target_dense",
     "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/target_dense_w8a8",
     "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/target_latent_reuse",
     "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/source_dense/probe_masks",
     "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/source_dense/self_contrast_masks",
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/fusion_masks",
     "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B5/frames/source_dense_first_frame.png",
     "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B5/frames/target_dense_first_frame.png",
     "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/B5/summary.json",
@@ -124,13 +124,13 @@
   },
   "runs": {
     "source_dense": {
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/videos/source_dense.mp4",
-      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/manifest.json",
-      "denoising_seconds": 376.7120380140841,
-      "end_to_end_seconds": 399.6308881531004,
-      "self_attn_seconds": 280.2482505569458,
-      "cross_attn_seconds": 16.462637692451477,
-      "ffn_seconds": 35.99692315673828,
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/manifest.json",
+      "denoising_seconds": 376.2078079469502,
+      "end_to_end_seconds": 398.9312856318429,
+      "self_attn_seconds": 279.6707440261841,
+      "cross_attn_seconds": 16.40710652923584,
+      "ffn_seconds": 36.133510011672975,
       "latent_shape": [
         48,
         31,
@@ -143,8 +143,8 @@
         40
       ],
       "peak_gpu_memory_gib": {
-        "allocated": 43.76645612716675,
-        "reserved": 52.935546875
+        "allocated": 43.76482343673706,
+        "reserved": 52.93359375
       },
       "masked_injection": {
         "enabled": false,
@@ -152,7 +152,7 @@
         "calls": 0,
         "total_seconds": 0.0,
         "avg_ms": 0.0,
-        "mask_steps": {}
+        "mask_source_completed_step": null
       },
       "sparse_blocks": {
         "enabled": false
@@ -181,13 +181,13 @@
           28,
           29
         ],
-        "source_mask_cache_id": "real-wan-c0-b4/history",
-        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/outer_block_masks",
+        "source_mask_cache_id": "real-wan-c0-b4",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/outer_block_masks",
         "format": "carnator-source-block-mask-v1",
         "cfg_branches": 2,
         "entries": 1520,
-        "capture_seconds": 275.1970355755184,
-        "write_seconds": 2.784845101647079,
+        "capture_seconds": 275.44298494048417,
+        "write_seconds": 3.25482220062986,
         "avg_density": 0.3200347054945795,
         "avg_coverage": 0.9632794556256972
       },
@@ -199,11 +199,11 @@
     "target_dense": {
       "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/videos/target_dense.mp4",
       "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/target_dense/manifest.json",
-      "denoising_seconds": 278.8981972190086,
-      "end_to_end_seconds": 302.0892767768819,
-      "self_attn_seconds": 182.56422089004516,
-      "cross_attn_seconds": 16.552841245651244,
-      "ffn_seconds": 35.3344558839798,
+      "denoising_seconds": 277.3633730839938,
+      "end_to_end_seconds": 300.641002896009,
+      "self_attn_seconds": 181.54632278060913,
+      "cross_attn_seconds": 16.459084579467774,
+      "ffn_seconds": 34.97696521663666,
       "latent_shape": [
         48,
         31,
@@ -225,7 +225,7 @@
         "calls": 0,
         "total_seconds": 0.0,
         "avg_ms": 0.0,
-        "mask_steps": {}
+        "mask_source_completed_step": null
       },
       "sparse_blocks": {
         "enabled": false
@@ -241,11 +241,11 @@
     "target_latent_reuse": {
       "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/videos/target_latent_reuse.mp4",
       "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/B5/cache/target_latent_reuse/manifest.json",
-      "denoising_seconds": 123.16195073910058,
-      "end_to_end_seconds": 146.88281741994433,
-      "self_attn_seconds": 40.93805989456177,
-      "cross_attn_seconds": 10.14693687081337,
-      "ffn_seconds": 18.569227808237077,
+      "denoising_seconds": 123.21315901586786,
+      "end_to_end_seconds": 149.0917178511154,
+      "self_attn_seconds": 40.939618516921996,
+      "cross_attn_seconds": 10.148749089002608,
+      "ffn_seconds": 18.57323119878769,
       "latent_shape": [
         48,
         31,
@@ -258,21 +258,16 @@
         40
       ],
       "peak_gpu_memory_gib": {
-        "allocated": 41.32712125778198,
+        "allocated": 41.32649326324463,
         "reserved": 50.4765625
       },
       "masked_injection": {
         "enabled": true,
         "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
         "calls": 40,
-        "total_seconds": 0.10457489755935967,
-        "avg_ms": 2.6143724389839917,
-        "mask_steps": {
-          "10": 4,
-          "15": 5,
-          "20": 5,
-          "25": 26
-        }
+        "total_seconds": 0.11033530486747622,
+        "avg_ms": 2.7583826216869056,
+        "mask_source_completed_step": 5
       },
       "sparse_blocks": {
         "enabled": true,
@@ -291,7 +286,7 @@
         ],
         "sparse_call_count": 880,
         "dense_fallback_count": 0,
-        "sparse_forward_elapsed_seconds": 13.156281435396522,
+        "sparse_forward_elapsed_seconds": 13.086509864544496,
         "calls_by_layer": {
           "10": 80,
           "11": 80,
@@ -307,31 +302,7 @@
         },
         "index_cache": [
           {
-            "mask_source_step": 10,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 15,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 20,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 25,
+            "source_completed_step": 5,
             "token_count": 27280,
             "query_count": 9583,
             "context_count": 18483,
@@ -343,15 +314,15 @@
       "outer_sparse": {
         "backend": "sparge-sage2",
         "execution_dtype": "torch.float16",
-        "source_mask_cache_id": "real-wan-c0-b4/history",
-        "source_mask_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/outer_block_masks",
+        "source_mask_cache_id": "real-wan-c0-b4",
+        "source_mask_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/outer_block_masks",
         "quantization": "QK INT8 and PV FP8",
         "runs": 1520,
         "cache_hits": 1520,
         "cache_misses": 0,
         "planned_masks": 1520,
         "plan_seconds": 0.0,
-        "mask_load_seconds": 1.0128947952762246,
+        "mask_load_seconds": 1.024156732019037,
         "routing_time_ms": 0.0,
         "avg_runtime_density": 0.3200347054945795,
         "avg_source_per_head_density": 0.3200347054945795,
@@ -1272,37 +1243,13 @@
       "sparse_density": {
         "sparse_call_count": 880,
         "dense_fallback_count": 0,
-        "sparse_forward_elapsed_seconds": 13.156281435396522,
+        "sparse_forward_elapsed_seconds": 13.086509864544496,
         "avg_medit_query_ratio": 0.351282991202346,
         "avg_msee_context_ratio": 0.6775293255131964,
         "avg_self_attn_region_density_estimate": 0.2380045280935836,
         "records": [
           {
-            "mask_source_step": 10,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 15,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 20,
-            "token_count": 27280,
-            "query_count": 9583,
-            "context_count": 18483,
-            "query_ratio": 0.351282991202346,
-            "context_ratio": 0.6775293255131964
-          },
-          {
-            "mask_source_step": 25,
+            "source_completed_step": 5,
             "token_count": 27280,
             "query_count": 9583,
             "context_count": 18483,
@@ -1315,133 +1262,25 @@
   },
   "speedups": {
     "reference_run": "target_dense",
-    "denoising_vs_reference": 2.26448343457803,
-    "end_to_end_vs_reference": 2.056668588492523
+    "denoising_vs_reference": 2.2510856413337628,
+    "end_to_end_vs_reference": 2.0164835929802107
   },
   "masks": {
     "available": true,
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/history/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4/cache/source_dense/fusion_masks",
     "mask_variant": "self_contrast_cross_attention_fusion",
-    "per_step": {
-      "1": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "2": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "3": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "4": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "5": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "10": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "15": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "20": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      },
-      "25": {
-        "token_area": {
-          "mbase": 0.1690615862607956,
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "latent_area": {
-          "medit": 0.3512829840183258,
-          "msee": 0.6775293350219727
-        },
-        "raw_coverage_area": 0.1690615862607956
-      }
-    },
-    "avg_token_area": {
+    "source_completed_step": 5,
+    "token_area": {
       "mbase": 0.1690615862607956,
       "medit": 0.3512829840183258,
-      "msee": 0.6775293350219727
+      "msee": 0.6775293350219727,
+      "original_mbase": 0.22192081809043884
     },
-    "avg_latent_area": {
+    "latent_area": {
       "medit": 0.3512829840183258,
       "msee": 0.6775293350219727
     },
-    "avg_raw_coverage_area": 0.1690615862607956,
+    "raw_coverage_area": 0.1690615862607956,
     "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
   },
   "first_frames": {

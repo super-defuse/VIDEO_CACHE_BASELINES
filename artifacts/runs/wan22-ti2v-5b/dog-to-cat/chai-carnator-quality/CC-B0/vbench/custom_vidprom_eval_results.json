@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9469141272207101,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": 0.9469141272207101
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.976885986328125,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": 0.976885986328125,
+                "video_sim": 117.226318359375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9939783524052179,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": 0.9939783524052179
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.4666363298892975,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": 0.4666363298892975
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.4522157577640754,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/CC-B0/videos/video.mp4",
+                "video_results": 45.22157577640754
+            }
+        ]
+    ]
+}

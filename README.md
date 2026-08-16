@@ -1,6 +1,6 @@
 # Video Cache Baselines
 
-统一承载 NIRVANA-VID、TeaCache、CHAI、Carnator 和 CHAI-Carnator 的 T2V 集成骨架，模型入口为 Wan2.2 与 CogVideoX1.5。Chorus 暂不实现，也不把 Carnator 对 Chorus2 的引用当作 Chorus。
+统一承载 NIRVANA-VID、TeaCache、CHAI、Carnator、CHAI-Carnator 和 Chorus 的 T2V 集成骨架，模型入口为 Wan2.2 与 CogVideoX1.5。
 
 ## 运行
 
@@ -18,7 +18,7 @@ PYTHONPATH=. python scripts/run/run.py --model synthetic --method chai \
 python scripts/benchmark/quality.py artifacts/runs/smoke
 ```
 
-安装脚本会将旧名称 `chai-wan`、`chai-cogvideo`、`chai-vbench` 分别迁移为 `wan`、`cogvideo`、`vbench`。方法环境名为 `vcb-baseline`、`vcb-chai`、`vcb-teacache`、`vcb-nirvana-vid` 和 `vcb-carnator`，可独立安装或替换为兼容环境。
+安装脚本会将旧名称 `chai-wan`、`chai-cogvideo`、`chai-vbench` 分别迁移为 `wan`、`cogvideo`、`vbench`。方法环境名为 `vcb-baseline`、`vcb-chai`、`vcb-teacache`、`vcb-nirvana-vid` 和 `vcb-carnator`；Chorus 复用 `wan` 环境。
 
 ## 支持矩阵
 
@@ -29,7 +29,7 @@ python scripts/benchmark/quality.py artifacts/runs/smoke
 | NIRVANA-VID | 支持，原生扩散 latent restart | 支持，Diffusers latent restart | 已真实验收 |
 | Carnator | 原生 C0/B0--B5 矩阵入口 | source-latent-restart adapter | 已真实验收 |
 | CHAI-Carnator | 原生 CC-B0--CC-B5 matrix；8-step block-0 Cache Attention + Carnator 其余 blocks | N/A（Wan block/mask/FFN 拓扑） | 已真实验收 |
-| Chorus | N/A | N/A | 本阶段不实现 |
+| Chorus | Wan2.2 50-step source trajectory，K1=10/K2=40、per-step cache、SRD（Medit/Msee）和 TGAA | N/A | Wan2.2 已接入；CogVideoX1.5 保留 N/A |
 
 N/A 会保留在结果汇总中，不静默跳过。所有结果逐请求写入 JSONL，再由 `scripts/aggregate/results.py` 自动汇总。
 
@@ -49,12 +49,15 @@ Carnator 需要初始化三个固定 submodule。B2/B5 使用 SpargeAttn 扩展�
 ```bash
 git -C ../CARNATOR_ICLR2027 submodule update --init external/Wan2.2 external/LightX2V external/SpargeAttn
 conda run -n wan env PYTHONPATH=. python scripts/run/carnator_wan_matrix.py \
-  --source-prompt "a dog is sleeping on grass" --target-prompt "a cat is sleeping on grass" --run-id wan-matrix
+  --source-prompt "a dog is sleeping on grass" --target-prompt "a cat is sleeping on grass" \
+  --source-positive dog --run-id wan-matrix
 ```
 
 来源 commit 可用 `PYTHONPATH=. /usr/bin/python3 scripts/check_environment.py` 校验。
 
-真实运行与质量验收结果见 `docs/ACCEPTANCE.md`。Carnator 矩阵可用
+真实运行与质量验收结果见 `docs/ACCEPTANCE.md`。Carnator source 完整运行 50 步，
+只在 completed step 5 生成 canonical cross/self mask，所有 reuse step 使用同一份 mask；
+Carnator 矩阵可用
 `scripts/benchmark/carnator_quality.py <matrix.json> --output-dir <dir>` 评测。
 
 CHAI-Carnator 使用独立的 8-step source/target 协议。source 保存全部八步 latent、
@@ -82,3 +85,12 @@ PYTHONPATH=. python scripts/run/source_target_matrix.py --model cogvideox15 \
 ```
 
 baseline 和 TeaCache 是 target-only 方法，在同一实验中只传 target prompt；不要为它们制造 source cache 命中。
+
+Chorus 使用同一 source/target 矩阵入口，优先跑 Wan2.2：
+
+```bash
+conda run --no-capture-output -n wan python scripts/run/source_target_matrix.py --model wan22 \
+  --source-prompt "a dog is sleeping on a grassland, focus on the dog" \
+  --target-prompt "a cat is sleeping on a grassland, focus on the cat" \
+  --methods chorus --run-prefix wan22-ti2v-5b/dog-to-cat --reset-cache
+```

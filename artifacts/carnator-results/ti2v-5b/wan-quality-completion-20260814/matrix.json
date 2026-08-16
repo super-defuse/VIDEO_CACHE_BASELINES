@@ -17,11 +17,11 @@
     },
     {
       "baseline": "NIRVANA-VID",
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-source-target-20260814-nirvana_vid-nirvana_vid/videos/0001_target-000.mp4"
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/nirvana-vid/videos/0001_target-000.mp4"
     },
     {
       "baseline": "TeaCache",
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/real-wan-source-target-20260814-teacache-teacache/videos/0000_target-000.mp4"
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/teacache/videos/0000_target-000.mp4"
     }
   ]
 }

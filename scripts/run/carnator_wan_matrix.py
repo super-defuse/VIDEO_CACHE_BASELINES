@@ -19,7 +19,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-prompt", required=True)
     parser.add_argument("--target-prompt", required=True)
-    parser.add_argument("--source-positive", default="")
+    parser.add_argument("--source-positive", default="dog")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--model-path", type=Path, default=DEFAULT_MODEL)

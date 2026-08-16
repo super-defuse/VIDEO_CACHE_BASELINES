@@ -9,6 +9,7 @@ METHOD_MODULES = {
     "teacache": "methods.teacache.method",
     "nirvana_vid": "methods.nirvana_vid.method",
     "carnator": "methods.carnator.method",
+    "chorus": "methods.chorus.method",
 }
 
 REAL_SUPPORTED = {
@@ -17,6 +18,7 @@ REAL_SUPPORTED = {
     "teacache": {"wan22", "cogvideox15"},
     "nirvana_vid": {"wan22", "cogvideox15"},
     "carnator": {"cogvideox15"},
+    "chorus": {"wan22"},
 }
 
 

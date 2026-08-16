@@ -43,6 +43,23 @@ class NamespaceCache:
     def bytes_used(self) -> int:
         return sum(e.bytes for e in self._entries.values())
 
+    @staticmethod
+    def _payload_bytes(path: Path) -> int:
+        if path.is_dir():
+            return sum(item.stat().st_size for item in path.rglob("*") if item.is_file())
+        return path.stat().st_size if path.is_file() else 0
+
+    @staticmethod
+    def _remove_payload(path: Path) -> None:
+        path.unlink(missing_ok=True)
+        # Chorus stores its per-step tensors beside the manifest. Other
+        # methods have no sidecar and are unaffected by this cleanup.
+        sidecar = path.with_suffix(".steps")
+        if sidecar.is_dir():
+            shutil.rmtree(sidecar)
+        source_video = path.with_suffix(".source.mp4")
+        source_video.unlink(missing_ok=True)
+
     def clear(self) -> None:
         shutil.rmtree(self.entries, ignore_errors=True)
         self.entries.mkdir(parents=True, exist_ok=True)
@@ -73,11 +90,11 @@ class NamespaceCache:
         save_latent(latent, temporary)
         temporary.replace(path)
         entry = CacheEntry(request.uuid, request.request_index, request.prompt, str(path), latent_step,
-                           path.stat().st_size, time.time())
+                           self._payload_bytes(path) + self._payload_bytes(path.with_suffix(".steps")), time.time())
         self._entries[request.uuid] = entry
         while self.bytes_used > self.max_bytes and self._entries:
             victim = min(self._entries.values(), key=lambda e: e.accessed_at)
-            Path(victim.latent_path).unlink(missing_ok=True)
+            self._remove_payload(Path(victim.latent_path))
             self._entries.pop(victim.uuid, None)
         self._save()
         return entry

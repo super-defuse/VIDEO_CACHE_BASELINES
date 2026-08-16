@@ -17,7 +17,7 @@ import shutil
 import sys
 import time
 import types
-from contextlib import AbstractContextManager, ExitStack, contextmanager
+from contextlib import AbstractContextManager, ExitStack
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -169,20 +169,6 @@ def _write_tokens(path: Path, tokens: dict[int, Any]) -> None:
     torch.save({int(step): value.cpu() for step, value in sorted(tokens.items())}, path)
 
 
-@contextmanager
-def _fixed_latent_mask_source(completed_step: int):
-    """Make native latent injection use one calibrated mask for every step."""
-
-    import carnator.masks as masks
-
-    original = masks.step_mask_source
-    masks.step_mask_source = lambda _step: int(completed_step)
-    try:
-        yield
-    finally:
-        masks.step_mask_source = original
-
-
 def _parser() -> argparse.ArgumentParser:
     native = _external()
     parser = native.build_parser()
@@ -190,7 +176,6 @@ def _parser() -> argparse.ArgumentParser:
     parser.set_defaults(
         steps=8,
         reuse_start_step=0,
-        mask_steps=",".join(str(step) for step in CC_STEPS),
         mask_probe_step=CC_MASK_PROBE_STEP,
         sparse_layers=CC_REGION_LAYERS,
         outer_sparse_layers=CC_OUTER_LAYERS,
@@ -214,8 +199,6 @@ def _validate(args: argparse.Namespace) -> None:
     native = _external()
     if args.steps != 8:
         raise ValueError(f"{NAME} requires exactly 8 steps, got {args.steps}")
-    if tuple(native.parse_int_list(args.mask_steps)) != CC_STEPS:
-        raise ValueError(f"{NAME} requires mask steps 1..8, got {args.mask_steps}")
     if args.mask_probe_step != CC_MASK_PROBE_STEP:
         raise ValueError(f"{NAME} calibrates masks at completed step {CC_MASK_PROBE_STEP}")
     if args.reuse_start_step != 0:
@@ -260,7 +243,6 @@ def _run_target_variant(runtime: Any, args: argparse.Namespace, source: dict[str
     sparse_state = NativeSparseState(
         model_module=runtime.wan["model_module"],
         mask_bundle=mask_bundle,
-        step_mask_source=lambda _step: CC_MASK_PROBE_STEP,
         layers=native.parse_int_ranges(CC_REGION_LAYERS),
     )
     outer_state = None
@@ -307,22 +289,21 @@ def _run_target_variant(runtime: Any, args: argparse.Namespace, source: dict[str
                 cached_tokens=tokens,
             )
         )
-        with _fixed_latent_mask_source(CC_MASK_PROBE_STEP):
-            manifest = native.run_native_t2v_stage(
-                runtime,
-                args,
-                label=baseline,
-                prompt=args.target_prompt,
-                out_video=output,
-                cache_dir=cache_dir,
-                resume_latent_path=source_initial,
-                resume_start_step=0,
-                source_trajectory=source_trajectory,
-                mask_bundle=mask_bundle,
-                sparse_state=sparse_state,
-                outer_sparse_state=outer_state,
-                ffn_state=ffn_state,
-            )
+        manifest = native.run_native_t2v_stage(
+            runtime,
+            args,
+            label=baseline,
+            prompt=args.target_prompt,
+            out_video=output,
+            cache_dir=cache_dir,
+            resume_latent_path=source_initial,
+            resume_start_step=0,
+            source_trajectory=source_trajectory,
+            mask_bundle=mask_bundle,
+            sparse_state=sparse_state,
+            outer_sparse_state=outer_state,
+            ffn_state=ffn_state,
+        )
     manifest["hybrid"] = {
         "name": NAME,
         "baseline": baseline,
@@ -465,7 +446,7 @@ def run_matrix(args: argparse.Namespace) -> dict[str, Any]:
         mask_bundle["hybrid"] = {
             "name": NAME,
             "calibration_completed_step": CC_MASK_PROBE_STEP,
-            "target_mask_source_steps": {str(step): CC_MASK_PROBE_STEP for step in CC_STEPS},
+            "target_mask_source_completed_step": CC_MASK_PROBE_STEP,
             "block0_cache_steps": list(CC_CACHE_STEPS),
         }
         save_mask_bundle(paths["mask_dir"], mask_bundle, save_cpu=True)

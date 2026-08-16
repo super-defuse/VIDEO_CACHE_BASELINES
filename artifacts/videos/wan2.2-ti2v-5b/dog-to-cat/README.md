@@ -9,6 +9,7 @@
 | NIRVANA-VID | `nirvana-vid.mp4` |
 | CHAI | `chai.mp4` |
 | TeaCache | `teacache.mp4` |
+| Chorus | `chorus.mp4` |
 | Carnator B0 | `carnator-b0.mp4` |
 | Carnator B1 | `carnator-b1.mp4` |
 | Carnator B2 | `carnator-b2.mp4` |
@@ -23,6 +24,6 @@
 | CHAI-Carnator CC-B5 | `chai-carnator-b5.mp4` |
 
 原始路径和运行元数据仍保留在 `artifacts/carnator/`、`artifacts/chai-carnator/`、
-`artifacts/runs/`、`artifacts/carnator-results/ti2v-5b/` 以及
-`artifacts/chai-carnator-results/` 下；CHAI-Carnator 质量指标见
-`artifacts/runs/real-wan-chai-carnator-20260814-quality/metrics.json`。
+`artifacts/runs/wan22-ti2v-5b/dog-to-cat/`、`artifacts/carnator-results/ti2v-5b/`
+以及 `artifacts/chai-carnator-results/` 下；CHAI-Carnator 质量指标见
+`artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/metrics.json`。

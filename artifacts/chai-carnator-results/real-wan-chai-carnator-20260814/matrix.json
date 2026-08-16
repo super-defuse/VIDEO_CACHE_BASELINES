@@ -133,16 +133,7 @@
       "enabled": true,
       "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/probe_masks/masks.pt",
       "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/probe_masks",
-      "mask_steps": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ]
+      "source_completed_step": 5
     },
     "resume": {
       "resume_latent_path": null,
@@ -154,7 +145,7 @@
       "calls": 0,
       "total_seconds": 0.0,
       "avg_ms": 0.0,
-      "mask_steps": {}
+      "mask_source_completed_step": null
     },
     "sparse_blocks": {
       "enabled": false
@@ -187,8 +178,8 @@
       "format": "carnator-source-block-mask-v1",
       "cfg_branches": 2,
       "entries": 288,
-      "capture_seconds": 49.20618394063786,
-      "write_seconds": 0.6067442249041051,
+      "capture_seconds": 53.10654922318645,
+      "write_seconds": 0.6103022883180529,
       "avg_density": 0.3650270732016199,
       "avg_coverage": 0.956892252796226
     },
@@ -197,35 +188,35 @@
       "backend": "fp"
     },
     "timing": {
-      "loop_denoise_seconds": 61.89263188187033,
-      "finalize_output_seconds": 18.80533292097971,
-      "end_to_end_seconds": 85.0670005439315
+      "loop_denoise_seconds": 61.93565397989005,
+      "finalize_output_seconds": 19.014178136130795,
+      "end_to_end_seconds": 85.12127855187282
     },
     "profile": {
       "self_attn": {
         "calls": 480,
-        "total_ms": 46399.13991165161,
-        "avg_ms": 96.66487481594086
+        "total_ms": 46490.52731704712,
+        "avg_ms": 96.85526524384817
       },
       "cross_attn": {
         "calls": 480,
-        "total_ms": 2659.6637120246887,
-        "avg_ms": 5.540966066718101
+        "total_ms": 2614.7634267807007,
+        "avg_ms": 5.447423805793126
       },
       "ffn": {
         "calls": 480,
-        "total_ms": 5656.494456291199,
-        "avg_ms": 11.784363450606664
+        "total_ms": 5665.198302268982,
+        "avg_ms": 11.802496463060379
       },
       "denoising": {
         "calls": 16,
-        "total_ms": 61692.545166015625,
-        "avg_ms": 3855.7840728759766
+        "total_ms": 61733.939697265625,
+        "avg_ms": 3858.3712310791016
       }
     },
     "peak_gpu_memory_gib": {
-      "allocated": 43.76625204086304,
-      "reserved": 52.935546875
+      "allocated": 43.76482343673706,
+      "reserved": 52.93359375
     },
     "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/manifest.json",
     "hybrid": {
@@ -248,6 +239,24 @@
         4
       ],
       "chai_block0_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/chai_block0_tokens.pt",
+      "block0_cache_capture": {
+        "capture": true,
+        "cache_steps": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "captured_steps": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "cache_attention_steps": [],
+        "cache_attention_calls": 0,
+        "model_forward_calls": 16
+      },
       "carnator_mask_probe_step": 5,
       "outer_mask_layers": [
         1,
@@ -306,16 +315,7 @@
       "enabled": false,
       "path": null,
       "mask_dir": null,
-      "mask_steps": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ]
+      "source_completed_step": null
     },
     "resume": {
       "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -327,7 +327,7 @@
       "calls": 0,
       "total_seconds": 0.0,
       "avg_ms": 0.0,
-      "mask_steps": {}
+      "mask_source_completed_step": null
     },
     "sparse_blocks": {
       "enabled": false
@@ -340,30 +340,30 @@
       "backend": "fp"
     },
     "timing": {
-      "loop_denoise_seconds": 44.55255415290594,
-      "finalize_output_seconds": 19.017483111005276,
-      "end_to_end_seconds": 63.89972198009491
+      "loop_denoise_seconds": 44.50588244199753,
+      "finalize_output_seconds": 19.033044843003154,
+      "end_to_end_seconds": 63.91988485399634
     },
     "profile": {
       "self_attn": {
         "calls": 480,
-        "total_ms": 29233.493865966797,
-        "avg_ms": 60.90311222076416
+        "total_ms": 29188.89906311035,
+        "avg_ms": 60.8102063814799
       },
       "cross_attn": {
         "calls": 480,
-        "total_ms": 2637.987012863159,
-        "avg_ms": 5.495806276798248
+        "total_ms": 2640.9330554008484,
+        "avg_ms": 5.5019438654184345
       },
       "ffn": {
         "calls": 480,
-        "total_ms": 5603.281887054443,
-        "avg_ms": 11.673503931363424
+        "total_ms": 5605.4942445755005,
+        "avg_ms": 11.678113009532293
       },
       "denoising": {
         "calls": 16,
-        "total_ms": 44542.171875,
-        "avg_ms": 2783.8857421875
+        "total_ms": 44495.654541015625,
+        "avg_ms": 2780.9784088134766
       }
     },
     "peak_gpu_memory_gib": {
@@ -413,16 +413,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -432,11 +423,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.02458878280594945,
-          "avg_ms": 3.073597850743681,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.023260555928573012,
+          "avg_ms": 2.9075694910716265,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -455,7 +444,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 14.741192648885772,
+          "sparse_forward_elapsed_seconds": 14.725466691656038,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -471,7 +460,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -488,30 +477,30 @@
           "backend": "fp"
         },
         "timing": {
-          "loop_denoise_seconds": 39.77012976282276,
-          "finalize_output_seconds": 19.064335602801293,
-          "end_to_end_seconds": 59.175401230109856
+          "loop_denoise_seconds": 39.58599411603063,
+          "finalize_output_seconds": 18.972917234990746,
+          "end_to_end_seconds": 58.91697621089406
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 19352.402992248535,
-            "avg_ms": 63.659220369238604
+            "total_ms": 19191.15208053589,
+            "avg_ms": 63.128789738604894
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2274.6004498004913,
-            "avg_ms": 4.738750937084357
+            "total_ms": 2276.356769800186,
+            "avg_ms": 4.742409937083721
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 4808.323362827301,
-            "avg_ms": 10.017340339223544
+            "total_ms": 4802.690017700195,
+            "avg_ms": 10.005604203542074
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 39668.79541015625,
-            "avg_ms": 2479.2997131347656
+            "total_ms": 39490.61962890625,
+            "avg_ms": 2468.1637268066406
           }
         },
         "peak_gpu_memory_gib": {
@@ -548,7 +537,25 @@
           "ffn_backend": "fp",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     },
@@ -591,16 +598,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -610,11 +608,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.020121091743931174,
-          "avg_ms": 2.515136467991397,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.02304155007004738,
+          "avg_ms": 2.8801937587559223,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -633,7 +629,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 3.7509635754395276,
+          "sparse_forward_elapsed_seconds": 3.737020454602316,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -649,7 +645,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -668,8 +664,8 @@
           "cache_hits": 288,
           "cache_misses": 0,
           "planned_masks": 288,
-          "plan_seconds": 7.298172626411542,
-          "mask_load_seconds": 0.206662975018844,
+          "plan_seconds": 7.26970964577049,
+          "mask_load_seconds": 0.25338428001850843,
           "routing_time_ms": 0.0,
           "avg_runtime_density": 0.3650270732016199,
           "avg_source_per_head_density": 0.3650270732016199,
@@ -713,30 +709,30 @@
           "backend": "fp"
         },
         "timing": {
-          "loop_denoise_seconds": 41.26697733998299,
-          "finalize_output_seconds": 18.91909202816896,
-          "end_to_end_seconds": 60.57072300789878
+          "loop_denoise_seconds": 41.17233391595073,
+          "finalize_output_seconds": 18.976453935028985,
+          "end_to_end_seconds": 60.52028337307274
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 20907.509799957275,
-            "avg_ms": 68.77470328933315
+            "total_ms": 20842.912963867188,
+            "avg_ms": 68.56221369693154
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2274.412576675415,
-            "avg_ms": 4.738359534740448
+            "total_ms": 2273.390751838684,
+            "avg_ms": 4.736230732997258
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 4799.180124759674,
-            "avg_ms": 9.998291926582654
+            "total_ms": 4790.321530818939,
+            "avg_ms": 9.979836522539456
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 41176.215576171875,
-            "avg_ms": 2573.513473510742
+            "total_ms": 41082.13427734375,
+            "avg_ms": 2567.6333923339844
           }
         },
         "peak_gpu_memory_gib": {
@@ -773,7 +769,25 @@
           "ffn_backend": "fp",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     },
@@ -816,16 +830,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -835,11 +840,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.022799209458753467,
-          "avg_ms": 2.8499011823441833,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.02243947610259056,
+          "avg_ms": 2.80493451282382,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -858,7 +861,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 3.500779189169407,
+          "sparse_forward_elapsed_seconds": 3.4785359611269087,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -874,7 +877,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -894,7 +897,7 @@
           "cache_misses": 0,
           "planned_masks": 288,
           "plan_seconds": 0.0,
-          "mask_load_seconds": 0.23531729658134282,
+          "mask_load_seconds": 0.24062926694750786,
           "routing_time_ms": 0.0,
           "avg_runtime_density": 0.3650270732016199,
           "avg_source_per_head_density": 0.3650270732016199,
@@ -936,30 +939,30 @@
           "backend": "fp"
         },
         "timing": {
-          "loop_denoise_seconds": 30.76476177596487,
-          "finalize_output_seconds": 18.976731614908203,
-          "end_to_end_seconds": 50.09682364901528
+          "loop_denoise_seconds": 30.733542302856222,
+          "finalize_output_seconds": 19.06304697901942,
+          "end_to_end_seconds": 50.19466875703074
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 10204.876022338867,
-            "avg_ms": 33.568671126114694
+            "total_ms": 10217.642078399658,
+            "avg_ms": 33.61066473157782
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2299.8617293834686,
-            "avg_ms": 4.791378602882227
+            "total_ms": 2301.884805202484,
+            "avg_ms": 4.795593344171842
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 4770.492858886719,
-            "avg_ms": 9.93852678934733
+            "total_ms": 4766.876287460327,
+            "avg_ms": 9.930992265542349
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 30671.237548828125,
-            "avg_ms": 1916.9523468017578
+            "total_ms": 30639.93017578125,
+            "avg_ms": 1914.9956359863281
           }
         },
         "peak_gpu_memory_gib": {
@@ -996,7 +999,25 @@
           "ffn_backend": "fp",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     },
@@ -1039,16 +1060,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -1058,11 +1070,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.025416129967197776,
-          "avg_ms": 3.177016245899722,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.02442133123986423,
+          "avg_ms": 3.0526664049830288,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -1081,7 +1091,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 15.004058733582497,
+          "sparse_forward_elapsed_seconds": 14.980716346763074,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -1097,7 +1107,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -1990,30 +2000,30 @@
           "layer_output_error": {}
         },
         "timing": {
-          "loop_denoise_seconds": 40.11713389586657,
-          "finalize_output_seconds": 19.046009585028514,
-          "end_to_end_seconds": 59.50599218904972
+          "loop_denoise_seconds": 40.115722839022055,
+          "finalize_output_seconds": 18.973863571183756,
+          "end_to_end_seconds": 59.45003734692
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 18733.31965637207,
-            "avg_ms": 61.62276202753971
+            "total_ms": 18731.52656173706,
+            "avg_ms": 61.61686368992454
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2265.597729921341,
-            "avg_ms": 4.71999527066946
+            "total_ms": 2268.403141260147,
+            "avg_ms": 4.725839877625306
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 6013.783871650696,
-            "avg_ms": 12.528716399272282
+            "total_ms": 6015.120269775391,
+            "avg_ms": 12.531500562032063
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 40016.052734375,
-            "avg_ms": 2501.0032958984375
+            "total_ms": 40016.14453125,
+            "avg_ms": 2501.009033203125
           }
         },
         "peak_gpu_memory_gib": {
@@ -2050,7 +2060,25 @@
           "ffn_backend": "w8a8",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     },
@@ -2093,16 +2121,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -2112,11 +2131,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.021260763984173536,
-          "avg_ms": 2.657595498021692,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.019874576246365905,
+          "avg_ms": 2.484322030795738,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -2135,7 +2152,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 3.5427627863828093,
+          "sparse_forward_elapsed_seconds": 3.5418754869606346,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -2151,7 +2168,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -2170,8 +2187,8 @@
           "cache_hits": 288,
           "cache_misses": 0,
           "planned_masks": 288,
-          "plan_seconds": 6.6745064712595195,
-          "mask_load_seconds": 0.19870705576613545,
+          "plan_seconds": 6.699920929968357,
+          "mask_load_seconds": 0.19877207092940807,
           "routing_time_ms": 0.0,
           "avg_runtime_density": 0.3650270732016199,
           "avg_source_per_head_density": 0.3650270732016199,
@@ -3091,30 +3108,30 @@
           "layer_output_error": {}
         },
         "timing": {
-          "loop_denoise_seconds": 39.06388852302916,
-          "finalize_output_seconds": 19.036063737934455,
-          "end_to_end_seconds": 58.49383569811471
+          "loop_denoise_seconds": 39.082442654063925,
+          "finalize_output_seconds": 18.986392179969698,
+          "end_to_end_seconds": 58.47842178191058
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 20035.72129058838,
-            "avg_ms": 65.90697792956703
+            "total_ms": 20076.36421585083,
+            "avg_ms": 66.0406717626672
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2268.7576308250427,
-            "avg_ms": 4.7265783975521725
+            "total_ms": 2270.3921267986298,
+            "avg_ms": 4.729983597497145
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 3745.7251086235046,
-            "avg_ms": 7.803593976298968
+            "total_ms": 3741.3561687469482,
+            "avg_ms": 7.794492018222809
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 38983.707763671875,
-            "avg_ms": 2436.481735229492
+            "total_ms": 39003.256103515625,
+            "avg_ms": 2437.7035064697266
           }
         },
         "peak_gpu_memory_gib": {
@@ -3151,7 +3168,25 @@
           "ffn_backend": "w8a8",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     },
@@ -3194,16 +3229,7 @@
           "enabled": false,
           "path": null,
           "mask_dir": null,
-          "mask_steps": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8
-          ]
+          "source_completed_step": null
         },
         "resume": {
           "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chai-carnator/real-wan-chai-carnator-20260814/cache/source_dense/latents_initial.pt",
@@ -3213,11 +3239,9 @@
           "enabled": true,
           "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
           "calls": 8,
-          "total_seconds": 0.02464196109212935,
-          "avg_ms": 3.0802451365161687,
-          "mask_steps": {
-            "5": 8
-          }
+          "total_seconds": 0.021547825075685978,
+          "avg_ms": 2.6934781344607472,
+          "mask_source_completed_step": 5
         },
         "sparse_blocks": {
           "enabled": true,
@@ -3236,7 +3260,7 @@
           ],
           "sparse_call_count": 176,
           "dense_fallback_count": 0,
-          "sparse_forward_elapsed_seconds": 3.2197679344099015,
+          "sparse_forward_elapsed_seconds": 3.213204780127853,
           "calls_by_layer": {
             "10": 16,
             "11": 16,
@@ -3252,7 +3276,7 @@
           },
           "index_cache": [
             {
-              "mask_source_step": 5,
+              "source_completed_step": 5,
               "token_count": 27280,
               "query_count": 16314,
               "context_count": 21522,
@@ -3272,7 +3296,7 @@
           "cache_misses": 0,
           "planned_masks": 288,
           "plan_seconds": 0.0,
-          "mask_load_seconds": 0.20814512274228036,
+          "mask_load_seconds": 0.22756646643392742,
           "routing_time_ms": 0.0,
           "avg_runtime_density": 0.3650270732016199,
           "avg_source_per_head_density": 0.3650270732016199,
@@ -4190,30 +4214,30 @@
           "layer_output_error": {}
         },
         "timing": {
-          "loop_denoise_seconds": 28.80231983703561,
-          "finalize_output_seconds": 19.0184467821382,
-          "end_to_end_seconds": 48.18355241487734
+          "loop_denoise_seconds": 28.862618249841034,
+          "finalize_output_seconds": 19.06467819097452,
+          "end_to_end_seconds": 48.301398099865764
         },
         "profile": {
           "self_attn": {
             "calls": 304,
-            "total_ms": 9785.187532424927,
-            "avg_ms": 32.188116882976736
+            "total_ms": 9839.258960723877,
+            "avg_ms": 32.3659834234338
           },
           "cross_attn": {
             "calls": 480,
-            "total_ms": 2260.111552476883,
-            "avg_ms": 4.7085657343268394
+            "total_ms": 2261.8564500808716,
+            "avg_ms": 4.712200937668483
           },
           "ffn": {
             "calls": 480,
-            "total_ms": 3658.7392740249634,
-            "avg_ms": 7.622373487552007
+            "total_ms": 3654.181242465973,
+            "avg_ms": 7.612877588470777
           },
           "denoising": {
             "calls": 16,
-            "total_ms": 28718.170043945312,
-            "avg_ms": 1794.885627746582
+            "total_ms": 28771.2705078125,
+            "avg_ms": 1798.2044067382812
           }
         },
         "peak_gpu_memory_gib": {
@@ -4250,7 +4274,25 @@
           "ffn_backend": "w8a8",
           "fixed_mask_completed_step": 5,
           "fixed_latent_mask_source": 5,
-          "latent_injection_calls_expected": 8
+          "latent_injection_calls_expected": 8,
+          "block0_cache_attention": {
+            "capture": false,
+            "cache_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "captured_steps": [],
+            "cache_attention_steps": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "cache_attention_calls": 8,
+            "model_forward_calls": 16
+          }
         }
       }
     }
@@ -4301,6 +4343,6 @@
     ]
   },
   "timing": {
-    "matrix_seconds": 542.2041416768916
+    "matrix_seconds": 543.3418631020468
   }
 }

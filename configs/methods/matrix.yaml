@@ -24,6 +24,6 @@ methods:
     wan22: supported-via-chai-carnator-matrix-cli
     cogvideox15: N/A
   chorus:
-    environment: N/A
-    wan22: N/A
+    environment: wan
+    wan22: supported-via-source-target-matrix
     cogvideox15: N/A

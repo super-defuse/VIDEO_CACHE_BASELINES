@@ -36,6 +36,35 @@ def test_chai_cold_then_hot_and_namespace(tmp_path):
     assert not (tmp_path / "cache" / "synthetic" / "baseline").exists()
 
 
+def test_chorus_uses_source_prompt_cache_on_synthetic(tmp_path):
+    config = {"dry_run": True, "seed": 3, "cache_root": "cache", "max_cache_bytes": 1024}
+    adapter = make_adapter("synthetic", config)
+    method = make_method("chorus", config)
+    runner = Runner(adapter, method, model="synthetic", output_dir=tmp_path / "chorus",
+                    cache_root=tmp_path / "cache")
+    source = runner.process(Request(0, "source", "a dog", 4))
+    target = runner.process(Request(1, "target", "a cat", 4, cache_prompt="a dog"))
+    assert source.status == target.status == "ok"
+    assert target.cache_match.kind == "source_prompt"
+    assert target.executed_steps == 8
+
+
+def test_chorus_latent_fusion_matches_carnator_region_semantics():
+    import torch
+
+    from adapters.wan22 import Wan22Adapter
+
+    sample = torch.full((2, 2, 3, 4), 7.0)
+    source = torch.full_like(sample, -3.0)
+    edit = torch.zeros((2, 3, 4), dtype=torch.bool)
+    edit[:, 1:, 2:] = True
+    fused = Wan22Adapter._fuse_chorus_latent(sample, source, edit)
+
+    assert torch.equal(fused[:, :, :1, :], source[:, :, :1, :])
+    assert torch.equal(fused[:, :, 1:, 2:], sample[:, :, 1:, 2:])
+    assert torch.equal(fused[:, :, 1:, :2], source[:, :, 1:, :2])
+
+
 def test_cache_namespace_isolated_by_model(tmp_path):
     config = {"dry_run": True, "cache_root": "cache", "max_cache_bytes": 1024}
     first = Runner(make_adapter("synthetic", config), make_method("chai", config),

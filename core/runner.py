@@ -39,26 +39,48 @@ class Runner:
     def process(self, request: Request) -> RequestResult:
         start = time.perf_counter()
         match = CacheMatch()
+        timing: dict[str, float] = {}
         try:
+            lookup_start = time.perf_counter()
             match = self.cache.find(request) if self.method.capabilities.cross_request_cache else CacheMatch()
+            timing["cache_lookup_s"] = time.perf_counter() - lookup_start
             cached = None
+            cache_load_start = time.perf_counter()
             loaded = self.cache.load(match)
             if loaded:
                 path, _entry = loaded
                 cached = self.adapter.load_latent(path)
+            timing["cache_load_s"] = time.perf_counter() - cache_load_start
+            generation_start = time.perf_counter()
             generation = self.method.generate(request, cached_latent=cached, capture=not match.hit)
+            timing["generation_s"] = time.perf_counter() - generation_start
             output_path = self.video_dir / f"{request.request_index:04d}_{request.uuid}.mp4"
+            save_start = time.perf_counter()
             self.adapter.save_video(generation.video, output_path)
+            timing["save_video_s"] = time.perf_counter() - save_start
+            cache_save_start = time.perf_counter()
             if not match.hit and generation.latent is not None and self.method.capabilities.cross_request_cache:
                 self.cache.put(request, generation.latent, generation.latent_step or -1, self.adapter.save_latent)
+            timing["cache_save_s"] = time.perf_counter() - cache_save_start
+            hash_start = time.perf_counter()
+            output_hash = _hash(output_path)
+            timing["hash_s"] = time.perf_counter() - hash_start
+            elapsed = time.perf_counter() - start
+            excluded = float(generation.extra.get("excluded_latency_s", 0.0))
+            timing["excluded_preprocess_s"] = excluded
+            timing["reported_latency_s"] = max(0.0, elapsed - excluded)
+            extra = dict(generation.extra)
+            extra["timing"] = timing
             return RequestResult(request.request_index, request.uuid, request.prompt, self.model, self.method.name,
-                                 request.seed, match, generation.executed_steps, time.perf_counter() - start,
-                                 "ok", str(output_path), str(output_path), _hash(output_path), self.cache.bytes_used,
-                                 extra=generation.extra)
+                                 request.seed, match, generation.executed_steps, timing["reported_latency_s"],
+                                 "ok", str(output_path), str(output_path), output_hash, self.cache.bytes_used,
+                                 extra=extra)
         except Exception as exc:
+            timing["reported_latency_s"] = time.perf_counter() - start
             return RequestResult(request.request_index, request.uuid, request.prompt, self.model, self.method.name,
-                                 request.seed, match, None, time.perf_counter() - start, "error",
-                                 error=f"{type(exc).__name__}: {exc}", cache_bytes=self.cache.bytes_used)
+                                 request.seed, match, None, timing["reported_latency_s"], "error",
+                                 error=f"{type(exc).__name__}: {exc}", cache_bytes=self.cache.bytes_used,
+                                 extra={"timing": timing})
 
 
 def _hash(path: Path) -> str:

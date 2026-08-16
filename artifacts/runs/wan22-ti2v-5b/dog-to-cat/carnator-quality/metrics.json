@@ -1,0 +1,90 @@
+{
+  "status": "completed",
+  "matrix": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/wan-quality-completion-20260814/matrix.json",
+  "quality_metrics": [
+    "clip_t",
+    "vbench_q"
+  ],
+  "records": [
+    {
+      "profile": "Wan2.2-TI2V-5B",
+      "baseline": "Carnator_B1",
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4-flashinfer-20260813/B1/videos/target_latent_reuse.mp4",
+      "clip_t": 0.353271484375,
+      "vbench_q": 0.6366156542453829,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9857820734381676,
+        "background_consistency": 0.978961181640625,
+        "motion_smoothness": 0.9903083817165992,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6939669251441956,
+        "imaging_quality": 75.25114579634233,
+        "vbench_q": 0.6366156542453829
+      }
+    },
+    {
+      "profile": "Wan2.2-TI2V-5B",
+      "baseline": "Carnator_B3",
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b3-20260814/B3/videos/target_latent_reuse.mp4",
+      "clip_t": 0.351318359375,
+      "vbench_q": 0.6375641866561713,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9852956473827362,
+        "background_consistency": 0.9814351399739584,
+        "motion_smoothness": 0.9901724191062354,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6955475211143494,
+        "imaging_quality": 75.52111860543243,
+        "vbench_q": 0.6375641866561713
+      }
+    },
+    {
+      "profile": "Wan2.2-TI2V-5B",
+      "baseline": "Carnator_B4",
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-c0-b4-flashinfer-20260813/B4/videos/target_latent_reuse.mp4",
+      "clip_t": 0.3515625,
+      "vbench_q": 0.6363279739766664,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9848050723473231,
+        "background_consistency": 0.9835306803385416,
+        "motion_smoothness": 0.9903193230269144,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6870800852775574,
+        "imaging_quality": 75.24961455794406,
+        "vbench_q": 0.6363279739766664
+      }
+    },
+    {
+      "profile": "Wan2.2-TI2V-5B",
+      "baseline": "NIRVANA-VID",
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/nirvana-vid/videos/0001_target-000.mp4",
+      "clip_t": 0.35546875,
+      "vbench_q": 0.6336521621019793,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9889445679883162,
+        "background_consistency": 0.9784627278645833,
+        "motion_smoothness": 0.9906810397992254,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6847763657569885,
+        "imaging_quality": 73.69939296501727,
+        "vbench_q": 0.6336521621019793
+      }
+    },
+    {
+      "profile": "Wan2.2-TI2V-5B",
+      "baseline": "TeaCache",
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/teacache/videos/0000_target-000.mp4",
+      "clip_t": 0.33349609375,
+      "vbench_q": 0.6209197070044019,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9782367177307606,
+        "background_consistency": 0.9671407063802083,
+        "motion_smoothness": 0.9931014779042339,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.5883556604385376,
+        "imaging_quality": 76.564869526004,
+        "vbench_q": 0.6209197070044019
+      }
+    }
+  ]
+}

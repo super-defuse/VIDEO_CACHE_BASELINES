@@ -18,6 +18,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+
+METHOD_RUN_NAMES = {
+    "nirvana_vid": "nirvana-vid",
+}
+
 from adapters import make_adapter
 from core import Request, Runner
 from core.registry import ensure_supported, make_method
@@ -48,7 +53,7 @@ def main() -> int:
     args = parser.parse_args()
 
     names = [item.strip() for item in args.methods.split(",") if item.strip()]
-    allowed = {"baseline", "chai", "teacache", "nirvana_vid", "carnator"}
+    allowed = {"baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus"}
     if not names or any(name not in allowed for name in names):
         raise SystemExit(f"--methods must be a subset of {sorted(allowed)}")
     model_config = ({"model": "synthetic", "dry_run": True, "seed": 0}
@@ -57,15 +62,18 @@ def main() -> int:
     method_config = _load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = {**model_config, **method_config, "dry_run": args.model == "synthetic"}
     seed = int(args.seed if args.seed is not None else config.get("seed", 0))
+    run_root = ROOT / "artifacts" / "runs" / args.run_prefix
+    run_root.mkdir(parents=True, exist_ok=True)
     summary = {"model": args.model, "source_prompt": args.source_prompt,
-               "target_prompt": args.target_prompt, "seed": seed, "methods": {}}
+               "target_prompt": args.target_prompt, "seed": seed,
+               "run_root": str(run_root), "methods": {}}
 
-    cross_request = {"chai", "nirvana_vid", "carnator"}
+    cross_request = {"chai", "nirvana_vid", "carnator", "chorus"}
     for name in names:
         ensure_supported(args.model, name)
         adapter = make_adapter(args.model, config)
         method = make_method(name, config)
-        run_dir = ROOT / "artifacts" / "runs" / f"{args.run_prefix}-{name}"
+        run_dir = run_root / METHOD_RUN_NAMES.get(name, name)
         run_dir.mkdir(parents=True, exist_ok=True)
         runner = Runner(adapter, method, model=adapter.model_name, output_dir=run_dir,
                         cache_root=ROOT / config["cache_root"])
@@ -91,10 +99,13 @@ def main() -> int:
             "target_cache_match": results[-1].cache_match.kind,
             "target_latency_s": results[-1].latency_s,
             "target_executed_steps": results[-1].executed_steps,
+            "source_timing": results[0].extra.get("timing") if name in cross_request else None,
+            "target_timing": results[-1].extra.get("timing"),
+            "target_extra": results[-1].extra,
         }
         adapter.reset_hooks()
 
-    output = ROOT / "artifacts" / "runs" / f"{args.run_prefix}-summary.json"
+    output = run_root / "summary.json"
     output.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     return 0

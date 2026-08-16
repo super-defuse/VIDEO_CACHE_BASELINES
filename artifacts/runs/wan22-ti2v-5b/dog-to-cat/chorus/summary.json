@@ -1,0 +1,144 @@
+{
+  "model": "wan22",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "methods": {
+    "chorus": {
+      "run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus",
+      "source_status": "ok",
+      "target_status": "ok",
+      "target_cache_match": "source_prompt",
+      "target_latency_s": 178.26975430594757,
+      "target_executed_steps": 40,
+      "source_timing": {
+        "cache_lookup_s": 2.0837876945734024e-05,
+        "cache_load_s": 1.0801013559103012e-06,
+        "generation_s": 291.69406633102335,
+        "save_video_s": 1.5661158689763397,
+        "cache_save_s": 0.9187251369003206,
+        "hash_s": 0.011050919070839882,
+        "excluded_preprocess_s": 0,
+        "reported_latency_s": 294.19011127296835
+      },
+      "target_timing": {
+        "cache_lookup_s": 0.00016257399693131447,
+        "cache_load_s": 0.00037297001108527184,
+        "generation_s": 227.8298661748413,
+        "save_video_s": 2.9190622998867184,
+        "cache_save_s": 2.0090024918317795e-05,
+        "hash_s": 0.018684788141399622,
+        "excluded_preprocess_s": 52.49853069009259,
+        "reported_latency_s": 178.26975430594757
+      },
+      "target_extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 40,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            40
+          ],
+          "stage3": [
+            40,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "chorus_llm": {
+          "source_entities": [
+            "dog"
+          ],
+          "target_entities": [
+            "cat"
+          ],
+          "removed_tokens": [
+            "dog"
+          ],
+          "added_tokens": [
+            "cat"
+          ],
+          "edit_summary": "Replaced 'dog' with 'cat' as the main subject while keeping the setting and action identical.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 25.729
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "dog",
+          "boxes": 1,
+          "box_confidence_max": 0.9543,
+          "pixel_edit_fraction": 0.1395,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1395,
+          "edit_fraction": 0.5324,
+          "see_fraction": 0.8406,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max"
+        },
+        "chorus_preprocess_s": 52.49853069009259,
+        "chorus_llm_s": 25.729232802055776,
+        "chorus_sam_s": 26.769297888036817,
+        "excluded_latency_s": 52.49853069009259,
+        "chorus_tgaa": {
+          "gamma_k": 1.15,
+          "gamma_o": 1.05
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "srd": {
+            "enabled": true,
+            "edit_fraction": 0.5324,
+            "see_fraction": 0.8406,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          },
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 49,
+          "latent_fusion_semantics": "source latent fused at every target denoising step from K1 through final step; SRD active only in K1 <= step < K2"
+        },
+        "timing": {
+          "cache_lookup_s": 0.00016257399693131447,
+          "cache_load_s": 0.00037297001108527184,
+          "generation_s": 227.8298661748413,
+          "save_video_s": 2.9190622998867184,
+          "cache_save_s": 2.0090024918317795e-05,
+          "hash_s": 0.018684788141399622,
+          "excluded_preprocess_s": 52.49853069009259,
+          "reported_latency_s": 178.26975430594757
+        }
+      },
+      "source_output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/videos/0000_source-000.mp4",
+      "target_output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/videos/0001_target-000.mp4",
+      "target_output_hash": "62b34cd38b21458a25a3bfa1273f14d8a4daf85ad9d49b85e43b91b87e5d4f1f",
+      "artifact_status": "replaced_after_latent_fusion_fix",
+      "timing_note": "target timing_s and timing breakdown are retained from the original full source/target run; the fixed target replacement was regenerated target-only from the existing source cache and did not emit a separate Runner timing record",
+      "target_regeneration": {
+        "mode": "target_only_from_existing_source_cache",
+        "timing_recorded": false,
+        "source_cache_reused": true,
+        "output_hash": "62b34cd38b21458a25a3bfa1273f14d8a4daf85ad9d49b85e43b91b87e5d4f1f"
+      }
+    }
+  }
+}

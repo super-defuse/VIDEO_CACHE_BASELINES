@@ -1,2 +1,27 @@
 cache_root: artifacts/cache
 max_cache_bytes: 5368709120
+chorus:
+  stages:
+    # Engineering schedule for the 50-step Wan2.2 run; Chorus does not
+    # publish numeric K1/K2 values.
+    k1: 10
+    k2: 40
+  gamma_k: 1.15
+  gamma_o: 1.05
+  tgaa_blocks: [0]
+  tgaa_token_prefix: 8
+  mask_dilation_edit: 8
+  mask_dilation_see: 14
+  grounded_sam2:
+    release: v1.0
+    commit: dd4c514
+    root: ../Grounded-SAM-2
+    checkpoint_dir: ../../models/Grounded-SAM-2-v1.0
+    device: cuda
+    hf_endpoint: https://hf-mirror.com
+    box_threshold: 0.35
+    text_threshold: 0.25
+    sam_checkpoint: sam2.1_hiera_large.pt
+    sam_config: configs/sam2.1/sam2.1_hiera_l.yaml
+    groundingdino_checkpoint: groundingdino_swint_ogc.pth
+    groundingdino_config: GroundingDINO_SwinT_OGC.py
