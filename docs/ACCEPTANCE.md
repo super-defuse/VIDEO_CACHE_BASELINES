@@ -40,7 +40,7 @@ Grounded-SAM-2 预处理通过 `excluded_latency_s` 单独列出并从报告时�
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B3 | 8 | 59.45 | 5.06x | 0.3367 | 0.5500 | block 0 CHAI；其余 block dense outer + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B4 | 8 | 58.48 | 5.14x | 0.3506 | 0.5556 | block 0 CHAI；其余 block FlashInfer VariableBlock + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B5 | 8 | 48.30 | 6.23x | 0.3484 | 0.5578 | block 0 CHAI；其余 block SpargeAttn + W8A8 FFN；本轮重跑 |
-| Wan2.2-TI2V-5B | Chorus | 40 | 178.27 | 1.69x | N/A | N/A | source 50 步；K1=10/K2=40；逐步 cache 读取计入生成时延；SRD `Medit=53.24%`/`Msee=84.06%`；LLM+SAM `52.50s` 单独剔除 |
+| Wan2.2-TI2V-5B | Chorus | 40 | 179.06 | 1.68x | 0.3491 | 0.6218 | source `295.77s`；K1=10/K2=40；Stage 2 使用 SRD、dense head、全部 30 个 blocks 的 TGAA（1800 calls）和 latent fusion；Stage 3 在 step 40 重置 UniPC history 后 dense/no-reuse；LLM+SAM `60.28s` 单独剔除；VBench 六维度已完成 |
 | CogVideoX1.5 | Dense baseline（Carnator C0） | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | NIRVANA-VID | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | CHAI | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空；旧版产物已清理 |
@@ -97,10 +97,10 @@ target E2E 与 speedup。CC-B 的 speedup 以本轮 50-step dense baseline（Car
   结果汇总：`artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/`
 - CogVideoX1.5：本轮不运行，未保留旧版运行目录和缓存。
 
-- Wan Chorus 修复后 source/target 视频、结果与分阶段计时：
-  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`；摘要：
-  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/summary.json`；本轮未重新执行 VBench；cache：
-  `artifacts/cache/Wan2.2/chorus/`。
+- Wan Chorus source/target 视频、结果、质量评估与分阶段计时：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`；本轮 target `179.06s`、source_prompt
+  hit，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；VBench 原始六维度见同目录下的
+  `vbench/custom_vidprom_eval_results.json`；cache：`artifacts/cache/Wan2.2/chorus/`。
 
 旧版未定型组合基线仍保持清理状态；当前 `CHAI-Carnator` 是独立实现和独立实验目录，
 不复用旧 source continuation 或旧验收数值。

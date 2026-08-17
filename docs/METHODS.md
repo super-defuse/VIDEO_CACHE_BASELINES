@@ -12,11 +12,19 @@ latent 和 FFN hook。
 | `nirvana_vid` | 跨请求扩散 latent、跳步、source trajectory | `adapters/{wan22,cogvideox15}.py` |
 | `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；CogVideoX1.5 使用 source latent restart 适配 | `carnator/` + `scripts/run/carnator_matrix.py` |
 | `chai_carnator` | Wan 专用 `CHAI-Carnator`：8-step source/target；block 0 在 CHAI local steps 1--4 读取对应 source token，其余 block 按 CC-B0--CC-B5 使用 Carnator sparse attention、latent injection 和可选 W8A8 FFN | `scripts/run/chai_carnator_matrix.py` + `carnator/` |
-| `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、SRD（Medit/Msee）、LLM prompt diff、Grounded-SAM-2 v1.0 mask、TGAA；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
+| `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、Stage-2 SRD/TGAA/latent fusion、Stage-3 dense no-reuse、LLM prompt diff、Grounded-SAM-2 v1.0 mask；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
 
 Chorus 当前真实产物的 mask 后端为官方 Grounded-SAM-2 v1.0：Grounding DINO 在 source
 首帧生成框，SAM 2.1 Hiera-Large 传播到 121 帧，再 max-pool 到 Wan latent/token 网格；缺失
 模型或权重时直接报错，不切换到几何 mask。
+
+Chorus 的 TGAA hook 只在 Stage 2 激活，并覆盖 Wan 的全部 transformer blocks。Stage 2 的 SRD
+保留 native Wan head 的 dense 输出；Stage 3 起点清空 UniPC derivative history、保留全局 timestep
+index，再执行 dense/no-reuse。论文没有公开
+`F_k(t,m)`/`F_o(t,m)` 的具体函数，因此当前使用 step-only linear decay approximation，
+运行元数据会显式标注该近似；差异 token 无法映射到 target tokenizer 时直接失败，不使用
+任意 token-prefix fallback。Stage 3 关闭 TGAA、SRD 和 source latent fusion，执行完整 dense
+计算以修复区域复用的 discontinuity。
 
 CHAI 的 8-step express schedule 对齐 OpenSora：Cache Attention 在 block 0 的
 历史请求 source 的 1、2、3、4 步 token 逐步保存，target fast steps 1、2、3、4

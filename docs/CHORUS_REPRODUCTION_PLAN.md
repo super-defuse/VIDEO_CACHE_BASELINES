@@ -25,9 +25,9 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
 
 ## 实现步骤
 
-1. 已在 `wan` 环境安装 Grounded-SAM-2 v1.0（commit `dd4c514`）及 CUDA 扩展；固定使用 `sam2.1_hiera_large.pt`、Grounding DINO `groundingdino_swint_ogc.pth`，不使用其他 mask 方法。
+1. 使用锁定的 `external/grounded-sam2` v1.0（commit `dd4c514`）及与当前 PyTorch ABI 匹配的 GroundingDINO CUDA 扩展；加载器优先使用这份 checkout，不使用工作站上其他可编辑源码。固定使用 `sam2.1_hiera_large.pt`、Grounding DINO `groundingdino_swint_ogc.pth`，不使用其他 mask 方法。
 2. source 原生运行 50 步并缓存完整 latent trajectory；target 固定读取 source，不经过向量检索。LLM 使用 DMXAPI `qwen3.5-plus-2026-02-15` 提取实体差分。
-3. target 使用三阶段 50-step schedule：`K1=10`、`K2=40`（工程取值，论文未披露数值）。Stage 1 从 source 完成第 10 步的 latent 恢复，Stage 2 在 10--39 步执行真正的 SRD（`Medit` token 重算，`Msee` token 提供 self-attention K/V，cross-attention/FFN 仅处理 `Medit`），Stage 3 在 40--49 步恢复 dense 计算。自 `K1` 起每一步都按同一步 source latent 做 `Medit`/非 `Medit` 区域融合，SRD 只在 Stage 2 生效；无几何 mask fallback。
+3. target 使用三阶段 50-step schedule：`K1=10`、`K2=40`（工程取值，论文未披露数值）。Stage 1 从 source 完成第 10 步的 latent 恢复，Stage 2 在 10--39 步执行真正的 SRD（`Medit` token 重算，`Msee` token 提供 self-attention K/V，cross-attention/FFN 仅处理 `Medit`），同时启用 TGAA 和 Stage-2 latent fusion；Stage 2 保留 native Wan head 的 dense 输出，避免非编辑 token 的 scheduler derivative 被置零。Stage 3 在 40--49 步执行 dense full computation，关闭 TGAA、SRD 和 latent reuse，并在 step 40 清空 UniPC derivative history、保留全局 timestep index，以修复区域复用产生的 discontinuity。论文未公开 `F_k(t,m)`/`F_o(t,m)` 的具体形式，当前保留 step-only linear decay，并在运行元数据中标记为 approximation；TGAA 配置覆盖全部 Wan blocks。差异 token 无法映射时直接报错，不使用 token-prefix fallback。
 
    ```text
    Stage 1: 复用 source 的早期 latent
@@ -36,7 +36,7 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
             max-pool 到 latent，膨胀得到 Mbase/Medit/Msee
             TGAA 放大差异 token；SRD 只计算 Medit/Msee 对应区域
             用同一步 source latent 保留 Medit 之外的区域
-   Stage 3: 关闭 SRD，dense 细化剩余步骤，同时继续保留 Medit 之外的 source latent
+   Stage 3: 关闭 TGAA/SRD/latent reuse，重置 UniPC history 后 dense 细化剩余步骤以修复 discontinuity
    ```
 
    阶段边界、mask 膨胀半径和 token 计算比例放入 YAML；先以少量固定值跑通，再做消融。所有 hook 必须在 `finally` 中清理，关闭 Chorus 时回退到同一 Wan2.2 dense adapter。
@@ -47,21 +47,23 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
 - 使用上述 dog -> cat、seed、分辨率、帧数和 GPU，与现有 Wan2.2 dense baseline 对比；不引入 VidProM、CLIP 检索或论文的 1K warm-cache 流程。
 - 分别报告 source 预处理和 target 请求；target 表格使用现有基线的 E2E、hit latency 与 speedup 口径。
 - 质量评测接入现有 VBench 流程，报告 CLIP-T、VBench-Q；同时记录 LLM、Grounded-SAM-2、mask 投影和 sparse kernel 的耗时。
-- 测试覆盖：source trajectory/cache 读写、JSON 输出校验、Grounded-SAM-2 mask 传播、TGAA token 映射、hook 清理、fingerprint 不匹配回退，以及关闭 Chorus 的 dense 回归。
+- 测试覆盖：source trajectory/cache 读写、JSON 输出校验、Grounded-SAM-2 mask 传播、TGAA token 映射失败即报错、Stage-2 TGAA/SRD/fusion 门控、Stage-3 dense/no-reuse 回归和 hook 清理。
 - 在 Wan2.2 真实验收完成前，CogVideoX1.5 所有 Chorus 指标保持 `N/A`，不得用其他方法结果代填。
 
-## 当前实跑（2026-08-16）
+## 当前实跑（2026-08-17）
 
-- 当前产物：`artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`，摘要：
-  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/summary.json`。source 50 步 `294.19s`；target
-  使用同一 source cache 重新生成 40 步修复版，命中 `source_prompt`，cache `1.07GB`。从 `K1=10`
-  到最终 step 都执行 source latent fusion，SRD 仅在 Stage 2 (`10 <= step < 40`) 生效；旧版
-  `chorus-wan22-final` 产物已删除。
-- fixed target 是 target-only replacement，未单独输出新的 Runner timing；摘要中的 `178.27s`、
-  `generation_s=227.83s` 保留为同配置完整 source/target 运行参考，并在 `summary.json` 的
-  provenance 字段中标注。
-- cache 已与 Carnator 对齐：manifest 只保存索引，source trajectory 以 `latents_initial.pt` + `latents_step_000.pt`--`latents_step_049.pt` 逐步读取；target 的逐步读取包含在 `generation_s=227.83s` 内，不做预加载或从计时中扣除。
-- LLM：DMXAPI `qwen3.5-plus-2026-02-15`，请求耗时 `25.729s`；Grounded-SAM-2 检出 1 个 `dog` 框并传播 121 帧，耗时 `26.769s`。两者合计 `52.499s`，作为预处理单独记录并从 target 报告时延剔除；其余 cache lookup/load、生成、视频保存和 hash 均正常计时。
-- SRD：`Medit=53.24%`、`Msee=84.06%`；self-attention 使用 `Medit` queries/`Msee` keys-values，cross-attention 与 FFN 只计算 `Medit`，Stage 3 恢复 dense。
-- 以现有 50-step dense target `300.64s` 为分母，target speedup `1.69x`（若把 LLM+SAM 也计入则为 `1.30x`）。本轮未重新执行 VBench，因此质量指标不填旧结果。
-- CogVideoX1.5：保持 `N/A`。
+- 产物：`artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`。source 完成 50 步，
+  `295.77s`；target 命中 `source_prompt` cache，执行 40 步，报告时延 `179.06s`，以现有
+  50-step dense target `300.64s` 为分母为 `1.68x`。source trajectory cache 为 `1.07GB`。
+- target Stage 2 为 step 10--39：SRD `Medit=53.24%`、`Msee=84.06%`，保留 native Wan
+  dense head，TGAA 覆盖全部 30 个 Wan blocks。目标请求的 cond/uncond 两个分支合计记录
+  `1800` 次 TGAA 调用；Stage 3 为 step 40--49 dense full computation，不执行 TGAA、SRD
+  或 source latent fusion，并在 step 40 重置 UniPC derivative history。
+- `F_k(t,m)`/`F_o(t,m)` 仍为论文未披露的细节。本轮使用并标记
+  `linear_step_decay_approximation`，而非声称与论文函数等价；token 映射失败时会直接失败。
+- LLM `31.68s`、Grounded-SAM-2 `28.60s`，合计 `60.28s`，通过
+  `excluded_latency_s` 从 target 报告时延中剔除。2026-08-17 已按锁定的 VBench snapshot
+  完成质量评估：target `CLIP-T=0.3491`、`VBench-Q=0.6218`；原始六维度和 source/target
+  分项保存在 `chorus/vbench/custom_vidprom_eval_results.json` 与 `results.jsonl`。
+- 路线一之前的 Chorus 运行目录和 cache 已移至本机回收站，不再作为 Chorus 结果；当前产物
+  只对应 Stage 2 fusion、dense head 和 Stage 3 UniPC history reset 实现。

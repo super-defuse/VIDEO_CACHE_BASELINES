@@ -29,7 +29,8 @@ artifacts/
 
 ## 当前验收产物
 
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus/` 是修复 latent fusion 后重新生成的 Chorus source/target 结果；target 采用 `K1=10` 到最终 step 的 source latent fusion，SRD 仅在 Stage 2 (`10 <= step < 40`) 生效。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus/` 是当前 Chorus source/target 结果；target 只在 Stage 2 (`10 <= step < 40`) 使用 source latent fusion、SRD 和 TGAA，Stage 3 为 dense full computation，不复用 latent。Stage 2 保留 native Wan head dense，Stage 3 在 step 40 清空 UniPC derivative history 并保留全局 timestep index。
+- Chorus 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；逐请求字段写回该目录的 `results.jsonl`。
 - `runs/wan22-ti2v-5b/dog-to-cat/carnator-quality/` 包含原生 Carnator B1/B3/B4、NIRVANA-VID 和 TeaCache 的质量补跑。
 - `runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/` 包含 CC-B0--CC-B5 的质量结果。
 - `videos/wan2.2-ti2v-5b/dog-to-cat/README.md` 是全部 target 视频的稳定入口索引。

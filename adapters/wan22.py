@@ -120,7 +120,13 @@ class Wan22Adapter(ModelAdapter):
         llm_diff: dict[str, Any] | None = None
         tgaa_patches: list[tuple[Any, Any]] = []
         srd_patches: list[tuple[Any, Any]] = []
-        srd_state: dict[str, Any] = {"active": False, "step": 0, "total_steps": steps}
+        srd_state: dict[str, Any] = {
+            "active": False,
+            "tgaa_active": False,
+            "step": 0,
+            "total_steps": steps,
+            "tgaa_calls": 0,
+        }
         llm_s = sam_s = 0.0
         if not is_source:
             source_prompt = request.cache_prompt or request.prompt
@@ -149,6 +155,10 @@ class Wan22Adapter(ModelAdapter):
             diff_indices = self._differential_token_indices(
                 pipeline.text_encoder, request.prompt, target_entities
             )
+            if not diff_indices:
+                raise RuntimeError(
+                    "TGAA could not map the LLM differential tokens to target prompt tokens"
+                )
             tgaa_patches = self._install_native_tgaa(
                 pipeline.model, chorus_cfg, diff_indices, srd_state
             )
@@ -162,7 +172,15 @@ class Wan22Adapter(ModelAdapter):
         try:
             with torch.amp.autocast("cuda", dtype=pipeline.param_dtype), torch.no_grad(), no_sync():
                 for index, timestep_value in enumerate(scheduler.timesteps[start:], start=start):
-                    srd_state["active"] = (not is_source and k1 <= index < k2)
+                    stage2_active = not is_source and k1 <= index < k2
+                    if not is_source and index == k2:
+                        # SRD only supplies partial model outputs in Stage 2. Do
+                        # not carry those regional derivatives into dense Stage
+                        # 3; retain the global sigma index for the same schedule.
+                        self._reset_chorus_scheduler_history(scheduler)
+                        srd_state["scheduler_history_reset"] = True
+                    srd_state["active"] = stage2_active
+                    srd_state["tgaa_active"] = stage2_active
                     srd_state["step"] = index
                     timestep = torch.stack([timestep_value])
                     temp_ts = (mask2[0][0][:, ::2, ::2] * timestep).flatten()
@@ -174,10 +192,10 @@ class Wan22Adapter(ModelAdapter):
                         noise_pred.unsqueeze(0), timestep_value, latents[0].unsqueeze(0),
                         return_dict=False, generator=generator,
                     )[0].squeeze(0)
-                    # Match Carnator's latent-injection contract: after the
-                    # reuse point, preserve source features outside Medit at
-                    # every remaining step, including dense Stage 3.
-                    if not is_source and index >= k1:
+                    # Stage 2 is the only stage that reuses source latent
+                    # features. Stage 3 is deliberately full computation so
+                    # it can repair discontinuities introduced by SRD.
+                    if stage2_active:
                         source_state = self._load_chorus_state(
                             source_trajectory[index + 1], sample.device, sample.dtype
                         )
@@ -206,13 +224,26 @@ class Wan22Adapter(ModelAdapter):
                       "chorus_preprocess_s": preprocess_s,
                       "chorus_llm_s": llm_s, "chorus_sam_s": sam_s,
                       "excluded_latency_s": preprocess_s,
-                      "chorus_tgaa": {"gamma_k": chorus_cfg.get("gamma_k", 1.15),
-                                       "gamma_o": chorus_cfg.get("gamma_o", 1.05)},
+                      "chorus_tgaa": {
+                          "gamma_k": chorus_cfg.get("gamma_k", 1.15),
+                          "gamma_o": chorus_cfg.get("gamma_o", 1.05),
+                          "schedule": "linear_step_decay_approximation",
+                          "paper_exact_schedule": "not specified",
+                          "scope": "stage2",
+                          "blocks": "all",
+                          "calls": int(srd_state.get("tgaa_calls", 0)),
+                      },
+                      "chorus_scheduler": {
+                          "stage3_history_reset": bool(srd_state.get("scheduler_history_reset", False)),
+                          "stage3_history_reset_step": k2,
+                          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index",
+                      },
                       "chorus_cache": {"source_trajectory_steps": steps,
                                        "format": "per_step_manifest",
                                        "stage2_latent_fusion": True,
                                        "latent_fusion_from_step": k1,
-                                       "latent_fusion_through_step": steps - 1,
+                                       "latent_fusion_through_step": k2 - 1,
+                                       "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
                                        "srd": {"enabled": True,
                                                "edit_fraction": mask_metadata.get("edit_fraction") if mask_metadata else None,
                                                "see_fraction": mask_metadata.get("see_fraction") if mask_metadata else None,
@@ -253,6 +284,20 @@ class Wan22Adapter(ModelAdapter):
         return torch.where(edit_mask, sample, source_state.to(device=sample.device, dtype=sample.dtype))
 
     @staticmethod
+    def _reset_chorus_scheduler_history(scheduler: Any) -> None:
+        """Restart UniPC multistep warmup without changing the global step."""
+        if hasattr(scheduler, "model_outputs"):
+            scheduler.model_outputs = [None] * len(scheduler.model_outputs)
+        if hasattr(scheduler, "timestep_list"):
+            scheduler.timestep_list = [None] * len(scheduler.timestep_list)
+        if hasattr(scheduler, "lower_order_nums"):
+            scheduler.lower_order_nums = 0
+        if hasattr(scheduler, "last_sample"):
+            scheduler.last_sample = None
+        if hasattr(scheduler, "this_order"):
+            scheduler.this_order = 1
+
+    @staticmethod
     def _load_chorus_state(path: Path, device: Any, dtype: Any | None = None) -> Any:
         import torch
 
@@ -289,11 +334,16 @@ class Wan22Adapter(ModelAdapter):
         from wan.modules.attention import flash_attention
 
         patches: list[tuple[Any, Any]] = []
-        blocks = set(int(item) for item in chorus_cfg.get("tgaa_blocks", [0]))
+        configured_blocks = chorus_cfg.get("tgaa_blocks", "all")
+        if configured_blocks in (None, "all"):
+            blocks = set(range(len(model.blocks)))
+        else:
+            blocks = set(int(item) for item in configured_blocks)
         gamma_k = float(chorus_cfg.get("gamma_k", 1.15))
         gamma_o = float(chorus_cfg.get("gamma_o", 1.05))
-        token_prefix = int(chorus_cfg.get("tgaa_token_prefix", 8))
-        token_indices = list(differential_tokens) or list(range(token_prefix))
+        token_indices = list(differential_tokens)
+        if not token_indices:
+            raise ValueError("TGAA requires at least one mapped differential token")
         for index, block in enumerate(model.blocks):
             if index not in blocks:
                 continue
@@ -301,15 +351,26 @@ class Wan22Adapter(ModelAdapter):
             original = attention.forward
 
             def patched_cross(x, context_value, context_lens, *, _attention=attention, _original=original):
+                if not state.get("tgaa_active", False):
+                    return _original(x, context_value, context_lens)
                 batch, heads, head_dim = x.size(0), _attention.num_heads, _attention.head_dim
                 query = _attention.norm_q(_attention.q(x)).view(batch, -1, heads, head_dim)
-                key = _attention.norm_k(_attention.k(context_value)).view(batch, -1, heads, head_dim)
+                # ``context_value`` is shared by every transformer block.
+                # TGAA must change this block's attention key only; an
+                # in-place scale on a view would compound into later blocks.
+                key = _attention.norm_k(_attention.k(context_value)).view(
+                    batch, -1, heads, head_dim
+                ).clone()
                 value = _attention.v(context_value).view(batch, -1, heads, head_dim)
+                # The paper leaves F_k(t,m) and F_o(t,m) unspecified. Keep
+                # the existing step-only linear decay as an explicit
+                # approximation rather than inventing a matching-score law.
                 progress = min(1.0, max(0.0, float(state.get("step", 0)) /
                                        max(1, int(state.get("total_steps", 1)) - 1)))
                 scale_k = 1.0 + (gamma_k - 1.0) * (1.0 - progress)
                 scale_o = 1.0 + (gamma_o - 1.0) * (1.0 - progress)
                 valid = [item for item in token_indices if item < key.shape[1]]
+                state["tgaa_calls"] = int(state.get("tgaa_calls", 0)) + 1
                 if valid:
                     key[:, valid] *= scale_k
                 output = flash_attention(query, key, value, k_lens=context_lens)
@@ -363,28 +424,9 @@ class Wan22Adapter(ModelAdapter):
             block.forward = patched_block
             patches.append((block, original))
 
-        head = model.head
-        original_head = head.forward
-
-        def patched_head(x, e, *, _head=head, _original=original_head):
-            if not state.get("active", False):
-                return _original(x, e)
-            edit_idx, _see_idx = get_indices(x.shape[1], x.device)
-            x_edit = x.index_select(1, edit_idx)
-            e_edit = e.index_select(1, edit_idx)
-            with torch.amp.autocast("cuda", dtype=torch.float32):
-                modulation = (_head.modulation.unsqueeze(0) + e_edit.unsqueeze(2)).chunk(2, dim=2)
-                out_edit = _head.head(
-                    _head.norm(x_edit) * (1 + modulation[1].squeeze(2)) + modulation[0].squeeze(2)
-                )
-            output = torch.zeros(
-                x.shape[0], x.shape[1], out_edit.shape[-1], device=x.device, dtype=out_edit.dtype
-            )
-            output[:, edit_idx] = out_edit
-            return output
-
-        head.forward = patched_head
-        patches.append((head, original_head))
+        # Keep Wan's native head dense. The sparse block path leaves non-edit
+        # hidden states unchanged, but the head must still produce a full
+        # model output so the scheduler does not record zeros outside Medit.
         return patches
 
     @staticmethod

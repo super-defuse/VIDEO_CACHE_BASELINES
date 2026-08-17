@@ -8,8 +8,12 @@ chorus:
     k2: 40
   gamma_k: 1.15
   gamma_o: 1.05
-  tgaa_blocks: [0]
-  tgaa_token_prefix: 8
+  # The paper does not specify a block subset; run the TGAA hook on every
+  # Wan block and audit the actual call count in the request metadata.
+  tgaa_blocks: all
+  # F_k(t,m) and F_o(t,m) are not published. The adapter keeps its
+  # step-only linear decay as an explicitly labeled approximation.
+  tgaa_schedule: linear_step_decay_approximation
   mask_dilation_edit: 8
   mask_dilation_see: 14
   grounded_sam2:

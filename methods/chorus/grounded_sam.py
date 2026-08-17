@@ -47,8 +47,15 @@ class GroundedSam2Segmenter:
         if missing:
             raise FileNotFoundError("Grounded-SAM-2 files are missing: " + ", ".join(missing))
         import sys
-        if str(root) not in sys.path:
-            sys.path.insert(0, str(root))
+        # Grounded-SAM-2 ships GroundingDINO as a nested project.  Put both
+        # import roots first so an unrelated editable ``groundingdino``
+        # installation cannot supply Python modules while this pinned checkout
+        # supplies (or lacks) its matching CUDA extension.
+        for import_root in (root, root / "grounding_dino"):
+            value = str(import_root)
+            if value in sys.path:
+                sys.path.remove(value)
+            sys.path.insert(0, value)
         hf_endpoint = self.config.get("hf_endpoint")
         if hf_endpoint:
             os.environ.setdefault("HF_ENDPOINT", str(hf_endpoint))

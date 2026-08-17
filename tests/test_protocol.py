@@ -65,6 +65,157 @@ def test_chorus_latent_fusion_matches_carnator_region_semantics():
     assert torch.equal(fused[:, :, 1:, :2], source[:, :, 1:, :2])
 
 
+def test_chorus_scheduler_history_reset_preserves_global_step():
+    from adapters.wan22 import Wan22Adapter
+
+    class Scheduler:
+        model_outputs = ["a", "b"]
+        timestep_list = ["t0", "t1"]
+        lower_order_nums = 2
+        last_sample = "sample"
+        this_order = 2
+        _step_index = 40
+
+    scheduler = Scheduler()
+    Wan22Adapter._reset_chorus_scheduler_history(scheduler)
+    assert scheduler.model_outputs == [None, None]
+    assert scheduler.timestep_list == [None, None]
+    assert scheduler.lower_order_nums == 0
+    assert scheduler.last_sample is None
+    assert scheduler.this_order == 1
+    assert scheduler._step_index == 40
+
+
+def test_native_srd_keeps_native_head_dense():
+    import torch
+
+    from adapters.wan22 import Wan22Adapter
+
+    class Block:
+        def forward(self, *args):
+            return args[0]
+
+    class Head:
+        def __init__(self):
+            self.calls = 0
+
+        def forward(self, x, e):
+            self.calls += 1
+            return x + e
+
+    block = Block()
+    head = Head()
+    model = type("Model", (), {"blocks": [block], "head": head})()
+    state = {"active": True}
+    patches = Wan22Adapter({})._install_native_srd(
+        model,
+        {"token_edit": torch.tensor([True, False]), "token_see": torch.tensor([True, True])},
+        state,
+    )
+    try:
+        x = torch.ones((1, 2, 3))
+        result = head.forward(x, torch.ones_like(x))
+        assert head.calls == 1
+        assert torch.equal(result, x + 1)
+    finally:
+        Wan22Adapter._restore_native_srd(patches)
+
+
+def test_native_tgaa_is_all_blocks_stage_two_gated(monkeypatch):
+    import types
+
+    import pytest
+    import torch
+
+    from adapters.wan22 import Wan22Adapter
+
+    observed: list[torch.Tensor] = []
+
+    def flash_attention(query, key, value, *, k_lens):
+        del query, value, k_lens
+        observed.append(key.detach().clone())
+        return key
+
+    wan_module = types.ModuleType("wan")
+    wan_modules = types.ModuleType("wan.modules")
+    attention_module = types.ModuleType("wan.modules.attention")
+    attention_module.flash_attention = flash_attention
+    wan_module.modules = wan_modules
+    wan_modules.attention = attention_module
+    monkeypatch.setitem(sys.modules, "wan", wan_module)
+    monkeypatch.setitem(sys.modules, "wan.modules", wan_modules)
+    monkeypatch.setitem(sys.modules, "wan.modules.attention", attention_module)
+
+    class Attention:
+        num_heads = 1
+        head_dim = 2
+
+        def __init__(self):
+            self.base_calls = 0
+
+        @staticmethod
+        def norm_q(value):
+            return value
+
+        @staticmethod
+        def q(value):
+            return value
+
+        @staticmethod
+        def norm_k(value):
+            return value
+
+        @staticmethod
+        def k(value):
+            return value
+
+        @staticmethod
+        def v(value):
+            return value
+
+        @staticmethod
+        def o(value):
+            return value
+
+        def forward(self, x, context, context_lens):
+            del context, context_lens
+            self.base_calls += 1
+            return torch.full_like(x, -1.0)
+
+    attentions = [Attention() for _ in range(3)]
+    model = types.SimpleNamespace(
+        blocks=[types.SimpleNamespace(cross_attn=attention) for attention in attentions]
+    )
+    state = {"tgaa_active": False, "step": 10, "total_steps": 50, "tgaa_calls": 0}
+    adapter = Wan22Adapter({})
+    patches = adapter._install_native_tgaa(
+        model, {"tgaa_blocks": "all", "gamma_k": 1.15, "gamma_o": 1.05}, [1], state
+    )
+    assert len(patches) == len(attentions)
+
+    x = torch.ones((1, 2, 2))
+    context = torch.ones((1, 2, 2))
+    for attention in attentions:
+        assert torch.equal(attention.forward(x, context, None), torch.full_like(x, -1.0))
+    assert [attention.base_calls for attention in attentions] == [1, 1, 1]
+    assert state["tgaa_calls"] == 0
+
+    state["tgaa_active"] = True
+    progress = state["step"] / (state["total_steps"] - 1)
+    key_scale = 1.0 + 0.15 * (1.0 - progress)
+    output_scale = 1.0 + 0.05 * (1.0 - progress)
+    for attention in attentions:
+        result = attention.forward(x, context, None)
+        assert result[0, 1].tolist() == pytest.approx([key_scale * output_scale] * 2)
+    assert [attention.base_calls for attention in attentions] == [1, 1, 1]
+    assert state["tgaa_calls"] == len(attentions)
+    assert all(torch.allclose(key[0, 1], torch.full_like(key[0, 1], key_scale)) for key in observed)
+    assert torch.equal(context, torch.ones_like(context))
+
+    with pytest.raises(ValueError, match="requires at least one"):
+        adapter._install_native_tgaa(model, {"tgaa_blocks": "all"}, [], state)
+
+
 def test_cache_namespace_isolated_by_model(tmp_path):
     config = {"dry_run": True, "cache_root": "cache", "max_cache_bytes": 1024}
     first = Runner(make_adapter("synthetic", config), make_method("chai", config),

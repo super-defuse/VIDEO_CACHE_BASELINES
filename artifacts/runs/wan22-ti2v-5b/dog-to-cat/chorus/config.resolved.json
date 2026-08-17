@@ -1,7 +1,7 @@
 {
   "model": "wan22",
   "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
-  "wan_source": "/home/tangxuebin/project/CHAI/third_party/wan2.2",
+  "wan_source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2",
   "device": "cuda:0",
   "dtype": "bfloat16",
   "width": 1280,
@@ -46,16 +46,14 @@
     },
     "gamma_k": 1.15,
     "gamma_o": 1.05,
-    "tgaa_blocks": [
-      0
-    ],
-    "tgaa_token_prefix": 8,
+    "tgaa_blocks": "all",
+    "tgaa_schedule": "linear_step_decay_approximation",
     "mask_dilation_edit": 8,
     "mask_dilation_see": 14,
     "grounded_sam2": {
       "release": "v1.0",
       "commit": "dd4c514",
-      "root": "../Grounded-SAM-2",
+      "root": "external/grounded-sam2",
       "checkpoint_dir": "../../models/Grounded-SAM-2-v1.0",
       "device": "cuda",
       "hf_endpoint": "https://hf-mirror.com",
