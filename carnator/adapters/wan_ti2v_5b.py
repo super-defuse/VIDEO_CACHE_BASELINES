@@ -71,6 +71,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--disable-progress", action="store_true", default=True)
 
     parser.add_argument("--reuse-start-step", type=int, default=10)
+    parser.add_argument(
+        "--latent-injection-mode",
+        choices=("hard", "boundary-blend"),
+        default="hard",
+        help="Latent reuse policy: legacy hard replacement or Mbase--Medit boundary blending.",
+    )
+    parser.add_argument(
+        "--boundary-alpha-function",
+        choices=("smoothstep", "cosine"),
+        default="smoothstep",
+        help="Distance-to-Mbase interpolation used by boundary-blend injection.",
+    )
     parser.add_argument("--mask-layers", default="15")
     parser.add_argument("--mask-probe-step", type=int, default=5)
     parser.add_argument("--mask-self-layer", type=int, default=15)
@@ -928,19 +940,69 @@ def load_latent(path: Path, device, dtype):
     return torch.load(path, map_location="cpu").to(device=device, dtype=dtype)
 
 
-def apply_latent_injection(latent, source_latent, mask_bundle: dict[str, Any]) -> tuple[Any, float, int]:
+def apply_latent_injection(
+    latent,
+    source_latent,
+    mask_bundle: dict[str, Any],
+    *,
+    mode: str = "hard",
+    alpha_function: str = "smoothstep",
+) -> tuple[Any, float, int, dict[str, Any]]:
     import torch
 
-    from carnator.masks import get_canonical_latent_masks
+    from carnator.masks import boundary_blend_latent, boundary_blend_weights, get_canonical_latent_masks
 
     started = time.perf_counter()
     step_masks = get_canonical_latent_masks(mask_bundle, latent.unsqueeze(0))
     source_step = int(step_masks["source_completed_step"])
-    mask = step_masks["latent_medit"][0]
-    out = torch.where(mask, latent, source_latent.to(device=latent.device, dtype=latent.dtype))
+    source = source_latent.to(device=latent.device, dtype=latent.dtype)
+    if mode == "hard":
+        mask = step_masks["latent_medit"][0]
+        out = torch.where(mask, latent, source)
+        stats = {
+            "mode": "hard",
+            "base_fraction": float(step_masks["latent_mbase"].float().mean().item()),
+            "band_fraction": 0.0,
+            "edit_fraction": float(step_masks["latent_medit"].float().mean().item()),
+        }
+    elif mode == "boundary-blend":
+        cache = mask_bundle.setdefault("_boundary_alpha_cache", {})
+        key = (str(latent.device), tuple(latent.shape), alpha_function)
+        if key in cache:
+            # Reuse the precomputed alpha/band tensors without recomputing the
+            # morphological distance transform at every denoising step.
+            alpha, band = cache[key]
+            mbase = step_masks["latent_mbase"]
+            target = latent.unsqueeze(0)
+            alpha = alpha.to(device=latent.device, dtype=latent.dtype)
+            band = band.to(device=latent.device, dtype=torch.bool)
+            blended = target * (1.0 - alpha) + source.unsqueeze(0) * alpha
+            out = torch.where(mbase, target, torch.where(band, blended, source.unsqueeze(0)))[0]
+            band_alpha = alpha[band].float()
+            stats = {
+                "mode": "boundary-blend",
+                "base_fraction": float(mbase.float().mean().item()),
+                "band_fraction": float(band.float().mean().item()),
+                "edit_fraction": float((mbase | band).float().mean().item()),
+                "alpha_mean": float(band_alpha.mean().item()) if band_alpha.numel() else 0.0,
+                "alpha_min": float(band_alpha.min().item()) if band_alpha.numel() else 0.0,
+                "alpha_max": float(band_alpha.max().item()) if band_alpha.numel() else 0.0,
+            }
+        else:
+            alpha, band = boundary_blend_weights(step_masks, function=alpha_function)
+            cache[key] = (alpha.detach(), band.detach())
+            out, stats = boundary_blend_latent(
+                latent,
+                source,
+                step_masks,
+                function=alpha_function,
+                weights=(alpha, band),
+            )
+    else:
+        raise ValueError(f"unknown latent injection mode: {mode}")
     if torch.cuda.is_available():
         torch.cuda.synchronize()
-    return out, time.perf_counter() - started, source_step
+    return out, time.perf_counter() - started, source_step, stats
 
 
 def stage_paths(args: argparse.Namespace) -> dict[str, Path]:
@@ -1037,6 +1099,7 @@ def run_native_t2v_stage(
     injection_seconds = 0.0
     injection_calls = 0
     injection_mask_source_step: int | None = None
+    injection_stats: dict[str, Any] = {}
 
     no_sync = getattr(model, "no_sync", nullcontext)
     probe_context = probe if probe is not None else nullcontext()
@@ -1072,14 +1135,18 @@ def run_native_t2v_stage(
                 if source_path is None:
                     raise KeyError(f"source trajectory missing step {step_index}")
                 source_latent = load_latent(source_path, runtime.device, latent.dtype)
-                latent, elapsed, source_step = apply_latent_injection(
+                latent, elapsed, source_step, current_injection_stats = apply_latent_injection(
                     latent,
                     source_latent,
                     mask_bundle,
+                    mode=args.latent_injection_mode,
+                    alpha_function=args.boundary_alpha_function,
                 )
                 injection_seconds += elapsed
                 injection_calls += 1
                 injection_mask_source_step = source_step
+                if not injection_stats:
+                    injection_stats = current_injection_stats
             if save_trajectory:
                 trajectory[step_index] = Path(save_latent(cache_dir / f"latents_step_{step_index:03d}.pt", latent))
 
@@ -1160,11 +1227,19 @@ def run_native_t2v_stage(
         },
         "masked_injection": {
             "enabled": source_trajectory is not None and mask_bundle is not None,
-            "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
+            "mode": args.latent_injection_mode,
+            "alpha_function": args.boundary_alpha_function if args.latent_injection_mode == "boundary-blend" else None,
+            "formula": (
+                "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + "
+                "(1 - Medit) * L_source"
+                if args.latent_injection_mode == "boundary-blend"
+                else "L_new = Medit * L_target + (1 - Medit) * L_source_cache"
+            ),
             "calls": injection_calls,
             "total_seconds": injection_seconds,
             "avg_ms": injection_seconds * 1000.0 / injection_calls if injection_calls else 0.0,
             "mask_source_completed_step": injection_mask_source_step,
+            "mask_statistics": injection_stats,
         },
         "sparse_blocks": sparse_state.summary() if sparse_state is not None else {"enabled": False},
         "outer_sparse": outer_sparse_state.summary() if hasattr(outer_sparse_state, "summary") else {"enabled": False},
@@ -1461,6 +1536,8 @@ def build_summary(
             "guidance_scale": args.guidance_scale,
             "effective_guidance": guidance_mode(args.guidance_scale),
             "reuse_start_step": args.reuse_start_step,
+            "latent_injection_mode": args.latent_injection_mode,
+            "boundary_alpha_function": args.boundary_alpha_function,
             "mask_method": "fusion",
             "mask_probe_step": args.mask_probe_step,
             "mask_self_layer": args.mask_self_layer,
@@ -1543,6 +1620,7 @@ def write_report(
             f"- Shape: `{summary['config']['width']}x{summary['config']['height']}`, frames `{summary['config']['frames']}`, fps `{summary['config']['fps']}`",
             f"- Sampling: `{summary['config']['steps']}` steps, `{summary['config']['scheduler']}`, solver order `{summary['config']['solver_order']}`, flow shift `{summary['config']['flow_shift']}`",
             f"- Guidance: `{summary['config']['guidance_scale']}` ({summary['config']['effective_guidance']}), region-update layers `{summary['config']['region_update_layers']}`, outer `{summary['config']['outer_attn_backend']}` ({summary['config']['outer_flashinfer_wrapper']}) on `{summary['config']['outer_sparse_layers']}`, FFN `{summary['config']['ffn_backend']}`, reuse start step `{summary['config']['reuse_start_step']}`",
+            f"- latent injection: `{summary['config']['latent_injection_mode']}` (alpha `{summary['config']['boundary_alpha_function']}`)",
             f"- attention mask: `{summary['config']['mask_method']}`, completed probe step `{summary['config']['mask_probe_step']}`, self layer `{summary['config']['mask_self_layer']}`",
             "",
             "## Results",

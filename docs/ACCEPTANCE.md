@@ -10,7 +10,8 @@ source 先写入方法自己的缓存 namespace，target 再以 source prompt �
 时延只统计 target 请求。Dense baseline（Carnator C0）是所有 Wan target 加速结果的共同
 参考：同模型、同 prompt、同 seed、50-step、无 Carnator cache、mask 注入、稀疏 attention
 或 W8A8 FFN hook。speedup 为 `dense baseline target latency / 当前 target latency`；`N/A`
-表示该指标没有实测，不是零收益。
+表示该指标没有实测，不是零收益。历史 hard-injection 行沿用 `300.64s` 的 C0；
+boundary-blend 组使用同一 run 内匹配的 `303.58s` C0，避免把不同运行条件的计时混作一个分母。
 
 TeaCache 是单请求方法，只运行 target prompt，不制造 source 命中。
 
@@ -33,6 +34,13 @@ Grounded-SAM-2 预处理通过 `excluded_latency_s` 单独列出并从报告时�
 | Wan2.2-TI2V-5B | Carnator B3 | 40 | 193.65 | 1.55x | 0.3513 | 0.6376 | dense outer + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | Carnator B4 | 40 | 196.01 | 1.53x | 0.3516 | 0.6363 | VariableBlock/FlashInfer + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | Carnator B5 | 40 | 149.09 | 2.02x | 0.3516 | 0.6360 | SpargeAttn + W8A8 FFN；本轮重跑 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend dense target control（C0） | 50 | 303.58 | 1.00x | 0.3374 | 0.6334 | 同 run 的 dense target 参考；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B0 | 40 | 201.93 | 1.50x | 0.3540 | 0.6348 | dense outer + FP FFN；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B1 | 40 | 198.43 | 1.53x | 0.3542 | 0.6314 | VariableBlock/FlashInfer + FP FFN；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B2 | 40 | 153.02 | 1.98x | 0.3542 | 0.6304 | SpargeAttn + FP FFN；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B3 | 40 | 197.17 | 1.54x | 0.3533 | 0.6344 | dense outer + W8A8 FFN；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B4 | 40 | 196.46 | 1.55x | 0.3550 | 0.6320 | VariableBlock/FlashInfer + W8A8 FFN；smoothstep；CLIP/VBench 本轮完成 |
+| Wan2.2-TI2V-5B | Carnator boundary-blend B5 | 40 | 148.16 | 2.05x | 0.3545 | 0.6307 | SpargeAttn + W8A8 FFN；smoothstep；CLIP/VBench 本轮完成 |
 | Wan2.2-TI2V-5B | CHAI-Carnator dense target control | 8 | 63.92 | N/A | N/A | N/A | 同 seed/source initial latent 的未修改 8-step target；本轮重跑 |
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B0 | 8 | 58.92 | 5.10x | 0.3457 | 0.5547 | block 0 CHAI cache steps 1/2/3/4；其余 block Carnator dense outer + FP FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B1 | 8 | 60.52 | 4.97x | 0.3508 | 0.5594 | block 0 CHAI；其余 block FlashInfer VariableBlock + FP FFN；本轮重跑 |
@@ -73,7 +81,22 @@ CC-B0/CC-B3 保持 dense outer；CC-B3/CC-B4/CC-B5 使用 W8A8 FFN。每个 CC-B
 target E2E 与 speedup。CC-B 的 speedup 以本轮 50-step dense baseline（Carnator C0，300.64s）为共同分母；
 63.92s 的 8-step dense target 仅保留为 CC 后端消融对照。表中的 CLIP-T/VBench-Q 沿用此前
 协议等价运行的质量结果，本轮重点重跑 source、C0/B0--B5 与 CC-B0--CC-B5 的缓存和时延，
-未重新执行 VBench。
+未重新执行 VBench；boundary-blend 组的 CLIP-T/VBench-Q 已在本轮单独完成。
+
+### Boundary-blend 变体
+
+Boundary-blend 保留原 Carnator 的 canonical `Mbase/Medit/Msee`，新增
+`Mband = Medit - Mbase`。在 latent 注入时使用
+`L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source`。
+`alpha` 由 token-grid 上到 `Mbase` 的 Chebyshev 距离计算，在 `Mband` 内使用 smoothstep
+（本轮配置），因此 `Mbase` 内完全采用 target latent，`Medit` 外完全采用 source latent，
+只在中间带平滑过渡。旧的 `latent-injection-mode=hard` 行为保持不变；该变体不增加模型
+forward，只增加 mask/latent 的逐元素融合。
+
+本轮固定 step-5 mask 的 latent 面积为 `Mbase=16.91%`、`Mband=18.22%`、
+`Medit=35.13%`；alpha 的运行时均值为 `0.5071`（范围 `[0, 1]`），每个 B 变体执行
+40 次注入。表中 boundary-blend 的 speedup 使用同一个 run 内的 303.58s dense C0，
+与上方历史 hard-injection 结果的 300.64s 仅作参考，不能直接混算。
 
 ## 产物索引
 
@@ -85,6 +108,14 @@ target E2E 与 speedup。CC-B 的 speedup 以本轮 50-step dense baseline（Car
   `artifacts/chai-carnator-results/real-wan-chai-carnator-20260814/matrix.json`
 - Wan 原生 Carnator source、C0/B0--B5 matrix：
   `artifacts/carnator-results/ti2v-5b/real-wan-c0-b4/matrix.json`
+- Wan 原生 Carnator boundary-blend source、C0/B0--B5 matrix：
+  `artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/matrix.json`
+- Wan 原生 Carnator boundary-blend source、C0/B0--B5 视频与缓存：
+  `artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/`
+- Wan 原生 Carnator boundary-blend 质量评测（C0、B0--B5，CLIP-T + 六维 VBench-Q）：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/metrics.json`
+- 本项目独立 VBench 模型缓存：
+  `artifacts/vbench-cache/`
 - Wan CHAI-Carnator 质量评测（六个 CC-B 变体）：
   `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/metrics.json`
 - Wan 缺失质量指标补跑（原生 B1/B3/B4、NIRVANA-VID、TeaCache）：

@@ -1,0 +1,1259 @@
+{
+  "status": "completed",
+  "error": null,
+  "updated_at": "2026-08-17 07:20:06 UTC",
+  "config": {
+    "model_family": "Wan2.2-TI2V-5B",
+    "backend": "native Wan2.2",
+    "mode": "T2V",
+    "model_dtype": "fp16",
+    "convert_model_dtype": true,
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "height": 704,
+    "width": 1280,
+    "frames": 121,
+    "fps": 24,
+    "steps": 50,
+    "seed": 20260218,
+    "scheduler": "unipc",
+    "solver_order": 2,
+    "flow_shift": 5.0,
+    "guidance_scale": 5.0,
+    "effective_guidance": "CFG",
+    "reuse_start_step": 10,
+    "latent_injection_mode": "boundary-blend",
+    "boundary_alpha_function": "smoothstep",
+    "mask_method": "fusion",
+    "mask_probe_step": 5,
+    "mask_self_layer": 15,
+    "mask_fusion_eps": 0.2,
+    "mask_fusion_gamma": 1.0,
+    "sparse_layers": "10-20",
+    "region_update_layers": "10-20",
+    "outer_attn_backend": "dense",
+    "outer_flashinfer_wrapper": "n/a",
+    "capture_outer_block_masks": false,
+    "outer_sparse_layers": "0-9,21-29",
+    "outer_sparse_dtype": "fp16",
+    "use_fp16_qk_reduction": false,
+    "flashinfer_plan_cache": "layer",
+    "sparge_smooth_k": true,
+    "sparge_pvthreshd": 50.0,
+    "outer_block_mask": {
+      "q_block_size": 64,
+      "k_block_size": 128,
+      "top_p": 0.95,
+      "min_top_k": 0.1
+    },
+    "ffn_backend": "w8a8",
+    "skip_w8a8_dense_diagnostic": true,
+    "expected_token_grid": [
+      31,
+      22,
+      40
+    ]
+  },
+  "environment": {
+    "python": "/data/shared/conda_envs/wan/bin/python",
+    "model_dir": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+    "wan_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2",
+    "model_layout": {
+      "exists": true,
+      "native_config_json": true,
+      "vae_checkpoint": true,
+      "t5_checkpoint": true,
+      "t5_tokenizer": true
+    },
+    "torch": "2.10.0+cu128",
+    "cuda_available": true,
+    "gpu": {
+      "name": "NVIDIA H100 PCIe",
+      "total_memory_gib": 79.171142578125
+    },
+    "native_wan_available": true,
+    "flash_attention": {
+      "fa2": true,
+      "fa3": false
+    },
+    "wan_config": {
+      "num_layers": 30,
+      "num_heads": 24,
+      "patch_size": [
+        1,
+        2,
+        2
+      ],
+      "vae_stride": [
+        4,
+        16,
+        16
+      ]
+    },
+    "outer_attention": {
+      "backend": "dense",
+      "available": true
+    },
+    "w8a8": {
+      "available": true,
+      "kernel": "torch._int_mm"
+    }
+  },
+  "paths": {
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3",
+    "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/target_latent_reuse",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/cache/source_dense/fusion_masks",
+    "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/frames/source_dense_first_frame.png",
+    "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/frames/target_dense_first_frame.png",
+    "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/summary.json",
+    "report": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/report.md"
+  },
+  "runs": {
+    "source_dense": {
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/cache/source_dense/manifest.json",
+      "denoising_seconds": 377.1046296718996,
+      "end_to_end_seconds": 401.1475385290105,
+      "self_attn_seconds": 280.31997494888304,
+      "cross_attn_seconds": 16.420028490066528,
+      "ffn_seconds": 36.24538288497925,
+      "latent_shape": [
+        48,
+        31,
+        44,
+        80
+      ],
+      "token_grid": [
+        31,
+        22,
+        40
+      ],
+      "peak_gpu_memory_gib": {
+        "allocated": 43.764925479888916,
+        "reserved": 52.93359375
+      },
+      "masked_injection": {
+        "enabled": false,
+        "mode": "hard",
+        "alpha_function": null,
+        "formula": "L_new = Medit * L_target + (1 - Medit) * L_source_cache",
+        "calls": 0,
+        "total_seconds": 0.0,
+        "avg_ms": 0.0,
+        "mask_source_completed_step": null,
+        "mask_statistics": {}
+      },
+      "sparse_blocks": {
+        "enabled": false
+      },
+      "outer_sparse": {
+        "enabled": true,
+        "mode": "source_capture",
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "source_mask_cache_id": "real-wan-boundary-blend-20260817/history",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/cache/source_dense/outer_block_masks",
+        "format": "carnator-source-block-mask-v1",
+        "cfg_branches": 2,
+        "entries": 1520,
+        "capture_seconds": 276.5187524028588,
+        "write_seconds": 3.0749761713668704,
+        "avg_density": 0.3200347054945795,
+        "avg_coverage": 0.9632794556256972
+      },
+      "ffn": {
+        "enabled": false,
+        "backend": "fp"
+      }
+    },
+    "target_dense": {
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/videos/target_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/cache/target_dense/manifest.json",
+      "denoising_seconds": 278.9674894870259,
+      "end_to_end_seconds": 303.58121795021,
+      "self_attn_seconds": 182.4908418121338,
+      "cross_attn_seconds": 16.572655995368958,
+      "ffn_seconds": 35.35211838436127,
+      "latent_shape": [
+        48,
+        31,
+        44,
+        80
+      ],
+      "token_grid": [
+        31,
+        22,
+        40
+      ],
+      "peak_gpu_memory_gib": {
+        "allocated": 43.76461935043335,
+        "reserved": 52.93359375
+      },
+      "masked_injection": {
+        "enabled": false,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 0,
+        "total_seconds": 0.0,
+        "avg_ms": 0.0,
+        "mask_source_completed_step": null,
+        "mask_statistics": {}
+      },
+      "sparse_blocks": {
+        "enabled": false
+      },
+      "outer_sparse": {
+        "enabled": false
+      },
+      "ffn": {
+        "enabled": false,
+        "backend": "fp"
+      }
+    },
+    "target_latent_reuse": {
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_latent_reuse.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/cache/target_latent_reuse/manifest.json",
+      "denoising_seconds": 171.31934833200648,
+      "end_to_end_seconds": 197.17496449803002,
+      "self_attn_seconds": 88.71956632995605,
+      "cross_attn_seconds": 10.171864193439484,
+      "ffn_seconds": 18.980063988685608,
+      "latent_shape": [
+        48,
+        31,
+        44,
+        80
+      ],
+      "token_grid": [
+        31,
+        22,
+        40
+      ],
+      "peak_gpu_memory_gib": {
+        "allocated": 41.32700204849243,
+        "reserved": 50.4765625
+      },
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.2085498832166195,
+        "avg_ms": 5.213747080415487,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "sparse_blocks": {
+        "enabled": true,
+        "layers": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "sparse_call_count": 880,
+        "dense_fallback_count": 0,
+        "sparse_forward_elapsed_seconds": 69.14636594499461,
+        "calls_by_layer": {
+          "10": 80,
+          "11": 80,
+          "12": 80,
+          "13": 80,
+          "14": 80,
+          "15": 80,
+          "16": 80,
+          "17": 80,
+          "18": 80,
+          "19": 80,
+          "20": 80
+        },
+        "index_cache": [
+          {
+            "source_completed_step": 5,
+            "token_count": 27280,
+            "query_count": 9583,
+            "context_count": 18483,
+            "query_ratio": 0.351282991202346,
+            "context_ratio": 0.6775293255131964
+          }
+        ]
+      },
+      "outer_sparse": {
+        "enabled": false
+      },
+      "ffn": {
+        "enabled": true,
+        "backend": "w8a8",
+        "kernel": "triton-w8a8-v1",
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "layer_metadata": {
+          "0": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015973672270774841
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0008554458618164062
+            }
+          },
+          "1": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0008841697126626968
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013213865458965302
+            }
+          },
+          "2": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001117616891860962
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001514524221420288
+            }
+          },
+          "3": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0014290171675384045
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009003877639770508
+            }
+          },
+          "4": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013237912207841873
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0008231345564126968
+            }
+          },
+          "5": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013291966170072556
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012168283574283123
+            }
+          },
+          "6": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010907631367444992
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010032355785369873
+            }
+          },
+          "7": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010126065462827682
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009470173390582204
+            }
+          },
+          "8": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0011211605742573738
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001038799062371254
+            }
+          },
+          "9": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012696031481027603
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012503787875175476
+            }
+          },
+          "10": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.00102404342032969
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0011346768587827682
+            }
+          },
+          "11": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001210866030305624
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0014772182330489159
+            }
+          },
+          "12": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.000981578603386879
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0019779205322265625
+            }
+          },
+          "13": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012226104736328125
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009760780958458781
+            }
+          },
+          "14": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012942329049110413
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013221080880612135
+            }
+          },
+          "15": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015018433332443237
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001181264640763402
+            }
+          },
+          "16": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013398900628089905
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001737699843943119
+            }
+          },
+          "17": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0012730881571769714
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015906686894595623
+            }
+          },
+          "18": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015191510319709778
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009899139404296875
+            }
+          },
+          "19": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013316599652171135
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013183830305933952
+            }
+          },
+          "20": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009494088590145111
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0017032022587954998
+            }
+          },
+          "21": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010630637407302856
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.002790316939353943
+            }
+          },
+          "22": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013532638549804688
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0031176437623798847
+            }
+          },
+          "23": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0017741043120622635
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009870529174804688
+            }
+          },
+          "24": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0017003268003463745
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010794103145599365
+            }
+          },
+          "25": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0010734014213085175
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.000772552564740181
+            }
+          },
+          "26": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015700033400207758
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009615477174520493
+            }
+          },
+          "27": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0013848552480340004
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0008260169997811317
+            }
+          },
+          "28": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0009053560206666589
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001025402918457985
+            }
+          },
+          "29": {
+            "kernel": "triton-w8a8-v1",
+            "format": "W8A8 dynamic activation / per-output-channel weight",
+            "fc1": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.001814655028283596
+            },
+            "fc2": {
+              "kernel": "triton-w8a8-v1",
+              "weight_dtype": "torch.int8",
+              "weight_layout": "output-input",
+              "weight_scale_granularity": "per-output-channel",
+              "activation_dtype": "torch.int8",
+              "activation_scale_granularity": "per-token-row",
+              "accumulator_dtype": "torch.int32",
+              "epilogue": "scale + bias + output cast fused in Triton GEMM",
+              "output_dtype": "torch.float16",
+              "weight_max_abs_error": 0.0015002875588834286
+            }
+          }
+        },
+        "layer_output_error": {}
+      },
+      "sparse_density": {
+        "sparse_call_count": 880,
+        "dense_fallback_count": 0,
+        "sparse_forward_elapsed_seconds": 69.14636594499461,
+        "avg_medit_query_ratio": 0.351282991202346,
+        "avg_msee_context_ratio": 0.6775293255131964,
+        "avg_self_attn_region_density_estimate": 0.2380045280935836,
+        "records": [
+          {
+            "source_completed_step": 5,
+            "token_count": 27280,
+            "query_count": 9583,
+            "context_count": 18483,
+            "query_ratio": 0.351282991202346,
+            "context_ratio": 0.6775293255131964
+          }
+        ]
+      }
+    }
+  },
+  "speedups": {
+    "reference_run": "target_dense",
+    "denoising_vs_reference": 1.6283478322973997,
+    "end_to_end_vs_reference": 1.5396539754581422
+  },
+  "masks": {
+    "available": true,
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history/cache/source_dense/fusion_masks",
+    "mask_variant": "self_contrast_cross_attention_fusion",
+    "source_completed_step": 5,
+    "token_area": {
+      "mbase": 0.1690615862607956,
+      "medit": 0.3512829840183258,
+      "msee": 0.6775293350219727,
+      "original_mbase": 0.22192081809043884
+    },
+    "latent_area": {
+      "mbase": 0.1690615862607956,
+      "medit": 0.3512829840183258,
+      "msee": 0.6775293350219727,
+      "mband": 0.1822214126586914
+    },
+    "raw_coverage_area": 0.1690615862607956,
+    "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
+  },
+  "first_frames": {
+    "source_dense": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/frames/source_dense_first_frame.png",
+    "target_dense": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/frames/target_dense_first_frame.png"
+  }
+}

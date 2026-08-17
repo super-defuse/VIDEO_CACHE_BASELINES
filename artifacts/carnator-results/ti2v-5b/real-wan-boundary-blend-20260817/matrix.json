@@ -1,0 +1,529 @@
+{
+  "status": "completed",
+  "created_at": "2026-08-17T07:35:18.803742+00:00",
+  "name": "Carnator boundary-blend",
+  "method": "carnator-boundary-blend",
+  "profile": "ti2v-5b",
+  "model": "Wan2.2-TI2V-5B",
+  "run_id": "real-wan-boundary-blend-20260817",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/history",
+  "latent_injection_mode": "boundary-blend",
+  "boundary_alpha_function": "smoothstep",
+  "baselines": [
+    {
+      "status": "completed",
+      "baseline": "C0",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/videos/target_dense.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "fp",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 278.9674894870259,
+        "end_to_end_seconds": 303.58121795021
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.33740234375,
+        "vbench_q": 0.6333843918142568,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9827543693284194,
+          "background_consistency": 0.9865091959635417,
+          "motion_smoothness": 0.9903745106791336,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.7012665271759033,
+          "imaging_quality": 71.59979689416807,
+          "vbench_q": 0.6333843918142568
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B0",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B0/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "fp",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 178.65862540295348,
+        "end_to_end_seconds": 201.92644917988218
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B0/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.35400390625,
+        "vbench_q": 0.6348295090563695,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9853430286049842,
+          "background_consistency": 0.984283447265625,
+          "motion_smoothness": 0.9906350961988528,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6757636666297913,
+          "imaging_quality": 75.08432189689195,
+          "vbench_q": 0.6348295090563695
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B1",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B1/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "flashinfer",
+        "ffn": "fp",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 175.21957541885786,
+        "end_to_end_seconds": 198.42841116106138
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B1/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.354248046875,
+        "vbench_q": 0.631416168390298,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9845063356061776,
+          "background_consistency": 0.9824015299479166,
+          "motion_smoothness": 0.9906869264460243,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6653087139129639,
+          "imaging_quality": 74.09602532505004,
+          "vbench_q": 0.631416168390298
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B2",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B2/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "sparge-sage2",
+        "ffn": "fp",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 129.82745434204116,
+        "end_to_end_seconds": 153.01680215401575
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B2/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.354248046875,
+        "vbench_q": 0.6304172098202782,
+        "vbench_dimensions": {
+          "subject_consistency": 0.98138342872262,
+          "background_consistency": 0.9755839029947917,
+          "motion_smoothness": 0.9903887782785344,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6702568531036377,
+          "imaging_quality": 74.30491877784414,
+          "vbench_q": 0.6304172098202782
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B3",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "dense",
+        "ffn": "w8a8",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 171.31934833200648,
+        "end_to_end_seconds": 197.17496449803002
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B3/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.353271484375,
+        "vbench_q": 0.6344319113052205,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9847990383704504,
+          "background_consistency": 0.9835795084635417,
+          "motion_smoothness": 0.9906087897926492,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6754032969474792,
+          "imaging_quality": 75.00407056572024,
+          "vbench_q": 0.6344319113052205
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B4",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B4/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "flashinfer",
+        "ffn": "w8a8",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 170.60380365792662,
+        "end_to_end_seconds": 196.45636830688454
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B4/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.35498046875,
+        "vbench_q": 0.6320270990610932,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9844295231004556,
+          "background_consistency": 0.983697509765625,
+          "motion_smoothness": 0.9906423258125062,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6676331758499146,
+          "imaging_quality": 74.16024458703916,
+          "vbench_q": 0.6320270990610932
+        }
+      }
+    },
+    {
+      "status": "completed",
+      "baseline": "B5",
+      "profile": "ti2v-5b",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B5/videos/target_latent_reuse.mp4",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "configuration": {
+        "guidance_scale": 5.0,
+        "outer_attention": "sparge-sage2",
+        "ffn": "w8a8",
+        "latent_injection_mode": "boundary-blend",
+        "boundary_alpha_function": "smoothstep"
+      },
+      "timing": {
+        "denoising_seconds": 123.13343810592778,
+        "end_to_end_seconds": 148.16176775097847
+      },
+      "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator-results/ti2v-5b/real-wan-boundary-blend-20260817/B5/summary.json",
+      "quality_status": "completed",
+      "quality": {
+        "clip_t": 0.3544921875,
+        "vbench_q": 0.6306940988063541,
+        "vbench_dimensions": {
+          "subject_consistency": 0.9840887832144897,
+          "background_consistency": 0.9810445149739583,
+          "motion_smoothness": 0.9906843568526488,
+          "dynamic_degree": 0.0,
+          "aesthetic_quality": 0.6634066104888916,
+          "imaging_quality": 74.02841873799474,
+          "vbench_q": 0.6306940988063541
+        }
+      }
+    }
+  ],
+  "records": [
+    {
+      "baseline": "C0",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/videos/target_dense.mp4",
+      "e2e_seconds": 303.58121795021,
+      "denoising_seconds": 278.9674894870259,
+      "speedup_vs_C0_e2e": null,
+      "speedup_vs_C0_denoising": null,
+      "masked_injection": {
+        "enabled": false,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 0,
+        "total_seconds": 0.0,
+        "avg_ms": 0.0,
+        "mask_source_completed_step": null,
+        "mask_statistics": {}
+      },
+      "quality_status": "completed",
+      "clip_t": 0.33740234375,
+      "vbench_q": 0.6333843918142568,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9827543693284194,
+        "background_consistency": 0.9865091959635417,
+        "motion_smoothness": 0.9903745106791336,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7012665271759033,
+        "imaging_quality": 71.59979689416807,
+        "vbench_q": 0.6333843918142568
+      }
+    },
+    {
+      "baseline": "B0",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B0/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 201.92644917988218,
+      "denoising_seconds": 178.65862540295348,
+      "speedup_vs_C0_e2e": 1.5034247330312367,
+      "speedup_vs_C0_denoising": 1.5614554788935153,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.5173264343757182,
+        "avg_ms": 12.933160859392956,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.35400390625,
+      "vbench_q": 0.6348295090563695,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9853430286049842,
+        "background_consistency": 0.984283447265625,
+        "motion_smoothness": 0.9906350961988528,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6757636666297913,
+        "imaging_quality": 75.08432189689195,
+        "vbench_q": 0.6348295090563695
+      }
+    },
+    {
+      "baseline": "B1",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B1/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 198.42841116106138,
+      "denoising_seconds": 175.21957541885786,
+      "speedup_vs_C0_e2e": 1.5299281800114684,
+      "speedup_vs_C0_denoising": 1.592102302611802,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.21355866733938456,
+        "avg_ms": 5.338966683484614,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.354248046875,
+      "vbench_q": 0.631416168390298,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9845063356061776,
+        "background_consistency": 0.9824015299479166,
+        "motion_smoothness": 0.9906869264460243,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6653087139129639,
+        "imaging_quality": 74.09602532505004,
+        "vbench_q": 0.631416168390298
+      }
+    },
+    {
+      "baseline": "B2",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B2/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 153.01680215401575,
+      "denoising_seconds": 129.82745434204116,
+      "speedup_vs_C0_e2e": 1.9839730910377207,
+      "speedup_vs_C0_denoising": 2.148755753556278,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.20555915869772434,
+        "avg_ms": 5.138978967443109,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.354248046875,
+      "vbench_q": 0.6304172098202782,
+      "vbench_dimensions": {
+        "subject_consistency": 0.98138342872262,
+        "background_consistency": 0.9755839029947917,
+        "motion_smoothness": 0.9903887782785344,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6702568531036377,
+        "imaging_quality": 74.30491877784414,
+        "vbench_q": 0.6304172098202782
+      }
+    },
+    {
+      "baseline": "B3",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B3/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 197.17496449803002,
+      "denoising_seconds": 171.31934833200648,
+      "speedup_vs_C0_e2e": 1.5396539754581422,
+      "speedup_vs_C0_denoising": 1.6283478322973997,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.2085498832166195,
+        "avg_ms": 5.213747080415487,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.353271484375,
+      "vbench_q": 0.6344319113052205,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9847990383704504,
+        "background_consistency": 0.9835795084635417,
+        "motion_smoothness": 0.9906087897926492,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6754032969474792,
+        "imaging_quality": 75.00407056572024,
+        "vbench_q": 0.6344319113052205
+      }
+    },
+    {
+      "baseline": "B4",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B4/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 196.45636830688454,
+      "denoising_seconds": 170.60380365792662,
+      "speedup_vs_C0_e2e": 1.54528570677834,
+      "speedup_vs_C0_denoising": 1.6351774316027359,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.2261733920313418,
+        "avg_ms": 5.654334800783545,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.35498046875,
+      "vbench_q": 0.6320270990610932,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9844295231004556,
+        "background_consistency": 0.983697509765625,
+        "motion_smoothness": 0.9906423258125062,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6676331758499146,
+        "imaging_quality": 74.16024458703916,
+        "vbench_q": 0.6320270990610932
+      }
+    },
+    {
+      "baseline": "B5",
+      "status": "completed",
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/carnator/ti2v-5b/real-wan-boundary-blend-20260817/B5/videos/target_latent_reuse.mp4",
+      "e2e_seconds": 148.16176775097847,
+      "denoising_seconds": 123.13343810592778,
+      "speedup_vs_C0_e2e": 2.048984853234549,
+      "speedup_vs_C0_denoising": 2.2655705369571426,
+      "masked_injection": {
+        "enabled": true,
+        "mode": "boundary-blend",
+        "alpha_function": "smoothstep",
+        "formula": "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + (1 - Medit) * L_source",
+        "calls": 40,
+        "total_seconds": 0.20184033387340605,
+        "avg_ms": 5.046008346835151,
+        "mask_source_completed_step": 5,
+        "mask_statistics": {
+          "base_fraction": 0.1690615862607956,
+          "band_fraction": 0.1822214126586914,
+          "edit_fraction": 0.3512829840183258,
+          "alpha_mean": 0.5070818066596985,
+          "alpha_min": 0.0,
+          "alpha_max": 1.0
+        }
+      },
+      "quality_status": "completed",
+      "clip_t": 0.3544921875,
+      "vbench_q": 0.6306940988063541,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9840887832144897,
+        "background_consistency": 0.9810445149739583,
+        "motion_smoothness": 0.9906843568526488,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6634066104888916,
+        "imaging_quality": 74.02841873799474,
+        "vbench_q": 0.6306940988063541
+      }
+    }
+  ],
+  "quality_metrics": [
+    "clip_t",
+    "vbench_q"
+  ],
+  "quality_status": "completed",
+  "quality_results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/metrics.json"
+}

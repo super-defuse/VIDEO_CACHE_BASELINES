@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.98138342872262,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": 0.98138342872262
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9755839029947917,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": 0.9755839029947917,
+                "video_sim": 117.070068359375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9903887782785344,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": 0.9903887782785344
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6702568531036377,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": 0.6702568531036377
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7430491877784413,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/B2/videos/video.mp4",
+                "video_results": 74.30491877784414
+            }
+        ]
+    ]
+}

@@ -23,8 +23,21 @@ def main() -> None:
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--model-path", type=Path, default=DEFAULT_MODEL)
     parser.add_argument("--baselines", default="C0,B0,B1,B2,B3,B4,B5")
+    parser.add_argument(
+        "--latent-injection-mode",
+        choices=("hard", "boundary-blend"),
+        default="hard",
+        help="Native Wan latent reuse policy.",
+    )
+    parser.add_argument(
+        "--boundary-alpha-function",
+        choices=("smoothstep", "cosine"),
+        default="smoothstep",
+        help="Distance-to-Mbase interpolation for boundary-blend mode.",
+    )
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--runtime-python", type=Path, default=Path(sys.executable))
     args = parser.parse_args()
 
     wan_root = ROOT / "external" / "wan2.2"
@@ -48,7 +61,9 @@ def main() -> None:
         "--results-root", str(results_root),
         "--run-id", args.run_id,
         "--baselines", args.baselines,
-        "--runtime-python", sys.executable,
+        "--latent-injection-mode", args.latent_injection_mode,
+        "--boundary-alpha-function", args.boundary_alpha_function,
+        "--runtime-python", str(args.runtime_python),
     ]
     if args.check_only:
         command.append("--check-only")

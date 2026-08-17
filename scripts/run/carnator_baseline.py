@@ -30,6 +30,18 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--artifact-root", type=Path, default=ROOT / "artifacts")
     value.add_argument("--results-root", type=Path, default=ROOT / "results")
     value.add_argument("--run-id", default="latest")
+    value.add_argument(
+        "--latent-injection-mode",
+        choices=("hard", "boundary-blend"),
+        default="hard",
+        help="Native Wan latent reuse policy.",
+    )
+    value.add_argument(
+        "--boundary-alpha-function",
+        choices=("smoothstep", "cosine"),
+        default="smoothstep",
+        help="Distance-to-Mbase interpolation for boundary-blend mode.",
+    )
     value.add_argument("--source-run-dir", type=Path, help="Required by B0--B5 when source assets were prepared separately.")
     value.add_argument("--target-dense-manifest", type=Path, help="Optional matched C0 manifest for B0--B5 timing references.")
     value.add_argument("--check-only", action="store_true")
@@ -47,6 +59,11 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--flashinfer-wrapper", choices=("variable", "block"), default="variable")
     value.add_argument("--outer-dtype", choices=("fp16", "bf16"), default="fp16")
     value.add_argument("--model-dtype", choices=("fp16", "bf16"), default="fp16")
+    value.add_argument(
+        "--skip-w8a8-dense-diagnostic",
+        action="store_true",
+        help="Skip the optional dense W8A8 target diagnostic when using an existing C0 reference.",
+    )
     value.add_argument("--guidance-scale", type=float, default=None)
     value.add_argument("--runtime-python", type=Path, default=Path(sys.executable))
     return value
@@ -64,6 +81,8 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
         "--results-root", str(args.results_root / "ti2v-5b"), "--run-id", runtime_run_id,
         "--source-prompt", args.source_prompt, "--target-prompt", args.target_prompt,
         "--source-positive", args.source_positive, "--seed", str(args.seed),
+        "--latent-injection-mode", args.latent_injection_mode,
+        "--boundary-alpha-function", args.boundary_alpha_function,
         "--outer-attn-backend", spec.outer_attention, "--ffn-backend", spec.ffn,
         "--model-dtype", args.model_dtype, "--sparse-layers", region_layers,
         "--outer-sparse-layers", outer_layers, "--outer-mask-q-block", str(args.q_block_size),
@@ -74,12 +93,16 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
     ]
     if args.guidance_scale is not None:
         command.extend(("--guidance-scale", str(args.guidance_scale)))
+    if args.skip_w8a8_dense_diagnostic:
+        command.append("--skip-w8a8-dense-diagnostic")
     if args.check_only:
         return [*command, "--check-only"]
     if spec.identifier == "C0":
         return [*command, "--target-dense-only"]
     if args.source_run_dir is not None:
-        command.extend(("--source-run-dir", str(args.source_run_dir), "--skip-w8a8-dense-diagnostic"))
+        command.extend(("--source-run-dir", str(args.source_run_dir)))
+        if not args.skip_w8a8_dense_diagnostic:
+            command.append("--skip-w8a8-dense-diagnostic")
         if args.target_dense_manifest is not None:
             command.extend(("--target-dense-manifest", str(args.target_dense_manifest)))
     return command
@@ -184,6 +207,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     spec = parse_baseline(args.baseline)
     profile = load_profile(args.profile)
+    if args.profile != "ti2v-5b" and args.latent_injection_mode != "hard":
+        raise ValueError("boundary-blend is currently implemented only for native Wan2.2-TI2V-5B")
     checkpoint = (args.checkpoint or default_checkpoint(profile)).expanduser()
     if args.profile == "ti2v-5b":
         command = native_5b_command(args, checkpoint, spec)

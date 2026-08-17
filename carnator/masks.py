@@ -429,17 +429,21 @@ def build_canonical_cross_attention_mask(
 
 
 def add_canonical_latent_masks(bundle: dict[str, Any], latents: torch.Tensor) -> dict[str, Any]:
-    """Materialize the sole native Wan region mask in latent space."""
+    """Materialize canonical Wan region masks in latent space."""
 
     if "Medit" not in bundle:
         raise KeyError("missing canonical token mask Medit")
+    mbase = bundle.get("Mbase", bundle["Medit"])
     medit = bundle["Medit"]
     msee = bundle.get("Msee", medit)
+    bundle["latent_Mbase"] = token_mask_to_latent_mask(mbase, latents)
     bundle["latent_Medit"] = token_mask_to_latent_mask(medit, latents)
     bundle["latent_Msee"] = token_mask_to_latent_mask(msee, latents)
     bundle["latent_area"] = {
+        "mbase": float(bundle["latent_Mbase"].float().mean().item()),
         "medit": float(bundle["latent_Medit"].float().mean().item()),
         "msee": float(bundle["latent_Msee"].float().mean().item()),
+        "mband": float((bundle["latent_Medit"] & ~bundle["latent_Mbase"]).float().mean().item()),
     }
     return bundle
 
@@ -447,6 +451,16 @@ def add_canonical_latent_masks(bundle: dict[str, Any], latents: torch.Tensor) ->
 def get_canonical_latent_masks(bundle: dict[str, Any], latents: torch.Tensor) -> dict[str, Any]:
     """Return the fixed source-calibrated mask for any native Wan target step."""
 
+    if "latent_Mbase" in bundle:
+        latent_mbase = bundle["latent_Mbase"].to(device=latents.device, dtype=torch.bool)
+    elif "Mbase" in bundle:
+        latent_mbase = token_mask_to_latent_mask(bundle["Mbase"], latents)
+    elif "Medit" in bundle:
+        # Older bundles did not serialize Mbase.  Treat their edit region as
+        # the core so the legacy hard-injection behavior remains unchanged.
+        latent_mbase = token_mask_to_latent_mask(bundle["Medit"], latents)
+    else:
+        raise KeyError("missing canonical Mbase mask")
     if "latent_Medit" in bundle:
         latent_medit = bundle["latent_Medit"].to(device=latents.device, dtype=torch.bool)
     elif "Medit" in bundle:
@@ -460,10 +474,121 @@ def get_canonical_latent_masks(bundle: dict[str, Any], latents: torch.Tensor) ->
     else:
         raise KeyError("missing canonical Msee mask")
     return {
+        "latent_mbase": latent_mbase,
         "latent_medit": latent_medit,
         "latent_msee": latent_msee,
         "source_completed_step": int(bundle["source_completed_step"]),
     }
+
+
+def _distance_alpha(
+    mbase: torch.Tensor,
+    medit: torch.Tensor,
+    *,
+    function: str = "smoothstep",
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return a smooth source weight and the transition band.
+
+    The distance is an exact Chebyshev distance on the latent grid, computed
+    by iterative 3x3 dilation.  This matches the spatial max-pool dilation
+    used to construct ``Medit`` while avoiding a scipy dependency.
+    """
+
+    if mbase.shape != medit.shape:
+        raise ValueError(f"Mbase shape {tuple(mbase.shape)} != Medit shape {tuple(medit.shape)}")
+    if function not in {"smoothstep", "cosine"}:
+        raise ValueError("boundary alpha function must be 'smoothstep' or 'cosine'")
+    if mbase.ndim != 5:
+        raise ValueError(f"latent masks must have shape [B,C,T,H,W], got {tuple(mbase.shape)}")
+
+    # The masks are channel-expanded copies.  Compute one spatial mask per
+    # sample/frame and broadcast the resulting weights back to all channels.
+    base = mbase[:, 0].bool()
+    edit = (medit[:, 0].bool() | base)
+    band = edit & ~base
+    batch, frames, height, width = band.shape
+    flat_base = base.reshape(batch * frames, 1, height, width)
+    flat_band = band.reshape(batch * frames, 1, height, width)
+    remaining = flat_band.clone()
+    frontier = flat_base.clone()
+    distance = torch.zeros_like(flat_band, dtype=torch.float32)
+
+    # In normal Carnator masks this exits after only a few iterations because
+    # Medit is a small dilation of Mbase.  The bound also handles malformed or
+    # hand-authored bundles without an unbounded loop.
+    for step in range(1, max(height, width) + 1):
+        frontier = F.max_pool2d(frontier.float(), kernel_size=3, stride=1, padding=1).gt(0)
+        newly = frontier & remaining
+        distance = torch.where(newly, torch.as_tensor(float(step), device=distance.device), distance)
+        remaining &= ~newly
+        if not bool(remaining.any()):
+            break
+    if bool(remaining.any()):
+        fallback = distance.amax(dim=(-2, -1), keepdim=True).clamp_min(1.0) + 1.0
+        distance = torch.where(remaining, fallback, distance)
+
+    band_flat = flat_band.flatten(1)
+    max_distance = distance.flatten(1).masked_fill(~band_flat, 0.0).amax(dim=1).view(batch * frames, 1, 1, 1)
+    denominator = (max_distance - 1.0).clamp_min(1.0)
+    normalized = ((distance - 1.0) / denominator).clamp(0.0, 1.0)
+    # A one-cell transition cannot expose both endpoints.  Keep it genuinely
+    # blended instead of collapsing it to the target-side endpoint.
+    normalized = torch.where(max_distance == 1.0, torch.full_like(normalized, 0.5), normalized)
+    if function == "smoothstep":
+        alpha = normalized.square() * (3.0 - 2.0 * normalized)
+    else:
+        alpha = 0.5 - 0.5 * torch.cos(torch.pi * normalized)
+    alpha = torch.where(flat_band, alpha, torch.zeros_like(alpha))
+    alpha = alpha.reshape(batch, frames, height, width)[:, None]
+    alpha = alpha.expand_as(mbase)
+    return alpha, band[:, None].expand_as(mbase)
+
+
+def boundary_blend_weights(
+    masks: dict[str, torch.Tensor],
+    *,
+    function: str = "smoothstep",
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return cached-friendly ``(alpha, M_band)`` tensors for latent blending."""
+
+    return _distance_alpha(masks["latent_mbase"], masks["latent_medit"], function=function)
+
+
+def boundary_blend_latent(
+    latent: torch.Tensor,
+    source_latent: torch.Tensor,
+    masks: dict[str, torch.Tensor],
+    *,
+    function: str = "smoothstep",
+    weights: tuple[torch.Tensor, torch.Tensor] | None = None,
+) -> tuple[torch.Tensor, dict[str, float]]:
+    """Blend source latent through the Mbase--Medit transition band.
+
+    ``Mbase`` stays entirely target-generated, ``Medit minus Mbase`` receives a
+    distance-weighted blend, and the stable region outside ``Medit`` keeps the
+    source latent used by the original Carnator baseline.
+    """
+
+    if latent.shape != source_latent.shape:
+        raise ValueError(f"target latent {tuple(latent.shape)} != source latent {tuple(source_latent.shape)}")
+    alpha, band = weights if weights is not None else boundary_blend_weights(masks, function=function)
+    target = latent.unsqueeze(0)
+    source = source_latent.to(device=latent.device, dtype=latent.dtype).unsqueeze(0)
+    mbase = masks["latent_mbase"].to(device=latent.device, dtype=torch.bool)
+    band = band.to(device=latent.device, dtype=torch.bool)
+    alpha = alpha.to(device=latent.device, dtype=latent.dtype)
+    blended = target * (1.0 - alpha) + source * alpha
+    output = torch.where(mbase, target, torch.where(band, blended, source))[0]
+    band_alpha = alpha[band].float()
+    stats = {
+        "base_fraction": float(mbase.float().mean().item()),
+        "band_fraction": float(band.float().mean().item()),
+        "edit_fraction": float((mbase | band).float().mean().item()),
+        "alpha_mean": float(band_alpha.mean().item()) if band_alpha.numel() else 0.0,
+        "alpha_min": float(band_alpha.min().item()) if band_alpha.numel() else 0.0,
+        "alpha_max": float(band_alpha.max().item()) if band_alpha.numel() else 0.0,
+    }
+    return output, stats
 
 
 def remove_isolated_pixels(mask: torch.Tensor) -> torch.Tensor:

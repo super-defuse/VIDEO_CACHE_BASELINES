@@ -16,6 +16,13 @@
 | Carnator B3 | `carnator-b3.mp4` |
 | Carnator B4 | `carnator-b4.mp4` |
 | Carnator B5 | `carnator-b5.mp4` |
+| Carnator boundary-blend C0 | `carnator-boundary-blend-c0.mp4` |
+| Carnator boundary-blend B0 | `carnator-boundary-blend-b0.mp4` |
+| Carnator boundary-blend B1 | `carnator-boundary-blend-b1.mp4` |
+| Carnator boundary-blend B2 | `carnator-boundary-blend-b2.mp4` |
+| Carnator boundary-blend B3 | `carnator-boundary-blend-b3.mp4` |
+| Carnator boundary-blend B4 | `carnator-boundary-blend-b4.mp4` |
+| Carnator boundary-blend B5 | `carnator-boundary-blend-b5.mp4` |
 | CHAI-Carnator CC-B0 | `chai-carnator-b0.mp4` |
 | CHAI-Carnator CC-B1 | `chai-carnator-b1.mp4` |
 | CHAI-Carnator CC-B2 | `chai-carnator-b2.mp4` |
@@ -25,5 +32,7 @@
 
 原始路径和运行元数据仍保留在 `artifacts/carnator/`、`artifacts/chai-carnator/`、
 `artifacts/runs/wan22-ti2v-5b/dog-to-cat/`、`artifacts/carnator-results/ti2v-5b/`
-以及 `artifacts/chai-carnator-results/` 下；CHAI-Carnator 质量指标见
+以及 `artifacts/chai-carnator-results/` 下；boundary-blend 的质量指标见
+`artifacts/runs/wan22-ti2v-5b/dog-to-cat/carnator-boundary-blend-quality/metrics.json`，
+CHAI-Carnator 质量指标见
 `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/metrics.json`。

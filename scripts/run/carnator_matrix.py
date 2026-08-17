@@ -29,6 +29,18 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--artifact-root", type=Path, default=ROOT / "artifacts")
     value.add_argument("--results-root", type=Path, default=ROOT / "results")
     value.add_argument("--run-id", default="latest")
+    value.add_argument(
+        "--latent-injection-mode",
+        choices=("hard", "boundary-blend"),
+        default="hard",
+        help="Native Wan latent reuse policy.",
+    )
+    value.add_argument(
+        "--boundary-alpha-function",
+        choices=("smoothstep", "cosine"),
+        default="smoothstep",
+        help="Distance-to-Mbase interpolation for boundary-blend mode.",
+    )
     value.add_argument("--baselines", default="C0,B0,B1,B2,B3,B4,B5")
     value.add_argument("--check-only", action="store_true")
     value.add_argument("--dtype", choices=("bf16", "fp16"), default="bf16")
@@ -64,6 +76,8 @@ def common_command(args: argparse.Namespace, checkpoint: Path, baseline: str) ->
         "--source-positive", args.source_positive, "--seed", str(args.seed),
         "--checkpoint", str(checkpoint), "--artifact-root", str(args.artifact_root),
         "--results-root", str(args.results_root), "--run-id", args.run_id,
+        "--latent-injection-mode", args.latent_injection_mode,
+        "--boundary-alpha-function", args.boundary_alpha_function,
         "--dtype", args.dtype, "--model-dtype", args.model_dtype,
         "--region-layers", args.region_layers, "--outer-layers", args.outer_layers,
         "--mask-self-layer", str(args.mask_self_layer), "--q-block-size", str(args.q_block_size),
@@ -102,7 +116,13 @@ def record_5b(args: argparse.Namespace, baseline: str) -> dict[str, Any]:
         "output": run.get("output"),
         "prompt": summary["config"]["target_prompt"],
         "seed": summary["config"]["seed"],
-        "configuration": {"guidance_scale": summary["config"]["guidance_scale"], "outer_attention": BASELINES[baseline].outer_attention, "ffn": BASELINES[baseline].ffn},
+        "configuration": {
+            "guidance_scale": summary["config"]["guidance_scale"],
+            "outer_attention": BASELINES[baseline].outer_attention,
+            "ffn": BASELINES[baseline].ffn,
+            "latent_injection_mode": summary["config"].get("latent_injection_mode", "hard"),
+            "boundary_alpha_function": summary["config"].get("boundary_alpha_function", "smoothstep"),
+        },
         "timing": {"denoising_seconds": run.get("denoising_seconds"), "end_to_end_seconds": run.get("end_to_end_seconds")},
         "summary": str(result_root / (args.run_id if baseline == "C0" else f"{args.run_id}/{baseline}") / "summary.json"),
     }
@@ -166,6 +186,8 @@ def main(argv: list[str] | None = None) -> int:
             "created_at": utc_now(),
             "profile": args.profile,
             "source_cache": str(source) if source else None,
+            "latent_injection_mode": args.latent_injection_mode,
+            "boundary_alpha_function": args.boundary_alpha_function,
             "baselines": records,
             "quality_metrics": ["clip_t", "vbench_q"],
         },
