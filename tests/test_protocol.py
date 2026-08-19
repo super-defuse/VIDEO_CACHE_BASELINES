@@ -49,6 +49,20 @@ def test_chorus_uses_source_prompt_cache_on_synthetic(tmp_path):
     assert target.executed_steps == 8
 
 
+def test_chorus_no_tgaa_is_registered_as_a_cross_request_variant():
+    method = make_method("chorus_no_tgaa", {"dry_run": True})
+    assert method.name == "chorus_no_tgaa"
+    assert method.capabilities.cross_request_cache
+    assert method.capabilities.source_trajectory
+
+
+def test_chorus_tgaa_component_ablations_are_registered():
+    for name in ("chorus_tgaa_key_only", "chorus_tgaa_output_only"):
+        method = make_method(name, {"dry_run": True})
+        assert method.name == name
+        assert method.capabilities.cross_request_cache
+
+
 def test_chorus_latent_fusion_matches_carnator_region_semantics():
     import torch
 

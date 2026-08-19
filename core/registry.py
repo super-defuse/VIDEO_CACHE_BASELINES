@@ -10,6 +10,9 @@ METHOD_MODULES = {
     "nirvana_vid": "methods.nirvana_vid.method",
     "carnator": "methods.carnator.method",
     "chorus": "methods.chorus.method",
+    "chorus_no_tgaa": "methods.chorus_no_tgaa.method",
+    "chorus_tgaa_key_only": "methods.chorus_tgaa_key_only.method",
+    "chorus_tgaa_output_only": "methods.chorus_tgaa_output_only.method",
 }
 
 REAL_SUPPORTED = {
@@ -19,6 +22,9 @@ REAL_SUPPORTED = {
     "nirvana_vid": {"wan22", "cogvideox15"},
     "carnator": {"cogvideox15"},
     "chorus": {"wan22"},
+    "chorus_no_tgaa": {"wan22"},
+    "chorus_tgaa_key_only": {"wan22"},
+    "chorus_tgaa_output_only": {"wan22"},
 }
 
 

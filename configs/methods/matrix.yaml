@@ -27,3 +27,15 @@ methods:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
+  chorus_no_tgaa:
+    environment: wan
+    wan22: supported-via-source-target-matrix
+    cogvideox15: N/A
+  chorus_tgaa_key_only:
+    environment: wan
+    wan22: supported-via-source-target-matrix
+    cogvideox15: N/A
+  chorus_tgaa_output_only:
+    environment: wan
+    wan22: supported-via-source-target-matrix
+    cogvideox15: N/A

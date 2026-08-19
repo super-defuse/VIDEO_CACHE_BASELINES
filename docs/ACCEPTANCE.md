@@ -15,7 +15,7 @@ boundary-blend 组使用同一 run 内匹配的 `303.58s` C0，避免把不同�
 
 TeaCache 是单请求方法，只运行 target prompt，不制造 source 命中。
 
-Chorus 的 target 计时沿用同一 Runner 口径：cache lookup、manifest 和逐步 trajectory
+Chorus 及其 TGAA/no-TGAA 消融的 target 计时沿用同一 Runner 口径：cache lookup、manifest 和逐步 trajectory
 读取、模型生成、视频保存与 hash 都计入；只有 target 内部的 LLM prompt diff 与
 Grounded-SAM-2 预处理通过 `excluded_latency_s` 单独列出并从报告时延剔除。原始墙钟和
 各阶段明细保存在 Chorus 运行结果的 `extra.timing` 中。
@@ -49,6 +49,9 @@ Grounded-SAM-2 预处理通过 `excluded_latency_s` 单独列出并从报告时�
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B4 | 8 | 58.48 | 5.14x | 0.3506 | 0.5556 | block 0 CHAI；其余 block FlashInfer VariableBlock + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | CHAI-Carnator CC-B5 | 8 | 48.30 | 6.23x | 0.3484 | 0.5578 | block 0 CHAI；其余 block SpargeAttn + W8A8 FFN；本轮重跑 |
 | Wan2.2-TI2V-5B | Chorus | 40 | 179.06 | 1.68x | 0.3491 | 0.6218 | source `295.77s`；K1=10/K2=40；Stage 2 使用 SRD、dense head、全部 30 个 blocks 的 TGAA（1800 calls）和 latent fusion；Stage 3 在 step 40 重置 UniPC history 后 dense/no-reuse；LLM+SAM `60.28s` 单独剔除；VBench 六维度已完成 |
+| Wan2.2-TI2V-5B | Chorus（仅去掉 TGAA） | 40 | 179.36 | 1.68x | 0.3491 | 0.6332 | `chorus_no_tgaa`；source `296.47s` 且视频 hash 与 Chorus source 相同；K1=10/K2=40；SRD、dense head、latent fusion 和 Stage-3 history reset 均保持；TGAA `enabled=false/calls=0`；LLM+SAM `52.18s` 单独剔除；VBench 六维度已完成 |
+| Wan2.2-TI2V-5B | Chorus TGAA key-only（`gamma_o=1.0`） | 40 | 179.88 | 1.67x | 0.3159 | 0.6189 | `chorus_tgaa_key_only`；保留 `gamma_k=1.15`、关闭 output amplification；source `296.51s`，hash 与其他变体 source 相同；其余 Chorus/SRD/mask/Stage-3 配置不变；VBench 六维度已完成 |
+| Wan2.2-TI2V-5B | Chorus TGAA output-only（`gamma_k=1.0`） | 40 | 179.96 | 1.67x | 0.3521 | 0.6339 | `chorus_tgaa_output_only`；保留 `gamma_o=1.05`、关闭 key amplification；source `295.62s`，hash 与其他变体 source 相同；其余 Chorus/SRD/mask/Stage-3 配置不变；VBench 六维度已完成 |
 | CogVideoX1.5 | Dense baseline（Carnator C0） | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | NIRVANA-VID | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | CHAI | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空；旧版产物已清理 |
@@ -132,6 +135,56 @@ forward，只增加 mask/latent 的逐元素融合。
   `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`；本轮 target `179.06s`、source_prompt
   hit，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；VBench 原始六维度见同目录下的
   `vbench/custom_vidprom_eval_results.json`；cache：`artifacts/cache/Wan2.2/chorus/`。
+- Wan Chorus 仅去掉 TGAA 的消融 source/target 视频、结果和质量评估：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/`；target `179.36s`、source_prompt
+  hit，`CLIP-T=0.3491`、`VBench-Q=0.6332`；TGAA `enabled=false/calls=0`，与 Chorus 使用相同
+  `phrase=dog`、`Medit=53.24%`、`Msee=84.06%` mask；VBench 原始六维度见该目录下的
+  `vbench/custom_vidprom_eval_results.json`；cache：`artifacts/cache/Wan2.2/chorus_no_tgaa/`。
+- Wan Chorus TGAA key-only（`gamma_o=1.0`）source/target 视频、结果和质量评估：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/`；target `179.88s`、
+  `CLIP-T=0.3159`、`VBench-Q=0.6189`；`gamma_k=1.15`、`gamma_o=1.0`、1800 calls；
+  VBench 原始六维度见该目录下的 `vbench/custom_vidprom_eval_results.json`；cache：
+  `artifacts/cache/Wan2.2/chorus_tgaa_key_only/`。
+- Wan Chorus TGAA output-only（`gamma_k=1.0`）source/target 视频、结果和质量评估：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-output-only/`；target `179.96s`、
+  `CLIP-T=0.3521`、`VBench-Q=0.6339`；`gamma_k=1.0`、`gamma_o=1.05`、1800 calls；
+  VBench 原始六维度见该目录下的 `vbench/custom_vidprom_eval_results.json`；cache：
+  `artifacts/cache/Wan2.2/chorus_tgaa_output_only/`。
+
+### TGAA 视觉问题分析
+
+本轮定性对照为 `chorus/videos/0001_target-000.mp4` 和
+`chorus-no-tgaa/videos/0001_target-000.mp4`。两者 source hash 和 Grounded-SAM-2 mask
+相同；Chorus 的猫左肩至脸侧出现稳定的黑色块/条带，去掉 TGAA 后该块消失。该单例消融只说明
+TGAA 与该现象相关，不把 SRD/latent fusion 的残留外观归因于 TGAA。
+
+[`Chorus.pdf`](../../Chorus2/docs/Chorus.pdf) 第 4 页明确了 TGAA 的两步操作：将差异 token 的
+cross-attention key 乘 `gamma_k`，并将整个 cross-attention 输出乘 `gamma_o`；第 5 页只规定
+`gamma_k(t,m)`、`gamma_o(t,m)` 应随 denoising 进度和 matching score `m` 衰减、且不低于 `1.0`，
+同时警告 key/output 过放大会造成运动抑制、artifact 或 blur。论文没有披露 `F_k`/`F_o` 的具体
+函数、`gamma` 数值、block 覆盖范围、token 映射细节或与 SRD mask 的空间耦合方式。
+
+当前真实实现的对应项是：Stage 2、全部 30 个 Wan blocks、target tokenizer 映射的 `cat` token，
+`gamma_k=1.15`、`gamma_o=1.05`，以及仅按 step 的 linear decay；没有使用论文要求的 `m` 条件，
+也没有论文给出的精确调度函数。因此它实现了论文公开的操作形式，但无法声称复现未公开的
+`F_k(t,m)`/`F_o(t,m)`。在此差距下，当前视频中的异常色块只能解释为 TGAA 放大与 SRD 区域更新、
+source latent 融合共同作用的可观察结果，不能进一步断言是论文 TGAA 本身的唯一表现。
+
+### TGAA 组件消融
+
+在相同 source trajectory、source hash、`phrase=dog`、`Medit=53.24%`、`Msee=84.06%`、
+Stage 2/3 和 1800 次调用下，仅切换一个放大项：
+
+| 变体 | `gamma_k` | `gamma_o` | target CLIP-T | target VBench-Q |
+| --- | ---: | ---: | ---: | ---: |
+| Chorus | 1.15 | 1.05 | 0.3491 | 0.6218 |
+| key-only | 1.15 | 1.00 | 0.3159 | 0.6189 |
+| output-only | 1.00 | 1.05 | 0.3521 | 0.6339 |
+
+本轮数值显示，保留 `gamma_o`、去掉 `gamma_k` 的 output-only 结果最高；仅保留 `gamma_k` 的
+key-only 结果最低。对 target 视频第 30、60、90 帧的抽样也显示：key-only 在猫的颈脸区域出现
+稳定的蓝色矩形块，而 output-only 未出现该块，视觉上更接近 no-TGAA。该表是组件行为记录，
+不改变 Chorus 的复现配置，也不补全论文未公开的调度函数。
 
 旧版未定型组合基线仍保持清理状态；当前 `CHAI-Carnator` 是独立实现和独立实验目录，
 不复用旧 source continuation 或旧验收数值。

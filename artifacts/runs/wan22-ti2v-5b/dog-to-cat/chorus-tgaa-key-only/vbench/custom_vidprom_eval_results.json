@@ -1,0 +1,84 @@
+{
+    "subject_consistency": [
+        0.9808489268024763,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": 0.9780084689458212
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": 0.9836893846591314
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.98250732421875,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": 0.9784627278645833,
+                "video_sim": 117.41552734375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": 0.9865519205729166,
+                "video_sim": 118.38623046875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.990343518346861,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": 0.9898856015733313
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": 0.9908014351203905
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5673498064279556,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": 0.48688116669654846
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": 0.6478184461593628
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7585618099496384,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4",
+                "video_results": 76.85449048507311
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4",
+                "video_results": 74.85787150485457
+            }
+        ]
+    ]
+}

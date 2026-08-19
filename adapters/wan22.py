@@ -33,13 +33,14 @@ class Wan22Adapter(ModelAdapter):
             return self._generate_teacache(request)
         if method == "nirvana_vid":
             return self._generate_nirvana(request, cached_latent=cached_latent, capture=capture)
-        if method == "chorus":
-            return self._generate_chorus(request, cached_latent=cached_latent, capture=capture)
+        if method in {"chorus", "chorus_no_tgaa", "chorus_tgaa_key_only", "chorus_tgaa_output_only"}:
+            return self._generate_chorus(request, cached_latent=cached_latent, capture=capture, method=method)
         delegate = self._load_delegate()
         result = delegate.generate(request.prompt, request.seed, fast=fast, cached_latent=cached_latent, capture=capture)
         return Generation(result.video, result.latent, result.latent_step, result.extra.get("executed_steps"), extra=result.extra)
 
-    def _generate_chorus(self, request: Request, *, cached_latent: Any, capture: bool) -> Generation:
+    def _generate_chorus(self, request: Request, *, cached_latent: Any, capture: bool,
+                         method: str = "chorus") -> Generation:
         """Run Chorus full reuse, SRD, and dense refinement on native Wan."""
         delegate = self._load_delegate()
         delegate._load()
@@ -59,7 +60,11 @@ class Wan22Adapter(ModelAdapter):
         from wan.utils.fm_solvers_unipc import FlowUniPCMultistepScheduler
         from wan.utils.utils import masks_like
 
-        chorus_cfg = self.config.get("chorus", {})
+        chorus_cfg = dict(self.config.get("chorus", {}))
+        if method == "chorus_tgaa_key_only":
+            chorus_cfg["gamma_o"] = 1.0
+        elif method == "chorus_tgaa_output_only":
+            chorus_cfg["gamma_k"] = 1.0
         stages = chorus_cfg.get("stages", {})
         steps = int(self.config["baseline_steps"])
         k1 = int(stages.get("k1", 10))
@@ -128,12 +133,20 @@ class Wan22Adapter(ModelAdapter):
             "tgaa_calls": 0,
         }
         llm_s = sam_s = 0.0
+        tgaa_enabled = method in {"chorus", "chorus_tgaa_key_only", "chorus_tgaa_output_only"}
         if not is_source:
             source_prompt = request.cache_prompt or request.prompt
             llm_started = time.perf_counter()
             llm_diff = extract_prompt_diff(source_prompt, request.prompt)
             llm_s = time.perf_counter() - llm_started
-            source_entities = llm_diff.get("source_entities") or []
+            # Keep the original Chorus entity selection unchanged. The
+            # no-TGAA ablation prefers removed tokens so LLM-added scene nouns
+            # cannot change its edit region in addition to removing TGAA.
+            source_entities = (
+                (llm_diff.get("removed_tokens") or llm_diff.get("source_entities") or [])
+                if method != "chorus" else
+                (llm_diff.get("source_entities") or llm_diff.get("removed_tokens") or [])
+            )
             target_entities = llm_diff.get("target_entities") or []
             unique_entities = list(dict.fromkeys(str(item).strip() for item in source_entities if str(item).strip()))
             phrase = " ".join(unique_entities[:4]).strip()
@@ -152,16 +165,17 @@ class Wan22Adapter(ModelAdapter):
                         "mask_dilation_see": chorus_cfg.get("mask_dilation_see", 14)},
             )
             sam_s = time.perf_counter() - sam_started
-            diff_indices = self._differential_token_indices(
-                pipeline.text_encoder, request.prompt, target_entities
-            )
-            if not diff_indices:
-                raise RuntimeError(
-                    "TGAA could not map the LLM differential tokens to target prompt tokens"
+            if tgaa_enabled:
+                diff_indices = self._differential_token_indices(
+                    pipeline.text_encoder, request.prompt, target_entities
                 )
-            tgaa_patches = self._install_native_tgaa(
-                pipeline.model, chorus_cfg, diff_indices, srd_state
-            )
+                if not diff_indices:
+                    raise RuntimeError(
+                        "TGAA could not map the LLM differential tokens to target prompt tokens"
+                    )
+                tgaa_patches = self._install_native_tgaa(
+                    pipeline.model, chorus_cfg, diff_indices, srd_state
+                )
             srd_patches = self._install_native_srd(pipeline.model, latent_edit_mask, srd_state)
 
         @contextmanager
@@ -180,7 +194,7 @@ class Wan22Adapter(ModelAdapter):
                         self._reset_chorus_scheduler_history(scheduler)
                         srd_state["scheduler_history_reset"] = True
                     srd_state["active"] = stage2_active
-                    srd_state["tgaa_active"] = stage2_active
+                    srd_state["tgaa_active"] = tgaa_enabled and stage2_active
                     srd_state["step"] = index
                     timestep = torch.stack([timestep_value])
                     temp_ts = (mask2[0][0][:, ::2, ::2] * timestep).flatten()
@@ -225,6 +239,7 @@ class Wan22Adapter(ModelAdapter):
                       "chorus_llm_s": llm_s, "chorus_sam_s": sam_s,
                       "excluded_latency_s": preprocess_s,
                       "chorus_tgaa": {
+                          "enabled": tgaa_enabled,
                           "gamma_k": chorus_cfg.get("gamma_k", 1.15),
                           "gamma_o": chorus_cfg.get("gamma_o", 1.05),
                           "schedule": "linear_step_decay_approximation",

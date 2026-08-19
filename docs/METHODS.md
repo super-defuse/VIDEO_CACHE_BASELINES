@@ -13,6 +13,9 @@ latent 和 FFN hook。
 | `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；CogVideoX1.5 使用 source latent restart 适配 | `carnator/` + `scripts/run/carnator_matrix.py` |
 | `chai_carnator` | Wan 专用 `CHAI-Carnator`：8-step source/target；block 0 在 CHAI local steps 1--4 读取对应 source token，其余 block 按 CC-B0--CC-B5 使用 Carnator sparse attention、latent injection 和可选 W8A8 FFN | `scripts/run/chai_carnator_matrix.py` + `carnator/` |
 | `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、Stage-2 SRD/TGAA/latent fusion、Stage-3 dense no-reuse、LLM prompt diff、Grounded-SAM-2 v1.0 mask；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
+| `chorus_no_tgaa` | Wan2.2 Chorus 消融；保留同一 source trajectory、SRD、latent fusion、Stage-3 dense/no-reuse 和 mask，仅关闭 Stage-2 TGAA；CogVideoX1.5 为 N/A | `methods/chorus_no_tgaa` + `adapters/wan22.py` |
+| `chorus_tgaa_key_only` | Wan2.2 Chorus TGAA 组件消融；保留 `gamma_k`，固定 `gamma_o=1.0`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_key_only` + `adapters/wan22.py` |
+| `chorus_tgaa_output_only` | Wan2.2 Chorus TGAA 组件消融；固定 `gamma_k=1.0`，保留 `gamma_o`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_output_only` + `adapters/wan22.py` |
 
 Chorus 当前真实产物的 mask 后端为官方 Grounded-SAM-2 v1.0：Grounding DINO 在 source
 首帧生成框，SAM 2.1 Hiera-Large 传播到 121 帧，再 max-pool 到 Wan latent/token 网格；缺失

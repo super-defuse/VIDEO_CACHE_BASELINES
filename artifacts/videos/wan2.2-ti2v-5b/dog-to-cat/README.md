@@ -10,6 +10,9 @@
 | CHAI | `chai.mp4` |
 | TeaCache | `teacache.mp4` |
 | Chorus | `chorus.mp4` |
+| Chorus（仅去掉 TGAA） | `chorus-no-tgaa.mp4` |
+| Chorus TGAA key-only（`gamma_o=1.0`） | `chorus-tgaa-key-only.mp4` |
+| Chorus TGAA output-only（`gamma_k=1.0`） | `chorus-tgaa-output-only.mp4` |
 | Carnator B0 | `carnator-b0.mp4` |
 | Carnator B1 | `carnator-b1.mp4` |
 | Carnator B2 | `carnator-b2.mp4` |

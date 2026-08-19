@@ -21,6 +21,9 @@ if str(ROOT) not in sys.path:
 
 METHOD_RUN_NAMES = {
     "nirvana_vid": "nirvana-vid",
+    "chorus_no_tgaa": "chorus-no-tgaa",
+    "chorus_tgaa_key_only": "chorus-tgaa-key-only",
+    "chorus_tgaa_output_only": "chorus-tgaa-output-only",
 }
 
 from adapters import make_adapter
@@ -53,7 +56,8 @@ def main() -> int:
     args = parser.parse_args()
 
     names = [item.strip() for item in args.methods.split(",") if item.strip()]
-    allowed = {"baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus"}
+    allowed = {"baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus",
+               "chorus_no_tgaa", "chorus_tgaa_key_only", "chorus_tgaa_output_only"}
     if not names or any(name not in allowed for name in names):
         raise SystemExit(f"--methods must be a subset of {sorted(allowed)}")
     model_config = ({"model": "synthetic", "dry_run": True, "seed": 0}
@@ -68,7 +72,8 @@ def main() -> int:
                "target_prompt": args.target_prompt, "seed": seed,
                "run_root": str(run_root), "methods": {}}
 
-    cross_request = {"chai", "nirvana_vid", "carnator", "chorus"}
+    cross_request = {"chai", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa",
+                     "chorus_tgaa_key_only", "chorus_tgaa_output_only"}
     for name in names:
         ensure_supported(args.model, name)
         adapter = make_adapter(args.model, config)

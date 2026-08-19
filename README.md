@@ -47,7 +47,7 @@ conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality.py artifac
 | Baseline / CHAI / TeaCache / NIRVANA-VID | 支持 | 支持 |
 | Carnator | 原生 C0/B0--B5 matrix | source-latent-restart adapter |
 | CHAI-Carnator | 原生 CC-B0--CC-B5 matrix | N/A |
-| Chorus | source/target matrix | N/A |
+| Chorus / TGAA and no-TGAA ablations | source/target matrix | N/A |
 
 ## Layout
 

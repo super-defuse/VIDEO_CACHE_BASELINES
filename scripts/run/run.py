@@ -43,7 +43,7 @@ def _requests(args, config: dict) -> list[Request]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run one video cache baseline.")
     parser.add_argument("--model", choices=("wan22", "cogvideox15", "synthetic"), required=True)
-    parser.add_argument("--method", choices=("baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus"), required=True)
+    parser.add_argument("--method", choices=("baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa", "chorus_tgaa_key_only", "chorus_tgaa_output_only"), required=True)
     parser.add_argument("--prompt")
     parser.add_argument("--workload")
     parser.add_argument("--seed", type=int)

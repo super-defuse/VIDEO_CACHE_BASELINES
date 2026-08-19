@@ -31,6 +31,10 @@ artifacts/
 
 - `runs/wan22-ti2v-5b/dog-to-cat/chorus/` 是当前 Chorus source/target 结果；target 只在 Stage 2 (`10 <= step < 40`) 使用 source latent fusion、SRD 和 TGAA，Stage 3 为 dense full computation，不复用 latent。Stage 2 保留 native Wan head dense，Stage 3 在 step 40 清空 UniPC derivative history 并保留全局 timestep index。
 - Chorus 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；逐请求字段写回该目录的 `results.jsonl`。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/` 是 Chorus 仅去掉 TGAA 的严格消融；source trajectory、SRD、mask、latent fusion 和 Stage 3 均相同，target 的 `chorus_tgaa.enabled=false` 且 `calls=0`。
+- Chorus-no-TGAA 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6332`；逐请求字段写回该目录的 `results.jsonl`。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/` 是 `gamma_o=1.0` 的 TGAA 组件消融，target `CLIP-T=0.3159`、`VBench-Q=0.6189`。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-output-only/` 是 `gamma_k=1.0` 的 TGAA 组件消融，target `CLIP-T=0.3521`、`VBench-Q=0.6339`。
 - `runs/wan22-ti2v-5b/dog-to-cat/carnator-quality/` 包含原生 Carnator B1/B3/B4、NIRVANA-VID 和 TeaCache 的质量补跑。
 - `runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/` 包含 CC-B0--CC-B5 的质量结果。
 - `videos/wan2.2-ti2v-5b/dog-to-cat/README.md` 是全部 target 视频的稳定入口索引。
