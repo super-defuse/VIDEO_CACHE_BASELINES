@@ -10,7 +10,7 @@
             "imaging_quality"
         ],
         "video_list": [
-            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0001_target-000.mp4"
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3/videos/0001_target-000.mp4"
         ]
     },
     {
@@ -24,7 +24,7 @@
             "imaging_quality"
         ],
         "video_list": [
-            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/videos/0000_source-000.mp4"
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3/videos/0000_source-000.mp4"
         ]
     }
 ]

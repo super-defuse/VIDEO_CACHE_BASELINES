@@ -8,6 +8,12 @@ chorus:
     k2: 40
   gamma_k: 1.15
   gamma_o: 1.05
+  joint_gamma_1_6:
+    gamma_k: 1.30
+    gamma_o: 1.30
+  joint_gamma_2_1:
+    gamma_k: 1.6
+    gamma_o: 1.6
   # The paper does not specify a block subset; run the TGAA hook on every
   # Wan block and audit the actual call count in the request metadata.
   tgaa_blocks: all

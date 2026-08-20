@@ -10,8 +10,8 @@
   "baseline_steps": 50,
   "fast_steps": 8,
   "seed": 20260218,
-  "guidance_scale": 5.0,
-  "shift": 5.0,
+  "guidance_scale": 5,
+  "shift": 5,
   "solver": "unipc",
   "source_cache_steps": [
     1,
@@ -46,6 +46,14 @@
     },
     "gamma_k": 1.15,
     "gamma_o": 1.05,
+    "joint_gamma_1_6": {
+      "gamma_k": 1.3,
+      "gamma_o": 1.3
+    },
+    "joint_gamma_2_1": {
+      "gamma_k": 1.6,
+      "gamma_o": 1.6
+    },
     "tgaa_blocks": "all",
     "tgaa_schedule": "linear_step_decay_approximation",
     "mask_dilation_edit": 8,

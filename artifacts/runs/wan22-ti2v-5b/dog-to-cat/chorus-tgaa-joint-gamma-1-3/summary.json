@@ -1,0 +1,145 @@
+{
+  "model": "wan22",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "run_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3",
+  "methods": {
+    "chorus_tgaa_joint_gamma_1_6": {
+      "run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3",
+      "source_status": "ok",
+      "target_status": "ok",
+      "target_cache_match": "source_prompt",
+      "target_latency_s": 179.83240033799848,
+      "target_executed_steps": 40,
+      "source_timing": {
+        "cache_lookup_s": 2.1129999367985874e-05,
+        "cache_load_s": 1.128999429056421e-06,
+        "generation_s": 294.3854383329999,
+        "save_video_s": 1.5582340239998302,
+        "cache_save_s": 1.113493668000956,
+        "hash_s": 0.013700055000299471,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 297.07101495499955
+      },
+      "target_timing": {
+        "cache_lookup_s": 0.00018193700088886544,
+        "cache_load_s": 0.00047171400001388974,
+        "generation_s": 222.57386383099947,
+        "save_video_s": 2.622504515999026,
+        "cache_save_s": 2.230300015071407e-05,
+        "hash_s": 0.015008283000497613,
+        "excluded_preprocess_s": 45.37979482300034,
+        "reported_latency_s": 179.83240033799848
+      },
+      "target_extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 40,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            40
+          ],
+          "stage3": [
+            40,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "chorus_llm": {
+          "source_entities": [
+            "dog"
+          ],
+          "target_entities": [
+            "cat"
+          ],
+          "removed_tokens": [
+            "dog"
+          ],
+          "added_tokens": [
+            "cat"
+          ],
+          "edit_summary": "Replaced 'dog' with 'cat' as the main subject while keeping the setting and action identical.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 17.905
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "dog",
+          "boxes": 1,
+          "box_confidence_max": 0.9543,
+          "pixel_edit_fraction": 0.1395,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1395,
+          "edit_fraction": 0.5324,
+          "see_fraction": 0.8406,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max"
+        },
+        "chorus_preprocess_s": 45.37979482300034,
+        "chorus_llm_s": 17.906309141000747,
+        "chorus_sam_s": 27.47348568199959,
+        "excluded_latency_s": 45.37979482300034,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.3,
+          "gamma_o": 1.3,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1800
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 40,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 39,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "edit_fraction": 0.5324,
+            "see_fraction": 0.8406,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00018193700088886544,
+          "cache_load_s": 0.00047171400001388974,
+          "generation_s": 222.57386383099947,
+          "save_video_s": 2.622504515999026,
+          "cache_save_s": 2.230300015071407e-05,
+          "hash_s": 0.015008283000497613,
+          "excluded_preprocess_s": 45.37979482300034,
+          "reported_latency_s": 179.83240033799848
+        }
+      }
+    }
+  }
+}

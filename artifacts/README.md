@@ -33,8 +33,9 @@ artifacts/
 - Chorus 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；逐请求字段写回该目录的 `results.jsonl`。
 - `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/` 是 Chorus 仅去掉 TGAA 的严格消融；source trajectory、SRD、mask、latent fusion 和 Stage 3 均相同，target 的 `chorus_tgaa.enabled=false` 且 `calls=0`。
 - Chorus-no-TGAA 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6332`；逐请求字段写回该目录的 `results.jsonl`。
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-key-only/` 是 `gamma_o=1.0` 的 TGAA 组件消融，target `CLIP-T=0.3159`、`VBench-Q=0.6189`。
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-output-only/` 是 `gamma_k=1.0` 的 TGAA 组件消融，target `CLIP-T=0.3521`、`VBench-Q=0.6339`。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3/` 与
+  `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-6/chorus-tgaa-joint-gamma-1-6/` 分别是
+  同步设置 `gamma_k=gamma_o=1.30`、`1.6` 的工程敏感性探针。
 - `runs/wan22-ti2v-5b/dog-to-cat/carnator-quality/` 包含原生 Carnator B1/B3/B4、NIRVANA-VID 和 TeaCache 的质量补跑。
 - `runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/` 包含 CC-B0--CC-B5 的质量结果。
 - `videos/wan2.2-ti2v-5b/dog-to-cat/README.md` 是全部 target 视频的稳定入口索引。

@@ -33,7 +33,8 @@ class Wan22Adapter(ModelAdapter):
             return self._generate_teacache(request)
         if method == "nirvana_vid":
             return self._generate_nirvana(request, cached_latent=cached_latent, capture=capture)
-        if method in {"chorus", "chorus_no_tgaa", "chorus_tgaa_key_only", "chorus_tgaa_output_only"}:
+        if method in {"chorus", "chorus_no_tgaa", "chorus_tgaa_joint_gamma_1_6",
+                      "chorus_tgaa_joint_gamma_2_1"}:
             return self._generate_chorus(request, cached_latent=cached_latent, capture=capture, method=method)
         delegate = self._load_delegate()
         result = delegate.generate(request.prompt, request.seed, fast=fast, cached_latent=cached_latent, capture=capture)
@@ -61,10 +62,14 @@ class Wan22Adapter(ModelAdapter):
         from wan.utils.utils import masks_like
 
         chorus_cfg = dict(self.config.get("chorus", {}))
-        if method == "chorus_tgaa_key_only":
-            chorus_cfg["gamma_o"] = 1.0
-        elif method == "chorus_tgaa_output_only":
-            chorus_cfg["gamma_k"] = 1.0
+        if method == "chorus_tgaa_joint_gamma_1_6":
+            probe_cfg = chorus_cfg.get("joint_gamma_1_6", {})
+            chorus_cfg["gamma_k"] = float(probe_cfg.get("gamma_k", 1.30))
+            chorus_cfg["gamma_o"] = float(probe_cfg.get("gamma_o", 1.30))
+        elif method == "chorus_tgaa_joint_gamma_2_1":
+            probe_cfg = chorus_cfg.get("joint_gamma_2_1", {})
+            chorus_cfg["gamma_k"] = float(probe_cfg.get("gamma_k", 1.6))
+            chorus_cfg["gamma_o"] = float(probe_cfg.get("gamma_o", 1.6))
         stages = chorus_cfg.get("stages", {})
         steps = int(self.config["baseline_steps"])
         k1 = int(stages.get("k1", 10))
@@ -133,7 +138,8 @@ class Wan22Adapter(ModelAdapter):
             "tgaa_calls": 0,
         }
         llm_s = sam_s = 0.0
-        tgaa_enabled = method in {"chorus", "chorus_tgaa_key_only", "chorus_tgaa_output_only"}
+        tgaa_enabled = method in {"chorus", "chorus_tgaa_joint_gamma_1_6",
+                                  "chorus_tgaa_joint_gamma_2_1"}
         if not is_source:
             source_prompt = request.cache_prompt or request.prompt
             llm_started = time.perf_counter()

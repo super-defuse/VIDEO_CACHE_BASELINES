@@ -48,6 +48,7 @@ conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality.py artifac
 | Carnator | 原生 C0/B0--B5 matrix | source-latent-restart adapter |
 | CHAI-Carnator | 原生 CC-B0--CC-B5 matrix | N/A |
 | Chorus / TGAA and no-TGAA ablations | source/target matrix | N/A |
+| Chorus TGAA joint-gamma probes (`1.30`, `1.6`) | source/target matrix | N/A |
 
 ## Layout
 

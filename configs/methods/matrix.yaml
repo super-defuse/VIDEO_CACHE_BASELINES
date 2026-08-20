@@ -31,11 +31,11 @@ methods:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
-  chorus_tgaa_key_only:
+  chorus_tgaa_joint_gamma_1_6:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
-  chorus_tgaa_output_only:
+  chorus_tgaa_joint_gamma_2_1:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
