@@ -21,7 +21,27 @@ weights remain outside this directory and are configured with `model_path`.
 | `vbench` | Optional VBench checkout, installed separately when quality evaluation is needed |
 
 VBench is not a Git submodule because the accepted evaluator was originally a
-snapshot in the CHAI source tree. Clone the revision recorded in `lock.json`
-into `external/vbench` before running a real quality evaluation. It remains
-ignored by the parent repository so its large model and cache files cannot be
-committed accidentally.
+snapshot in the CHAI source tree. Install the locked checkout with:
+
+```bash
+git clone https://github.com/Vchitect/VBench.git external/vbench
+git -C external/vbench checkout c2dd0593fb913a24bc4f4ebd8803fd8c49c7db2d
+```
+
+It remains ignored by the parent repository so its large model and cache files
+cannot be committed accidentally. The VBench Python dependencies are installed
+by `scripts/create_environments.sh` into the `vbench` environment.
+
+For Chorus, install the pinned Grounded-SAM-2 checkout into `wan` after the
+base environments exist:
+
+```bash
+conda run -n wan python -m pip install --no-build-isolation -e external/grounded-sam2
+conda run -n wan python -m pip install addict yapf timm "supervision>=0.22.0" pycocotools
+conda run -n wan python -m pip install --no-build-isolation -e external/grounded-sam2/grounding_dino
+```
+
+Set `CUDA_HOME` to the matching toolkit before these commands. Place the SAM
+and Grounding-DINO checkpoints under `models/Grounded-SAM-2-v1.0/` as described
+in the root README, and cache a local `bert-base-uncased` snapshot before using
+the mask backend.

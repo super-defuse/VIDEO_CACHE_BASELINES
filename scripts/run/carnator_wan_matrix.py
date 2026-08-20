@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_MODEL = ROOT.parent.parent / "models" / "Wan2.2-TI2V-5B"
+DEFAULT_MODEL = ROOT / "models" / "Wan2.2-TI2V-5B"
 
 
 def main() -> None:

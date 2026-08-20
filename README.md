@@ -12,6 +12,8 @@
 
 ## Install
 
+需要 Linux、Conda、Git、NVIDIA 驱动和与 PyTorch wheel 匹配的 CUDA toolkit。
+
 ```bash
 git submodule update --init --recursive
 # Replace cu128 with the CUDA wheel index matching the machine.
@@ -19,12 +21,48 @@ PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu128 scripts/create_environm
 PYTHONPATH=. python3 scripts/check_environment.py
 ```
 
-模型权重不提交；在 `configs/models/*.yaml` 中设置 `model_path`。真实质量评测还需要把锁定的 VBench checkout 放到 `external/vbench`，详见 [external/README.md](external/README.md)。Carnator B1--B5 需要在 `wan` 中编译 FlashAttention；B2/B5 还需要 SpargeAttn：
+模型权重不提交。模板默认从仓库内的 `models/` 读取；将权重放入对应目录，或修改
+`configs/models/*.yaml` 中的 `model_path`。
+
+启用 VBench 质量评测：
+
+```bash
+git clone https://github.com/Vchitect/VBench.git external/vbench
+git -C external/vbench checkout c2dd0593fb913a24bc4f4ebd8803fd8c49c7db2d
+mkdir -p artifacts/vbench-cache/clip_model
+conda run -n vbench python -c \
+  'import clip; clip.load("ViT-B/32", download_root="artifacts/vbench-cache/clip_model")'
+```
+
+启用 Chorus 的 Grounded-SAM-2（需要匹配 PyTorch 的 `CUDA_HOME`）：
+
+```bash
+conda run -n wan python -m pip install --no-build-isolation -e external/grounded-sam2
+conda run -n wan python -m pip install addict yapf timm "supervision>=0.22.0" pycocotools
+conda run -n wan python -m pip install --no-build-isolation -e external/grounded-sam2/grounding_dino
+```
+
+将 `sam2.1_hiera_large.pt` 放到
+`models/Grounded-SAM-2-v1.0/checkpoints/`，将 `groundingdino_swint_ogc.pth`
+放到 `models/Grounded-SAM-2-v1.0/gdino_checkpoints/`，并预先缓存
+`bert-base-uncased`，例如：
+
+```bash
+HF_ENDPOINT=https://hf-mirror.com conda run -n wan python -c \
+  'from huggingface_hub import snapshot_download; snapshot_download("bert-base-uncased")'
+```
+
+Chorus 如需调用 DMXAPI prompt diff，设置 `LLM_API_KEY`；未设置时使用内置 lexical fallback。
+
+Carnator 的加速后端：
 
 ```bash
 conda run -n wan python -m pip install --no-build-isolation flash-attn==2.8.3.post1
 conda run -n wan python -m pip install --no-build-isolation -e external/spargeattn
 ```
+
+上述两个后端需要本机 CUDA 编译工具链；只运行 Baseline、CHAI、TeaCache 或 NIRVANA-VID 时可以跳过。
+VBench、Grounded-SAM-2 的来源和固定版本见 [external/README.md](external/README.md)。
 
 ## Run
 

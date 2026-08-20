@@ -1,0 +1,22 @@
+# Put the checkpoint under models/, or replace this with an absolute path.
+model: cogvideox15
+model_path: models/CogVideoX1.5-5B
+device: cuda:0
+dtype: bfloat16
+width: 1360
+height: 768
+frames: 81
+baseline_steps: 50
+fast_steps: 8
+seed: 20260218
+guidance_scale: 6.0
+source_cache_steps: [1, 2, 3, 4]
+cache_attention:
+  blocks: [0]
+  # Match the OpenSora CHAI 8-step express schedule: 0 < step < 5.
+  steps: [1, 2, 3, 4]
+teacache:
+  relative_l1_threshold: 0.5
+  max_skip_steps: 2
+nirvana_vid:
+  reuse_start_step: 10

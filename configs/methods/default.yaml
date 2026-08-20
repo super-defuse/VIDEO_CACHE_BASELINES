@@ -29,7 +29,7 @@ chorus:
     release: v1.0
     commit: dd4c514
     root: external/grounded-sam2
-    checkpoint_dir: ../../models/Grounded-SAM-2-v1.0
+    checkpoint_dir: models/Grounded-SAM-2-v1.0
     device: cuda
     hf_endpoint: https://hf-mirror.com
     box_threshold: 0.35

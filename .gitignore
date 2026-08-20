@@ -12,7 +12,7 @@ venv/
 .vscode/
 
 # Downloaded model weights and large tensor/checkpoint payloads
-models/
+/models/
 *.pt
 *.pth
 *.ckpt
