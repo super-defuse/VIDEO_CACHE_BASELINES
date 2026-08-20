@@ -13,6 +13,7 @@ METHOD_MODULES = {
     "chorus_no_tgaa": "methods.chorus_no_tgaa.method",
     "chorus_tgaa_joint_gamma_1_6": "methods.chorus_tgaa_joint_gamma_1_6.method",
     "chorus_tgaa_joint_gamma_2_1": "methods.chorus_tgaa_joint_gamma_2_1.method",
+    "chorus_tgaa_joint_gamma_2_0": "methods.chorus_tgaa_joint_gamma_2_0.method",
 }
 
 REAL_SUPPORTED = {
@@ -25,6 +26,7 @@ REAL_SUPPORTED = {
     "chorus_no_tgaa": {"wan22"},
     "chorus_tgaa_joint_gamma_1_6": {"wan22"},
     "chorus_tgaa_joint_gamma_2_1": {"wan22"},
+    "chorus_tgaa_joint_gamma_2_0": {"wan22"},
 }
 
 

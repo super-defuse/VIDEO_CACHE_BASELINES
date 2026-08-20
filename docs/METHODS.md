@@ -16,6 +16,7 @@ latent 和 FFN hook。
 | `chorus_no_tgaa` | Wan2.2 Chorus 消融；保留同一 source trajectory、SRD、latent fusion、Stage-3 dense/no-reuse 和 mask，仅关闭 Stage-2 TGAA；CogVideoX1.5 为 N/A | `methods/chorus_no_tgaa` + `adapters/wan22.py` |
 | `chorus_tgaa_joint_gamma_1_6` | Wan2.2 Chorus TGAA 工程探针；同步设置 `gamma_k=gamma_o=1.30`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_joint_gamma_1_6` + `adapters/wan22.py` |
 | `chorus_tgaa_joint_gamma_2_1` | Wan2.2 Chorus TGAA 工程探针；同步设置 `gamma_k=gamma_o=1.6`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_joint_gamma_2_1` + `adapters/wan22.py` |
+| `chorus_tgaa_joint_gamma_2_0` | Wan2.2 Chorus TGAA 工程探针；同步设置 `gamma_k=gamma_o=2.0`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_joint_gamma_2_0` + `adapters/wan22.py` |
 
 Chorus 当前真实产物的 mask 后端为官方 Grounded-SAM-2 v1.0：Grounding DINO 在 source
 首帧生成框，SAM 2.1 Hiera-Large 传播到 121 帧，再 max-pool 到 Wan latent/token 网格；缺失

@@ -13,6 +13,7 @@
 | Chorus（仅去掉 TGAA） | `chorus-no-tgaa.mp4` |
 | Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=1.30`） | `chorus-tgaa-joint-gamma-1-3.mp4` |
 | Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=1.6`） | `chorus-tgaa-joint-gamma-1-6.mp4` |
+| Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=2.0`） | `chorus-tgaa-joint-gamma-2-0.mp4` |
 | Carnator B0 | `carnator-b0.mp4` |
 | Carnator B1 | `carnator-b1.mp4` |
 | Carnator B2 | `carnator-b2.mp4` |

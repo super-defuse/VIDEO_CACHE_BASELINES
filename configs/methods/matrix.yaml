@@ -39,3 +39,7 @@ methods:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
+  chorus_tgaa_joint_gamma_2_0:
+    environment: wan
+    wan22: supported-via-source-target-matrix
+    cogvideox15: N/A

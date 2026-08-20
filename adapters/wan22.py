@@ -34,7 +34,7 @@ class Wan22Adapter(ModelAdapter):
         if method == "nirvana_vid":
             return self._generate_nirvana(request, cached_latent=cached_latent, capture=capture)
         if method in {"chorus", "chorus_no_tgaa", "chorus_tgaa_joint_gamma_1_6",
-                      "chorus_tgaa_joint_gamma_2_1"}:
+                      "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}:
             return self._generate_chorus(request, cached_latent=cached_latent, capture=capture, method=method)
         delegate = self._load_delegate()
         result = delegate.generate(request.prompt, request.seed, fast=fast, cached_latent=cached_latent, capture=capture)
@@ -70,6 +70,10 @@ class Wan22Adapter(ModelAdapter):
             probe_cfg = chorus_cfg.get("joint_gamma_2_1", {})
             chorus_cfg["gamma_k"] = float(probe_cfg.get("gamma_k", 1.6))
             chorus_cfg["gamma_o"] = float(probe_cfg.get("gamma_o", 1.6))
+        elif method == "chorus_tgaa_joint_gamma_2_0":
+            probe_cfg = chorus_cfg.get("joint_gamma_2_0", {})
+            chorus_cfg["gamma_k"] = float(probe_cfg.get("gamma_k", 2.0))
+            chorus_cfg["gamma_o"] = float(probe_cfg.get("gamma_o", 2.0))
         stages = chorus_cfg.get("stages", {})
         steps = int(self.config["baseline_steps"])
         k1 = int(stages.get("k1", 10))
@@ -139,7 +143,7 @@ class Wan22Adapter(ModelAdapter):
         }
         llm_s = sam_s = 0.0
         tgaa_enabled = method in {"chorus", "chorus_tgaa_joint_gamma_1_6",
-                                  "chorus_tgaa_joint_gamma_2_1"}
+                                  "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}
         if not is_source:
             source_prompt = request.cache_prompt or request.prompt
             llm_started = time.perf_counter()

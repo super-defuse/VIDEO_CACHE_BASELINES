@@ -52,6 +52,7 @@ Grounded-SAM-2 预处理通过 `excluded_latency_s` 单独列出并从报告时�
 | Wan2.2-TI2V-5B | Chorus（仅去掉 TGAA） | 40 | 179.36 | 1.68x | 0.3491 | 0.6332 | `chorus_no_tgaa`；source `296.47s` 且视频 hash 与 Chorus source 相同；K1=10/K2=40；SRD、dense head、latent fusion 和 Stage-3 history reset 均保持；TGAA `enabled=false/calls=0`；LLM+SAM `52.18s` 单独剔除；VBench 六维度已完成 |
 | Wan2.2-TI2V-5B | Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=1.30`） | 40 | 179.83 | 1.67x | 0.3513 | 0.6149 | source `297.07s`；TGAA 1800 calls；LLM+SAM `45.38s` 单独剔除；六维 VBench 已完成；工程探针，不声称论文精确复现 |
 | Wan2.2-TI2V-5B | Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=1.6`） | 40 | 179.97 | 1.67x | 0.3560 | 0.6120 | source `298.10s`；TGAA 1800 calls；LLM+SAM `47.34s` 单独剔除；六维 VBench 已完成；工程探针，不声称论文精确复现 |
+| Wan2.2-TI2V-5B | Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=2.0`） | 40 | 179.74 | 1.67x | 0.3572 | 0.6121 | source `297.08s`；TGAA 1800 calls；LLM+SAM `74.68s` 单独剔除（本次 LLM 超时后 lexical fallback）；六维 VBench 已完成；工程探针，不声称论文精确复现 |
 | CogVideoX1.5 | Dense baseline（Carnator C0） | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | NIRVANA-VID | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空 |
 | CogVideoX1.5 | CHAI | N/A | N/A | N/A | N/A | N/A | 本轮按要求留空；旧版产物已清理 |
@@ -148,6 +149,11 @@ forward，只增加 mask/latent 的逐元素融合。
   `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-6/chorus-tgaa-joint-gamma-1-6/`；target
   `179.97s`、`CLIP-T=0.3560`、`VBench-Q=0.6120`；`gamma_k=gamma_o=1.6`、1800 calls；VBench 原始六维度见该目录下的
   `vbench/custom_vidprom_eval_results.json`。
+- Wan Chorus TGAA joint-gamma probe（`gamma_k=gamma_o=2.0`）的 source/target 视频、结果和质量评估：
+  `artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-2-0/`；target `179.74s`、
+  `CLIP-T=0.3572`、`VBench-Q=0.6121`；`gamma_k=gamma_o=2.0`、1800 calls；LLM+SAM `74.68s`
+  单独剔除（LLM 超时后使用 lexical fallback）；VBench 原始六维度见该目录下的
+  `vbench/custom_vidprom_eval_results.json`。
 
 ### TGAA 视觉问题分析
 
@@ -171,18 +177,21 @@ source latent 融合共同作用的可观察结果，不能进一步断言是论
 ### TGAA gamma 敏感性探针
 
 在相同 source trajectory、source hash、`phrase=dog`、`Medit=53.24%`、`Msee=84.06%`、
-Stage 2/3 和 1800 次调用下，比较 Chorus 参考值与两个同步放大探针：
+Stage 2/3 和 1800 次调用下，比较 Chorus 参考值与三个同步放大探针：
 
 | 变体 | `gamma_k` | `gamma_o` | target CLIP-T | target VBench-Q |
 | --- | ---: | ---: | ---: | ---: |
 | Chorus | 1.15 | 1.05 | 0.3491 | 0.6218 |
 | joint-gamma probe | 1.30 | 1.30 | 0.3513 | 0.6149 |
 | joint-gamma probe | 1.6 | 1.6 | 0.3560 | 0.6120 |
+| joint-gamma probe | 2.0 | 2.0 | 0.3572 | 0.6121 |
 
 本轮联合提高 gamma 的探针没有改变 Chorus 的复现配置；其中 `1.30/1.30` 的 target
 `CLIP-T=0.3513`、`VBench-Q=0.6149`，
-`1.6/1.6` 的 target `CLIP-T=0.3560`、`VBench-Q=0.6120`。这只是单一 gamma 点的敏感性结果，
-不代表对所有 gamma 调度的结论。
+`1.6/1.6` 的 target `CLIP-T=0.3560`、`VBench-Q=0.6120`，
+`2.0/2.0` 的 target `CLIP-T=0.3572`、`VBench-Q=0.6121`，
+这只是单一 gamma 点的敏感性结果，不代表对所有 gamma 调度的结论；`2.0/2.0` 本次 prompt diff 请求超时，使用了实现内 lexical fallback，
+其结果仍计入本表但应与其他点区分解读。
 
 旧版未定型组合基线仍保持清理状态；当前 `CHAI-Carnator` 是独立实现和独立实验目录，
 不复用旧 source continuation 或旧验收数值。

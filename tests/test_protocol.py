@@ -57,7 +57,8 @@ def test_chorus_no_tgaa_is_registered_as_a_cross_request_variant():
 
 
 def test_chorus_tgaa_probes_are_registered():
-    for name in ("chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1"):
+    for name in ("chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
+                 "chorus_tgaa_joint_gamma_2_0"):
         method = make_method(name, {"dry_run": True})
         assert method.name == name
         assert method.capabilities.cross_request_cache

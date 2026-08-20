@@ -275,6 +275,147 @@
           "reported_latency_s": 179.35824128612876
         }
       }
+    },
+    "chorus_tgaa_joint_gamma_2_0": {
+      "run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-2-0",
+      "source_status": "ok",
+      "target_status": "ok",
+      "target_cache_match": "source_prompt",
+      "target_latency_s": 179.7413521829999,
+      "target_executed_steps": 40,
+      "source_timing": {
+        "cache_lookup_s": 2.949999998236308e-05,
+        "cache_load_s": 8.639999578008428e-07,
+        "generation_s": 294.49218690299995,
+        "save_video_s": 1.666955623999911,
+        "cache_save_s": 0.9083811149998837,
+        "hash_s": 0.01066539700013891,
+        "excluded_preprocess_s": 0,
+        "reported_latency_s": 297.0783539019999
+      },
+      "target_timing": {
+        "cache_lookup_s": 0.0001599820002411434,
+        "cache_load_s": 0.00038808900035292027,
+        "generation_s": 251.74563620200024,
+        "save_video_s": 2.6562157059997844,
+        "cache_save_s": 2.4804999611660605e-05,
+        "hash_s": 0.019472535999739193,
+        "excluded_preprocess_s": 74.68066163000003,
+        "reported_latency_s": 179.7413521829999
+      },
+      "target_extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 40,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            40
+          ],
+          "stage3": [
+            40,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "chorus_llm": {
+          "source_entities": [
+            "dog",
+            "dog"
+          ],
+          "target_entities": [
+            "cat",
+            "cat"
+          ],
+          "removed_tokens": [
+            "dog",
+            "dog"
+          ],
+          "added_tokens": [
+            "cat",
+            "cat"
+          ],
+          "edit_summary": "replace dog, dog with cat, cat",
+          "backend": "lexical_fallback",
+          "error": "TimeoutError: The read operation timed out",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 45.146
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "dog",
+          "boxes": 1,
+          "box_confidence_max": 0.9543,
+          "pixel_edit_fraction": 0.1395,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1395,
+          "edit_fraction": 0.5324,
+          "see_fraction": 0.8406,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max"
+        },
+        "chorus_preprocess_s": 74.68066163000003,
+        "chorus_llm_s": 45.14754098399999,
+        "chorus_sam_s": 29.533120646000043,
+        "excluded_latency_s": 74.68066163000003,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 2,
+          "gamma_o": 2,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1800
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 40,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 39,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "edit_fraction": 0.5324,
+            "see_fraction": 0.8406,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0001599820002411434,
+          "cache_load_s": 0.00038808900035292027,
+          "generation_s": 251.74563620200024,
+          "save_video_s": 2.6562157059997844,
+          "cache_save_s": 2.4804999611660605e-05,
+          "hash_s": 0.019472535999739193,
+          "excluded_preprocess_s": 74.68066163000003,
+          "reported_latency_s": 179.7413521829999
+        }
+      }
     }
   }
 }

@@ -36,6 +36,9 @@ artifacts/
 - `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3/` 与
   `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-6/chorus-tgaa-joint-gamma-1-6/` 分别是
   同步设置 `gamma_k=gamma_o=1.30`、`1.6` 的工程敏感性探针。
+- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-2-0/` 是同步设置
+  `gamma_k=gamma_o=2.0` 的工程敏感性探针；target 质量结果已写回 `results.jsonl`，六维
+  VBench 原始结果位于该目录的 `vbench/`。
 - `runs/wan22-ti2v-5b/dog-to-cat/carnator-quality/` 包含原生 Carnator B1/B3/B4、NIRVANA-VID 和 TeaCache 的质量补跑。
 - `runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/` 包含 CC-B0--CC-B5 的质量结果。
 - `videos/wan2.2-ti2v-5b/dog-to-cat/README.md` 是全部 target 视频的稳定入口索引。
