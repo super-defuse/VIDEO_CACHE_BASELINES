@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import copy
 import gc
+import hashlib
 import json
 import math
 import os
@@ -48,6 +49,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-prompt", default=SOURCE_PROMPT)
     parser.add_argument("--target-prompt", default=TARGET_PROMPT)
     parser.add_argument("--source-positive", default="dog")
+    parser.add_argument(
+        "--signature-only",
+        action="store_true",
+        help="Capture only the native completed-step mask/signature; requires --source-only and --steps == --mask-probe-step.",
+    )
+    parser.add_argument(
+        "--ets-nouns",
+        default="",
+        help="Semicolon-separated canonical dataset nouns to bind to the native prompt ETS.",
+    )
+    parser.add_argument(
+        "--ets-output",
+        type=Path,
+        help="Optional path for the native prompt ETS JSON. Defaults to <source-cache>/carnator_ets.json.",
+    )
     parser.add_argument("--height", type=int, default=704)
     parser.add_argument("--width", type=int, default=1280)
     parser.add_argument("--frames", type=int, default=121)
@@ -170,6 +186,36 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def write_native_prompt_ets(
+    mask_dir: Path,
+    prompt: str,
+    nouns: list[str],
+    output: Path,
+    *,
+    request_seed: int | None = None,
+) -> dict[str, Any]:
+    """Serialize the actual step-5 fusion-mask ETS beside a native source cache."""
+
+    from carnator.retrieval import build_native_prompt_ets_signature_from_dir, canonical_nouns
+
+    canonical = canonical_nouns(nouns)
+    if not canonical:
+        raise ValueError("--ets-nouns must contain at least one canonical noun")
+    signature = build_native_prompt_ets_signature_from_dir(
+        mask_dir, prompt, canonical, request_seed=request_seed
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(signature, sort_keys=True) + "\n", encoding="utf-8")
+    digest = hashlib.sha256(output.read_bytes()).hexdigest()
+    return {
+        "path": str(output),
+        "sha256": digest,
+        "signature_profile_id": signature["signature_profile_id"],
+        "signature_scope": signature["signature_scope"],
+        "signature_source": signature["signature_source"],
+    }
+
+
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -233,6 +279,15 @@ def validate_experiment_config(args: argparse.Namespace) -> None:
         raise ValueError("--target-dense-only cannot be combined with source/reuse options")
     if args.capture_outer_block_masks and args.source_run_dir:
         raise ValueError("--capture-outer-block-masks cannot be combined with --source-run-dir")
+    if args.signature_only:
+        if not args.source_only:
+            raise ValueError("--signature-only requires --source-only")
+        if args.source_run_dir:
+            raise ValueError("--signature-only cannot reuse a source run")
+        if args.steps != args.mask_probe_step:
+            raise ValueError("--signature-only requires --steps to equal --mask-probe-step")
+        if not args.ets_nouns.strip():
+            raise ValueError("--signature-only requires --ets-nouns")
 
 
 def task_mode(args: argparse.Namespace) -> str:
@@ -1048,6 +1103,7 @@ def run_native_t2v_stage(
     outer_sparse_state: Any | None = None,
     ffn_state: Any | None = None,
     mask_output_dir: Path | None = None,
+    decode_video: bool = True,
 ) -> dict[str, Any]:
     import torch
 
@@ -1177,13 +1233,15 @@ def run_native_t2v_stage(
         selected_mask_output_dir = mask_output_dir or stage_paths(args)["mask_dir"]
         mask_path = save_mask_bundle(selected_mask_output_dir, built_masks, save_cpu=True)
 
-    decode_start = time.perf_counter()
-    video = pipe.vae.decode([latent])[0]
-    save_native_video(out_video, video, args.fps)
-    torch.cuda.synchronize()
-    finalize_seconds = time.perf_counter() - decode_start
-    if not out_video.exists():
-        raise RuntimeError(f"native Wan save_video did not create {out_video}")
+    finalize_seconds = 0.0
+    if decode_video:
+        decode_start = time.perf_counter()
+        video = pipe.vae.decode([latent])[0]
+        save_native_video(out_video, video, args.fps)
+        torch.cuda.synchronize()
+        finalize_seconds = time.perf_counter() - decode_start
+        if not out_video.exists():
+            raise RuntimeError(f"native Wan save_video did not create {out_video}")
 
     if args.offload_model:
         model.cpu()
@@ -1198,7 +1256,7 @@ def run_native_t2v_stage(
         "model_dir": str(args.model_dir.expanduser()),
         "wan_root": str(DEFAULT_WAN_ROOT),
         "dtype": str(pipe.param_dtype),
-        "output": str(out_video),
+        "output": str(out_video) if decode_video else None,
         "height": args.height,
         "width": args.width,
         "frames": args.frames,
@@ -1835,6 +1893,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                         save_trajectory=True,
                         outer_sparse_state=source_outer_state,
                         mask_output_dir=paths["coarse_mask_dir"],
+                        decode_video=not args.signature_only,
                     )
             else:
                 source = run_native_t2v_stage(
@@ -1847,6 +1906,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     capture_masks=True,
                     save_trajectory=True,
                     mask_output_dir=paths["coarse_mask_dir"],
+                    decode_video=not args.signature_only,
                 )
             source_trajectory = {
                 int(item["step_index"]): Path(item["path"])
@@ -1871,6 +1931,21 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
             )
             source_mask_dir = paths["mask_dir"]
             source_initial_latent = paths["source_cache"] / "latents_initial.pt"
+
+        if args.ets_nouns.strip():
+            output = args.ets_output or (Path(source["cache_dir"]) / "carnator_ets.json")
+            early_signature = write_native_prompt_ets(
+                source_mask_dir,
+                str(source["prompt"]),
+                [item.strip() for item in args.ets_nouns.split(";") if item.strip()],
+                output.expanduser().resolve(),
+                request_seed=args.seed,
+            )
+            source["early_signature"] = early_signature
+            manifest_path = Path(source["manifest_path"])
+            source_manifest = read_json(manifest_path)
+            source_manifest["early_signature"] = early_signature
+            write_json(manifest_path, source_manifest)
 
         if args.source_only:
             summary = build_summary(args, paths, source, None, None, None, status="source_prepared")

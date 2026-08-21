@@ -9,6 +9,7 @@ no dependency on the external early-signature project.
 
 from __future__ import annotations
 
+import base64
 import csv
 import hashlib
 import json
@@ -40,6 +41,10 @@ def _finite_number(value: Any) -> float:
     return result
 
 
+def prompt_sha256(prompt: str) -> str:
+    return hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+
+
 def _normalise(vector: Iterable[float]) -> list[float]:
     values = [_finite_number(value) for value in vector]
     norm = math.sqrt(sum(value * value for value in values))
@@ -60,6 +65,25 @@ def _cosine(left: Iterable[float], right: Iterable[float]) -> float:
 
 
 def _flatten_mask(value: Any) -> list[float]:
+    if isinstance(value, dict):
+        if value.get("encoding") != "bitset-base64":
+            raise ValueError("unsupported mask encoding")
+        shape = value.get("shape")
+        if not isinstance(shape, list) or not shape or any(int(item) <= 0 for item in shape):
+            raise ValueError("encoded mask needs a non-empty positive shape")
+        count = math.prod(int(item) for item in shape)
+        if int(value.get("count", count)) != count:
+            raise ValueError("encoded mask count does not match shape")
+        try:
+            payload = base64.b64decode(str(value["data"]), validate=True)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("invalid encoded mask payload") from exc
+        if len(payload) != math.ceil(count / 8):
+            raise ValueError("encoded mask byte length does not match shape")
+        flattened = [float((payload[index // 8] >> (7 - index % 8)) & 1) for index in range(count)]
+        if count % 8 and payload[-1] & ((1 << (8 - count % 8)) - 1):
+            raise ValueError("encoded mask has non-zero padding bits")
+        return flattened
     if isinstance(value, (str, bytes, bytearray)) or value is None:
         raise ValueError("mask must be a non-empty numeric array")
     if isinstance(value, (int, float)):
@@ -87,6 +111,154 @@ def _iou(left: list[float], right: list[float]) -> float:
     union = sum(a or b for a, b in zip(lhs, rhs, strict=True))
     intersection = sum(a and b for a, b in zip(lhs, rhs, strict=True))
     return 1.0 if union == 0 else intersection / union
+
+
+def _shape_and_values(value: Any) -> tuple[list[int], list[float]]:
+    """Convert a CPU tensor or nested numeric list into a rectangular shape/value pair."""
+
+    if hasattr(value, "detach") and hasattr(value, "cpu") and hasattr(value, "tolist"):
+        value = value.detach().cpu().tolist()
+
+    def visit(item: Any) -> tuple[list[int], list[float]]:
+        if isinstance(item, (int, float, bool)):
+            return [], [_finite_number(item)]
+        if not isinstance(item, (list, tuple)) or not item:
+            raise ValueError("native ETS tensor must be a non-empty numeric array")
+        child_shape, child_values = visit(item[0])
+        values = list(child_values)
+        for child in item[1:]:
+            shape, child_values = visit(child)
+            if shape != child_shape:
+                raise ValueError("native ETS tensor must be rectangular")
+            values.extend(child_values)
+        return [len(item), *child_shape], values
+
+    return visit(value)
+
+
+def _encode_binary_mask(value: Any) -> dict[str, Any]:
+    shape, values = _shape_and_values(value)
+    if not shape:
+        raise ValueError("native ETS mask must not be scalar")
+    bits = [number >= 0.5 for number in values]
+    packed = bytearray(math.ceil(len(bits) / 8))
+    for index, enabled in enumerate(bits):
+        if enabled:
+            packed[index // 8] |= 1 << (7 - index % 8)
+    return {
+        "encoding": "bitset-base64",
+        "shape": shape,
+        "count": len(bits),
+        "data": base64.b64encode(bytes(packed)).decode("ascii"),
+    }
+
+
+def _pooled_ets_vector(value: Any, *, pool_shape: tuple[int, int, int] = (4, 8, 8)) -> list[float]:
+    """Pool a real [T,H,W] fusion score into a compact, stable ETS vector."""
+
+    shape, values = _shape_and_values(value)
+    if len(shape) != 3:
+        raise ValueError(f"native ETS score must have [T,H,W] shape, got {shape}")
+    if any(size <= 0 for size in pool_shape):
+        raise ValueError("native ETS pool shape must be positive")
+    effective_shape = tuple(min(int(pool), int(source)) for pool, source in zip(pool_shape, shape, strict=True))
+    pooled_count = math.prod(effective_shape)
+    sums = [0.0] * pooled_count
+    counts = [0] * pooled_count
+    source_t, source_h, source_w = shape
+    output_h, output_w = effective_shape[1:]
+    for index, number in enumerate(values):
+        t = index // (source_h * source_w)
+        rem = index % (source_h * source_w)
+        h, w = divmod(rem, source_w)
+        target_t = min(effective_shape[0] - 1, t * effective_shape[0] // source_t)
+        target_h = min(output_h - 1, h * output_h // source_h)
+        target_w = min(output_w - 1, w * output_w // source_w)
+        target = (target_t * output_h + target_h) * output_w + target_w
+        sums[target] += number
+        counts[target] += 1
+    if not all(counts):
+        raise ValueError("native ETS pooling produced an empty bin")
+    return _normalise(total / count for total, count in zip(sums, counts, strict=True))
+
+
+def build_native_prompt_ets_signature(
+    prompt: str,
+    nouns: Iterable[str],
+    mask_bundle: dict[str, Any],
+    *,
+    model_id: str = "Wan2.2-TI2V-5B",
+    pool_shape: tuple[int, int, int] = (4, 8, 8),
+    request_seed: int | None = None,
+) -> dict[str, Any]:
+    """Build a real step-5 prompt ETS from native Wan fusion-mask tensors.
+
+    The cross-request noun set remains a cheap stage-1 filter.  The ETS itself
+    is prompt-level because the native source path captures one calibrated
+    fusion mask per prompt; no noun-only fixture is used here.
+    """
+
+    noun_set = canonical_nouns(nouns)
+    if not noun_set:
+        raise ValueError("native ETS needs at least one annotated noun")
+    if not isinstance(mask_bundle, dict):
+        raise ValueError("native ETS needs a mask bundle")
+    if int(mask_bundle.get("source_completed_step", -1)) != 5:
+        raise ValueError("native ETS must come from completed step 5")
+    captured_prompt = mask_bundle.get("prompt")
+    if captured_prompt is not None and str(captured_prompt) != prompt:
+        raise ValueError("native ETS prompt does not match the captured mask bundle")
+    required = ("Mbase", "Medit", "Msee", "score")
+    if any(mask_bundle.get(key) is None for key in required):
+        raise ValueError("native ETS bundle is missing canonical masks or fusion score")
+    mask_shapes = [_shape_and_values(mask_bundle[key])[0] for key in required]
+    if any(shape != mask_shapes[0] for shape in mask_shapes) or len(mask_shapes[0]) != 3:
+        raise ValueError("native ETS masks and fusion score must share a [T,H,W] shape")
+    effective_pool_shape = [min(int(pool), int(source)) for pool, source in zip(pool_shape, mask_shapes[0], strict=True)]
+    return {
+        "implementation_id": CARNATOR_IMPLEMENTATION_ID,
+        "signature_profile_id": CARNATOR_SIGNATURE_PROFILE_ID,
+        "completed_step": 5,
+        "signature_scope": "prompt",
+        "signature_source": "native_wan_step5_fusion_mask",
+        "prompt_sha256": prompt_sha256(prompt),
+        "trf_nouns": list(noun_set),
+        "prompt_signature": {
+            "mbase": _encode_binary_mask(mask_bundle["Mbase"]),
+            "medit": _encode_binary_mask(mask_bundle["Medit"]),
+            "msee": _encode_binary_mask(mask_bundle["Msee"]),
+            "ets": _pooled_ets_vector(mask_bundle["score"], pool_shape=pool_shape),
+        },
+        "native_capture": {
+            "model_id": model_id,
+            "mask_variant": mask_bundle.get("mask_variant"),
+            "token_shape": mask_shapes[0],
+            "score_pool_shape": effective_pool_shape,
+            "mask_positive": mask_bundle.get("mask_positive", ""),
+            "request_seed": int(request_seed) if request_seed is not None else None,
+        },
+    }
+
+
+def build_native_prompt_ets_signature_from_dir(
+    mask_dir: str | Path,
+    prompt: str,
+    nouns: Iterable[str],
+    *,
+    model_id: str = "Wan2.2-TI2V-5B",
+    request_seed: int | None = None,
+) -> dict[str, Any]:
+    """Load a native fusion-mask bundle and serialize its real ETS."""
+
+    from carnator.masks import load_mask_bundle
+
+    return build_native_prompt_ets_signature(
+        prompt,
+        nouns,
+        load_mask_bundle(Path(mask_dir), None),
+        model_id=model_id,
+        request_seed=request_seed,
+    )
 
 
 def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
@@ -232,6 +404,8 @@ class CarnatorSignatureBuilder:
             "implementation_id": self.implementation_id,
             "signature_profile_id": self.signature_profile_id,
             "completed_step": 5,
+            "signature_scope": "noun",
+            "signature_source": "fixture",
             "trf_nouns": list(noun_set),
             "nouns": {
                 noun: {
@@ -262,7 +436,7 @@ class CarnatorSignatureComparator:
         raise ValueError("noun sets differ by more than one substitution")
 
     @staticmethod
-    def _validate(signature: dict[str, Any]) -> tuple[tuple[str, ...], dict[str, dict[str, list[float]]]]:
+    def _validate(signature: dict[str, Any]) -> tuple[tuple[str, ...], dict[str, dict[str, list[float]]], str]:
         if not isinstance(signature, dict):
             raise ValueError("ETS signature must be an object")
         implementation_id = signature.get("implementation_id", signature.get("local_implementation_id"))
@@ -274,6 +448,9 @@ class CarnatorSignatureComparator:
         if int(signature.get("completed_step", signature.get("step", -1))) != 5:
             raise ValueError("ETS signature must be from completed step 5")
         nouns = canonical_nouns(signature.get("trf_nouns", []))
+        scope = str(signature.get("signature_scope", "noun"))
+        if scope not in {"noun", "prompt"}:
+            raise ValueError("unsupported ETS signature scope")
         raw_nouns = signature.get("nouns", signature.get("noun_signatures"))
         direct_metrics = signature.get("metrics")
         if raw_nouns is None and isinstance(direct_metrics, dict):
@@ -287,11 +464,23 @@ class CarnatorSignatureComparator:
                 value = _finite_number(value)
                 if not 0.0 <= value <= 1.0:
                     raise ValueError("ETS metric must be in [0, 1]")
-            return nouns, {}
-        if not nouns or not isinstance(raw_nouns, dict) or set(raw_nouns) != set(nouns):
+            return nouns, {}, scope
+
+        if scope == "prompt":
+            raw_prompt = signature.get("prompt_signature")
+            prompt_sha256 = signature.get("prompt_sha256")
+            if (not nouns or not isinstance(raw_prompt, dict)
+                    or not isinstance(prompt_sha256, str)
+                    or not re.fullmatch(r"[0-9a-f]{64}", prompt_sha256)):
+                raise ValueError("prompt ETS needs prompt_signature, noun metadata and prompt hash")
+            raw_nouns = {"__prompt__": raw_prompt}
+            expected_nouns = ("__prompt__",)
+        else:
+            expected_nouns = nouns
+        if not nouns or not isinstance(raw_nouns, dict) or set(raw_nouns) != set(expected_nouns):
             raise ValueError("ETS noun metadata does not match signature entries")
         entries: dict[str, dict[str, list[float]]] = {}
-        for noun in nouns:
+        for noun in expected_nouns:
             raw = raw_nouns[noun]
             if not isinstance(raw, dict):
                 raise ValueError("ETS noun entry must be an object")
@@ -308,14 +497,15 @@ class CarnatorSignatureComparator:
                 raise ValueError("ETS vector must not be empty")
             if not (len(entries[noun]["mbase"]) == len(entries[noun]["medit"]) == len(entries[noun]["msee"])):
                 raise ValueError("ETS masks have inconsistent dimensions")
-        return nouns, entries
+        return nouns, entries, scope
 
     def compare(self, target: dict[str, Any], source: dict[str, Any]) -> dict[str, float]:
         if not self.threshold_config.valid:
             raise ValueError("threshold config is not frozen and authenticated")
-        target_nouns, target_entries = self._validate(target)
-        source_nouns, source_entries = self._validate(source)
-        mapping = self.noun_mapping(source_nouns, target_nouns)
+        target_nouns, target_entries, target_scope = self._validate(target)
+        source_nouns, source_entries, source_scope = self._validate(source)
+        if target_scope != source_scope:
+            raise ValueError("ETS signature scopes differ")
         if not target_entries or not source_entries:
             aliases = {
                 "mbase_iou": "base_iou", "medit_iou": "edit_iou",
@@ -332,10 +522,14 @@ class CarnatorSignatureComparator:
                     raise ValueError("missing direct ETS metric")
                 metrics[metric] = min(values)
             return metrics
-        paired = [
-            (source_entries[source_noun], target_entries[target_noun])
-            for source_noun, target_noun in sorted(mapping.items())
-        ]
+        if target_scope == "prompt":
+            paired = [(source_entries["__prompt__"], target_entries["__prompt__"])]
+        else:
+            mapping = self.noun_mapping(source_nouns, target_nouns)
+            paired = [
+                (source_entries[source_noun], target_entries[target_noun])
+                for source_noun, target_noun in sorted(mapping.items())
+            ]
         metrics = {
             "mbase_iou": sum(_iou(lhs["mbase"], rhs["mbase"]) for lhs, rhs in paired) / len(paired),
             "medit_iou": sum(_iou(lhs["medit"], rhs["medit"]) for lhs, rhs in paired) / len(paired),
@@ -488,6 +682,7 @@ class CarnatorRetriever(RetrievalStrategy):
     def __init__(self, embedder: TextEmbedder, noun_annotations: CarnatorNounAnnotations,
                  threshold_config: CarnatorThresholdConfig | None, *, candidate_top_k: int = 20,
                  retrieval_only: bool = False,
+                 allow_fixture_signatures: bool = False,
                  signature_builder: CarnatorSignatureBuilder | None = None) -> None:
         if candidate_top_k <= 0:
             raise ValueError("Carnator candidate_top_k must be positive")
@@ -496,6 +691,7 @@ class CarnatorRetriever(RetrievalStrategy):
         self.threshold_config = threshold_config or CarnatorThresholdConfig("", "", "", {}, False, False)
         self.candidate_top_k = int(candidate_top_k)
         self.retrieval_only = retrieval_only
+        self.allow_fixture_signatures = bool(allow_fixture_signatures or retrieval_only)
         self.signature_builder = signature_builder or CarnatorSignatureBuilder()
         self.comparator = CarnatorSignatureComparator(self.threshold_config)
         self.validator = CarnatorArtifactValidator(retrieval_only=retrieval_only)
@@ -519,8 +715,19 @@ class CarnatorRetriever(RetrievalStrategy):
         metadata = dict(getattr(entry, "metadata", None) or {})
         metadata.setdefault("source_request_index", int(entry.request_index))
         metadata.setdefault("trf_nouns", list(nouns))
-        metadata.setdefault("signature", self.signature_builder.build(entry.prompt, nouns))
-        metadata.setdefault("manifest_path", str(Path(entry.latent_path).with_suffix(".manifest.json")))
+        if "signature" not in metadata and self.allow_fixture_signatures:
+            metadata["signature"] = self.signature_builder.build(entry.prompt, nouns)
+        if "signature" not in metadata:
+            # A production source must provide the native step-5 signature.
+            # Do not silently turn a real request into the lexical fixture.
+            metadata["cache_ready"] = False
+            metadata.setdefault("signature_missing_reason", "native_step5_signature_required")
+        # Dataset replay uses inline, retrieval-only manifests and does not
+        # materialize a latent path.  Native/cache Runner entries still carry
+        # the on-disk manifest path as before.
+        latent_path = getattr(entry, "latent_path", None)
+        if latent_path is not None:
+            metadata.setdefault("manifest_path", str(Path(latent_path).with_suffix(".manifest.json")))
         return [VectorRecord(entry.uuid, entry.prompt, self.embedder.encode([entry.prompt])[0], metadata,
                              int(entry.request_index))]
 
@@ -584,7 +791,13 @@ class CarnatorRetriever(RetrievalStrategy):
             raise ValueError("missing ETS signature")
         return signature
 
-    def search(self, request: Request, records: Iterable[VectorRecord]) -> CacheMatch:
+    def search(
+        self,
+        request: Request,
+        records: Iterable[VectorRecord],
+        *,
+        target_signature: dict[str, Any] | None = None,
+    ) -> CacheMatch:
         metadata: dict[str, Any] = {
             "retriever": self.kind,
             "embedding": self.embedder.signature,
@@ -592,6 +805,7 @@ class CarnatorRetriever(RetrievalStrategy):
             "threshold_config_id": self.threshold_config.threshold_config_id,
             "cache_ready": False,
             "step_2_probe_run": False,
+            "probe_required": False,
             "top_k": [],
             "candidates": [],
             "noun_prefilter": [],
@@ -624,13 +838,29 @@ class CarnatorRetriever(RetrievalStrategy):
             metadata["reason"] = "no_noun_compatible_candidate"
             return CacheMatch(metadata=metadata, kind="no_reuse")
 
+        if target_signature is None and not self.allow_fixture_signatures:
+            # Stage 1 is intentionally non-authoritative. The native Wan
+            # request must run to completed step 5 and call this method again
+            # with its real fusion-mask ETS before any latent is loaded.
+            metadata["reason"] = "target_signature_required"
+            metadata["probe_required"] = True
+            return CacheMatch(metadata=metadata, kind="probe_required")
+
         # The probe is intentionally performed once, after noun prefiltering.
         metadata["step_2_probe_run"] = True
-        target_signature = self.signature_builder.build(request.prompt, target_nouns)
+        if target_signature is None:
+            target_signature = self.signature_builder.build(request.prompt, target_nouns)
+        elif target_signature.get("signature_scope") == "prompt":
+            if target_signature.get("prompt_sha256") != prompt_sha256(request.prompt):
+                metadata["reason"] = "target_signature_prompt_mismatch"
+                return CacheMatch(metadata=metadata, kind="no_reuse")
         for score, record, _ in passed:
             candidate_result: dict[str, Any] = {"uuid": record.uuid, "score": score}
             try:
                 source_signature = self._source_signature(record)
+                if (source_signature.get("signature_scope") == "prompt"
+                        and source_signature.get("prompt_sha256") != prompt_sha256(record.term)):
+                    raise ValueError("source ETS prompt hash does not match source prompt")
                 source_metadata_nouns = canonical_nouns(
                     (record.metadata or {}).get("trf_nouns", []) if isinstance(record.metadata, dict) else []
                 )
@@ -729,6 +959,7 @@ def make_carnator_retriever(config: dict[str, Any], *, dry_run: bool,
         _make_embedder(config, dry_run=dry_run), annotations, thresholds,
         candidate_top_k=int(config.get("candidate_top_k", 20)),
         retrieval_only=retrieval_only,
+        allow_fixture_signatures=bool(dry_run),
     )
 
 
@@ -742,5 +973,6 @@ __all__ = [
     "CarnatorArtifactValidator", "CarnatorNounAnnotations", "CarnatorRetriever",
     "CarnatorSignatureBuilder", "CarnatorSignatureComparator", "CarnatorThresholdConfig",
     "CarnatorETSBuilder", "CarnatorETSComparator",
-    "canonical_nouns", "heuristic_nouns", "make_carnator_retriever",
+    "build_native_prompt_ets_signature", "build_native_prompt_ets_signature_from_dir",
+    "canonical_nouns", "heuristic_nouns", "make_carnator_retriever", "prompt_sha256",
 ]

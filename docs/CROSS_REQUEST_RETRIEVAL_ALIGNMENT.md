@@ -23,10 +23,12 @@ synthetic 路径始终使用确定性的词法编码器和内存向量查询，�
 
 Carnator 已接入本仓库独立实现的两阶段检索：整条 prompt 使用归一化 CLIP 的精确内积 Top-K
 召回，随后用本地 `trf_nouns` 做相同/单 noun substitution 预过滤，再以 completed step 5
-的 ETS signature、冻结且认证的阈值配置和精确 step-10/sparse-attention artifact manifest
-作唯一复用决策。`carnator/retrieval.py` 与
+原生 fusion mask 构造的 prompt ETS、冻结且认证的阈值配置和精确 step-10/sparse-attention
+artifact manifest 作唯一复用决策。`scripts/run/carnator_dataset_ets.py` 可在一个原生 Wan
+进程中为整个数据集采集真实 ETS JSONL，`scripts/run/cross_request_dataset.py` 用它回放四种方法
+的 retrieval-only dataset 模式。`carnator/retrieval.py` 与
 [`CARNATOR_CROSS_REQUEST_RETRIEVAL_DESIGN.md`](CARNATOR_CROSS_REQUEST_RETRIEVAL_DESIGN.md)
-共同定义协议；`scripts/run/carnator_retrieval_only.py` 提供不加载 Wan 或真实 tensor 的验收路径。
+共同定义协议；`scripts/run/carnator_retrieval_only.py` 仍提供使用 fixture 的单元验收路径。
 
 ## 真实运行前提
 

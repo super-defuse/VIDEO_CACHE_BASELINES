@@ -70,7 +70,9 @@ conda run -n wan env PYTHONNOUSERSITE=1 python scripts/check_retrieval_environme
 conda run -n cogvideo env PYTHONNOUSERSITE=1 python scripts/check_retrieval_environment.py --runtime cogvideo
 ```
 
-CHAI 还需要官方 LongCLIP Python 模块、`longclip-L.pt` checkpoint，以及 spaCy 模型：
+CHAI 还需要官方 LongCLIP Python 模块、`longclip-L.pt` checkpoint，以及 spaCy 模型。LongCLIP
+源码已锁定在 `external/Long-CLIP` submodule；首次 clone 后执行 `git submodule update --init --recursive`，
+并将该目录加入 `PYTHONPATH`：
 
 ```bash
 conda run -n wan env PYTHONNOUSERSITE=1 python -m spacy download en_core_web_sm

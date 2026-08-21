@@ -11,7 +11,7 @@
 prompt
   -> 阶段 1：整条 prompt 的 CLIP Top-K 召回
   -> trf_nouns noun-set 预过滤
-  -> target 正常执行至 completed step 5，构造 ETS signature
+  -> target 正常执行至 completed step 5，构造 prompt ETS signature
   -> 阶段 2：按召回顺序比较 signature
   -> 首个通过者：step-10 latent + sparse-attention joint reuse
   -> 无通过者：沿当前轨迹完成 dense generation
@@ -22,10 +22,10 @@ prompt
 候选上限，CLIP 分数不参与最终授权，也不设未经校准的接受阈值。
 
 source 和 query 均使用 `trf_nouns`。只保留 noun set 相同，或双方各恰有一个不同 noun 的候选；
-没有候选时不运行 step-5 probe。对保留候选，target 在 step 5 生成每个 noun 的 `Mbase` 和临时
-`ets` signature；依次执行 metadata/noun mapping、四项 ETS metric、冻结阈值和精确 cache
-artifact 检查。第一个同时满足 `signature_compatible && cache_ready` 的候选获选，不得融合或重排
-signature 分数。
+没有候选时不运行 step-5 probe。对保留候选，target 在 step 5 从完整 prompt 的 native fusion mask
+生成一份 prompt ETS：压缩 `Mbase/Medit/Msee` 并池化 `score`。`trf_nouns` 只用于预过滤和
+metadata 一致性检查；随后依次执行四项 ETS metric、冻结阈值和精确 cache artifact 检查。第一个同时
+满足 `signature_compatible && cache_ready` 的候选获选，不得融合或重排 signature 分数。
 
 无冻结且认证的 `threshold_config_id`、任一 metadata/mask/数值错误，或缺少精确 step-10 latent 和 sparse-attention artifact 时一律 `No Reuse`。失败候选的 latent 或 attention 不得注入 target。
 
@@ -49,7 +49,7 @@ implementation/profile ID 的 manifest 一律拒绝。
 
 ## 落盘与配置
 
-每个 cache-ready source 保存 `carnator_ets.json`、精确 step-10 latent、
+每个 cache-ready source 保存原生 prompt ETS `carnator_ets.json`、精确 step-10 latent、
 sparse-attention pattern、含 artifact hash 的 `manifest.json`，以及 prompt vector 到 UUID/signature/manifest 的 `retrieval.json`。淘汰或 artifact 失效时同步删除 vector record。`results.jsonl.cache_match` 记录 `retriever=carnator_two_stage`、Top-K `(uuid, rank, score)`、noun 预过滤、阶段 2 拒绝 reason/metric、获选 UUID、`threshold_config_id` 与 `cache_ready`；只有最终 joint reuse 才是 `hit=true`。
 
 ```yaml

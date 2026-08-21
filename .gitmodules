@@ -13,3 +13,6 @@
 [submodule "grounded_sam2"]
 	path = external/grounded-sam2
 	url = https://github.com/IDEA-Research/Grounded-SAM-2.git
+[submodule "longclip"]
+	path = external/Long-CLIP
+	url = https://github.com/beichenzbc/Long-CLIP.git

@@ -18,6 +18,7 @@ weights remain outside this directory and are configured with `model_path`.
 | `lightx2v` | LightX2V distilled-Wan runtime |
 | `spargeattn` | SpargeAttn sparse-attention backend |
 | `grounded-sam2` | Grounded-SAM-2 mask backend |
+| `Long-CLIP` | Official LongCLIP module used by CHAI entity retrieval |
 | `vbench` | Optional VBench checkout, installed separately when quality evaluation is needed |
 
 VBench is not a Git submodule because the accepted evaluator was originally a

@@ -12,7 +12,7 @@ retrieval:
     # CHAI uses one LongCLIP vector per spaCy-extracted object/scene entity.
     backend: longclip
     longclip_checkpoint: models/longclip/longclip-L.pt
-    longclip_module: longclip
+    longclip_module: model.longclip
     device: cuda:0
     # CHAI specifies FAISS 1.13 for its entity vector database.
     vector_backend: faiss

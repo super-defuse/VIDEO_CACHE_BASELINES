@@ -27,6 +27,11 @@
       "url": "https://github.com/IDEA-Research/Grounded-SAM-2.git",
       "commit": "dd4c5141b75e4838dd486c64f773c43b4db3a07b"
     },
+    "longclip": {
+      "path": "external/Long-CLIP",
+      "url": "https://github.com/beichenzbc/Long-CLIP.git",
+      "commit": "3966af9ae9331666309a22128468b734db4672a7"
+    },
     "vbench": {
       "path": "external/vbench",
       "url": "https://github.com/Vchitect/VBench.git",
