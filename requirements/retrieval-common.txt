@@ -1,0 +1,14 @@
+# Cross-request retrieval dependencies used by CHAI and NIRVANA-VID.
+# Install this file into the model environment that executes the baseline.
+spacy==3.8.11
+
+# CHAI's paper specifies FAISS 1.13 for entity-vector lookup.
+faiss-cpu==1.13.0
+
+# NIRVANA's optional Match Predictor uses SGDOneClassSVM.
+scikit-learn>=1.5,<2.0
+# spaCy's CLI imports click even though it is not installed by every spaCy wheel.
+click>=8.1,<9.0
+
+# CHAI also requires the official LongCLIP package on PYTHONPATH and the
+# longclip-L.pt checkpoint. Neither is published as a stable PyPI dependency.

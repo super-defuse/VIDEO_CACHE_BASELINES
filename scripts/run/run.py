@@ -25,6 +25,19 @@ def _resolve_paths(config: dict) -> dict:
         value = config.get(key)
         if value and not Path(value).is_absolute():
             config[key] = str((ROOT / value).resolve())
+    chai_retrieval = config.get("retrieval", {}).get("chai", {})
+    checkpoint = chai_retrieval.get("longclip_checkpoint")
+    if checkpoint and not Path(checkpoint).is_absolute():
+        chai_retrieval["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
+    nirvana_retrieval = config.get("retrieval", {}).get("nirvana_vid", {})
+    for key in ("cache_selector_profile",):
+        value = nirvana_retrieval.get(key)
+        if value and not Path(value).is_absolute():
+            nirvana_retrieval[key] = str((ROOT / value).resolve())
+    predictor = nirvana_retrieval.get("match_predictor", {})
+    predictor_path = predictor.get("model_path")
+    if predictor_path and not Path(predictor_path).is_absolute():
+        predictor["model_path"] = str((ROOT / predictor_path).resolve())
     return config
 
 

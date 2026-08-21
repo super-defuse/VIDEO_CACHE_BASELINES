@@ -1,0 +1,25 @@
+{
+  "prompt": "a single red ceramic mug on a plain white tabletop, soft daylight, photorealistic, static camera",
+  "positive_phrase": "mug",
+  "video": "artifacts/static-prompt-defaults/ceramic-mug/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults/ceramic-mug/cache/source_dense/fusion_masks/masks.pt",
+  "frame_count": 121,
+  "resolution": [
+    1280,
+    704
+  ],
+  "selected_frames": {
+    "start": 0
+  },
+  "mask_areas": {
+    "mbase": 0.13266128301620483,
+    "medit": 0.26367300748825073,
+    "msee": 0.46356305480003357
+  },
+  "files_per_position": [
+    "original",
+    "mbase",
+    "medit",
+    "msee"
+  ]
+}

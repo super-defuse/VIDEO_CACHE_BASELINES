@@ -42,6 +42,18 @@ def _resolve_paths(config: dict) -> dict:
         value = config.get(key)
         if value and not Path(value).is_absolute():
             config[key] = str((ROOT / value).resolve())
+    chai_retrieval = config.get("retrieval", {}).get("chai", {})
+    checkpoint = chai_retrieval.get("longclip_checkpoint")
+    if checkpoint and not Path(checkpoint).is_absolute():
+        chai_retrieval["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
+    nirvana_retrieval = config.get("retrieval", {}).get("nirvana_vid", {})
+    profile = nirvana_retrieval.get("cache_selector_profile")
+    if profile and not Path(profile).is_absolute():
+        nirvana_retrieval["cache_selector_profile"] = str((ROOT / profile).resolve())
+    predictor = nirvana_retrieval.get("match_predictor", {})
+    predictor_path = predictor.get("model_path")
+    if predictor_path and not Path(predictor_path).is_absolute():
+        predictor["model_path"] = str((ROOT / predictor_path).resolve())
     return config
 
 
@@ -66,7 +78,7 @@ def main() -> int:
                     if args.model == "synthetic" else
                     _resolve_paths(_load_yaml(ROOT / "configs" / "models" / f"{args.model}.yaml")))
     method_config = _load_yaml(ROOT / "configs" / "methods" / "default.yaml")
-    config = {**model_config, **method_config, "dry_run": args.model == "synthetic"}
+    config = _resolve_paths({**model_config, **method_config, "dry_run": args.model == "synthetic"})
     seed = int(args.seed if args.seed is not None else config.get("seed", 0))
     run_root = ROOT / "artifacts" / "runs" / args.run_prefix
     run_root.mkdir(parents=True, exist_ok=True)

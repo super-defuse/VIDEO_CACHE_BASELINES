@@ -1,0 +1,6 @@
+# Backward-compatible aggregate for the Wan2.2 runtime.
+# Prefer retrieval-wan.txt or retrieval-cogvideo.txt in new setup scripts.
+-r retrieval-wan.txt
+
+# After installation, install the matching spaCy English model:
+# python -m spacy download en_core_web_sm

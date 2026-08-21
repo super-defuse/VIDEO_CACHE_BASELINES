@@ -1,0 +1,3 @@
+# Retrieval dependencies for the CogVideoX1.5 runtime.
+# Chorus is N/A for CogVideoX1.5, so ChromaDB is intentionally not installed.
+-r retrieval-common.txt

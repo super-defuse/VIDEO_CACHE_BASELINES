@@ -1,0 +1,25 @@
+{
+  "prompt": "a blue hard-shell suitcase standing upright in an empty hallway, photorealistic, static camera",
+  "positive_phrase": "suitcase",
+  "video": "artifacts/static-prompt-defaults/blue-suitcase/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults/blue-suitcase/cache/source_dense/fusion_masks/masks.pt",
+  "frame_count": 121,
+  "resolution": [
+    1280,
+    704
+  ],
+  "selected_frames": {
+    "start": 0
+  },
+  "mask_areas": {
+    "mbase": 0.13126832246780396,
+    "medit": 0.27357038855552673,
+    "msee": 0.44274193048477173
+  },
+  "files_per_position": [
+    "original",
+    "mbase",
+    "medit",
+    "msee"
+  ]
+}

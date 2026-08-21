@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from core.protocol import BaselineMethod
+from core.retrieval import make_chorus_retriever
 from core.types import MethodCapabilities
-import tempfile
 from pathlib import Path
 
 
@@ -16,45 +16,50 @@ class Chorus(BaselineMethod):
         source_trajectory=True,
     )
 
+    def prepare(self, model_adapter, config=None) -> None:
+        super().prepare(model_adapter, config)
+        retrieval_config = self.config.get("retrieval", {}).get("chorus", {})
+        self.retriever = make_chorus_retriever(retrieval_config, dry_run=bool(self.config.get("dry_run")))
+        self.cache_policy = "lru"
+
     def generate(self, request, *, cached_latent=None, capture=False):
         assert self.adapter is not None
         if self.adapter.model_name == "CogVideoX1.5":
             raise NotImplementedError("Chorus is N/A for CogVideoX1.5")
-        # The source request is always dense and refreshes the temporary video
-        # consumed by Grounded-SAM-2. This also makes reruns independent of a
-        # stale source latent left in the namespace cache.
-        is_source = request.cache_prompt is None
+        # A cache miss produces a dense source trajectory. A semantic hit is a
+        # target request even though it has no manually supplied cache_prompt.
+        is_source = cached_latent is None
         if is_source:
-            cached_latent = None
             capture = True
-        elif not getattr(self, "_source_video_path", None):
-            # A source trajectory may already exist from a previous process;
-            # keep its encoded source video alongside the latent cache.
-            entries = getattr(self._cache, "entries", None)
-            if entries is not None:
-                for entry in getattr(self._cache, "_entries", {}).values():
-                    if entry.prompt == request.cache_prompt:
-                        candidate = Path(entry.latent_path).with_suffix(".source.mp4")
-                        if candidate.is_file():
-                            self._source_video_path = candidate
-                            break
-            if not getattr(self, "_source_video_path", None):
-                raise RuntimeError("Chorus target requires the source video generated in this run")
+        else:
+            entry = self._active_cache_entry
+            if entry is None:
+                raise RuntimeError("Chorus target is missing its matched cache entry")
+            source_video_path = Path(entry.latent_path).with_suffix(".source.mp4")
+            if not source_video_path.is_file():
+                raise RuntimeError(f"Chorus target source video is missing: {source_video_path}")
         if not is_source:
-            self.adapter.chorus_source_video_path = Path(self._source_video_path)
-        result = self.adapter.generate(
-            request, fast=cached_latent is not None, cached_latent=cached_latent,
-            capture=capture, method=self.name,
-        )
+            self.adapter.chorus_source_video_path = source_video_path
+        boundaries = self._active_cache_match.metadata.get("stage_boundaries")
+        previous_boundaries = getattr(self.adapter, "chorus_stage_boundaries", None)
+        if boundaries:
+            self.adapter.chorus_stage_boundaries = dict(boundaries)
+        try:
+            result = self.adapter.generate(
+                request, fast=cached_latent is not None, cached_latent=cached_latent,
+                capture=capture, method=self.name,
+            )
+        finally:
+            if previous_boundaries is None:
+                self.adapter.__dict__.pop("chorus_stage_boundaries", None)
+            else:
+                self.adapter.chorus_stage_boundaries = previous_boundaries
         if is_source:
             entries = getattr(self._cache, "entries", None)
-            source_path = (Path(entries) / f"{request.uuid}.source.mp4" if entries is not None
-                           else Path(tempfile.mkstemp(prefix="chorus-source-", suffix=".mp4")[1]))
+            if entries is None:
+                raise RuntimeError("Chorus source requires an attached namespace cache")
+            source_path = Path(entries) / f"{request.uuid}.source.mp4"
             self.adapter.save_video(result.video, source_path)
-            self._source_video_path = source_path
-            self._source_prompt = request.prompt
-        else:
-            self._source_video_path = None
         return result
 
 

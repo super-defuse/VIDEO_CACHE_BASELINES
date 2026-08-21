@@ -1,0 +1,6 @@
+# Retrieval dependencies for the Wan2.2 runtime.
+-r retrieval-common.txt
+
+# Chorus uses a persistent ChromaDB prompt-vector index. Its exact paper
+# release is not disclosed; keep the supported major series.
+chromadb>=1.0,<2.0

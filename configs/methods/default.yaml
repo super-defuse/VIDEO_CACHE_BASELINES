@@ -1,5 +1,44 @@
 cache_root: artifacts/cache
 max_cache_bytes: 5368709120
+retrieval:
+  nirvana_vid:
+    # NIRVANA performs whole-prompt CLIP retrieval. Thresholds are the local
+    # CacheSelector profile and must be recalibrated for a different backbone.
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:0
+    cache_selector_profile: configs/retrieval/nirvana_cache_selector_profile.json
+    # The original optional predictor is disabled until an offline model has
+    # been generated with scripts/benchmark/train_nirvana_match_predictor.py.
+    match_predictor:
+      enabled: false
+      model_path: artifacts/nirvana_match_predictor.joblib
+  chai:
+    # CHAI uses one LongCLIP vector per spaCy-extracted object/scene entity.
+    backend: longclip
+    longclip_checkpoint: models/longclip/longclip-L.pt
+    longclip_module: longclip
+    device: cuda:0
+    # CHAI specifies FAISS 1.13 for its entity vector database.
+    vector_backend: faiss
+    spacy_model: en_core_web_sm
+    # The paper does not publish this acceptance threshold.
+    min_entity_similarity: 0.55
+  chorus:
+    # Chorus uses 768-d CLIP prompt embeddings and cosine top-1 retrieval.
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:0
+    # Chorus specifies a persistent ChromaDB index for prompt embeddings.
+    vector_backend: chroma
+    min_similarity: 0.65
+    # The paper only specifies that F(score, N) is monotonic. This is a
+    # documented linear approximation for the existing 50-step Wan path.
+    stage_scheduler:
+      min_k1: 10
+      min_k2: 40
+      max_k1: 30
+      max_k2: 45
 chorus:
   stages:
     # Engineering schedule for the 50-step Wan2.2 run; Chorus does not

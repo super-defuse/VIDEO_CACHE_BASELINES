@@ -117,15 +117,19 @@ class CogVideoX15Adapter(ModelAdapter):
         delegate = self._load_delegate()
         delegate._load()
         steps = int(self.config["baseline_steps"])
-        reuse_start = int(self.config["nirvana_vid"]["reuse_start_step"])
+        reuse_start = int(getattr(self, "nirvana_reuse_start_step", self.config["nirvana_vid"]["reuse_start_step"]))
         if not 0 < reuse_start < steps:
             raise ValueError("nirvana_vid.reuse_start_step must be within the sampling schedule")
+        cache_steps = tuple(sorted({int(step) for step in self.config["nirvana_vid"].get("cache_steps", [reuse_start])}))
+        if not cache_steps or any(not 0 < step < steps for step in cache_steps):
+            raise ValueError("nirvana_vid.cache_steps must be non-empty steps within the sampling schedule")
         start = reuse_start if cached_latent is not None else 0
-        captured = []
+        captured: dict[int, Any] = {}
 
         def capture_latent(_pipe, index, _timestep, values):
-            if capture and index + 1 == reuse_start:
-                captured.append(values["latents"].detach().cpu())
+            completed_step = index + 1
+            if capture and completed_step in cache_steps:
+                captured[completed_step] = values["latents"].detach().cpu()
             return values
 
         call = self._call_args(request, steps - start)
@@ -139,10 +143,11 @@ class CogVideoX15Adapter(ModelAdapter):
         output = delegate.pipe(**call)
         return Generation(
             video=output.frames[0],
-            latent=captured[-1] if captured else None,
-            latent_step=reuse_start,
+            latent=captured if capture else None,
+            latent_step=max(cache_steps),
             executed_steps=steps - start,
-            extra={"executed_steps": steps - start, "restart_step": start, "source_trajectory": cached_latent is not None},
+            extra={"executed_steps": steps - start, "restart_step": start, "source_trajectory": cached_latent is not None,
+                   "cache_steps": list(cache_steps)},
         )
 
     def save_latent(self, latent, path: Path):

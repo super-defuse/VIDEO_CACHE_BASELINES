@@ -74,7 +74,7 @@ class Wan22Adapter(ModelAdapter):
             probe_cfg = chorus_cfg.get("joint_gamma_2_0", {})
             chorus_cfg["gamma_k"] = float(probe_cfg.get("gamma_k", 2.0))
             chorus_cfg["gamma_o"] = float(probe_cfg.get("gamma_o", 2.0))
-        stages = chorus_cfg.get("stages", {})
+        stages = getattr(self, "chorus_stage_boundaries", None) or chorus_cfg.get("stages", {})
         steps = int(self.config["baseline_steps"])
         k1 = int(stages.get("k1", 10))
         k2 = int(stages.get("k2", 40))
@@ -556,9 +556,12 @@ class Wan22Adapter(ModelAdapter):
 
         torch = delegate.torch
         steps = int(self.config["baseline_steps"])
-        reuse_start = int(self.config["nirvana_vid"]["reuse_start_step"])
+        reuse_start = int(getattr(self, "nirvana_reuse_start_step", self.config["nirvana_vid"]["reuse_start_step"]))
         if not 0 < reuse_start < steps:
             raise ValueError("nirvana_vid.reuse_start_step must be within the sampling schedule")
+        cache_steps = tuple(sorted({int(step) for step in self.config["nirvana_vid"].get("cache_steps", [reuse_start])}))
+        if not cache_steps or any(not 0 < step < steps for step in cache_steps):
+            raise ValueError("nirvana_vid.cache_steps must be non-empty steps within the sampling schedule")
         start = reuse_start if cached_latent is not None else 0
         frame_num = int(self.config["frames"])
         size = (int(self.config["width"]), int(self.config["height"]))
@@ -591,7 +594,7 @@ class Wan22Adapter(ModelAdapter):
         mask1, mask2 = masks_like(latents, zero=False)
         arg_c = {"context": context, "seq_len": seq_len}
         arg_null = {"context": context_null, "seq_len": seq_len}
-        captured = None
+        captured: dict[int, Any] = {}
 
         @contextmanager
         def noop_no_sync():
@@ -610,15 +613,17 @@ class Wan22Adapter(ModelAdapter):
                     noise_pred.unsqueeze(0), timestep_value, latents[0].unsqueeze(0), return_dict=False, generator=generator
                 )[0]
                 latents = [sample.squeeze(0)]
-                if capture and index + 1 == reuse_start:
-                    captured = latents[0].detach().cpu()
+                completed_step = index + 1
+                if capture and completed_step in cache_steps:
+                    captured[completed_step] = latents[0].detach().cpu()
             video = pipeline.vae.decode(latents)[0]
         return Generation(
             video=video,
-            latent=captured,
-            latent_step=reuse_start,
+            latent=captured if capture else None,
+            latent_step=max(cache_steps),
             executed_steps=steps - start,
-            extra={"executed_steps": steps - start, "restart_step": start, "source_trajectory": cached_latent is not None},
+            extra={"executed_steps": steps - start, "restart_step": start, "source_trajectory": cached_latent is not None,
+                   "cache_steps": list(cache_steps)},
         )
 
     def save_latent(self, latent, path: Path):

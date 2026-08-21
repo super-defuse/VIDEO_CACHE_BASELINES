@@ -21,7 +21,8 @@ class Runner:
         self.video_dir.mkdir(parents=True, exist_ok=True)
         # A method's latent representation is model-specific. Keep both axes
         # in the on-disk namespace so identical prompt UUIDs cannot cross-hit.
-        self.cache = NamespaceCache(cache_root, f"{model}/{method.name}")
+        self.cache = NamespaceCache(cache_root, f"{model}/{method.name}",
+                                    max_bytes=int(method.config.get("max_cache_bytes", 5 * 1024**3)))
         method.attach_cache(self.cache)
         method.prepare(adapter, method.config)
 
@@ -42,17 +43,22 @@ class Runner:
         timing: dict[str, float] = {}
         try:
             lookup_start = time.perf_counter()
-            match = self.cache.find(request) if self.method.capabilities.cross_request_cache else CacheMatch()
+            match = self.method.find_cache(request) if self.method.capabilities.cross_request_cache else CacheMatch()
             timing["cache_lookup_s"] = time.perf_counter() - lookup_start
             cached = None
             cache_load_start = time.perf_counter()
             loaded = self.cache.load(match)
+            entry = None
             if loaded:
-                path, _entry = loaded
-                cached = self.adapter.load_latent(path)
+                path, entry = loaded
+                cached = self.method.select_cached_latent(self.adapter.load_latent(path), match)
             timing["cache_load_s"] = time.perf_counter() - cache_load_start
             generation_start = time.perf_counter()
-            generation = self.method.generate(request, cached_latent=cached, capture=not match.hit)
+            self.method.begin_request(match, entry)
+            try:
+                generation = self.method.generate(request, cached_latent=cached, capture=not match.hit)
+            finally:
+                self.method.end_request()
             timing["generation_s"] = time.perf_counter() - generation_start
             output_path = self.video_dir / f"{request.request_index:04d}_{request.uuid}.mp4"
             save_start = time.perf_counter()
@@ -60,7 +66,8 @@ class Runner:
             timing["save_video_s"] = time.perf_counter() - save_start
             cache_save_start = time.perf_counter()
             if not match.hit and generation.latent is not None and self.method.capabilities.cross_request_cache:
-                self.cache.put(request, generation.latent, generation.latent_step or -1, self.adapter.save_latent)
+                self.cache.put(request, generation.latent, generation.latent_step or -1, self.adapter.save_latent,
+                               strategy=self.method.retriever, eviction_policy=self.method.cache_policy)
             timing["cache_save_s"] = time.perf_counter() - cache_save_start
             hash_start = time.perf_counter()
             output_hash = _hash(output_path)

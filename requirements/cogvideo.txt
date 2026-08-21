@@ -5,7 +5,8 @@ diffusers==0.35.2
 einops==0.8.1
 imageio==2.37.2
 imageio-ffmpeg==0.6.0
-numpy==1.26.4
+# FAISS 1.13 (retrieval-common.txt) uses NumPy 2's public _core layout.
+numpy==2.2.6
 opencv-python==4.11.0.86
 Pillow==11.3.0
 PyYAML==6.0.3

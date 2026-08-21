@@ -13,6 +13,7 @@ venv/
 
 # Downloaded model weights and large tensor/checkpoint payloads
 /models/
+/models
 *.pt
 *.pth
 *.ckpt
@@ -24,6 +25,13 @@ venv/
 artifacts/cache/
 **/cache/
 artifacts/vbench-cache/
+
+# Local source trajectories for the static Carnator figure examples are
+# multi-gigabyte regenerable data.  Their compact PNG exports are tracked.
+/artifacts/static-prompt-defaults/
+
+# Generated package metadata is recreated by installation.
+/video_cache_baselines.egg-info/
 
 # Third-party sources are pinned as Git submodules.  Keep their build outputs
 # and local evaluator checkout out of the parent repository.

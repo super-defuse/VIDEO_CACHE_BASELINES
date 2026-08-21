@@ -7,8 +7,12 @@ scipy==1.15.3
 scikit-learn==1.7.2
 scikit-image==0.25.2
 opencv-python-headless==4.11.0.86
+# lvis declares an unbounded opencv-python dependency; pin it so pip does not
+# resolve/download every newer OpenCV release on a fresh clone.
+opencv-python==4.11.0.86
 openai-clip==1.0.1
-decord==0.6.0
+# Installed from conda-forge in scripts/create_environments.sh because the
+# PyPI wheel is tagged cp36 and pip check rejects it on Python 3.10.
 requests==2.32.3
 PyYAML==6.0.3
 easydict==1.13

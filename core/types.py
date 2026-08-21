@@ -43,6 +43,7 @@ class CacheMatch:
     source_request_index: int | None = None
     kind: str = "miss"
     score: float | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
