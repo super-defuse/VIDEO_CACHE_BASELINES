@@ -8,11 +8,6 @@ retrieval:
     model_id: openai/clip-vit-large-patch14
     device: cuda:0
     cache_selector_profile: configs/retrieval/nirvana_cache_selector_profile.json
-    # The original optional predictor is disabled until an offline model has
-    # been generated with scripts/benchmark/train_nirvana_match_predictor.py.
-    match_predictor:
-      enabled: false
-      model_path: artifacts/nirvana_match_predictor.joblib
   chai:
     # CHAI uses one LongCLIP vector per spaCy-extracted object/scene entity.
     backend: longclip
@@ -39,6 +34,15 @@ retrieval:
       min_k2: 40
       max_k1: 30
       max_k2: 45
+  carnator:
+    # Carnator first retrieves whole prompts, then authorizes reuse with the
+    # local step-5 ETS profile and exact artifact manifest.
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:0
+    candidate_top_k: 20
+    noun_annotations: datasets/carnator_vbench_trf_nouns.csv
+    threshold_config: configs/retrieval/carnator_ets_thresholds.json
 chorus:
   stages:
     # Engineering schedule for the 50-step Wan2.2 run; Chorus does not

@@ -50,10 +50,11 @@ def _resolve_paths(config: dict) -> dict:
     profile = nirvana_retrieval.get("cache_selector_profile")
     if profile and not Path(profile).is_absolute():
         nirvana_retrieval["cache_selector_profile"] = str((ROOT / profile).resolve())
-    predictor = nirvana_retrieval.get("match_predictor", {})
-    predictor_path = predictor.get("model_path")
-    if predictor_path and not Path(predictor_path).is_absolute():
-        predictor["model_path"] = str((ROOT / predictor_path).resolve())
+    carnator_retrieval = config.get("retrieval", {}).get("carnator", {})
+    for key in ("noun_annotations", "threshold_config"):
+        value = carnator_retrieval.get(key)
+        if value and not Path(value).is_absolute():
+            carnator_retrieval[key] = str((ROOT / value).resolve())
     return config
 
 

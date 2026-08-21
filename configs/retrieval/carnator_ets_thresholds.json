@@ -1,0 +1,13 @@
+{
+  "threshold_config_id": "carnator-ets-v1-frozen",
+  "implementation_id": "video-cache-baselines.carnator-two-stage.v1",
+  "signature_profile_id": "ets-v1",
+  "frozen": true,
+  "authenticated": true,
+  "thresholds": {
+    "mbase_iou": 0.50,
+    "medit_iou": 0.50,
+    "msee_iou": 0.50,
+    "ets_cosine": 0.80
+  }
+}

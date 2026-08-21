@@ -18,7 +18,6 @@ from core.retrieval import (
     ChorusRetriever,
     LexicalTestEmbedder,
     LexicalTestEntityExtractor,
-    NirvanaRetriever,
 )
 from core import CacheMatch, Request, Runner
 from core.registry import make_method
@@ -169,23 +168,3 @@ def test_nirvana_cache_selector_profile_uses_quality_safe_thresholds(tmp_path):
     path = tmp_path / "profile.json"
     path.write_text(json.dumps(profile.to_payload()), encoding="utf-8")
     assert CacheSelectorProfile.load(path).thresholds == profile.thresholds
-
-
-def test_nirvana_optional_match_predictor_can_gate_a_vector_query():
-    class RejectAll:
-        signature = "test-reject-all"
-
-        @staticmethod
-        def accepts(vector):
-            del vector
-            return False
-
-    retriever = NirvanaRetriever(
-        LexicalTestEmbedder(), {5: 0.10}, match_predictor=RejectAll()
-    )
-    match = retriever.search(
-        Request(1, "target", "a red train", 1),
-        retriever.records_for(type("Entry", (), {"uuid": "source", "prompt": "a red train"})()),
-    )
-    assert not match.hit
-    assert match.kind == "predicted_miss"

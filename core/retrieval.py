@@ -23,6 +23,10 @@ class VectorRecord:
     uuid: str
     term: str
     vector: list[float]
+    # Optional method-specific recovery metadata.  Existing manifests only
+    # contain the first three fields and remain valid after this extension.
+    metadata: dict[str, Any] | None = None
+    source_request_index: int | None = None
 
 
 @dataclass(frozen=True)
@@ -113,69 +117,6 @@ class CacheSelectorProfile:
                 for step, score in sorted(self.thresholds.items())
             ],
         }
-
-
-class MatchPredictor(Protocol):
-    @property
-    def signature(self) -> str: ...
-
-    def accepts(self, vector: list[float]) -> bool: ...
-
-
-class SgdOneClassMatchPredictor:
-    """Optional persisted `SGDOneClassSVM` gate used by NIRVANA."""
-
-    def __init__(self, model: Any, embedding_signature: str, source_path: str | None = None) -> None:
-        self.model = model
-        self.embedding_signature = embedding_signature
-        self.source_path = source_path
-
-    @property
-    def signature(self) -> str:
-        return f"sgd-one-class-svm:{self.embedding_signature}"
-
-    @classmethod
-    def load(cls, path: str | Path, embedding_signature: str) -> "SgdOneClassMatchPredictor":
-        try:
-            import joblib
-        except ImportError as exc:
-            raise RuntimeError("NIRVANA match predictor requires scikit-learn and joblib") from exc
-        payload = joblib.load(path)
-        saved_signature = str(payload["embedding_signature"])
-        if saved_signature != embedding_signature:
-            raise RuntimeError(
-                "NIRVANA match predictor embedding differs from the active retriever: "
-                f"{saved_signature!r} != {embedding_signature!r}"
-            )
-        return cls(payload["model"], saved_signature, str(path))
-
-    @classmethod
-    def fit(cls, vectors: list[list[float]], embedding_signature: str, *, nu: float = 0.05) -> "SgdOneClassMatchPredictor":
-        if not vectors:
-            raise ValueError("NIRVANA match predictor needs at least one inlier embedding")
-        try:
-            import numpy as np
-            from sklearn.linear_model import SGDOneClassSVM
-        except ImportError as exc:
-            raise RuntimeError("NIRVANA match predictor requires numpy and scikit-learn") from exc
-        model = SGDOneClassSVM(nu=nu, random_state=0, shuffle=False).fit(np.asarray(vectors, dtype="float32"))
-        return cls(model, embedding_signature)
-
-    def save(self, path: str | Path) -> None:
-        try:
-            import joblib
-        except ImportError as exc:
-            raise RuntimeError("NIRVANA match predictor requires scikit-learn and joblib") from exc
-        output = Path(path)
-        output.parent.mkdir(parents=True, exist_ok=True)
-        joblib.dump({"embedding_signature": self.embedding_signature, "model": self.model}, output)
-
-    def accepts(self, vector: list[float]) -> bool:
-        try:
-            import numpy as np
-        except ImportError as exc:
-            raise RuntimeError("NIRVANA match predictor requires numpy") from exc
-        return bool(self.model.predict(np.asarray([vector], dtype="float32"))[0] == 1)
 
 
 class EntryLike(Protocol):
@@ -439,34 +380,18 @@ class NirvanaRetriever(RetrievalStrategy):
         self,
         embedder: TextEmbedder,
         thresholds: dict[int, float],
-        *,
-        match_predictor: MatchPredictor | None = None,
     ) -> None:
         if not thresholds:
             raise ValueError("NIRVANA retrieval needs at least one similarity-to-step threshold")
         self.thresholds = dict(sorted((int(step), float(score)) for step, score in thresholds.items()))
-        self.match_predictor = match_predictor
         super().__init__(embedder, min(self.thresholds.values()))
 
     @property
     def signature(self) -> str:
         schedule = ",".join(f"{step}:{score:.8f}" for step, score in self.thresholds.items())
-        predictor = self.match_predictor.signature if self.match_predictor else "disabled"
-        return f"{self.kind}|{self.embedder.signature}|steps={schedule}|match_predictor={predictor}"
+        return f"{self.kind}|{self.embedder.signature}|steps={schedule}"
 
     def search(self, request: Request, records: Iterable[VectorRecord]) -> CacheMatch:
-        if self.match_predictor is not None:
-            query_term = request.cache_prompt or request.prompt
-            query_vector = self.embedder.encode([query_term])[0]
-            if not self.match_predictor.accepts(query_vector):
-                return CacheMatch(
-                    kind="predicted_miss",
-                    metadata={
-                        "retriever": self.kind,
-                        "embedding": self.embedder.signature,
-                        "match_predictor": self.match_predictor.signature,
-                    },
-                )
         match = super().search(request, records)
         if not match.hit or match.score is None:
             return match
@@ -662,14 +587,7 @@ def make_nirvana_retriever(config: dict[str, Any], *, dry_run: bool) -> NirvanaR
         }
     if not thresholds:
         thresholds = {5: 0.20, 10: 0.35, 15: 0.50, 20: 0.65, 25: 0.80}
-    predictor_config = config.get("match_predictor", {})
-    predictor: MatchPredictor | None = None
-    if not dry_run and predictor_config.get("enabled", False):
-        model_path = predictor_config.get("model_path")
-        if not model_path:
-            raise RuntimeError("enabled NIRVANA match predictor needs retrieval.nirvana_vid.match_predictor.model_path")
-        predictor = SgdOneClassMatchPredictor.load(str(model_path), embedder.signature)
-    return NirvanaRetriever(embedder, thresholds, match_predictor=predictor)
+    return NirvanaRetriever(embedder, thresholds)
 
 
 def make_chai_retriever(config: dict[str, Any], *, dry_run: bool) -> ChaiRetriever:
@@ -697,6 +615,18 @@ def make_chorus_retriever(config: dict[str, Any], *, dry_run: bool) -> ChorusRet
         schedule,
         vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
     )
+
+
+def make_carnator_retriever(config: dict[str, Any], *, dry_run: bool, retrieval_only: bool = False):
+    """Build Carnator's independent two-stage retriever lazily.
+
+    The implementation lives in ``carnator.retrieval`` so importing the
+    common retrieval module never pulls in model-specific code.
+    """
+
+    from carnator.retrieval import make_carnator_retriever as _make
+
+    return _make(config, dry_run=dry_run, retrieval_only=retrieval_only)
 
 
 def _vector_backend(config: dict[str, Any], *, dry_run: bool, default: str) -> str:

@@ -34,10 +34,11 @@ def _resolve_paths(config: dict) -> dict:
         value = nirvana_retrieval.get(key)
         if value and not Path(value).is_absolute():
             nirvana_retrieval[key] = str((ROOT / value).resolve())
-    predictor = nirvana_retrieval.get("match_predictor", {})
-    predictor_path = predictor.get("model_path")
-    if predictor_path and not Path(predictor_path).is_absolute():
-        predictor["model_path"] = str((ROOT / predictor_path).resolve())
+    carnator_retrieval = config.get("retrieval", {}).get("carnator", {})
+    for key in ("noun_annotations", "threshold_config"):
+        value = carnator_retrieval.get(key)
+        if value and not Path(value).is_absolute():
+            carnator_retrieval[key] = str((ROOT / value).resolve())
     return config
 
 

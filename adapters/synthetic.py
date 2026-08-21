@@ -21,7 +21,8 @@ class SyntheticAdapter(ModelAdapter):
         else:
             latent = digest if capture else None
         payload = cached_latent if fast and cached_latent is not None else digest
-        return Generation(b"VIDEO-CACHE-BASELINES:" + bytes(payload), latent, 1, 8 if fast else 50)
+        latent_step = 10 if method == "carnator" else 1
+        return Generation(b"VIDEO-CACHE-BASELINES:" + bytes(payload), latent, latent_step, 8 if fast else 50)
 
     def save_latent(self, latent, path: Path) -> None:
         if isinstance(latent, dict):

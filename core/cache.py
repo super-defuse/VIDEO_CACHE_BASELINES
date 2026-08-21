@@ -22,6 +22,7 @@ class CacheEntry:
     accessed_at: float
     hit_count: int = 0
     created_at: float = 0.0
+    metadata: dict[str, Any] | None = None
 
 
 class NamespaceCache:
@@ -49,6 +50,7 @@ class NamespaceCache:
         for key, payload in json.loads(self.index_path.read_text()).items():
             payload.setdefault("hit_count", 0)
             payload.setdefault("created_at", payload.get("accessed_at", 0.0))
+            payload.setdefault("metadata", None)
             entries[key] = CacheEntry(**payload)
         return entries
 
@@ -103,6 +105,8 @@ class NamespaceCache:
             shutil.rmtree(sidecar)
         source_video = path.with_suffix(".source.mp4")
         source_video.unlink(missing_ok=True)
+        for suffix in (".carnator_ets.json", ".manifest.json", ".sparse_attention"):
+            path.with_suffix(suffix).unlink(missing_ok=True)
 
     def clear(self) -> None:
         shutil.rmtree(self.entries, ignore_errors=True)
@@ -119,6 +123,13 @@ class NamespaceCache:
             self._ensure_retrieval_index(strategy)
             valid_uuids = {entry.uuid for entry in self._entries.values() if Path(entry.latent_path).is_file()}
             valid_records = [record for record in self._records if record.uuid in valid_uuids]
+            record_is_valid = getattr(strategy, "record_is_valid", None)
+            if record_is_valid is not None:
+                retained_records = [record for record in valid_records if record_is_valid(record)]
+                if len(retained_records) != len(valid_records):
+                    self._records = [record for record in self._records if record in retained_records]
+                    self._save_retrieval()
+                valid_records = retained_records
             # A missing payload outside of this process must not remain a
             # Chroma candidate. Memory/FAISS backends intentionally no-op.
             strategy.sync_vector_store(valid_records)
@@ -160,6 +171,21 @@ class NamespaceCache:
         entry = CacheEntry(request.uuid, request.request_index, request.prompt, str(path), latent_step,
                            self._payload_bytes(path) + self._payload_bytes(path.with_suffix(".steps")), now,
                            created_at=now)
+        if strategy is not None:
+            # Method-specific strategies may materialize a manifest and
+            # signature sidecars after the latent has a stable namespace path.
+            strategy.bind_vector_store(self.vector_store)
+            prepare = getattr(strategy, "prepare_cache_entry", None)
+            if prepare is not None:
+                entry_metadata = prepare(request, path, latent_step)
+            else:
+                entry_metadata = None
+        else:
+            entry_metadata = None
+        entry.metadata = entry_metadata
+        entry.bytes = self._payload_bytes(path)
+        for suffix in (".steps", ".carnator_ets.json", ".manifest.json", ".sparse_attention"):
+            entry.bytes += self._payload_bytes(path.with_suffix(suffix))
         self._entries[request.uuid] = entry
         if strategy is not None:
             self._ensure_retrieval_index(strategy)
