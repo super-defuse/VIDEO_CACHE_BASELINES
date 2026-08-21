@@ -2,14 +2,15 @@ cache_root: artifacts/cache
 max_cache_bytes: 5368709120
 retrieval:
   nirvana_vid:
-    # NIRVANA performs whole-prompt CLIP retrieval. Thresholds are the local
-    # CacheSelector profile and must be recalibrated for a different backbone.
+    # NIRVANA and Chorus share whole-prompt CLIP/Chroma top-1 retrieval.
     backend: clip
     model_id: openai/clip-vit-large-patch14
     device: cuda:0
-    cache_selector_profile: configs/retrieval/nirvana_cache_selector_profile.json
+    vector_backend: chroma
+    min_similarity: 0.65
+    reuse_step: 10
   chai:
-    # CHAI uses one LongCLIP vector per spaCy-extracted object/scene entity.
+    # Reference CHAI uses one LongCLIP vector per spaCy NOUN token.
     backend: longclip
     longclip_checkpoint: models/longclip/longclip-L.pt
     longclip_module: model.longclip
@@ -17,8 +18,9 @@ retrieval:
     # CHAI specifies FAISS 1.13 for its entity vector database.
     vector_backend: faiss
     spacy_model: en_core_web_sm
-    # The paper does not publish this acceptance threshold.
-    min_entity_similarity: 0.55
+    # Names match chai/opensora/chai.py: search on read, deduplicate on write.
+    sim_thres_for_search: 0.90
+    sim_thres_for_add: 0.95
   chorus:
     # Chorus uses 768-d CLIP prompt embeddings and cosine top-1 retrieval.
     backend: clip

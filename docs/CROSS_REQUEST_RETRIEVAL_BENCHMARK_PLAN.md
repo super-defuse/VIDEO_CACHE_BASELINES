@@ -1,62 +1,55 @@
-# 跨请求检索对比方案
+# 跨请求检索基准计划
 
-在同一份 `datasets/vbench_cross_request_prompts.csv` 上对 NIRVANA-VID、CHAI、Chorus、Carnator
-进行 retrieval-only 对比。实验只比较跨请求检索，不执行命中后的 Wan 推理、不加载 latent、不生成视频。
+## 目标
 
-## 请求回放
+在同一份 `datasets/vbench_cross_request_prompts.csv` 上比较 NIRVANA-VID、CHAI、Chorus 和 Carnator 的检索命中率、检索耗时和 cache 规模。
+实验是 retrieval-only：不执行命中后的 Wan 推理、不加载 latent、不生成视频。
 
-694 条 prompt 以固定 seed `20260821` 全局打乱后，按该顺序逐条到达。四种方法均从空的独立 cache 开始；当前请求先查询历史记录，只有 miss 后才将它作为新的 source record 写入自己的 cache。四种方法不共享 cache、向量索引或召回结果。
+## 回放规则
 
-Carnator 的第二阶段需要真实 Early Signature。预先对数据集每条 prompt 运行原生 Wan 的 completed step-5 probe，生成按 UUID 对齐的 ETS JSONL；该 probe 不 decode 视频，也不运行后续 target 推理。
-回放时，Carnator 使用同 prompt、同 `seed + request_index` 的 ETS；缺失或 prompt/seed 不一致时直接失败，不使用 fixture。
+1. 使用固定 shuffle seed `20260821`，按 694 条 prompt 的到达顺序逐条回放。
+2. 四种方法使用独立的空 cache，不共享向量索引或召回结果。
+3. 当前请求先查询历史 source；只有 miss 才写入新的 source record。
+4. Carnator 需要预先生成覆盖全部 UUID 的 native step-5 ETS JSONL。
 
-## 记录内容
+## 指标
 
-### Hit Rate 变化
-
-每处理 50 条请求记录一次该组的 `hits` 和 `hit_rate`；最后一组记录剩余请求。输出一张包含四条线的
-对比图：横轴为已处理请求数，纵轴为该 50 条内的 Hit Rate。同时保存原始 CSV，字段为：
-
-```text
-method, group_start, end_request, requests_in_group, hits, hit_rate
-```
-
-### 相同 Prompt 的最终选择
-
-按输入 query 对齐输出一张 CSV。每行记录同一个 prompt 在四种方法下最终选中的历史 source prompt：
-
-```text
-request_index, uuid, prompt,
-<method>_hit, <method>_source_uuid, <method>_source_prompt, <method>_score
-```
-
-miss 的 source 字段为空。
-
-### 检索耗时
-
-每种方法统计：
-
-```text
-requests, hits, retrieval_total_s, retrieval_mean_ms
-```
-
-计时包含单条 query 的文本/实体编码、向量查询和方法决策；不包含 encoder 首次加载、source record
-编码/写入、ETS 离线采集以及任何模型推理时间。
-
-### Cache 峰值
-
-记录每种方法的 `peak_cache_records` 和 `final_cache_records`。由于本实验不保存真实 latent、trajectory
-或 attention tensor，逻辑 record 数是唯一可比的 cache 峰值；不将其解释为 GPU 或磁盘字节数。
+- `hit_rate = hits / requests`
+- `retrieval_mean_ms`：单条 query 的编码、向量查询和方法决策时间，不含模型首次加载。
+- `peak_cache_records`、`final_cache_records`：逻辑 source record 数，不代表 GPU 或磁盘字节数。
+- NIRVANA 和 Chorus 还应检查逐请求的 hit、source UUID 和 score 是否一致。
 
 ## 输出
 
-一个 run 目录包含：
+每次 retrieval-only 运行使用统一目录：
 
-- `arrival_order.csv`：固定打乱后的到达顺序。
-- `<method>/results.jsonl` 与 `<method>/summary.json`：逐请求结果及方法汇总。
-- `selection_comparison.csv`：四种方法对相同 prompt 的最终选择。
-- `hit_rate_by_group.csv` 与 `hit_rate_by_group.svg`：每 50 条的 Hit Rate 对比。
-- `manifest.json`：workload、seed、方法配置和输出路径。
+`artifacts/cross_request_retrieval/<run-id>/runs/<run-name>/`
 
-实现入口为 `scripts/run/cross_request_dataset.py`；Carnator ETS 的离线采集入口为
-`scripts/run/carnator_dataset_ets.py`。
+运行命令示例：
+
+```bash
+conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=.:external/Long-CLIP \
+  python scripts/run/cross_request_dataset.py \
+  --methods chai \
+  --run-id 20260821 \
+  --run-name chai-official-real
+```
+
+运行目录包含：
+
+- `arrival_order.csv`：固定到达顺序。
+- `<method>/results.jsonl`：逐请求检索结果。
+- `<method>/summary.json`：方法汇总。
+- `selection_comparison.csv`：同一 prompt 在各方法下的选择。
+- `hit_rate_by_group.csv`、`hit_rate_by_group.svg`：每 50 条请求的命中率。
+- `manifest.json`：workload、seed、方法和输出路径。
+
+同一日期目录下的其他内容按用途分区：`inputs/` 保存 workload/ETS 输入，`work/` 保存可删除的
+中间探针文件，`logs/` 保存运行日志；当前四方法汇总结果固定在
+`runs/benchmark/`，每个方法只保留一个 `<method>/results.jsonl`。
+
+## 入口
+
+- 数据集回放：`scripts/run/cross_request_dataset.py`
+- Carnator ETS 采集：`scripts/run/carnator_dataset_ets.py`
+- 协议测试：`tests/test_cross_request_retrieval.py`

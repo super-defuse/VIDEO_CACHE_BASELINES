@@ -1,0 +1,12 @@
+{
+  "method": "chai",
+  "requests": 694,
+  "hits": 587,
+  "hit_rate": 0.845821325648415,
+  "retrieval_total_s": 5.617256833964348,
+  "retrieval_mean_ms": 8.094030020121538,
+  "peak_cache_records": 101,
+  "final_cache_records": 101,
+  "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/chai/results.jsonl",
+  "carnator_artifact_ready_assumed": false
+}

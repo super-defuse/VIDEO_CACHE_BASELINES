@@ -1,0 +1,12 @@
+{
+  "method": "nirvana_vid",
+  "requests": 694,
+  "hits": 540,
+  "hit_rate": 0.7780979827089337,
+  "retrieval_total_s": 9.2422790680248,
+  "retrieval_mean_ms": 13.31740499715389,
+  "peak_cache_records": 154,
+  "final_cache_records": 154,
+  "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/nirvana_vid/results.jsonl",
+  "carnator_artifact_ready_assumed": false
+}

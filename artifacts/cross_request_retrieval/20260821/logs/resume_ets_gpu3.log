@@ -1,0 +1,64 @@
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Loading checkpoint shards:  67%|██████▋   | 2/3 [00:00<00:00, 17.11it/s]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 25.04it/s]
+
+[1/57] ETS color_58
+[2/57] ETS color_59
+[3/57] ETS color_60
+[4/57] ETS color_61
+[5/57] ETS color_62
+[6/57] ETS color_63
+[7/57] ETS color_64
+[8/57] ETS color_65
+[9/57] ETS color_66
+[10/57] ETS color_67
+[11/57] ETS color_68
+[12/57] ETS color_69
+[13/57] ETS color_70
+[14/57] ETS color_71
+[15/57] ETS color_72
+[16/57] ETS color_73
+[17/57] ETS color_74
+[18/57] ETS color_75
+[19/57] ETS color_76
+[20/57] ETS color_77
+[21/57] ETS color_78
+[22/57] ETS color_79
+[23/57] ETS color_80
+[24/57] ETS color_81
+[25/57] ETS color_82
+[26/57] ETS color_83
+[27/57] ETS color_84
+[28/57] ETS human_action_44
+[29/57] ETS human_action_45
+[30/57] ETS human_action_46
+[31/57] ETS human_action_47
+[32/57] ETS human_action_48
+[33/57] ETS human_action_49
+[34/57] ETS human_action_50
+[35/57] ETS human_action_51
+[36/57] ETS human_action_52
+[37/57] ETS human_action_53
+[38/57] ETS human_action_54
+[39/57] ETS human_action_55
+[40/57] ETS human_action_56
+[41/57] ETS human_action_57
+[42/57] ETS human_action_58
+[43/57] ETS human_action_59
+[44/57] ETS human_action_60
+[45/57] ETS human_action_61
+[46/57] ETS human_action_62
+[47/57] ETS human_action_63
+[48/57] ETS human_action_64
+[49/57] ETS human_action_65
+[50/57] ETS human_action_66
+[51/57] ETS human_action_67
+[52/57] ETS human_action_68
+[53/57] ETS human_action_69
+[54/57] ETS human_action_70
+[55/57] ETS human_action_71
+[56/57] ETS human_action_72
+[57/57] ETS human_action_73
+{"mode": "native-wan-step5-prompt-ets", "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/resume_workloads/gpu3.csv", "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_resume_shards/ets_gpu3.jsonl", "run_id": "cross-request-ets-resume-gpu3", "requested_rows": 57, "completed": 57, "skipped_existing": 0, "mask_probe_step": 5, "steps_per_prompt": 5, "source_positive": "all_prompt_tokens", "kept_probe_artifacts": false}
+

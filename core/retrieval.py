@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import importlib
-import json
 import math
 import re
 from dataclasses import dataclass
@@ -27,96 +26,6 @@ class VectorRecord:
     # contain the first three fields and remain valid after this extension.
     metadata: dict[str, Any] | None = None
     source_request_index: int | None = None
-
-
-@dataclass(frozen=True)
-class CacheSelectorObservation:
-    """A measured quality result for one NIRVANA restart step."""
-
-    similarity: float
-    reuse_step: int
-    quality: float
-
-
-@dataclass(frozen=True)
-class CacheSelectorProfile:
-    """Offline NIRVANA similarity-to-restart-step profile.
-
-    The profile contains measured quality observations condensed into the
-    minimum similarity accepted for each cached restart step.  It does not
-    select model parameters or change them at runtime.
-    """
-
-    thresholds: dict[int, float]
-    quality_metric: str = "CLIPScore"
-    quality_threshold: float = 0.90
-    source: str = "offline_observations"
-
-    def __post_init__(self) -> None:
-        if not self.thresholds:
-            raise ValueError("CacheSelector profile needs at least one restart step")
-        for step, score in self.thresholds.items():
-            if int(step) <= 0 or not -1.0 <= float(score) <= 1.0:
-                raise ValueError(f"invalid CacheSelector threshold: step={step}, similarity={score}")
-
-    @classmethod
-    def from_observations(
-        cls,
-        observations: Iterable[CacheSelectorObservation],
-        *,
-        quality_threshold: float = 0.90,
-        quality_metric: str = "CLIPScore",
-    ) -> "CacheSelectorProfile":
-        """Derive the first safe similarity threshold for every measured step.
-
-        For a candidate threshold, every observed reuse at or above that
-        similarity must meet the requested quality.  This is the offline
-        CacheSelector construction described by NIRVANA; it intentionally
-        does not tune a threshold against a workload hit-rate objective.
-        """
-
-        grouped: dict[int, list[CacheSelectorObservation]] = {}
-        for observation in observations:
-            grouped.setdefault(int(observation.reuse_step), []).append(observation)
-        thresholds: dict[int, float] = {}
-        for step, samples in grouped.items():
-            for candidate in sorted({float(sample.similarity) for sample in samples}):
-                selected = [sample for sample in samples if sample.similarity >= candidate]
-                if selected and all(sample.quality >= quality_threshold for sample in selected):
-                    thresholds[step] = candidate
-                    break
-        if not thresholds:
-            raise ValueError("no restart step satisfies the requested CacheSelector quality threshold")
-        return cls(dict(sorted(thresholds.items())), quality_metric, quality_threshold)
-
-    @classmethod
-    def load(cls, path: str | Path) -> "CacheSelectorProfile":
-        payload = json.loads(Path(path).read_text(encoding="utf-8"))
-        raw_steps = payload.get("steps", payload.get("thresholds", []))
-        if isinstance(raw_steps, dict):
-            thresholds = {int(step): float(score) for step, score in raw_steps.items()}
-        else:
-            thresholds = {
-                int(item["step"]): float(item["min_similarity"])
-                for item in raw_steps
-            }
-        return cls(
-            dict(sorted(thresholds.items())),
-            str(payload.get("quality_metric", "CLIPScore")),
-            float(payload.get("quality_threshold", 0.90)),
-            str(payload.get("source", "offline_observations")),
-        )
-
-    def to_payload(self) -> dict[str, Any]:
-        return {
-            "quality_metric": self.quality_metric,
-            "quality_threshold": self.quality_threshold,
-            "source": self.source,
-            "steps": [
-                {"step": step, "min_similarity": score}
-                for step, score in sorted(self.thresholds.items())
-            ],
-        }
 
 
 class EntryLike(Protocol):
@@ -271,13 +180,12 @@ class SpacyEntityExtractor:
     def extract(self, prompt: str) -> list[str]:
         self._load()
         assert self._nlp is not None
-        doc = self._nlp(prompt)
-        entities: list[str] = []
-        for chunk in doc.noun_chunks:
-            if chunk.root.pos_ in {"NOUN", "PROPN"}:
-                entities.append(_normalize_term(chunk.text))
-        entities.extend(_normalize_term(token.text) for token in doc if token.pos_ in {"NOUN", "PROPN"})
-        return _unique_nonempty(entities)
+        # CHAI's reference implementation ignores the optional suffix used by
+        # VidProM prompts and indexes only spaCy tokens tagged as NOUN. It
+        # does not expand noun chunks or include PROPN tokens.
+        cleaned_prompt = prompt.split("aesthetic score", 1)[0]
+        doc = self._nlp(cleaned_prompt)
+        return [token.text for token in doc if token.pos_ == "NOUN"]
 
 
 class LexicalTestEntityExtractor:
@@ -336,6 +244,16 @@ class RetrievalStrategy:
         vectors = self.embedder.encode(terms)
         return [VectorRecord(entry.uuid, term, vector) for term, vector in zip(terms, vectors, strict=True)]
 
+    def records_for_add(
+        self,
+        entry: EntryLike,
+        existing_records: Iterable[VectorRecord],
+    ) -> list[VectorRecord]:
+        """Return the records accepted by the method's cache-write policy."""
+
+        del existing_records
+        return self.records_for(entry)
+
     def search(self, request: Request, records: Iterable[VectorRecord]) -> CacheMatch:
         query_terms = self.query_terms(request)
         if not query_terms:
@@ -372,37 +290,6 @@ class RetrievalStrategy:
         )
 
 
-class NirvanaRetriever(RetrievalStrategy):
-    kind = "nirvana_prompt"
-    eviction_policy = "lcbfu"
-
-    def __init__(
-        self,
-        embedder: TextEmbedder,
-        thresholds: dict[int, float],
-    ) -> None:
-        if not thresholds:
-            raise ValueError("NIRVANA retrieval needs at least one similarity-to-step threshold")
-        self.thresholds = dict(sorted((int(step), float(score)) for step, score in thresholds.items()))
-        super().__init__(embedder, min(self.thresholds.values()))
-
-    @property
-    def signature(self) -> str:
-        schedule = ",".join(f"{step}:{score:.8f}" for step, score in self.thresholds.items())
-        return f"{self.kind}|{self.embedder.signature}|steps={schedule}"
-
-    def search(self, request: Request, records: Iterable[VectorRecord]) -> CacheMatch:
-        match = super().search(request, records)
-        if not match.hit or match.score is None:
-            return match
-        eligible = [step for step, threshold in self.thresholds.items() if match.score >= threshold]
-        if not eligible:
-            return CacheMatch()
-        match.metadata["reuse_step"] = max(eligible)
-        match.metadata["selection"] = "largest-profiled-step-at-score"
-        return match
-
-
 class ChaiRetriever(RetrievalStrategy):
     kind = "chai_entity"
 
@@ -412,10 +299,14 @@ class ChaiRetriever(RetrievalStrategy):
         extractor: EntityExtractor,
         threshold: float,
         *,
+        add_threshold: float = 0.95,
         vector_backend: str = "memory",
     ) -> None:
         super().__init__(embedder, threshold, vector_backend=vector_backend)
+        if not -1.0 <= float(add_threshold) <= 1.0:
+            raise ValueError("CHAI add threshold must be between -1 and 1")
         self.extractor = extractor
+        self.add_threshold = float(add_threshold)
         self._faiss_index: Any | None = None
         self._faiss_record_ids: tuple[str, ...] = ()
 
@@ -423,7 +314,8 @@ class ChaiRetriever(RetrievalStrategy):
     def signature(self) -> str:
         return (
             f"{self.kind}|{self.embedder.signature}|{self.extractor.signature}"
-            f"|threshold={self.threshold:.8f}|vector_backend={self.vector_backend}"
+            f"|threshold={self.threshold:.8f}|add_threshold={self.add_threshold:.8f}"
+            f"|vector_backend={self.vector_backend}"
         )
 
     def index_terms(self, prompt: str) -> list[str]:
@@ -431,6 +323,28 @@ class ChaiRetriever(RetrievalStrategy):
 
     def query_terms(self, request: Request) -> list[str]:
         return self.extractor.extract(request.cache_prompt or request.prompt)
+
+    def records_for_add(
+        self,
+        entry: EntryLike,
+        existing_records: Iterable[VectorRecord],
+    ) -> list[VectorRecord]:
+        """Apply CHAI's similarity gate before adding a prompt's entity group.
+
+        The reference implementation searches the index built before this
+        batch and adds all nouns whose nearest existing entity is below
+        ``sim_thres_for_add``. Delaying the append until every noun has been
+        scored preserves that batch behavior for repeated nouns in one prompt.
+        """
+
+        candidates = list(existing_records)
+        records = self.records_for(entry)
+        accepted: list[VectorRecord] = []
+        for record in records:
+            nearest = self._top1([record.term], [record.vector], candidates)
+            if nearest is None or nearest[0] < self.add_threshold:
+                accepted.append(record)
+        return accepted
 
     def sync_vector_store(self, records: Iterable[VectorRecord]) -> None:
         if self.vector_backend != "faiss":
@@ -458,32 +372,37 @@ class ChaiRetriever(RetrievalStrategy):
         return _faiss_index_top1(self._faiss_index, query_terms, query_vectors, records)
 
 
-class ChorusRetriever(RetrievalStrategy):
-    kind = "chorus_prompt"
+class PromptRetriever(RetrievalStrategy):
+    """Shared whole-prompt CLIP/Chroma retrieval for NIRVANA and Chorus."""
+
+    kind = "prompt"
 
     def __init__(
         self,
         embedder: TextEmbedder,
         threshold: float,
-        schedule: dict[str, int],
         *,
-        vector_backend: str = "memory",
+        result_kind: str,
+        reuse_step: int | None = None,
+        schedule: dict[str, int] | None = None,
+        vector_backend: str = "chroma",
     ) -> None:
         super().__init__(embedder, threshold, vector_backend=vector_backend)
-        self.schedule = {key: int(value) for key, value in schedule.items()}
+        self.result_kind = result_kind
+        self.reuse_step = int(reuse_step) if reuse_step is not None else None
+        self.schedule = {key: int(value) for key, value in (schedule or {}).items()}
         self._chroma_client: Any | None = None
         self._chroma_collection: Any | None = None
-        required = {"min_k1", "min_k2", "max_k1", "max_k2"}
-        if required - self.schedule.keys():
-            raise ValueError(f"Chorus stage scheduler needs {sorted(required)}")
+        if self.reuse_step is None:
+            required = {"min_k1", "min_k2", "max_k1", "max_k2"}
+            if required - self.schedule.keys():
+                raise ValueError(f"prompt stage scheduler needs {sorted(required)}")
+        elif self.reuse_step <= 0:
+            raise ValueError("prompt reuse_step must be positive")
 
     @property
     def signature(self) -> str:
-        values = ",".join(f"{key}:{value}" for key, value in sorted(self.schedule.items()))
-        return (
-            f"{self.kind}|{self.embedder.signature}|threshold={self.threshold:.8f}|{values}"
-            f"|vector_backend={self.vector_backend}"
-        )
+        return f"{self.kind}|{self.embedder.signature}|threshold={self.threshold:.8f}|vector_backend={self.vector_backend}"
 
     def bind_vector_store(self, root: Path) -> None:
         if self._vector_store_root == root:
@@ -523,24 +442,34 @@ class ChorusRetriever(RetrievalStrategy):
         if not records:
             return None
         by_id = {_record_id(index, record): record for index, record in enumerate(records)}
+        record_order = {record.uuid: index for index, record in enumerate(records)}
         result = self._get_chroma_collection().query(
             query_embeddings=query_vectors,
-            n_results=1,
-            include=["distances", "metadatas"],
+            n_results=len(records),
+            include=["distances"],
         )
         best: tuple[float, VectorRecord, str] | None = None
         result_ids = result.get("ids", [])
         result_distances = result.get("distances", [])
-        for query_term, ids, distances in zip(query_terms, result_ids, result_distances, strict=True):
-            if not ids:
-                continue
-            record = by_id.get(ids[0])
-            if record is None:
-                continue
-            # ChromaDB's cosine HNSW distance is 1 - cosine similarity.
-            score = 1.0 - float(distances[0])
-            if best is None or score > best[0]:
-                best = (score, record, query_term)
+        for query_term, query_vector, ids, _distances in zip(
+            query_terms, query_vectors, result_ids, result_distances, strict=True
+        ):
+            # Chroma's HNSW result order is approximate. Rerank the complete
+            # synchronized candidate set with the shared exact cosine rule so
+            # NIRVANA and Chorus cannot diverge before their reuse policies run.
+            if len(ids) != len(by_id):
+                return _memory_top1(query_terms, query_vectors, records)
+            for record_id in ids:
+                record = by_id.get(record_id)
+                if record is None:
+                    return _memory_top1(query_terms, query_vectors, records)
+                score = _cosine(query_vector, record.vector)
+                candidate = (score, record, query_term)
+                if best is None or candidate[0] > best[0] or (
+                    candidate[0] == best[0]
+                    and record_order[record.uuid] < record_order[best[1].uuid]
+                ):
+                    best = candidate
         return best
 
     def _get_chroma_collection(self):
@@ -558,7 +487,7 @@ class ChorusRetriever(RetrievalStrategy):
         path.mkdir(parents=True, exist_ok=True)
         self._chroma_client = chromadb.PersistentClient(path=str(path))
         self._chroma_collection = self._chroma_client.get_or_create_collection(
-            name="chorus_prompt_embeddings",
+            name="prompt_embeddings",
             metadata={"hnsw:space": "cosine"},
         )
         return self._chroma_collection
@@ -567,31 +496,36 @@ class ChorusRetriever(RetrievalStrategy):
         match = super().search(request, records)
         if not match.hit or match.score is None:
             return match
-        ratio = min(1.0, max(0.0, (match.score - self.threshold) / (1.0 - self.threshold)))
-        k1 = _interpolate(self.schedule["min_k1"], self.schedule["max_k1"], ratio)
-        k2 = _interpolate(self.schedule["min_k2"], self.schedule["max_k2"], ratio)
-        match.metadata["stage_boundaries"] = {"k1": k1, "k2": k2}
-        match.metadata["stage_scheduler"] = "linear_similarity_approximation"
+        match.metadata["retriever"] = self.result_kind
+        if self.reuse_step is not None:
+            match.metadata["reuse_step"] = self.reuse_step
+            match.metadata["selection"] = "fixed_reuse_step"
+        else:
+            ratio = min(1.0, max(0.0, (match.score - self.threshold) / (1.0 - self.threshold)))
+            k1 = _interpolate(self.schedule["min_k1"], self.schedule["max_k1"], ratio)
+            k2 = _interpolate(self.schedule["min_k2"], self.schedule["max_k2"], ratio)
+            match.metadata["stage_boundaries"] = {"k1": k1, "k2": k2}
+            match.metadata["stage_scheduler"] = "linear_similarity_approximation"
         return match
 
 
-def make_nirvana_retriever(config: dict[str, Any], *, dry_run: bool) -> NirvanaRetriever:
+def make_nirvana_retriever(config: dict[str, Any], *, dry_run: bool) -> PromptRetriever:
     embedder = _make_embedder(config, dry_run=dry_run)
-    profile_path = config.get("cache_selector_profile")
-    if profile_path:
-        thresholds = CacheSelectorProfile.load(str(profile_path)).thresholds
-    else:
-        thresholds = {
-            int(item["step"]): float(item["min_similarity"])
-            for item in config.get("similarity_to_step", [])
-        }
-    if not thresholds:
-        thresholds = {5: 0.20, 10: 0.35, 15: 0.50, 20: 0.65, 25: 0.80}
-    return NirvanaRetriever(embedder, thresholds)
+    return PromptRetriever(
+        embedder,
+        float(config.get("min_similarity", 0.65 if not dry_run else 0.20)),
+        result_kind="nirvana_prompt",
+        reuse_step=int(config.get("reuse_step", 10)),
+        vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
+    )
 
 
 def make_chai_retriever(config: dict[str, Any], *, dry_run: bool) -> ChaiRetriever:
-    threshold = float(config.get("min_entity_similarity", 0.55 if not dry_run else 0.20))
+    threshold = float(config.get(
+        "sim_thres_for_search",
+        config.get("min_entity_similarity", 0.90 if not dry_run else 0.20),
+    ))
+    add_threshold = float(config.get("sim_thres_for_add", 0.95))
     if dry_run:
         extractor: EntityExtractor = LexicalTestEntityExtractor()
     else:
@@ -600,19 +534,21 @@ def make_chai_retriever(config: dict[str, Any], *, dry_run: bool) -> ChaiRetriev
         _make_embedder(config, dry_run=dry_run),
         extractor,
         threshold,
+        add_threshold=add_threshold,
         vector_backend=_vector_backend(config, dry_run=dry_run, default="faiss"),
     )
 
 
-def make_chorus_retriever(config: dict[str, Any], *, dry_run: bool) -> ChorusRetriever:
+def make_chorus_retriever(config: dict[str, Any], *, dry_run: bool) -> PromptRetriever:
     threshold = float(config.get("min_similarity", 0.65 if not dry_run else 0.20))
     schedule = config.get("stage_scheduler", {
         "min_k1": 10, "min_k2": 40, "max_k1": 30, "max_k2": 45,
     })
-    return ChorusRetriever(
+    return PromptRetriever(
         _make_embedder(config, dry_run=dry_run),
         threshold,
-        schedule,
+        result_kind="chorus_prompt",
+        schedule=schedule,
         vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
     )
 

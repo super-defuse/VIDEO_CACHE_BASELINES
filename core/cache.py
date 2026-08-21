@@ -80,7 +80,7 @@ class NamespaceCache:
             self._records = []
             for entry in self._entries.values():
                 if Path(entry.latent_path).is_file():
-                    self._records.extend(strategy.records_for(entry))
+                    self._records.extend(strategy.records_for_add(entry, self._records))
             self._retrieval_signature = strategy.signature
             self._save_retrieval()
         strategy.sync_vector_store(self._records)
@@ -190,7 +190,7 @@ class NamespaceCache:
         if strategy is not None:
             self._ensure_retrieval_index(strategy)
             self._records = [record for record in self._records if record.uuid != entry.uuid]
-            self._records.extend(strategy.records_for(entry))
+            self._records.extend(strategy.records_for_add(entry, self._records))
         while self.bytes_used > self.max_bytes and self._entries:
             victim = self._eviction_victim(eviction_policy)
             self._remove_payload(Path(victim.latent_path))

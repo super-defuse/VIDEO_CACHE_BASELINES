@@ -204,6 +204,30 @@ def test_dataset_replay_uses_native_ets_and_writes_comparison_outputs(tmp_path):
     assert (output_dir / "hit_rate_by_group.svg").is_file()
 
 
+def test_dataset_replay_can_resolve_organized_run_layout(tmp_path):
+    workload = tmp_path / "workload.csv"
+    workload.write_text(
+        "request_index,uuid,prompt\n"
+        "0,first,a train\n"
+        "1,second,a train\n",
+        encoding="utf-8",
+    )
+    assert cross_request_dataset.main([
+        "--workload", str(workload),
+        "--methods", "chai",
+        "--artifact-root", str(tmp_path / "artifacts"),
+        "--run-id", "test-run",
+        "--run-name", "chai",
+        "--shuffle-seed", "0",
+        "--dry-run",
+    ]) == 0
+    output_dir = tmp_path / "artifacts" / "test-run" / "runs" / "chai"
+    manifest = json.loads((output_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["artifact_layout"] == "cross-request-retrieval/v1"
+    assert manifest["run_id"] == "test-run"
+    assert manifest["run_name"] == "chai"
+
+
 def test_native_dataset_ets_collector_forces_a_step_five_source_probe(tmp_path):
     args = carnator_dataset_ets.build_parser().parse_args(["--output", str(tmp_path / "ets.jsonl")])
 

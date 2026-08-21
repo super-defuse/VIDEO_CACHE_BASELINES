@@ -1,0 +1,48 @@
+{
+  "existing_records": 355,
+  "missing_records": 339,
+  "partitions": [
+    {
+      "gpu": 2,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu2.csv",
+      "records": 57,
+      "first_request_index": 46,
+      "last_request_index": 146
+    },
+    {
+      "gpu": 3,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu3.csv",
+      "records": 57,
+      "first_request_index": 147,
+      "last_request_index": 247
+    },
+    {
+      "gpu": 4,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu4.csv",
+      "records": 57,
+      "first_request_index": 248,
+      "last_request_index": 392
+    },
+    {
+      "gpu": 5,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu5.csv",
+      "records": 56,
+      "first_request_index": 393,
+      "last_request_index": 493
+    },
+    {
+      "gpu": 6,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu6.csv",
+      "records": 56,
+      "first_request_index": 494,
+      "last_request_index": 593
+    },
+    {
+      "gpu": 7,
+      "workload": "artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu7.csv",
+      "records": 56,
+      "first_request_index": 594,
+      "last_request_index": 693
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "mode": "native-wan-step5-prompt-ets",
+  "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads/gpu4.csv",
+  "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/resume-shards/ets_gpu4.jsonl",
+  "run_id": "cross-request-ets-resume-gpu4",
+  "requested_rows": 57,
+  "completed": 57,
+  "skipped_existing": 0,
+  "mask_probe_step": 5,
+  "steps_per_prompt": 5,
+  "source_positive": "all_prompt_tokens",
+  "kept_probe_artifacts": false
+}

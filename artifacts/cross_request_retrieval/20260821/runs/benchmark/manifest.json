@@ -1,0 +1,68 @@
+{
+  "mode": "dataset-retrieval-only",
+  "artifact_layout": "cross-request-retrieval/v1",
+  "run_id": "20260821",
+  "run_name": "benchmark",
+  "output_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark",
+  "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/datasets/vbench_cross_request_prompts.csv",
+  "requests": 694,
+  "seed": 20260218,
+  "shuffle_seed": 20260821,
+  "dry_run": false,
+  "native_ets_jsonl": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/carnator_native_ets.jsonl",
+  "arrival_order": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/arrival_order.csv",
+  "selection_comparison": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/selection_comparison.csv",
+  "hit_rate_by_group": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/hit_rate_by_group.csv",
+  "hit_rate_chart": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/hit_rate_by_group.svg",
+  "group_size": 50,
+  "methods": {
+    "nirvana_vid": {
+      "method": "nirvana_vid",
+      "requests": 694,
+      "hits": 540,
+      "hit_rate": 0.7780979827089337,
+      "retrieval_total_s": 9.2422790680248,
+      "retrieval_mean_ms": 13.31740499715389,
+      "peak_cache_records": 154,
+      "final_cache_records": 154,
+      "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/nirvana_vid/results.jsonl",
+      "carnator_artifact_ready_assumed": false
+    },
+    "chai": {
+      "method": "chai",
+      "requests": 694,
+      "hits": 587,
+      "hit_rate": 0.845821325648415,
+      "retrieval_total_s": 5.617256833964348,
+      "retrieval_mean_ms": 8.094030020121538,
+      "peak_cache_records": 101,
+      "final_cache_records": 101,
+      "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/chai/results.jsonl",
+      "carnator_artifact_ready_assumed": false
+    },
+    "chorus": {
+      "method": "chorus",
+      "requests": 694,
+      "hits": 540,
+      "hit_rate": 0.7780979827089337,
+      "retrieval_total_s": 8.95414511803392,
+      "retrieval_mean_ms": 12.902226394861557,
+      "peak_cache_records": 154,
+      "final_cache_records": 154,
+      "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/chorus/results.jsonl",
+      "carnator_artifact_ready_assumed": false
+    },
+    "carnator": {
+      "method": "carnator",
+      "requests": 694,
+      "hits": 208,
+      "hit_rate": 0.29971181556195964,
+      "retrieval_total_s": 21.827725217979605,
+      "retrieval_mean_ms": 31.45205362821269,
+      "peak_cache_records": 486,
+      "final_cache_records": 486,
+      "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark/carnator/results.jsonl",
+      "carnator_artifact_ready_assumed": true
+    }
+  }
+}

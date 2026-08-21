@@ -1,0 +1,87 @@
+{
+  "layout": "cross-request-retrieval/v1",
+  "run_id": "20260821",
+  "dry_run": false,
+  "moves": [
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/benchmark",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/legacy-benchmark",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/chai_official_real_retrieval_only",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/chai-official-real",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/chai_official_retrieval_only",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/chai-lexical-dry-run",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/carnator_native_ets.jsonl",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/carnator_native_ets.jsonl",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_preflight.jsonl",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/preflight/ets_preflight.jsonl",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_preflight.jsonl.manifest.json",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/preflight/ets_preflight.jsonl.manifest.json",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_shards",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/shards",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_resume_shards",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/resume-shards",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/resume_workloads",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/resume-workloads",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/resume_plan.json",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/resume-plan.json",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_artifacts",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/work/ets-probes",
+      "status": "missing"
+    },
+    {
+      "source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/logs",
+      "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/logs",
+      "status": "already-organized"
+    }
+  ],
+  "reference_updates": {
+    "artifacts/cross_request_retrieval/20260821/benchmark": 12,
+    "artifacts/cross_request_retrieval/20260821/chai_official_real_retrieval_only": 0,
+    "artifacts/cross_request_retrieval/20260821/chai_official_retrieval_only": 6,
+    "artifacts/cross_request_retrieval/20260821/carnator_native_ets.jsonl": 1,
+    "artifacts/cross_request_retrieval/20260821/ets_preflight.jsonl": 1,
+    "artifacts/cross_request_retrieval/20260821/ets_resume_shards": 6,
+    "artifacts/cross_request_retrieval/20260821/ets_shards": 0,
+    "artifacts/cross_request_retrieval/20260821/resume_workloads": 12
+  },
+  "collapse": {
+    "status": "assembled",
+    "destination": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/runs/benchmark",
+    "methods": [
+      "nirvana_vid",
+      "chai",
+      "chorus",
+      "carnator"
+    ]
+  }
+}

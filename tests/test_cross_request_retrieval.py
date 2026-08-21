@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import importlib.util
-import json
 import sys
 from pathlib import Path
 
@@ -12,12 +11,11 @@ sys.path.insert(0, str(ROOT))
 from adapters import make_adapter
 from core.cache import NamespaceCache
 from core.retrieval import (
-    CacheSelectorObservation,
-    CacheSelectorProfile,
     ChaiRetriever,
-    ChorusRetriever,
     LexicalTestEmbedder,
     LexicalTestEntityExtractor,
+    PromptRetriever,
+    SpacyEntityExtractor,
 )
 from core import CacheMatch, Request, Runner
 from core.registry import make_method
@@ -36,13 +34,8 @@ def _config() -> dict:
         "retrieval": {
             "nirvana_vid": {
                 "backend": "test_lexical",
-                "similarity_to_step": [
-                    {"step": 5, "min_similarity": 0.10},
-                    {"step": 10, "min_similarity": 0.20},
-                    {"step": 15, "min_similarity": 0.30},
-                    {"step": 20, "min_similarity": 0.40},
-                    {"step": 25, "min_similarity": 0.50},
-                ],
+                "min_similarity": 0.20,
+                "reuse_step": 10,
             },
             "chai": {"backend": "test_lexical", "min_entity_similarity": 0.20},
             "chorus": {
@@ -70,13 +63,13 @@ def _run_workload(tmp_path: Path, method_name: str):
     return runner, [runner.process(request) for request in _requests()]
 
 
-def test_nirvana_selects_the_profiled_restart_latent():
+def test_nirvana_selects_the_fixed_restart_latent():
     method = make_method("nirvana_vid", _config())
     selected = method.select_cached_latent(
-        {5: b"step-5", 15: b"step-15"},
-        CacheMatch(hit=True, metadata={"reuse_step": 15}),
+        {10: b"step-10"},
+        CacheMatch(hit=True, metadata={"reuse_step": 10}),
     )
-    assert selected == b"step-15"
+    assert selected == b"step-10"
 
 
 def test_vbench_workload_retrieval_reaches_fast_generation_for_all_methods(tmp_path):
@@ -130,6 +123,63 @@ def test_chai_uses_faiss_inner_product_index_when_installed(tmp_path):
     assert match.source_uuid == source.uuid
 
 
+def test_chai_spacy_extractor_matches_reference_token_filter():
+    class Token:
+        def __init__(self, text: str, pos: str) -> None:
+            self.text = text
+            self.pos_ = pos
+
+    class FakeNlp:
+        def __init__(self) -> None:
+            self.seen_prompt = None
+
+        def __call__(self, prompt: str):
+            self.seen_prompt = prompt
+            return [
+                Token("Shanghai", "PROPN"),
+                Token("bund", "NOUN"),
+                Token("steady", "ADJ"),
+                Token("perspective", "NOUN"),
+            ]
+
+    extractor = SpacyEntityExtractor("fake")
+    nlp = FakeNlp()
+    extractor._nlp = nlp
+    assert extractor.extract("Shanghai bund aesthetic score 0.9") == ["bund", "perspective"]
+    assert nlp.seen_prompt == "Shanghai bund "
+
+
+def test_chai_write_threshold_deduplicates_entity_batch():
+    class Embedder:
+        @property
+        def signature(self) -> str:
+            return "fixed"
+
+        def encode(self, texts: list[str]) -> list[list[float]]:
+            vectors = {
+                "red": [1.0, 0.0],
+                "blue": [0.0, 1.0],
+                "green": [-1.0, 0.0],
+            }
+            return [vectors[text] for text in texts]
+
+    class Extractor:
+        @property
+        def signature(self) -> str:
+            return "fixed-entities"
+
+        def extract(self, prompt: str) -> list[str]:
+            return prompt.split()
+
+    strategy = ChaiRetriever(Embedder(), Extractor(), 0.90, add_threshold=0.95)
+    source = Request(0, "source", "red blue", 1)
+    target = Request(1, "target", "red green", 1)
+    source_records = strategy.records_for_add(source, [])
+    target_records = strategy.records_for_add(target, source_records)
+    assert [record.term for record in source_records] == ["red", "blue"]
+    assert [record.term for record in target_records] == ["green"]
+
+
 def test_chorus_uses_persistent_chromadb_index_when_installed(tmp_path):
     if importlib.util.find_spec("chromadb") is None:
         return
@@ -141,30 +191,17 @@ def test_chorus_uses_persistent_chromadb_index_when_installed(tmp_path):
         b"latent",
         5,
         _save_bytes,
-        strategy=ChorusRetriever(LexicalTestEmbedder(), 0.10, schedule, vector_backend="chroma"),
+        strategy=PromptRetriever(
+            LexicalTestEmbedder(), 0.10, result_kind="chorus_prompt", schedule=schedule, vector_backend="chroma"
+        ),
     )
     restarted = NamespaceCache(tmp_path, "chorus-chroma")
     match = restarted.find(
         Request(1, "target", "a red train", 1),
-        ChorusRetriever(LexicalTestEmbedder(), 0.10, schedule, vector_backend="chroma"),
+        PromptRetriever(
+            LexicalTestEmbedder(), 0.10, result_kind="chorus_prompt", schedule=schedule, vector_backend="chroma"
+        ),
     )
     assert match.hit
     assert match.source_uuid == source.uuid
     assert (restarted.vector_store / "chromadb").is_dir()
-
-
-def test_nirvana_cache_selector_profile_uses_quality_safe_thresholds(tmp_path):
-    profile = CacheSelectorProfile.from_observations(
-        [
-            CacheSelectorObservation(0.20, 5, 0.95),
-            CacheSelectorObservation(0.40, 5, 0.92),
-            CacheSelectorObservation(0.20, 10, 0.83),
-            CacheSelectorObservation(0.40, 10, 0.91),
-            CacheSelectorObservation(0.60, 10, 0.94),
-        ],
-        quality_threshold=0.90,
-    )
-    assert profile.thresholds == {5: 0.20, 10: 0.40}
-    path = tmp_path / "profile.json"
-    path.write_text(json.dumps(profile.to_payload()), encoding="utf-8")
-    assert CacheSelectorProfile.load(path).thresholds == profile.thresholds

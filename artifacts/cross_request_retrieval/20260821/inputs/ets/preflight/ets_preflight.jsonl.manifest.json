@@ -1,0 +1,13 @@
+{
+  "mode": "native-wan-step5-prompt-ets",
+  "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/datasets/vbench_cross_request_prompts.csv",
+  "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/inputs/ets/preflight/ets_preflight.jsonl",
+  "run_id": "cross-request-ets-preflight-gpu0",
+  "requested_rows": 1,
+  "completed": 1,
+  "skipped_existing": 0,
+  "mask_probe_step": 5,
+  "steps_per_prompt": 5,
+  "source_positive": "all_prompt_tokens",
+  "kept_probe_artifacts": false
+}

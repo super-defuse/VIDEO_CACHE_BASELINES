@@ -29,11 +29,6 @@ def _resolve_paths(config: dict) -> dict:
     checkpoint = chai_retrieval.get("longclip_checkpoint")
     if checkpoint and not Path(checkpoint).is_absolute():
         chai_retrieval["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
-    nirvana_retrieval = config.get("retrieval", {}).get("nirvana_vid", {})
-    for key in ("cache_selector_profile",):
-        value = nirvana_retrieval.get(key)
-        if value and not Path(value).is_absolute():
-            nirvana_retrieval[key] = str((ROOT / value).resolve())
     carnator_retrieval = config.get("retrieval", {}).get("carnator", {})
     for key in ("noun_annotations", "threshold_config"):
         value = carnator_retrieval.get(key)

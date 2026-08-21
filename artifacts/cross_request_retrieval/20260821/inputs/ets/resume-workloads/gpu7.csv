@@ -1,0 +1,57 @@
+request_index,uuid,prompt,dimension
+594,temporal_style_1,"A beautiful coastal beach in spring, waves lapping on sand, in super slow motion",temporal_style
+595,temporal_style_2,"A beautiful coastal beach in spring, waves lapping on sand, zoom in",temporal_style
+596,temporal_style_3,"A beautiful coastal beach in spring, waves lapping on sand, zoom out",temporal_style
+597,temporal_style_4,"A beautiful coastal beach in spring, waves lapping on sand, pan left",temporal_style
+598,temporal_style_5,"A beautiful coastal beach in spring, waves lapping on sand, pan right",temporal_style
+599,temporal_style_6,"A beautiful coastal beach in spring, waves lapping on sand, tilt up",temporal_style
+600,temporal_style_7,"A beautiful coastal beach in spring, waves lapping on sand, tilt down",temporal_style
+601,temporal_style_8,"A beautiful coastal beach in spring, waves lapping on sand, with an intense shaking effect",temporal_style
+602,temporal_style_9,"A beautiful coastal beach in spring, waves lapping on sand, featuring a steady and smooth perspective",temporal_style
+603,temporal_style_10,"A beautiful coastal beach in spring, waves lapping on sand, racking focus",temporal_style
+604,temporal_style_11,"The bund Shanghai, in super slow motion",temporal_style
+605,temporal_style_12,"The bund Shanghai, zoom in",temporal_style
+606,temporal_style_13,"The bund Shanghai, zoom out",temporal_style
+607,temporal_style_14,"The bund Shanghai, pan left",temporal_style
+652,temporal_style_59,"Gwen Stacy reading a book, featuring a steady and smooth perspective",temporal_style
+653,temporal_style_60,"Gwen Stacy reading a book, racking focus",temporal_style
+654,temporal_style_61,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, in super slow motion",temporal_style
+655,temporal_style_62,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, zoom in",temporal_style
+656,temporal_style_63,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, zoom out",temporal_style
+657,temporal_style_64,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, pan left",temporal_style
+658,temporal_style_65,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, pan right",temporal_style
+659,temporal_style_66,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, tilt up",temporal_style
+660,temporal_style_67,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, tilt down",temporal_style
+661,temporal_style_68,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, with an intense shaking effect",temporal_style
+662,temporal_style_69,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, featuring a steady and smooth perspective",temporal_style
+663,temporal_style_70,"A boat sailing leisurely along the Seine River with the Eiffel Tower in background, racking focus",temporal_style
+664,temporal_style_71,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, in super slow motion",temporal_style
+665,temporal_style_72,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, zoom in",temporal_style
+666,temporal_style_73,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, zoom out",temporal_style
+667,temporal_style_74,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, pan left",temporal_style
+668,temporal_style_75,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, pan right",temporal_style
+669,temporal_style_76,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, tilt up",temporal_style
+670,temporal_style_77,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, tilt down",temporal_style
+671,temporal_style_78,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, with an intense shaking effect",temporal_style
+672,temporal_style_79,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, featuring a steady and smooth perspective",temporal_style
+673,temporal_style_80,"A couple in formal evening wear going home get caught in a heavy downpour with umbrellas, racking focus",temporal_style
+674,temporal_style_81,"An astronaut flying in space, in super slow motion",temporal_style
+675,temporal_style_82,"An astronaut flying in space, zoom in",temporal_style
+676,temporal_style_83,"An astronaut flying in space, zoom out",temporal_style
+677,temporal_style_84,"An astronaut flying in space, pan left",temporal_style
+678,temporal_style_85,"An astronaut flying in space, pan right",temporal_style
+679,temporal_style_86,"An astronaut flying in space, tilt up",temporal_style
+680,temporal_style_87,"An astronaut flying in space, tilt down",temporal_style
+681,temporal_style_88,"An astronaut flying in space, with an intense shaking effect",temporal_style
+682,temporal_style_89,"An astronaut flying in space, featuring a steady and smooth perspective",temporal_style
+683,temporal_style_90,"An astronaut flying in space, racking focus",temporal_style
+684,temporal_style_91,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, in super slow motion",temporal_style
+685,temporal_style_92,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, zoom in",temporal_style
+686,temporal_style_93,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, zoom out",temporal_style
+687,temporal_style_94,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, pan left",temporal_style
+688,temporal_style_95,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, pan right",temporal_style
+689,temporal_style_96,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, tilt up",temporal_style
+690,temporal_style_97,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, tilt down",temporal_style
+691,temporal_style_98,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, with an intense shaking effect",temporal_style
+692,temporal_style_99,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, featuring a steady and smooth perspective",temporal_style
+693,temporal_style_100,"Snow rocky mountains peaks canyon. snow blanketed rocky mountains surround and shadow deep canyons. the canyons twist and bend through the high elevated mountain peaks, racking focus",temporal_style

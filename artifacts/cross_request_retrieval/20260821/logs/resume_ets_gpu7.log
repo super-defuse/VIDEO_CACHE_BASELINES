@@ -1,0 +1,63 @@
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]
+Loading checkpoint shards:  67%|██████▋   | 2/3 [00:00<00:00, 17.50it/s]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 25.62it/s]
+
+[1/56] ETS temporal_style_1
+[2/56] ETS temporal_style_2
+[3/56] ETS temporal_style_3
+[4/56] ETS temporal_style_4
+[5/56] ETS temporal_style_5
+[6/56] ETS temporal_style_6
+[7/56] ETS temporal_style_7
+[8/56] ETS temporal_style_8
+[9/56] ETS temporal_style_9
+[10/56] ETS temporal_style_10
+[11/56] ETS temporal_style_11
+[12/56] ETS temporal_style_12
+[13/56] ETS temporal_style_13
+[14/56] ETS temporal_style_14
+[15/56] ETS temporal_style_59
+[16/56] ETS temporal_style_60
+[17/56] ETS temporal_style_61
+[18/56] ETS temporal_style_62
+[19/56] ETS temporal_style_63
+[20/56] ETS temporal_style_64
+[21/56] ETS temporal_style_65
+[22/56] ETS temporal_style_66
+[23/56] ETS temporal_style_67
+[24/56] ETS temporal_style_68
+[25/56] ETS temporal_style_69
+[26/56] ETS temporal_style_70
+[27/56] ETS temporal_style_71
+[28/56] ETS temporal_style_72
+[29/56] ETS temporal_style_73
+[30/56] ETS temporal_style_74
+[31/56] ETS temporal_style_75
+[32/56] ETS temporal_style_76
+[33/56] ETS temporal_style_77
+[34/56] ETS temporal_style_78
+[35/56] ETS temporal_style_79
+[36/56] ETS temporal_style_80
+[37/56] ETS temporal_style_81
+[38/56] ETS temporal_style_82
+[39/56] ETS temporal_style_83
+[40/56] ETS temporal_style_84
+[41/56] ETS temporal_style_85
+[42/56] ETS temporal_style_86
+[43/56] ETS temporal_style_87
+[44/56] ETS temporal_style_88
+[45/56] ETS temporal_style_89
+[46/56] ETS temporal_style_90
+[47/56] ETS temporal_style_91
+[48/56] ETS temporal_style_92
+[49/56] ETS temporal_style_93
+[50/56] ETS temporal_style_94
+[51/56] ETS temporal_style_95
+[52/56] ETS temporal_style_96
+[53/56] ETS temporal_style_97
+[54/56] ETS temporal_style_98
+[55/56] ETS temporal_style_99
+[56/56] ETS temporal_style_100
+{"mode": "native-wan-step5-prompt-ets", "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/resume_workloads/gpu7.csv", "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cross_request_retrieval/20260821/ets_resume_shards/ets_gpu7.jsonl", "run_id": "cross-request-ets-resume-gpu7", "requested_rows": 56, "completed": 56, "skipped_existing": 0, "mask_probe_step": 5, "steps_per_prompt": 5, "source_positive": "all_prompt_tokens", "kept_probe_artifacts": false}
+

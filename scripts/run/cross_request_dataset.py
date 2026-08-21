@@ -25,6 +25,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+DEFAULT_ARTIFACT_ROOT = ROOT / "artifacts" / "cross_request_retrieval"
+
 from carnator.retrieval import (  # noqa: E402
     CARNATOR_IMPLEMENTATION_ID,
     CARNATOR_SIGNATURE_PROFILE_ID,
@@ -35,6 +37,7 @@ from carnator.retrieval import (  # noqa: E402
 )
 from core.retrieval import (  # noqa: E402
     RetrievalStrategy,
+    VectorRecord,
     make_chai_retriever,
     make_chorus_retriever,
     make_nirvana_retriever,
@@ -59,9 +62,27 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 
+def _safe_component(value: str, label: str) -> str:
+    component = Path(value)
+    if not value or component.name != value or value in {".", ".."}:
+        raise ValueError(f"{label} must be a single directory name: {value!r}")
+    return value
+
+
+def _resolve_output_dir(args: argparse.Namespace) -> Path:
+    if args.output_dir is not None:
+        if args.run_id is not None or args.run_name is not None:
+            raise ValueError("--output-dir cannot be combined with --run-id or --run-name")
+        return args.output_dir.expanduser().resolve()
+    if args.run_id is None or args.run_name is None:
+        raise ValueError("provide --output-dir, or provide both --run-id and --run-name")
+    run_id = _safe_component(args.run_id, "run-id")
+    run_name = _safe_component(args.run_name, "run-name")
+    return (args.artifact_root.expanduser().resolve() / run_id / "runs" / run_name).resolve()
+
+
 def _resolve_paths(config: dict[str, Any]) -> dict[str, Any]:
     for section, keys in (
-        ("nirvana_vid", ("cache_selector_profile",)),
         ("chai", ("longclip_checkpoint",)),
         ("carnator", ("noun_annotations", "threshold_config")),
     ):
@@ -167,12 +188,16 @@ def _source_records(
     retriever: RetrievalStrategy,
     request: Request,
     *,
+    existing_records: list[VectorRecord],
     method: str,
     signatures: dict[str, dict[str, Any]],
     annotations: CarnatorNounAnnotations | None,
 ) -> list:
     if method != "carnator":
-        return retriever.records_for(SourceEntry(request.uuid, request.request_index, request.prompt))
+        return retriever.records_for_add(
+            SourceEntry(request.uuid, request.request_index, request.prompt),
+            existing_records,
+        )
     assert isinstance(retriever, CarnatorRetriever)
     assert annotations is not None
     signature = signatures.get(request.uuid)
@@ -189,7 +214,10 @@ def _source_records(
         "manifest": _inline_carnator_manifest(request.uuid, retriever.threshold_config.threshold_config_id),
         "artifact_ready_assumed": True,
     }
-    return retriever.records_for(SourceEntry(request.uuid, request.request_index, request.prompt, metadata))
+    return retriever.records_for_add(
+        SourceEntry(request.uuid, request.request_index, request.prompt, metadata),
+        existing_records,
+    )
 
 
 def _run_method(
@@ -243,6 +271,7 @@ def _run_method(
                 records.extend(_source_records(
                     retriever,
                     request,
+                    existing_records=records,
                     method=method,
                     signatures=signatures,
                     annotations=annotations,
@@ -400,7 +429,19 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workload", type=Path, default=ROOT / "datasets" / "vbench_cross_request_prompts.csv")
     parser.add_argument("--methods", default=",".join(METHODS))
-    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Explicit output directory (legacy-compatible; cannot be combined with --run-id/--run-name).",
+    )
+    parser.add_argument(
+        "--artifact-root",
+        type=Path,
+        default=DEFAULT_ARTIFACT_ROOT,
+        help="Root used by the organized layout when --run-id and --run-name are provided.",
+    )
+    parser.add_argument("--run-id", help="Date or experiment identifier for the organized artifact layout.")
+    parser.add_argument("--run-name", help="Named retrieval run under <artifact-root>/<run-id>/runs/.")
     parser.add_argument("--seed", type=int, default=20260218)
     parser.add_argument("--shuffle-seed", type=int, default=20260821)
     parser.add_argument("--group-size", type=int, default=50)
@@ -409,6 +450,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true",
                         help="Use deterministic lexical retrieval encoders for protocol testing only.")
     args = parser.parse_args(argv)
+
+    try:
+        args.output_dir = _resolve_output_dir(args)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     methods = tuple(item.strip() for item in args.methods.split(",") if item.strip())
     if not methods or any(method not in METHODS for method in methods):
@@ -453,6 +499,10 @@ def main(argv: list[str] | None = None) -> int:
     _write_hit_rate_svg(groups, chart_path)
     manifest = {
         "mode": "dataset-retrieval-only",
+        "artifact_layout": "cross-request-retrieval/v1",
+        "run_id": args.run_id,
+        "run_name": args.run_name,
+        "output_dir": str(args.output_dir),
         "workload": str(args.workload.resolve()),
         "requests": len(rows),
         "seed": args.seed,

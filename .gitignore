@@ -26,6 +26,11 @@ artifacts/cache/
 **/cache/
 artifacts/vbench-cache/
 
+# Regenerable persistent vector indexes; retrieval manifests and results remain
+# publishable, while Chroma/FAISS database files do not belong in Git.
+**/vector_store/
+*.sqlite3
+
 # Local source trajectories for the static Carnator figure examples are
 # multi-gigabyte regenerable data.  Their compact PNG exports are tracked.
 /artifacts/static-prompt-defaults/
