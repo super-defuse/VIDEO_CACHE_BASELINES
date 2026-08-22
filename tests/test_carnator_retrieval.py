@@ -82,6 +82,73 @@ def test_carnator_rejects_unauthenticated_threshold_config_before_probe():
     assert result.metadata["step_2_probe_run"] is False
 
 
+def test_carnator_uses_shared_top_twenty_floor_and_limits_ets_to_five_candidates():
+    class FixedEmbedder:
+        @property
+        def signature(self) -> str:
+            return "fixed-clip"
+
+        def encode(self, texts: list[str]) -> list[list[float]]:
+            return [[1.0, 0.0] for _ in texts]
+
+    retriever = CarnatorRetriever(
+        FixedEmbedder(),
+        CarnatorNounAnnotations(),
+        CarnatorThresholdConfig(
+            "test-frozen", CARNATOR_IMPLEMENTATION_ID, CARNATOR_SIGNATURE_PROFILE_ID,
+            {"mbase_iou": 0.5, "medit_iou": 0.5, "msee_iou": 0.5, "ets_cosine": 0.8}, True, True,
+        ),
+        candidate_top_k=20,
+        candidate_min_similarity=0.65,
+        stage2_candidate_top_k=5,
+        retrieval_only=True,
+    )
+    records = []
+    for index, score in enumerate((0.99, 0.98, 0.97, 0.96, 0.95, 0.94), start=1):
+        record = _record(f"source-{index}", index, "train", ["train"], ready=index == 6)
+        record = VectorRecord(
+            record.uuid,
+            record.term,
+            [score, (1.0 - score * score) ** 0.5],
+            record.metadata,
+            record.source_request_index,
+        )
+        records.append(record)
+    records.append(VectorRecord("below-floor", "train", [0.64, 0.0], records[0].metadata, 7))
+
+    result = retriever.search(Request(8, "target", "train", 8), records)
+
+    assert not result.hit
+    assert [candidate["uuid"] for candidate in result.metadata["top_k"]] == [
+        "source-1", "source-2", "source-3", "source-4", "source-5", "source-6",
+    ]
+    assert [candidate["uuid"] for candidate in result.metadata["stage_2_candidates"]] == [
+        "source-1", "source-2", "source-3", "source-4", "source-5",
+    ]
+    assert len(result.metadata["stage_2"]) == 5
+    assert all(candidate["reason"] == "cache_not_ready" for candidate in result.metadata["stage_2"])
+
+
+def test_carnator_annotation_uuid_lookup_does_not_evaluate_the_fallback(tmp_path):
+    annotations_path = tmp_path / "entities.csv"
+    annotations_path.write_text(
+        "request_index,uuid,prompt,dimension,trf_nouns\n"
+        "0,remote,a remote,object_class,remote\n",
+        encoding="utf-8",
+    )
+
+    class FailingExtractor:
+        @property
+        def signature(self) -> str:
+            return "failing"
+
+        def extract(self, prompt: str) -> list[str]:
+            raise AssertionError(f"unexpected fallback for {prompt}")
+
+    annotations = CarnatorNounAnnotations(annotations_path, extractor=FailingExtractor())
+    assert annotations.for_request(Request(0, "remote", "a remote", 1)) == ("remote",)
+
+
 def _native_signature(
     prompt: str,
     nouns: list[str],

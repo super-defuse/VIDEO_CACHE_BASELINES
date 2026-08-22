@@ -155,13 +155,17 @@ class EntityExtractor(Protocol):
 
 
 class SpacyEntityExtractor:
-    def __init__(self, model: str) -> None:
+    def __init__(self, model: str, *, allowed_pos: tuple[str, ...] = ("NOUN",)) -> None:
         self.model = model
+        self.allowed_pos = tuple(allowed_pos)
+        if not self.allowed_pos:
+            raise ValueError("spaCy entity extractor needs at least one POS tag")
         self._nlp: Any | None = None
 
     @property
     def signature(self) -> str:
-        return f"spacy:{self.model}"
+        suffix = "" if self.allowed_pos == ("NOUN",) else f"|pos={','.join(self.allowed_pos)}"
+        return f"spacy:{self.model}{suffix}"
 
     def _load(self) -> None:
         if self._nlp is not None:
@@ -169,12 +173,12 @@ class SpacyEntityExtractor:
         try:
             import spacy
         except ImportError as exc:
-            raise RuntimeError("CHAI retrieval requires spacy==3.8.11 and its English model") from exc
+            raise RuntimeError("spaCy entity extraction requires spacy==3.8.11 and its English model") from exc
         try:
             self._nlp = spacy.load(self.model)
         except OSError as exc:
             raise RuntimeError(
-                f"CHAI retrieval requires the spaCy model {self.model!r}; install it before running"
+                f"spaCy entity extraction requires the model {self.model!r}; install it before running"
             ) from exc
 
     def extract(self, prompt: str) -> list[str]:
@@ -185,7 +189,7 @@ class SpacyEntityExtractor:
         # does not expand noun chunks or include PROPN tokens.
         cleaned_prompt = prompt.split("aesthetic score", 1)[0]
         doc = self._nlp(cleaned_prompt)
-        return [token.text for token in doc if token.pos_ == "NOUN"]
+        return [token.text for token in doc if token.pos_ in self.allowed_pos]
 
 
 class LexicalTestEntityExtractor:
@@ -373,7 +377,7 @@ class ChaiRetriever(RetrievalStrategy):
 
 
 class PromptRetriever(RetrievalStrategy):
-    """Shared whole-prompt CLIP/Chroma retrieval for NIRVANA and Chorus."""
+    """Shared whole-prompt CLIP/Chroma retrieval for prompt-level methods."""
 
     kind = "prompt"
 
@@ -437,40 +441,72 @@ class PromptRetriever(RetrievalStrategy):
         query_vectors: list[list[float]],
         records: list[VectorRecord],
     ) -> tuple[float, VectorRecord, str] | None:
-        if self.vector_backend != "chroma":
-            return super()._top1(query_terms, query_vectors, records)
+        ranked = self._rank_vectors(query_terms, query_vectors, records)
+        return ranked[0] if ranked else None
+
+    def rank_candidates(
+        self,
+        request: Request,
+        records: Iterable[VectorRecord],
+        *,
+        top_k: int,
+        use_cache_prompt: bool = True,
+    ) -> list[tuple[float, VectorRecord]]:
+        """Return exact whole-prompt cosine candidates in shared stable order."""
+
+        if top_k <= 0:
+            raise ValueError("prompt candidate top_k must be positive")
+        prompt = request.cache_prompt if use_cache_prompt and request.cache_prompt else request.prompt
+        ranked = self._rank_vectors([prompt], self.embedder.encode([prompt]), list(records))
+        return [(score, record) for score, record, _ in ranked if score >= self.threshold][:top_k]
+
+    def _rank_vectors(
+        self,
+        query_terms: list[str],
+        query_vectors: list[list[float]],
+        records: list[VectorRecord],
+    ) -> list[tuple[float, VectorRecord, str]]:
         if not records:
+            return []
+        candidate_rows = self._chroma_candidate_rows(query_vectors, records)
+        if candidate_rows is None:
+            # A stale or partial HNSW response must not change the exact shared
+            # ranking. Recover from the manifest vectors instead.
+            candidate_rows = [records] * len(query_vectors)
+        candidates: list[tuple[float, int, int, VectorRecord, str]] = []
+        record_order = {id(record): index for index, record in enumerate(records)}
+        for query_index, (query_term, query_vector, row) in enumerate(
+            zip(query_terms, query_vectors, candidate_rows, strict=True)
+        ):
+            for record in row:
+                record_index = record_order[id(record)]
+                candidates.append((_cosine(query_vector, record.vector), record_index, query_index, record, query_term))
+        candidates.sort(key=lambda item: (-item[0], item[1], item[2]))
+        return [(score, record, query_term) for score, _, _, record, query_term in candidates]
+
+    def _chroma_candidate_rows(
+        self,
+        query_vectors: list[list[float]],
+        records: list[VectorRecord],
+    ) -> list[list[VectorRecord]] | None:
+        """Return Chroma's complete candidates, or signal manifest recovery."""
+
+        if self.vector_backend != "chroma":
             return None
+
         by_id = {_record_id(index, record): record for index, record in enumerate(records)}
-        record_order = {record.uuid: index for index, record in enumerate(records)}
+        expected_ids = set(by_id)
         result = self._get_chroma_collection().query(
             query_embeddings=query_vectors,
             n_results=len(records),
             include=["distances"],
         )
-        best: tuple[float, VectorRecord, str] | None = None
-        result_ids = result.get("ids", [])
-        result_distances = result.get("distances", [])
-        for query_term, query_vector, ids, _distances in zip(
-            query_terms, query_vectors, result_ids, result_distances, strict=True
-        ):
-            # Chroma's HNSW result order is approximate. Rerank the complete
-            # synchronized candidate set with the shared exact cosine rule so
-            # NIRVANA and Chorus cannot diverge before their reuse policies run.
-            if len(ids) != len(by_id):
-                return _memory_top1(query_terms, query_vectors, records)
-            for record_id in ids:
-                record = by_id.get(record_id)
-                if record is None:
-                    return _memory_top1(query_terms, query_vectors, records)
-                score = _cosine(query_vector, record.vector)
-                candidate = (score, record, query_term)
-                if best is None or candidate[0] > best[0] or (
-                    candidate[0] == best[0]
-                    and record_order[record.uuid] < record_order[best[1].uuid]
-                ):
-                    best = candidate
-        return best
+        ids_by_query = result.get("ids", [])
+        if len(ids_by_query) != len(query_vectors):
+            return None
+        if any(len(ids) != len(expected_ids) or set(ids) != expected_ids for ids in ids_by_query):
+            return None
+        return [[by_id[record_id] for record_id in ids] for ids in ids_by_query]
 
     def _get_chroma_collection(self):
         if self._chroma_collection is not None:

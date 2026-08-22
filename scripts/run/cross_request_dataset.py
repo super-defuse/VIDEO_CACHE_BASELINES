@@ -340,6 +340,7 @@ def _write_hit_rate_by_group(
         writer = csv.DictWriter(
             handle,
             fieldnames=("method", "group_start", "end_request", "requests_in_group", "hits", "hit_rate"),
+            lineterminator="\n",
         )
         writer.writeheader()
         for method in results:
@@ -410,7 +411,7 @@ def _write_selection_comparison(
         if method in results:
             fields.extend((f"{method}_hit", f"{method}_source_uuid", f"{method}_source_prompt", f"{method}_score"))
     with output.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             payload = {key: row[key] for key in ("request_index", "uuid", "prompt")}

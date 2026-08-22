@@ -37,12 +37,16 @@ retrieval:
       max_k1: 30
       max_k2: 45
   carnator:
-    # Carnator first retrieves whole prompts, then authorizes reuse with the
-    # local step-5 ETS profile and exact artifact manifest.
+    # Shares CLIP/Chroma prompt ranking with NIRVANA and Chorus, then applies
+    # local entity filtering and step-5 ETS authorization.
     backend: clip
     model_id: openai/clip-vit-large-patch14
     device: cuda:0
+    vector_backend: chroma
+    min_similarity: 0.65
     candidate_top_k: 20
+    stage2_candidate_top_k: 5
+    spacy_model: en_core_web_sm
     noun_annotations: datasets/carnator_vbench_trf_nouns.csv
     threshold_config: configs/retrieval/carnator_ets_thresholds.json
 chorus:

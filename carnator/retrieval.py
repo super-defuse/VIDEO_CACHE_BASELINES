@@ -19,7 +19,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from core.retrieval import RetrievalStrategy, TextEmbedder, VectorRecord
+from core.retrieval import (
+    EntityExtractor,
+    LexicalTestEntityExtractor,
+    PromptRetriever,
+    RetrievalStrategy,
+    TextEmbedder,
+    VectorRecord,
+)
 from core.types import CacheMatch, Request
 
 
@@ -27,11 +34,6 @@ CARNATOR_IMPLEMENTATION_ID = "video-cache-baselines.carnator-two-stage.v1"
 CARNATOR_SIGNATURE_PROFILE_ID = "ets-v1"
 CARNATOR_RETRIEVER_ID = "carnator_two_stage"
 _NOUN_TOKEN_RE = re.compile(r"[a-z0-9]+(?:'[a-z0-9]+)?", re.IGNORECASE)
-_NOUN_STOP_WORDS = frozenset({
-    "a", "an", "and", "as", "at", "by", "for", "from", "in", "into", "is", "of",
-    "on", "or", "the", "to", "with", "without", "near", "over", "under", "while",
-    "this", "that", "these", "those", "very", "featuring", "feature", "style",
-})
 
 
 def _finite_number(value: Any) -> float:
@@ -273,19 +275,12 @@ def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
     return tuple(sorted(value for value in result if value))
 
 
-def heuristic_nouns(prompt: str) -> tuple[str, ...]:
-    """Small local fallback used only when a prompt is outside the VBench CSV."""
-
-    values = [token.lower() for token in _NOUN_TOKEN_RE.findall(prompt)]
-    nouns = [token for token in values if token not in _NOUN_STOP_WORDS and len(token) > 1]
-    return canonical_nouns(nouns) or ("prompt",)
-
-
 class CarnatorNounAnnotations:
-    """Load the repository-owned ``trf_nouns`` annotation CSV."""
+    """Load repository-owned spaCy noun/entity annotations."""
 
-    def __init__(self, path: str | Path | None = None) -> None:
+    def __init__(self, path: str | Path | None = None, *, extractor: EntityExtractor | None = None) -> None:
         self.path = Path(path) if path else None
+        self.extractor = extractor or LexicalTestEntityExtractor()
         self._by_uuid: dict[str, tuple[str, ...]] = {}
         self._by_prompt: dict[str, tuple[str, ...]] = {}
         if self.path is not None:
@@ -314,10 +309,23 @@ class CarnatorNounAnnotations:
             self._by_prompt[prompt] = nouns
 
     def for_request(self, request: Request) -> tuple[str, ...]:
-        return self._by_uuid.get(request.uuid, self._by_prompt.get(request.prompt, heuristic_nouns(request.prompt)))
+        return self._lookup(request.uuid, request.prompt)
 
     def for_entry(self, entry: Any) -> tuple[str, ...]:
-        return self._by_uuid.get(entry.uuid, self._by_prompt.get(entry.prompt, heuristic_nouns(entry.prompt)))
+        return self._lookup(entry.uuid, entry.prompt)
+
+    def _lookup(self, uuid: str, prompt: str) -> tuple[str, ...]:
+        nouns = self._by_uuid.get(uuid)
+        if nouns is not None:
+            return nouns
+        nouns = self._by_prompt.get(prompt)
+        return nouns if nouns is not None else self._extract(prompt)
+
+    def _extract(self, prompt: str) -> tuple[str, ...]:
+        nouns = canonical_nouns(self.extractor.extract(prompt))
+        if not nouns:
+            raise ValueError("spaCy entity extraction produced no NOUN/PROPN tokens")
+        return nouns
 
 
 @dataclass(frozen=True)
@@ -681,15 +689,31 @@ class CarnatorRetriever(RetrievalStrategy):
 
     def __init__(self, embedder: TextEmbedder, noun_annotations: CarnatorNounAnnotations,
                  threshold_config: CarnatorThresholdConfig | None, *, candidate_top_k: int = 20,
+                 candidate_min_similarity: float = 0.65,
+                 candidate_vector_backend: str = "memory",
+                 stage2_candidate_top_k: int = 5,
                  retrieval_only: bool = False,
                  allow_fixture_signatures: bool = False,
                  signature_builder: CarnatorSignatureBuilder | None = None) -> None:
         if candidate_top_k <= 0:
             raise ValueError("Carnator candidate_top_k must be positive")
+        if not -1.0 <= float(candidate_min_similarity) <= 1.0:
+            raise ValueError("Carnator candidate_min_similarity must be between -1 and 1")
+        if stage2_candidate_top_k <= 0:
+            raise ValueError("Carnator stage2_candidate_top_k must be positive")
         super().__init__(embedder, -1.0, vector_backend="memory")
         self.noun_annotations = noun_annotations
         self.threshold_config = threshold_config or CarnatorThresholdConfig("", "", "", {}, False, False)
         self.candidate_top_k = int(candidate_top_k)
+        self.candidate_min_similarity = float(candidate_min_similarity)
+        self.stage2_candidate_top_k = int(stage2_candidate_top_k)
+        self.prompt_retriever = PromptRetriever(
+            embedder,
+            self.candidate_min_similarity,
+            result_kind="carnator_prompt_candidates",
+            reuse_step=10,
+            vector_backend=candidate_vector_backend,
+        )
         self.retrieval_only = retrieval_only
         self.allow_fixture_signatures = bool(allow_fixture_signatures or retrieval_only)
         self.signature_builder = signature_builder or CarnatorSignatureBuilder()
@@ -702,13 +726,20 @@ class CarnatorRetriever(RetrievalStrategy):
     def signature(self) -> str:
         return (
             f"{self.kind}|{self.embedder.signature}|top_k={self.candidate_top_k}"
+            f"|min_similarity={self.candidate_min_similarity:.8f}"
+            f"|stage2_top_k={self.stage2_candidate_top_k}"
+            f"|vector_backend={self.prompt_retriever.vector_backend}"
             f"|threshold_config_id={self.threshold_config.threshold_config_id}"
             f"|implementation_id={CARNATOR_IMPLEMENTATION_ID}|profile={CARNATOR_SIGNATURE_PROFILE_ID}"
         )
 
     def bind_vector_store(self, root: Path) -> None:
         super().bind_vector_store(root)
+        self.prompt_retriever.bind_vector_store(root)
         self._namespace_root = root.parent
+
+    def sync_vector_store(self, records: Iterable[VectorRecord]) -> None:
+        self.prompt_retriever.sync_vector_store(records)
 
     def records_for(self, entry: Any) -> list[VectorRecord]:
         nouns = self.noun_annotations.for_entry(entry)
@@ -751,35 +782,14 @@ class CarnatorRetriever(RetrievalStrategy):
         return False, "noun_set_difference_gt_one"
 
     def _top_k(self, request: Request, records: list[VectorRecord]) -> list[tuple[float, VectorRecord]]:
-        # Carnator retrieval is defined over the complete target prompt;
-        # ``Request.cache_prompt`` is an explicit source override for legacy
-        # methods and must not bypass this stage.
-        query = self.embedder.encode([request.prompt])[0]
-        candidates: list[tuple[float, VectorRecord]] = []
-        for record in records:
-            try:
-                dimensions_match = len(query) == len(record.vector)
-            except TypeError:
-                continue
-            if not dimensions_match:
-                continue
-            try:
-                score = _finite_number(sum(a * b for a, b in zip(query, record.vector, strict=True)))
-            except (TypeError, ValueError):
-                continue
-            candidates.append((score, record))
-        def _sort_key(item: tuple[float, VectorRecord]):
-            raw_index = item[1].source_request_index
-            if raw_index is None and isinstance(item[1].metadata, dict):
-                raw_index = item[1].metadata.get("source_request_index")
-            try:
-                source_index = int(raw_index)
-            except (TypeError, ValueError):
-                source_index = 2**63 - 1
-            return -item[0], source_index, item[1].uuid
-
-        candidates.sort(key=_sort_key)
-        return candidates[: self.candidate_top_k]
+        # Carnator deliberately uses the original prompt rather than the
+        # optional legacy cache_prompt override.
+        return self.prompt_retriever.rank_candidates(
+            request,
+            records,
+            top_k=self.candidate_top_k,
+            use_cache_prompt=False,
+        )
 
     def _source_signature(self, record: VectorRecord) -> dict[str, Any]:
         metadata = record.metadata if isinstance(record.metadata, dict) else {}
@@ -802,12 +812,13 @@ class CarnatorRetriever(RetrievalStrategy):
             "retriever": self.kind,
             "embedding": self.embedder.signature,
             "candidate_top_k": self.candidate_top_k,
+            "candidate_min_similarity": self.candidate_min_similarity,
+            "stage_2_candidate_top_k": self.stage2_candidate_top_k,
             "threshold_config_id": self.threshold_config.threshold_config_id,
             "cache_ready": False,
             "step_2_probe_run": False,
             "probe_required": False,
             "top_k": [],
-            "candidates": [],
             "noun_prefilter": [],
             "stage_2": [],
         }
@@ -817,7 +828,6 @@ class CarnatorRetriever(RetrievalStrategy):
             {"uuid": record.uuid, "rank": rank, "score": score}
             for rank, (score, record) in enumerate(candidates, start=1)
         ]
-        metadata["candidates"] = metadata["top_k"]
         passed: list[tuple[float, VectorRecord, str]] = []
         for score, record in candidates:
             source_nouns = (record.metadata or {}).get("trf_nouns", []) if isinstance(record.metadata, dict) else []
@@ -831,6 +841,11 @@ class CarnatorRetriever(RetrievalStrategy):
             })
             if ok:
                 passed.append((score, record, reason))
+        stage_2_candidates = passed[:self.stage2_candidate_top_k]
+        metadata["stage_2_candidates"] = [
+            {"uuid": record.uuid, "score": score, "prefilter_reason": reason}
+            for score, record, reason in stage_2_candidates
+        ]
         if not self.threshold_config.valid:
             metadata["reason"] = "threshold_config_unauthenticated"
             return CacheMatch(metadata=metadata, kind="no_reuse")
@@ -854,7 +869,7 @@ class CarnatorRetriever(RetrievalStrategy):
             if target_signature.get("prompt_sha256") != prompt_sha256(request.prompt):
                 metadata["reason"] = "target_signature_prompt_mismatch"
                 return CacheMatch(metadata=metadata, kind="no_reuse")
-        for score, record, _ in passed:
+        for score, record, _ in stage_2_candidates:
             candidate_result: dict[str, Any] = {"uuid": record.uuid, "score": score}
             try:
                 source_signature = self._source_signature(record)
@@ -943,10 +958,18 @@ def make_carnator_retriever(config: dict[str, Any], *, dry_run: bool,
                             retrieval_only: bool = False) -> CarnatorRetriever:
     """Build Carnator retrieval from local configuration only."""
 
-    from core.retrieval import _make_embedder
+    from core.retrieval import SpacyEntityExtractor, _make_embedder, _vector_backend
 
     annotation_path = config.get("noun_annotations")
-    annotations = CarnatorNounAnnotations(annotation_path)
+    extractor: EntityExtractor
+    if dry_run:
+        extractor = LexicalTestEntityExtractor()
+    else:
+        extractor = SpacyEntityExtractor(
+            str(config.get("spacy_model", "en_core_web_sm")),
+            allowed_pos=("NOUN", "PROPN"),
+        )
+    annotations = CarnatorNounAnnotations(annotation_path, extractor=extractor)
     threshold_path = config.get("threshold_config")
     if threshold_path:
         try:
@@ -958,6 +981,9 @@ def make_carnator_retriever(config: dict[str, Any], *, dry_run: bool,
     return CarnatorRetriever(
         _make_embedder(config, dry_run=dry_run), annotations, thresholds,
         candidate_top_k=int(config.get("candidate_top_k", 20)),
+        candidate_min_similarity=float(config.get("min_similarity", 0.65 if not dry_run else 0.20)),
+        candidate_vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
+        stage2_candidate_top_k=int(config.get("stage2_candidate_top_k", 5)),
         retrieval_only=retrieval_only,
         allow_fixture_signatures=bool(dry_run),
     )
@@ -974,5 +1000,5 @@ __all__ = [
     "CarnatorSignatureBuilder", "CarnatorSignatureComparator", "CarnatorThresholdConfig",
     "CarnatorETSBuilder", "CarnatorETSComparator",
     "build_native_prompt_ets_signature", "build_native_prompt_ets_signature_from_dir",
-    "canonical_nouns", "heuristic_nouns", "make_carnator_retriever", "prompt_sha256",
+    "canonical_nouns", "make_carnator_retriever", "prompt_sha256",
 ]
