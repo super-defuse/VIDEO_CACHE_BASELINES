@@ -47,7 +47,6 @@ retrieval:
     candidate_top_k: 20
     stage2_candidate_top_k: 5
     spacy_model: en_core_web_sm
-    noun_annotations: datasets/carnator_vbench_trf_nouns.csv
     # Temporary operational value: formal labeled-pair calibration may replace it.
     max_latent_distance: 0.15
     # Single-noun substitutions stay fail-closed until their two mask gates are calibrated.

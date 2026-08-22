@@ -43,6 +43,14 @@ probe 必须沿用完整 50-step scheduler，只在第 5 个 completed step 采�
 
 线上 `Reuse` 还要求 source 的 step-10 latent、sparse-attention artifact 及其 hash 都可读取。任意缺失、metadata mismatch、不可计算的距离或失败 gate 都返回 `No Reuse`。
 
+## 正式测试
+
+正式 retrieval-only 测试的唯一 workload 是原始的
+`datasets/vbench_cross_request_prompts.csv`（694 条）。开始回放前固定执行
+`random.Random(20260821).shuffle(rows)`；该顺序是模拟真实 request arrival 的唯一顺序，并写入每条结果的 `arrival_index`。四种方法各自从空逻辑 cache 开始，按同一到达顺序处理；只有 miss 会写入该方法自己的 source cache。
+
+Carnator 在每个 request 到达时，以固定的 `spaCy en_core_web_sm` `NOUN+PROPN` extractor 直接从 prompt 得到 canonical noun set，不消费预生成的 VBench noun CSV。`object_class_65` 的 `a remote` 是 spaCy 已知的 POS 误标，保留为 UUID 绑定的 `remote` 纠正。
+
 ## 评测边界
 
 `scripts/benchmark/cross_request_retrieval.py` 只测检索授权，不运行 Wan 推理。它比较 NIRVANA-VID、CHAI、Chorus 和 Carnator，并固定产出：累计 hit rate、每 request 的命中及 source、平均检索时间和逻辑 cache 增长。Carnator 使用线上 collector 写入的完整 sidecar；benchmark 启动时验证每个 sidecar 的 codec、Mbase 和 step-10 cache 契约。

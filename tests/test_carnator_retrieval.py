@@ -8,7 +8,7 @@ import torch
 
 from carnator.online_signature import compare_online_signatures, write_online_signature
 from carnator.online_flow import resolve_online_request
-from carnator.retrieval import CarnatorNounAnnotations, CarnatorRetriever
+from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
 from scripts.benchmark import cross_request_retrieval
@@ -60,7 +60,7 @@ def _sidecar(tmp_path, name: str, prompt: str, nouns: list[str], *, step5_latent
 
 def _retriever(*, retrieval_only: bool = True):
     return CarnatorRetriever(
-        LexicalTestEmbedder(), CarnatorNounAnnotations(), retrieval_only=retrieval_only,
+        LexicalTestEmbedder(), CarnatorNounExtractor(), retrieval_only=retrieval_only,
         max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
     )
 
@@ -121,7 +121,7 @@ def test_carnator_uses_latent_area_and_shape_gates_for_one_noun_change(tmp_path)
     source_signature = _sidecar(tmp_path, "source", "a ball", ["ball"])
     target_signature = _sidecar(tmp_path, "target", "a cube", ["cube"])
     retriever = CarnatorRetriever(
-        LexicalTestEmbedder(), CarnatorNounAnnotations(), candidate_min_similarity=-1.0, retrieval_only=True,
+        LexicalTestEmbedder(), CarnatorNounExtractor(), candidate_min_similarity=-1.0, retrieval_only=True,
         max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
     )
     result = retriever.search(
@@ -234,7 +234,7 @@ def test_carnator_uses_top_twenty_and_limits_stage_two_to_five(tmp_path):
     source_signature = _sidecar(tmp_path, "source", "train", ["train"])
     target_signature = _sidecar(tmp_path, "target", "train", ["train"])
     retriever = CarnatorRetriever(
-        FixedEmbedder(), CarnatorNounAnnotations(), candidate_top_k=20,
+        FixedEmbedder(), CarnatorNounExtractor(), candidate_top_k=20,
         candidate_min_similarity=0.65, stage2_candidate_top_k=5, retrieval_only=True,
         max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
     )
@@ -258,24 +258,18 @@ def test_carnator_uses_top_twenty_and_limits_stage_two_to_five(tmp_path):
     assert all(candidate["reason"] == "cache_not_ready" for candidate in result.metadata["stage_2"])
 
 
-def test_carnator_annotation_uuid_lookup_does_not_evaluate_the_fallback(tmp_path):
-    annotations_path = tmp_path / "entities.csv"
-    annotations_path.write_text(
-        "request_index,uuid,prompt,dimension,trf_nouns\n"
-        "0,remote,a remote,object_class,remote\n",
-        encoding="utf-8",
-    )
-
-    class FailingExtractor:
+def test_carnator_runtime_extractor_applies_the_explicit_nounless_override():
+    class EmptyExtractor:
         @property
         def signature(self) -> str:
-            return "failing"
+            return "empty"
 
         def extract(self, prompt: str) -> list[str]:
-            raise AssertionError(f"unexpected fallback for {prompt}")
+            assert prompt == "a remote"
+            return []
 
-    annotations = CarnatorNounAnnotations(annotations_path, extractor=FailingExtractor())
-    assert annotations.for_request(Request(0, "remote", "a remote", 1)) == ("remote",)
+    extractor = CarnatorNounExtractor(EmptyExtractor())
+    assert extractor.for_request(Request(339, "object_class_65", "a remote", 1)) == ("remote",)
 
 
 def test_cross_request_benchmark_writes_all_four_reports(tmp_path):

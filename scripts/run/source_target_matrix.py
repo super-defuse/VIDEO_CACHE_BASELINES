@@ -46,11 +46,6 @@ def _resolve_paths(config: dict) -> dict:
     checkpoint = chai_retrieval.get("longclip_checkpoint")
     if checkpoint and not Path(checkpoint).is_absolute():
         chai_retrieval["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
-    carnator_retrieval = config.get("retrieval", {}).get("carnator", {})
-    for key in ("noun_annotations",):
-        value = carnator_retrieval.get(key)
-        if value and not Path(value).is_absolute():
-            carnator_retrieval[key] = str((ROOT / value).resolve())
     return config
 
 

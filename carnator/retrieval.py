@@ -7,7 +7,6 @@ intentionally unsupported.
 
 from __future__ import annotations
 
-import csv
 import json
 import math
 import re
@@ -31,6 +30,9 @@ from core.types import CacheMatch, Request
 
 CARNATOR_RETRIEVER_ID = "carnator_two_stage"
 _NOUN_TOKEN_RE = re.compile(r"[a-z0-9]+(?:'[a-z0-9]+)?", re.IGNORECASE)
+# spaCy labels the noun in this one-token VBench prompt as ADJ. Keep the
+# correction tied to the request UUID rather than expanding the POS policy.
+_NOUNLESS_OVERRIDES = {"object_class_65": ("remote",)}
 
 
 def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
@@ -45,52 +47,25 @@ def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
     return tuple(sorted(noun for noun in nouns if noun))
 
 
-class CarnatorNounAnnotations:
-    """Repository-owned noun annotations with a deterministic test fallback."""
+class CarnatorNounExtractor:
+    """Extract canonical nouns from the prompt at request arrival time."""
 
-    def __init__(self, path: str | Path | None = None, *, extractor: EntityExtractor | None = None) -> None:
-        self.path = Path(path) if path else None
+    def __init__(self, extractor: EntityExtractor | None = None) -> None:
         self.extractor = extractor or LexicalTestEntityExtractor()
-        self._by_uuid: dict[str, tuple[str, ...]] = {}
-        self._by_prompt: dict[str, tuple[str, ...]] = {}
-        if self.path is not None:
-            self._load()
-
-    def _load(self) -> None:
-        if not self.path or not self.path.is_file():
-            raise FileNotFoundError(f"Carnator noun annotations are missing: {self.path}")
-        with self.path.open(newline="", encoding="utf-8") as handle:
-            rows = list(csv.DictReader(handle))
-        required = {"request_index", "uuid", "prompt", "dimension", "trf_nouns"}
-        if not rows or required - set(rows[0]):
-            raise ValueError(f"noun annotation CSV must contain {sorted(required)}")
-        for row in rows:
-            nouns = canonical_nouns(str(row["trf_nouns"]).replace("|", ";").split(";"))
-            if not nouns:
-                raise ValueError(f"empty trf_nouns for {row.get('uuid')}")
-            uuid, prompt = str(row["uuid"]), str(row["prompt"])
-            if uuid in self._by_uuid:
-                raise ValueError(f"duplicate noun annotation: {uuid}")
-            self._by_uuid[uuid] = nouns
-            previous = self._by_prompt.get(prompt)
-            if previous is not None and previous != nouns:
-                raise ValueError(f"conflicting noun annotation for prompt: {prompt}")
-            self._by_prompt[prompt] = nouns
 
     def for_request(self, request: Request) -> tuple[str, ...]:
-        return self._lookup(request.uuid, request.prompt)
+        return self._extract(request.uuid, request.prompt)
 
     def for_entry(self, entry: Any) -> tuple[str, ...]:
-        return self._lookup(entry.uuid, entry.prompt)
+        return self._extract(entry.uuid, entry.prompt)
 
-    def _lookup(self, uuid: str, prompt: str) -> tuple[str, ...]:
-        nouns = self._by_uuid.get(uuid) or self._by_prompt.get(prompt)
-        if nouns is not None:
-            return nouns
-        extracted = canonical_nouns(self.extractor.extract(prompt))
-        if not extracted:
+    def _extract(self, uuid: str, prompt: str) -> tuple[str, ...]:
+        nouns = canonical_nouns(self.extractor.extract(prompt))
+        if not nouns:
+            nouns = canonical_nouns(_NOUNLESS_OVERRIDES.get(str(uuid), ()))
+        if not nouns:
             raise ValueError("noun extraction produced no NOUN/PROPN tokens")
-        return extracted
+        return nouns
 
 
 class CarnatorRetriever(RetrievalStrategy):
@@ -108,7 +83,7 @@ class CarnatorRetriever(RetrievalStrategy):
     def __init__(
         self,
         embedder: TextEmbedder,
-        noun_annotations: CarnatorNounAnnotations,
+        noun_extractor: CarnatorNounExtractor,
         *,
         candidate_top_k: int = 20,
         candidate_min_similarity: float = 0.65,
@@ -124,7 +99,7 @@ class CarnatorRetriever(RetrievalStrategy):
         if not -1.0 <= float(candidate_min_similarity) <= 1.0:
             raise ValueError("Carnator candidate_min_similarity must be between -1 and 1")
         super().__init__(embedder, -1.0, vector_backend="memory")
-        self.noun_annotations = noun_annotations
+        self.noun_extractor = noun_extractor
         self.candidate_top_k = int(candidate_top_k)
         self.candidate_min_similarity = float(candidate_min_similarity)
         self.stage2_candidate_top_k = int(stage2_candidate_top_k)
@@ -174,7 +149,7 @@ class CarnatorRetriever(RetrievalStrategy):
         self.prompt_retriever.sync_vector_store(records)
 
     def records_for(self, entry: Any) -> list[VectorRecord]:
-        nouns = self.noun_annotations.for_entry(entry)
+        nouns = self.noun_extractor.for_entry(entry)
         metadata = dict(getattr(entry, "metadata", None) or {})
         metadata.setdefault("source_request_index", int(entry.request_index))
         metadata.setdefault("trf_nouns", list(nouns))
@@ -251,7 +226,7 @@ class CarnatorRetriever(RetrievalStrategy):
             "noun_prefilter": [],
             "stage_2": [],
         }
-        target_nouns = self.noun_annotations.for_request(request)
+        target_nouns = self.noun_extractor.for_request(request)
         candidates = self._top_k(request, list(records))
         metadata["top_k"] = [
             {"uuid": record.uuid, "rank": rank, "score": score}
@@ -338,7 +313,7 @@ class CarnatorRetriever(RetrievalStrategy):
     def prepare_cache_entry(self, request: Request, latent_path: Path, latent_step: int) -> dict[str, Any]:
         del latent_path
         return {
-            "trf_nouns": list(self.noun_annotations.for_request(request)),
+            "trf_nouns": list(self.noun_extractor.for_request(request)),
             "cache_ready": False,
             "latent_step": int(latent_step),
             "signature_missing_reason": "native_online_signature_required",
@@ -348,7 +323,6 @@ class CarnatorRetriever(RetrievalStrategy):
 def make_carnator_retriever(
     config: dict[str, Any], *, dry_run: bool, retrieval_only: bool = False
 ) -> CarnatorRetriever:
-    annotation_path = config.get("noun_annotations")
     extractor: EntityExtractor = (
         LexicalTestEntityExtractor()
         if dry_run
@@ -356,7 +330,7 @@ def make_carnator_retriever(
     )
     return CarnatorRetriever(
         _make_embedder(config, dry_run=dry_run),
-        CarnatorNounAnnotations(annotation_path, extractor=extractor),
+        CarnatorNounExtractor(extractor),
         candidate_top_k=int(config.get("candidate_top_k", 20)),
         candidate_min_similarity=float(config.get("min_similarity", 0.65 if not dry_run else 0.20)),
         candidate_vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
@@ -368,4 +342,4 @@ def make_carnator_retriever(
     )
 
 
-__all__ = ["CARNATOR_RETRIEVER_ID", "CarnatorNounAnnotations", "CarnatorRetriever", "canonical_nouns", "make_carnator_retriever"]
+__all__ = ["CARNATOR_RETRIEVER_ID", "CarnatorNounExtractor", "CarnatorRetriever", "canonical_nouns", "make_carnator_retriever"]

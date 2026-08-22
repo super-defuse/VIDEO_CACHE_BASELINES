@@ -1,8 +1,9 @@
 # 跨请求检索基准
 
-在 `datasets/vbench_cross_request_prompts.csv` 的 694 条请求上，以固定 shuffle seed `20260821`
-回放 NIRVANA-VID、CHAI、Chorus 和 Carnator 的独立逻辑 cache。该基准只测检索授权，不执行
-Wan 推理或命中后的复用。
+在原始 `datasets/vbench_cross_request_prompts.csv` 的 694 条请求上，以固定 shuffle seed
+`20260821` 打乱后按 arrival order 回放 NIRVANA-VID、CHAI、Chorus 和 Carnator 的独立逻辑
+cache，模拟真实请求到达。四种方法从空 cache 开始，只有 miss 写入各自的 cache。该基准只测
+检索授权，不执行 Wan 推理或命中后的复用。
 
 唯一入口是：
 

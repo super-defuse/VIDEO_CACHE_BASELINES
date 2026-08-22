@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from carnator.retrieval import CarnatorNounAnnotations, CarnatorRetriever, make_carnator_retriever  # noqa: E402
+from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever, make_carnator_retriever  # noqa: E402
 from carnator.online_signature import SignatureError, validate_online_signature  # noqa: E402
 from core.retrieval import (  # noqa: E402
     RetrievalStrategy,
@@ -60,7 +60,7 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def _resolve_config_paths(config: dict[str, Any]) -> dict[str, Any]:
-    for section, keys in (("chai", ("longclip_checkpoint",)), ("carnator", ("noun_annotations",))):
+    for section, keys in (("chai", ("longclip_checkpoint",)),):
         values = config.get("retrieval", {}).get(section, {})
         for key in keys:
             value = values.get(key)
@@ -162,17 +162,17 @@ def _records_for_miss(
     *,
     method: str,
     signatures: dict[str, dict[str, Any]],
-    annotations: CarnatorNounAnnotations | None,
+    noun_extractor: CarnatorNounExtractor | None,
 ) -> list[VectorRecord]:
     if method != "carnator":
         return retriever.records_for_add(SourceEntry(request.uuid, request.request_index, request.prompt), existing_records)
 
     assert isinstance(retriever, CarnatorRetriever)
-    assert annotations is not None
+    assert noun_extractor is not None
     signature = signatures.get(request.uuid)
     metadata: dict[str, Any] = {
         "source_request_index": request.request_index,
-        "trf_nouns": list(annotations.for_request(request)),
+        "trf_nouns": list(noun_extractor.for_request(request)),
         # This benchmark measures retrieval authorization. Artifact presence is
         # represented by the sidecar and is not materialized by a model run.
         "cache_ready": signature is not None,
@@ -198,7 +198,7 @@ def _run_method(
     missing_signatures: int,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     retriever = _make_retriever(method, config, dry_run=dry_run)
-    annotations = retriever.noun_annotations if method == "carnator" else None
+    noun_extractor = retriever.noun_extractor if method == "carnator" else None
     retriever.bind_vector_store(index_dir)
     if rows:
         _warm(retriever, str(rows[0]["prompt"]))
@@ -226,7 +226,7 @@ def _run_method(
         else:
             records.extend(
                 _records_for_miss(
-                    retriever, request, records, method=method, signatures=signatures, annotations=annotations
+                    retriever, request, records, method=method, signatures=signatures, noun_extractor=noun_extractor
                 )
             )
             source_prompts[request.uuid] = request.prompt
