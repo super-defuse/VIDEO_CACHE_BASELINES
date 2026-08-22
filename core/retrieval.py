@@ -92,8 +92,12 @@ class TransformersClipEmbedder:
                 "CLIP retrieval requires torch and transformers; install the model environment first"
             ) from exc
         self._torch = torch
-        self._tokenizer = CLIPTokenizer.from_pretrained(self.model_id)
-        self._model = CLIPTextModelWithProjection.from_pretrained(self.model_id).to(self.device).eval()
+        self._tokenizer = CLIPTokenizer.from_pretrained(self.model_id, local_files_only=True)
+        # The pinned cache carries the official PyTorch checkpoint. Avoid an
+        # unnecessary safetensors download when that optional sibling is absent.
+        self._model = CLIPTextModelWithProjection.from_pretrained(
+            self.model_id, use_safetensors=False, local_files_only=True
+        ).to(self.device).eval()
 
     def encode(self, texts: list[str]) -> list[list[float]]:
         self._load()
