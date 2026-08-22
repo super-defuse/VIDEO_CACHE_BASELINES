@@ -33,9 +33,26 @@ class OnlineCollectionResult:
     signature_gate_s: float
     source_cache_s: float
     completed_steps: int
+    step10_cache_assumed: bool
 
 
 ProbeEvaluator = Callable[[dict[str, Any]], CacheMatch]
+
+
+def _assumed_step10_cache(metadata: dict[str, Any], request_uuid: str) -> dict[str, Any]:
+    """Describe a logical step-10 cache without materializing its artifacts."""
+
+    prefix = f"assumed://{request_uuid}"
+    return {
+        "anchor_step": 10,
+        "assumption": "step10_cache_exists",
+        "model": metadata["model"],
+        "latent_token_grid": metadata["latent_token_grid"],
+        "latent_path": f"{prefix}/step10.pt",
+        "latent_sha256": "assumed",
+        "sparse_attention_path": f"{prefix}/sparse_attention.json",
+        "sparse_attention_sha256": "assumed",
+    }
 
 
 def _sha256(path: Path) -> str:
@@ -68,11 +85,13 @@ class SyntheticOnlineCollector:
         *,
         probe_seed: int,
         noun_extractor: str = "test-nouns/v1",
+        assume_step10_cache: bool = False,
     ) -> None:
         self.artifact_root = artifact_root.resolve()
         self.probe_seed = int(probe_seed)
         self.noun_extractor = noun_extractor
         self.mask_policy = "synthetic-mbase/v1"
+        self.assume_step10_cache = bool(assume_step10_cache)
 
     def close(self) -> None:
         return None
@@ -125,8 +144,24 @@ class SyntheticOnlineCollector:
             if match.hit:
                 shutil.rmtree(source_dir)
                 return OnlineCollectionResult(
-                    match, None, True, False, early_probe_s, signature_gate_s, 0.0, 5
+                    match, None, True, False, early_probe_s, signature_gate_s, 0.0, 5, False
                 )
+
+        if self.assume_step10_cache:
+            cache = _assumed_step10_cache(metadata, request.uuid)
+            source_signature = write_online_signature(
+                source_dir,
+                step5_latent=step5,
+                initial_latent=initial,
+                metadata=metadata,
+                mbase_by_noun=masks,
+                cache=cache,
+            )
+            return OnlineCollectionResult(
+                match, source_signature, evaluate_probe is not None, True,
+                early_probe_s if evaluate_probe is not None else 0.0,
+                signature_gate_s, 0.0, 5, True,
+            )
 
         cache_started = time.perf_counter()
         step10_path = source_dir / "step10.pt"
@@ -164,6 +199,7 @@ class SyntheticOnlineCollector:
             signature_gate_s,
             time.perf_counter() - cache_started,
             10,
+            False,
         )
 
 
@@ -177,6 +213,7 @@ class NativeOnlineCollector:
         *,
         probe_seed: int,
         noun_extractor: str,
+        assume_step10_cache: bool = False,
     ) -> None:
         from carnator.adapters import wan_ti2v_5b as native
 
@@ -191,6 +228,7 @@ class NativeOnlineCollector:
         self.artifact_root = artifact_root.resolve()
         self.probe_seed = int(probe_seed)
         self.noun_extractor = noun_extractor
+        self.assume_step10_cache = bool(assume_step10_cache)
         self.mask_policy = (
             "native-cross-attention-mbase/v1"
             f"|layers={args.mask_layers}|top_p={float(args.mask_top_p):.8f}"
@@ -327,6 +365,18 @@ class NativeOnlineCollector:
                         if match.hit:
                             break
 
+                    if self.assume_step10_cache:
+                        source_signature = write_online_signature(
+                            source_dir,
+                            step5_latent=step5_latent,
+                            initial_latent=initial_latent,
+                            metadata=metadata,
+                            mbase_by_noun=self._mbase_by_noun(probe),
+                            cache=_assumed_step10_cache(metadata, request.uuid),
+                        )
+                        source_cached = True
+                        break
+
                 if completed_steps == args.reuse_start_step:
                     if step5_latent is None:
                         raise RuntimeError("source cache reached step 10 without a step-5 latent")
@@ -364,11 +414,11 @@ class NativeOnlineCollector:
         if match is not None and match.hit:
             shutil.rmtree(source_dir)
             return OnlineCollectionResult(
-                match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps
+                match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps, False
             )
         if source_signature is None:
             raise RuntimeError("online source cache did not reach completed step 10")
-        source_cache_s = time.perf_counter() - source_started
+        source_cache_s = 0.0 if self.assume_step10_cache else time.perf_counter() - source_started
         return OnlineCollectionResult(
             match,
             source_signature,
@@ -378,6 +428,7 @@ class NativeOnlineCollector:
             signature_gate_s,
             source_cache_s,
             completed_steps,
+            self.assume_step10_cache,
         )
 
 

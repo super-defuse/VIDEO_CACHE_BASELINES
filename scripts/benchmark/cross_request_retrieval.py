@@ -190,6 +190,7 @@ def _run_standard_method(
             "probe_collected": False,
             "source_cached": not match.hit,
             "completed_steps": 0,
+            "step10_cache_assumed": False,
             "cache_records": cache_records,
             "cache_match": match.metadata,
         })
@@ -279,6 +280,7 @@ def _run_carnator(
                 "probe_collected": collection.probe_collected,
                 "source_cached": collection.source_cached,
                 "completed_steps": collection.completed_steps,
+                "step10_cache_assumed": collection.step10_cache_assumed,
                 "cache_records": cache_records,
                 "cache_match": match.metadata,
             })
@@ -293,6 +295,7 @@ def _run_carnator(
         "early_probe_requests": probe_requests,
         "source_cache_total_s": total_source_cache_s,
         "source_cache_entries": len({record.uuid for record in records}),
+        "step10_cache_assumed": collector.assume_step10_cache,
     })
     return summary, results
 
@@ -351,7 +354,7 @@ def _write_reports(reports_dir: Path, summaries: dict[str, dict[str, Any]], resu
         "method", "requests", "hits", "hit_rate", "retrieval_total_s", "retrieval_mean_ms",
         "peak_cache_records", "final_cache_records", "stage_2", "stage1_retrieval_total_s",
         "signature_gate_total_s", "early_probe_total_s", "early_probe_requests", "source_cache_total_s",
-        "source_cache_entries",
+        "source_cache_entries", "step10_cache_assumed",
     ]
     _write_csv(reports_dir / "retrieval_summary.csv", summary_fields, [summaries[method] for method in METHODS])
 
@@ -392,6 +395,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seed", type=int, default=20260218)
     parser.add_argument("--shuffle-seed", type=int, default=20260821)
     parser.add_argument("--dry-run", action="store_true", help="Use deterministic retrieval and collector fixtures.")
+    parser.add_argument(
+        "--assume-step10-cache",
+        action="store_true",
+        help="Retrieval-only mode: stop each Carnator source at step 5 and assume step-10 cache artifacts exist.",
+    )
     parser.add_argument("--carnator-model-dir", type=Path, default=Path("/home/tangxuebin/models/Wan2.2-TI2V-5B"))
     parser.add_argument("--carnator-device", default="cuda:4")
     parser.add_argument("--carnator-model-dtype", choices=("fp16", "bf16"), default="fp16")
@@ -415,12 +423,14 @@ def main(argv: list[str] | None = None) -> int:
     del carnator_retriever
     collector = (
         SyntheticOnlineCollector(
-            artifact_dir / "carnator_sources", probe_seed=args.carnator_probe_seed, noun_extractor=noun_signature
+            artifact_dir / "carnator_sources", probe_seed=args.carnator_probe_seed, noun_extractor=noun_signature,
+            assume_step10_cache=args.assume_step10_cache,
         )
         if args.dry_run
         else NativeOnlineCollector(
             _native_args(args), artifact_dir / "carnator_sources", probe_seed=args.carnator_probe_seed,
             noun_extractor=noun_signature,
+            assume_step10_cache=args.assume_step10_cache,
         )
     )
     summaries["carnator"], results["carnator"] = _run_carnator(
@@ -432,17 +442,25 @@ def main(argv: list[str] | None = None) -> int:
                 handle.write(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n")
     _write_reports(artifact_dir / "reports", summaries, results)
     benchmark = {
-        "schema_version": "cross-request-retrieval/v3-progressive-online",
+        "schema_version": (
+            "cross-request-retrieval/v4-retrieval-only-assumed-step10"
+            if args.assume_step10_cache else "cross-request-retrieval/v3-progressive-online"
+        ),
         "workload": str(args.workload.expanduser().resolve()),
         "requests": len(rows),
         "seed": args.seed,
         "shuffle_seed": args.shuffle_seed,
         "dry_run": args.dry_run,
         "carnator": {
-            "sidecar_mode": "arrival_order_miss_only",
+            "sidecar_mode": (
+                "arrival_order_miss_only_assumed_step10"
+                if args.assume_step10_cache else "arrival_order_miss_only"
+            ),
             "scheduler_total_steps": 50,
             "target_probe_completed_step": 5,
             "source_cache_completed_step": 10,
+            "collector_max_completed_step": 5 if args.assume_step10_cache else 10,
+            "step10_cache_assumed": args.assume_step10_cache,
             "video_decoded": False,
             "probe_seed": args.carnator_probe_seed,
         },

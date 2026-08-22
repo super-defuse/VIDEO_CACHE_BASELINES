@@ -315,3 +315,42 @@ def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     assert set(path.name for path in (output_dir / "results").iterdir()) == {
         "nirvana_vid.jsonl", "chai.jsonl", "chorus.jsonl", "carnator.jsonl",
     }
+
+
+def test_cross_request_benchmark_can_assume_step10_cache(tmp_path):
+    workload = tmp_path / "workload.csv"
+    workload.write_text(
+        "request_index,uuid,prompt\n"
+        "0,first,a train\n"
+        "1,second,a train\n",
+        encoding="utf-8",
+    )
+    output_dir = tmp_path / "artifacts"
+
+    assert cross_request_retrieval.main([
+        "--workload", str(workload),
+        "--artifact-dir", str(output_dir),
+        "--shuffle-seed", "0",
+        "--dry-run",
+        "--assume-step10-cache",
+    ]) == 0
+
+    benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
+    assert benchmark["schema_version"] == "cross-request-retrieval/v4-retrieval-only-assumed-step10"
+    assert benchmark["carnator"]["step10_cache_assumed"] is True
+    assert benchmark["carnator"]["collector_max_completed_step"] == 5
+    assert benchmark["methods"]["carnator"]["step10_cache_assumed"] is True
+    assert benchmark["methods"]["carnator"]["source_cache_total_s"] == 0.0
+
+    carnator_rows = [
+        json.loads(line)
+        for line in (output_dir / "results" / "carnator.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert all(row["completed_steps"] == 5 for row in carnator_rows)
+    assert carnator_rows[0]["step10_cache_assumed"] is True
+    assert carnator_rows[1]["step10_cache_assumed"] is False
+    source_dirs = [path for path in (output_dir / "carnator_sources").iterdir() if path.is_dir()]
+    assert len(source_dirs) == 1
+    assert not (source_dirs[0] / "step10.pt").exists()
+    signature = json.loads((source_dirs[0] / "online_signature.json").read_text(encoding="utf-8"))
+    assert signature["cache"]["assumption"] == "step10_cache_exists"

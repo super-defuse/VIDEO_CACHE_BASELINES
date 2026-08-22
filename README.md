@@ -161,6 +161,9 @@ conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality.py artifac
 # Cross-request retrieval benchmark for NIRVANA-VID, CHAI, Chorus, and Carnator.
 # Carnator creates sidecars progressively in arrival order and stops at step 10.
 PYTHONPATH=. python3 scripts/benchmark/cross_request_retrieval.py
+
+# Retrieval-only replay: assume the logical step-10 cache exists and stop at step 5.
+PYTHONPATH=. python3 scripts/benchmark/cross_request_retrieval.py --assume-step10-cache
 ```
 
 `--dry-run` 会走对应模型配置和原有推理编排，但使用确定性的测试 adapter，不执行 CUDA

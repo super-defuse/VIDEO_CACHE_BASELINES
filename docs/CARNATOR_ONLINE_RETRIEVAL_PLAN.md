@@ -56,3 +56,8 @@ Carnator 在每个 request 到达时，以固定的 `spaCy en_core_web_sm` `NOUN
 `scripts/benchmark/cross_request_retrieval.py` 比较 NIRVANA-VID、CHAI、Chorus 和 Carnator，并固定产出：累计 hit rate、每 request 的命中及 source、平均检索时间和逻辑 cache 增长。它不读取任何预先收集的 694 条 sidecar。
 
 Carnator 的 collector 与 arrival replay 同步运行：无 Stage-1 候选时直接将该 request 作为 future source 准备到 step 10；有候选时先运行到 completed step 5，并只在 signature gate 拒绝后继续到 step 10。scheduler 始终为完整 50 steps，不执行 VAE decode、也不运行 step 10 之后的去噪。命中的 target 不保留 source sidecar。报告将 Stage-1 retrieval、signature gate、Early Probe 和 source-cache preparation 分别计时，避免将 Carnator 的模型 probe 混为纯检索耗时。
+
+如果只评估检索命中效果，可使用 `--assume-step10-cache` 轻量模式。该模式仍在线运行到
+step 5 并生成 signature，但 miss source 不执行 step 6--10，也不写入实际 step-10 latent 或
+sparse-attention artifact；逻辑 cache 默认标记为 step-10 ready。该结果只代表 retrieval-only
+实验，schema 和 `step10_cache_assumed` 字段会明确记录这一假设，不代表真实生成复用可执行。

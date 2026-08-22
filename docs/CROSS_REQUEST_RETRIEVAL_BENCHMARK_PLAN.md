@@ -27,3 +27,13 @@ step 5 写入临时 object-level signature 并执行 gate。无候选的 request
 artifact。命中的 target 会删除临时 probe sidecar，且不进入 cache。测试不解码视频，也不会执行
 step 10 后的去噪。在线 Early Probe 的最终定义见
 [CARNATOR_ONLINE_RETRIEVAL_PLAN.md](CARNATOR_ONLINE_RETRIEVAL_PLAN.md)。
+
+只测检索效果时可显式使用：
+
+```bash
+PYTHONPATH=. python scripts/benchmark/cross_request_retrieval.py --assume-step10-cache
+```
+
+该模式仍按 arrival order 运行到 step 5 并执行候选 gate；miss source 不再运行 step 6--10，
+仅在逻辑 cache 中标记 step-10 artifact 已存在。输出 schema 会标记
+`step10_cache_assumed=true`，不能用于验证实际 latent/sparse-attention 复用。
