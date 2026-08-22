@@ -7,10 +7,11 @@ name = "video-cache-baselines"
 version = "0.1.0"
 description = "Unified protocol for text-to-video cache baselines"
 requires-python = ">=3.10"
-dependencies = ["PyYAML>=6.0"]
+dependencies = ["PyYAML>=6.0", "safetensors>=0.6", "scikit-image>=0.22"]
 
 [project.scripts]
 vcb-run = "scripts.run.run:main"
+vcb-cross-request-benchmark = "scripts.benchmark.cross_request_retrieval:main"
 
 [tool.setuptools]
 py-modules = []

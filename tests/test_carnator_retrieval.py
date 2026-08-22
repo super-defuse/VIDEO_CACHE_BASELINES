@@ -1,88 +1,228 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 
-from carnator.retrieval import (
-    CARNATOR_IMPLEMENTATION_ID,
-    CARNATOR_SIGNATURE_PROFILE_ID,
-    CarnatorNounAnnotations,
-    CarnatorRetriever,
-    CarnatorSignatureBuilder,
-    CarnatorThresholdConfig,
-    build_native_prompt_ets_signature,
-)
+import torch
+
+from carnator.online_signature import compare_online_signatures, write_online_signature
+from carnator.online_flow import resolve_online_request
+from carnator.retrieval import CarnatorNounAnnotations, CarnatorRetriever
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
-from scripts.run import carnator_dataset_ets
-from scripts.run import cross_request_dataset
+from scripts.benchmark import cross_request_retrieval
 
 
-def _retriever(*, retrieval_only: bool = True, threshold_config=None):
-    return CarnatorRetriever(
-        LexicalTestEmbedder(), CarnatorNounAnnotations(),
-        threshold_config or CarnatorThresholdConfig(
-            "test-frozen", CARNATOR_IMPLEMENTATION_ID, CARNATOR_SIGNATURE_PROFILE_ID,
-            {"mbase_iou": 0.5, "medit_iou": 0.5, "msee_iou": 0.5, "ets_cosine": 0.8}, True, True,
-        ),
-        retrieval_only=retrieval_only,
+def _sidecar(tmp_path, name: str, prompt: str, nouns: list[str], *, step5_latent=None):
+    work = tmp_path / name
+    work.mkdir()
+    masks = {}
+    for index, noun in enumerate(nouns):
+        mask = torch.zeros((3, 4, 5), dtype=torch.bool)
+        mask[:, 1:3, 1 + index:3 + index] = True
+        masks[noun] = mask
+    step10 = work / "step10.pt"
+    sparse = work / "sparse.bin"
+    step10.write_bytes(b"step10")
+    sparse.write_bytes(b"sparse")
+    if step5_latent is None:
+        step5_latent = torch.ones((2, 3, 4, 5), dtype=torch.float32)
+    return write_online_signature(
+        work,
+        step5_latent=step5_latent,
+        initial_latent=torch.zeros((2, 3, 4, 5), dtype=torch.float32),
+        metadata={
+            "prompt": prompt,
+            "model": "test-wan",
+            "scheduler": "unipc",
+            "scheduler_config": {"flow_shift": 5.0, "solver_order": 2},
+            "cfg": 5.0,
+            "probe_seed": 20260218,
+            "completed_step": 5,
+            "latent_shape": [2, 3, 4, 5],
+            "latent_token_grid": [3, 4, 5],
+            "noun_extractor": "test-nouns/v1",
+            "mask_policy": "test-mbase/v1",
+        },
+        mbase_by_noun=masks,
+        cache={
+            "anchor_step": 10,
+            "model": "test-wan",
+            "latent_token_grid": [3, 4, 5],
+            "latent_path": str(step10),
+            "latent_sha256": hashlib.sha256(step10.read_bytes()).hexdigest(),
+            "sparse_attention_path": str(sparse),
+            "sparse_attention_sha256": hashlib.sha256(sparse.read_bytes()).hexdigest(),
+        },
     )
 
 
-def _record(uuid: str, request_index: int, prompt: str, nouns: list[str], *, ready: bool = True):
-    builder = CarnatorSignatureBuilder()
-    manifest = {
-        "implementation_id": CARNATOR_IMPLEMENTATION_ID,
-        "signature_profile_id": CARNATOR_SIGNATURE_PROFILE_ID,
-        "threshold_config_id": "test-frozen",
-        "uuid": uuid,
-        "namespace": "fixture",
-        "completed_step": 5,
-        "reuse_anchor_step": 10,
-    }
+def _retriever(*, retrieval_only: bool = True):
+    return CarnatorRetriever(
+        LexicalTestEmbedder(), CarnatorNounAnnotations(), retrieval_only=retrieval_only,
+        max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
+    )
+
+
+def _record(uuid: str, request_index: int, prompt: str, nouns: list[str], signature, *, ready: bool = True):
     metadata = {
         "source_request_index": request_index,
         "trf_nouns": nouns,
-        "signature": builder.build(prompt, nouns),
+        "signature": signature,
         "cache_ready": ready,
-        "manifest": manifest,
     }
     return VectorRecord(uuid, prompt, LexicalTestEmbedder().encode([prompt])[0], metadata, request_index)
 
 
-def test_carnator_accepts_same_nouns_only_when_fixture_is_cache_ready():
-    retriever = _retriever()
-    source = _record("source", 0, "train", ["train"])
-    result = retriever.search(Request(1, "target", "train", 2), [source])
+def test_carnator_accepts_matching_online_signature_when_fixture_is_cache_ready(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "train", ["train"])
+    source = _record("source", 0, "train", ["train"], source_signature)
+
+    result = _retriever().search(Request(1, "target", "train", 2), [source], target_signature=target_signature)
+
     assert result.hit
     assert result.source_uuid == "source"
     assert result.metadata["reuse_mode"] == "joint_latent_sparse_attention"
-
-    rejected = retriever.search(Request(1, "target", "train", 2),
-                                [_record("source", 0, "train", ["train"], ready=False)])
-    assert not rejected.hit
-    assert rejected.metadata["stage_2"][0]["reason"] == "cache_not_ready"
+    assert result.metadata["stage_2_profile"] == "online_signature"
+    assert result.metadata["stage_2"][0]["online_signature"]["reusable"] is True
 
 
-def test_carnator_noun_prefilter_skips_step_five_probe_for_multiple_differences():
-    retriever = _retriever()
-    source = _record("source", 0, "a red train", ["train", "station"])
-    result = retriever.search(Request(1, "target", "a blue dog", 2), [source])
+def test_carnator_rejects_when_signature_gate_passes_but_cache_is_not_ready(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "train", ["train"])
+    result = _retriever().search(
+        Request(1, "target", "train", 2),
+        [_record("source", 0, "train", ["train"], source_signature, ready=False)],
+        target_signature=target_signature,
+    )
+
+    assert not result.hit
+    assert result.metadata["stage_2"][0]["reason"] == "cache_not_ready"
+
+
+def test_online_signature_rejects_a_changed_step10_artifact(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "train", ["train"])
+    accepted = compare_online_signatures(
+        target_signature, source_signature, max_latent_distance=0.01, check_cache_artifacts=True,
+    )
+    assert accepted["reusable"] is True
+    (tmp_path / "source" / "step10.pt").write_bytes(b"changed")
+    rejected = compare_online_signatures(
+        target_signature, source_signature, max_latent_distance=0.01, check_cache_artifacts=True,
+    )
+    assert rejected["reusable"] is False
+    assert rejected["reason"] == "step10_artifact_unreadable_or_changed"
+
+
+def test_carnator_uses_latent_area_and_shape_gates_for_one_noun_change(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a ball", ["ball"])
+    target_signature = _sidecar(tmp_path, "target", "a cube", ["cube"])
+    retriever = CarnatorRetriever(
+        LexicalTestEmbedder(), CarnatorNounAnnotations(), candidate_min_similarity=-1.0, retrieval_only=True,
+        max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
+    )
+    result = retriever.search(
+        Request(1, "target", "a cube", 2),
+        [_record("source", 0, "a ball", ["ball"], source_signature)],
+        target_signature=target_signature,
+    )
+
+    assert result.hit
+    comparison = result.metadata["stage_2"][0]["online_signature"]
+    assert comparison["gates"]["latent_feature"] is True
+    assert comparison["gates"]["log_area_ratio"] is True
+    assert comparison["gates"]["shape_one_minus_dice"] is True
+
+
+def test_carnator_noun_prefilter_skips_online_signature_for_multiple_differences():
+    source = VectorRecord(
+        "source",
+        "a red train",
+        LexicalTestEmbedder().encode(["a red train"])[0],
+        {"trf_nouns": ["train", "station"]},
+        0,
+    )
+
+    result = _retriever().search(Request(1, "target", "a blue dog", 2), [source])
+
     assert not result.hit
     assert result.metadata["step_2_probe_run"] is False
     assert result.metadata["reason"] == "no_noun_compatible_candidate"
 
 
-def test_carnator_rejects_unauthenticated_threshold_config_before_probe():
-    config = CarnatorThresholdConfig("untrusted", "wrong", "wrong", {}, False, False)
-    result = _retriever(threshold_config=config).search(
-        Request(1, "target", "train", 2), [_record("source", 0, "train", ["train"])])
+def test_carnator_requires_a_target_sidecar_after_stage_one(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a train", ["train"])
+    result = _retriever(retrieval_only=False).search(
+        Request(1, "target", "a train", 2),
+        [_record("source", 0, "a train", ["train"], source_signature)],
+    )
+
     assert not result.hit
-    assert result.metadata["reason"] == "threshold_config_unauthenticated"
-    assert result.metadata["step_2_probe_run"] is False
+    assert result.kind == "probe_required"
+    assert result.metadata["reason"] == "target_signature_required"
 
 
-def test_carnator_uses_shared_top_twenty_floor_and_limits_ets_to_five_candidates():
+def test_online_flow_collects_one_target_signature_then_authorizes_joint_reuse(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "a train", ["train"])
+    calls = []
+
+    decision = resolve_online_request(
+        _retriever(retrieval_only=False),
+        Request(1, "target", "a train", 2),
+        [_record("source", 0, "a train", ["train"], source_signature)],
+        collect_target_signature=lambda: (calls.append("probe") or target_signature),
+    )
+
+    assert calls == ["probe"]
+    assert decision.probe_collected is True
+    assert decision.action == "joint_reuse"
+    assert decision.match.source_uuid == "source"
+
+
+def test_online_flow_skips_probe_without_a_noun_compatible_candidate(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a train", ["train"])
+    calls = []
+
+    decision = resolve_online_request(
+        _retriever(retrieval_only=False),
+        Request(1, "target", "a dog and a cat", 2),
+        [_record("source", 0, "a train", ["train"], source_signature)],
+        collect_target_signature=lambda: (calls.append("probe") or source_signature),
+    )
+
+    assert calls == []
+    assert decision.probe_collected is False
+    assert decision.action == "dense_generation"
+
+
+def test_online_flow_falls_back_to_dense_after_an_incompatible_signature(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a train", ["train"])
+    target_signature = _sidecar(
+        tmp_path,
+        "target",
+        "a train", ["train"],
+        step5_latent=torch.arange(120, dtype=torch.float32).reshape(2, 3, 4, 5),
+    )
+    calls = []
+
+    decision = resolve_online_request(
+        _retriever(retrieval_only=False),
+        Request(1, "target", "a train", 2),
+        [_record("source", 0, "a train", ["train"], source_signature)],
+        collect_target_signature=lambda: (calls.append("probe") or target_signature),
+    )
+
+    assert calls == ["probe"]
+    assert decision.probe_collected is True
+    assert decision.action == "dense_generation"
+    assert decision.match.metadata["stage_2"][0]["online_signature"]["gates"]["latent_feature"] is False
+
+
+def test_carnator_uses_top_twenty_and_limits_stage_two_to_five(tmp_path):
     class FixedEmbedder:
         @property
         def signature(self) -> str:
@@ -91,32 +231,21 @@ def test_carnator_uses_shared_top_twenty_floor_and_limits_ets_to_five_candidates
         def encode(self, texts: list[str]) -> list[list[float]]:
             return [[1.0, 0.0] for _ in texts]
 
+    source_signature = _sidecar(tmp_path, "source", "train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "train", ["train"])
     retriever = CarnatorRetriever(
-        FixedEmbedder(),
-        CarnatorNounAnnotations(),
-        CarnatorThresholdConfig(
-            "test-frozen", CARNATOR_IMPLEMENTATION_ID, CARNATOR_SIGNATURE_PROFILE_ID,
-            {"mbase_iou": 0.5, "medit_iou": 0.5, "msee_iou": 0.5, "ets_cosine": 0.8}, True, True,
-        ),
-        candidate_top_k=20,
-        candidate_min_similarity=0.65,
-        stage2_candidate_top_k=5,
-        retrieval_only=True,
+        FixedEmbedder(), CarnatorNounAnnotations(), candidate_top_k=20,
+        candidate_min_similarity=0.65, stage2_candidate_top_k=5, retrieval_only=True,
+        max_latent_distance=0.01, max_log_area_ratio=0.01, max_shape_distance=0.01,
     )
     records = []
     for index, score in enumerate((0.99, 0.98, 0.97, 0.96, 0.95, 0.94), start=1):
-        record = _record(f"source-{index}", index, "train", ["train"], ready=index == 6)
-        record = VectorRecord(
-            record.uuid,
-            record.term,
-            [score, (1.0 - score * score) ** 0.5],
-            record.metadata,
-            record.source_request_index,
-        )
-        records.append(record)
+        record = _record(f"source-{index}", index, "train", ["train"], source_signature, ready=index == 6)
+        records.append(VectorRecord(record.uuid, record.term, [score, (1.0 - score * score) ** 0.5],
+                                    record.metadata, record.source_request_index))
     records.append(VectorRecord("below-floor", "train", [0.64, 0.0], records[0].metadata, 7))
 
-    result = retriever.search(Request(8, "target", "train", 8), records)
+    result = retriever.search(Request(8, "target", "train", 8), records, target_signature=target_signature)
 
     assert not result.hit
     assert [candidate["uuid"] for candidate in result.metadata["top_k"]] == [
@@ -149,86 +278,7 @@ def test_carnator_annotation_uuid_lookup_does_not_evaluate_the_fallback(tmp_path
     assert annotations.for_request(Request(0, "remote", "a remote", 1)) == ("remote",)
 
 
-def _native_signature(
-    prompt: str,
-    nouns: list[str],
-    *,
-    offset: float = 0.0,
-    request_seed: int | None = None,
-):
-    return build_native_prompt_ets_signature(
-        prompt,
-        nouns,
-        {
-            "source_completed_step": 5,
-            "prompt": prompt,
-            "mask_variant": "self_contrast_cross_attention_fusion",
-            "mask_positive": "",
-            "Mbase": [[[1, 0], [0, 1]], [[1, 0], [0, 1]]],
-            "Medit": [[[1, 1], [0, 1]], [[1, 1], [0, 1]]],
-            "Msee": [[[1, 1], [1, 1]], [[1, 1], [1, 1]]],
-            "score": [
-                [[0.1 + offset, 0.3], [0.2, 0.4]],
-                [[0.2, 0.4 + offset], [0.3, 0.5]],
-            ],
-        },
-        request_seed=request_seed,
-    )
-
-
-def test_native_prompt_ets_requires_a_real_target_probe_before_authorization():
-    source = _record("source", 0, "a train", ["train"])
-    source.metadata["signature"] = _native_signature("a train", ["train"])
-    retriever = CarnatorRetriever(
-        LexicalTestEmbedder(), CarnatorNounAnnotations(),
-        CarnatorThresholdConfig(
-            "test-frozen", CARNATOR_IMPLEMENTATION_ID, CARNATOR_SIGNATURE_PROFILE_ID,
-            {"mbase_iou": 0.5, "medit_iou": 0.5, "msee_iou": 0.5, "ets_cosine": 0.8}, True, True,
-        ),
-    )
-    request = Request(1, "target", "a train", 2)
-
-    pending = retriever.search(request, [source])
-
-    assert not pending.hit
-    assert pending.kind == "probe_required"
-    assert pending.metadata["reason"] == "target_signature_required"
-    assert pending.metadata["probe_required"] is True
-    assert pending.metadata["step_2_probe_run"] is False
-
-
-def test_native_prompt_ets_compares_compressed_masks_after_the_probe():
-    source = _record("source", 0, "a train", ["train"])
-    source.metadata["signature"] = _native_signature("a train", ["train"])
-    target_signature = _native_signature("a train", ["train"])
-    retriever = _retriever(retrieval_only=True)
-
-    result = retriever.search(
-        Request(1, "target", "a train", 2), [source], target_signature=target_signature
-    )
-
-    assert result.hit
-    assert result.metadata["step_2_probe_run"] is True
-    assert result.metadata["selected_metrics"]["mbase_iou"] == 1.0
-    assert result.metadata["selected_metrics"]["ets_cosine"] > 0.99
-
-
-def test_native_prompt_ets_rejects_a_signature_from_another_prompt():
-    source = _record("source", 0, "a train", ["train"])
-    source.metadata["signature"] = _native_signature("a train", ["train"])
-    retriever = _retriever(retrieval_only=True)
-
-    result = retriever.search(
-        Request(1, "target", "a train", 2),
-        [source],
-        target_signature=_native_signature("a different train", ["train"]),
-    )
-
-    assert not result.hit
-    assert result.metadata["reason"] == "target_signature_prompt_mismatch"
-
-
-def test_dataset_replay_uses_native_ets_and_writes_comparison_outputs(tmp_path):
+def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     workload = tmp_path / "workload.csv"
     workload.write_text(
         "request_index,uuid,prompt\n"
@@ -237,69 +287,49 @@ def test_dataset_replay_uses_native_ets_and_writes_comparison_outputs(tmp_path):
         "2,third,a train\n",
         encoding="utf-8",
     )
-    signatures = tmp_path / "native_ets.jsonl"
-    signatures.write_text(
-        "".join(
-            json.dumps({
-                "uuid": uuid,
-                "signature": _native_signature("a train", ["train"], request_seed=20260218 + index),
-            }) + "\n"
-            for index, uuid in enumerate(("first", "second", "third"))
-        ),
-        encoding="utf-8",
-    )
-    output_dir = tmp_path / "replay"
+    signatures = tmp_path / "online_signature.jsonl"
+    with signatures.open("w", encoding="utf-8") as handle:
+        for uuid in ("first", "second", "third"):
+            handle.write(json.dumps({"uuid": uuid, "signature": _sidecar(tmp_path, uuid, "a train", ["train"])}) + "\n")
+    output_dir = tmp_path / "artifacts"
 
-    assert cross_request_dataset.main([
+    assert cross_request_retrieval.main([
         "--workload", str(workload),
-        "--native-ets-jsonl", str(signatures),
-        "--methods", "nirvana_vid,carnator",
-        "--output-dir", str(output_dir),
-        "--group-size", "2",
+        "--online-signatures", str(signatures),
+        "--artifact-dir", str(output_dir),
         "--shuffle-seed", "0",
         "--dry-run",
     ]) == 0
 
-    with (output_dir / "selection_comparison.csv").open(newline="", encoding="utf-8") as handle:
+    with (output_dir / "reports" / "request_matches.csv").open(newline="", encoding="utf-8") as handle:
         selected = list(csv.DictReader(handle))
     assert selected[0]["carnator_hit"] == "False"
     assert selected[1]["carnator_source_uuid"] == "first"
     assert selected[1]["nirvana_vid_source_uuid"] == "first"
-    with (output_dir / "hit_rate_by_group.csv").open(newline="", encoding="utf-8") as handle:
-        groups = list(csv.DictReader(handle))
-    assert len(groups) == 4
-    assert (output_dir / "hit_rate_by_group.svg").is_file()
+    benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
+    assert benchmark["schema_version"] == "cross-request-retrieval/v2"
+    assert benchmark["methods"]["carnator"]["stage_2"] == "online_signature"
+    assert (output_dir / "reports" / "hit_rate_over_time.csv").is_file()
+    assert (output_dir / "reports" / "retrieval_summary.csv").is_file()
+    assert (output_dir / "reports" / "cache_growth.csv").is_file()
+    assert set(path.name for path in (output_dir / "results").iterdir()) == {
+        "nirvana_vid.jsonl", "chai.jsonl", "chorus.jsonl", "carnator.jsonl",
+    }
 
 
-def test_dataset_replay_can_resolve_organized_run_layout(tmp_path):
+def test_cross_request_benchmark_allows_an_explicit_missing_carnator_sidecar_mode(tmp_path):
     workload = tmp_path / "workload.csv"
-    workload.write_text(
-        "request_index,uuid,prompt\n"
-        "0,first,a train\n"
-        "1,second,a train\n",
-        encoding="utf-8",
-    )
-    assert cross_request_dataset.main([
+    workload.write_text("request_index,uuid,prompt\n0,first,a train\n1,second,a train\n", encoding="utf-8")
+    output_dir = tmp_path / "artifacts"
+
+    assert cross_request_retrieval.main([
         "--workload", str(workload),
-        "--methods", "chai",
-        "--artifact-root", str(tmp_path / "artifacts"),
-        "--run-id", "test-run",
-        "--run-name", "chai",
+        "--artifact-dir", str(output_dir),
         "--shuffle-seed", "0",
         "--dry-run",
+        "--allow-missing-carnator-signatures",
     ]) == 0
-    output_dir = tmp_path / "artifacts" / "test-run" / "runs" / "chai"
-    manifest = json.loads((output_dir / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["artifact_layout"] == "cross-request-retrieval/v1"
-    assert manifest["run_id"] == "test-run"
-    assert manifest["run_name"] == "chai"
 
-
-def test_native_dataset_ets_collector_forces_a_step_five_source_probe(tmp_path):
-    args = carnator_dataset_ets.build_parser().parse_args(["--output", str(tmp_path / "ets.jsonl")])
-
-    carnator_dataset_ets._validate_args(args)
-
-    assert args.source_only is True
-    assert args.signature_only is True
-    assert args.steps == args.mask_probe_step == 5
+    benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
+    assert benchmark["methods"]["carnator"]["hits"] == 0
+    assert benchmark["carnator_missing_online_signatures"] == 2

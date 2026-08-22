@@ -1,8 +1,0 @@
-{
-  "mode": "native-wan-step5-prompt-ets",
-  "signatures": 694,
-  "entity_annotations": "datasets/carnator_vbench_trf_nouns.csv",
-  "entity_annotations_sha256": "6e589a4357b0aa83337d72195c0635ee12c12efec7121bc11dff32fc7ccef7f0",
-  "entity_extractor": "spacy:en_core_web_sm|pos=NOUN,PROPN",
-  "entity_metadata": "rebound_from_existing_native_prompt_ets"
-}

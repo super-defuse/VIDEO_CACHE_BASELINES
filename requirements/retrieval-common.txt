@@ -1,6 +1,7 @@
 # Cross-request retrieval dependencies used by CHAI.
 # Install this file into the model environment that executes the baseline.
 spacy==3.8.11
+safetensors>=0.6,<1.0
 
 # CHAI's paper specifies FAISS 1.13 for entity-vector lookup.
 faiss-cpu==1.13.0
