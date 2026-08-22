@@ -541,6 +541,69 @@ class NativeCrossAttentionProbe(AbstractContextManager):
         return hook
 
 
+class NativeMultiNounCrossAttentionProbe(AbstractContextManager):
+    """Capture one cross-attention score volume per canonical noun in one pass."""
+
+    def __init__(
+        self,
+        model,
+        layers: list[int],
+        positive_indices_by_noun: dict[str, list[int]],
+        token_grid: tuple[int, int, int],
+    ) -> None:
+        if not positive_indices_by_noun:
+            raise ValueError("multi-noun cross-attention probe needs at least one noun")
+        self.model = model
+        self.layers = layers
+        self.positive_indices_by_noun = {
+            str(noun): list(indices) for noun, indices in positive_indices_by_noun.items()
+        }
+        self.token_grid = token_grid
+        self.enabled = False
+        self.current_step_index = -1
+        self.records_by_noun: dict[str, list[dict[str, Any]]] = {
+            noun: [] for noun in self.positive_indices_by_noun
+        }
+        self.handles = []
+
+    def __enter__(self):
+        for layer_index in self.layers:
+            attn = self.model.blocks[layer_index].cross_attn
+            self.handles.append(attn.register_forward_pre_hook(self._make_hook(layer_index)))
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        for handle in self.handles:
+            handle.remove()
+        self.handles.clear()
+        return False
+
+    def _make_hook(self, layer_index: int):
+        def hook(attn, inputs):
+            if not self.enabled:
+                return
+            import torch
+
+            x, context = inputs[0], inputs[1]
+            batch, heads, head_dim = x.size(0), attn.num_heads, attn.head_dim
+            q = attn.norm_q(attn.q(x)).view(batch, -1, heads, head_dim)
+            k = attn.norm_k(attn.k(context)).view(batch, -1, heads, head_dim)
+            t, h, w = self.token_grid
+            for noun, indices in self.positive_indices_by_noun.items():
+                positive_indices = torch.tensor(indices, device=k.device, dtype=torch.long)
+                positive_keys = k.index_select(1, positive_indices)
+                score = torch.einsum("bqhd,bkhd->bhqk", q, positive_keys).mul(head_dim**-0.5).mean(dim=(0, 1, 3))
+                self.records_by_noun[noun].append(
+                    {
+                        "step_index": int(self.current_step_index),
+                        "layer_index": int(layer_index),
+                        "positive": score[: t * h * w].reshape(t, h, w).detach().float().cpu(),
+                    }
+                )
+
+        return hook
+
+
 class NativeSelfAttentionContrastProbe(AbstractContextManager):
     def __init__(
         self,

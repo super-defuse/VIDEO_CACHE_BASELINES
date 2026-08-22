@@ -277,19 +277,13 @@ def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     workload.write_text(
         "request_index,uuid,prompt\n"
         "0,first,a train\n"
-        "1,second,a train\n"
-        "2,third,a train\n",
+        "1,second,a train\n",
         encoding="utf-8",
     )
-    signatures = tmp_path / "online_signature.jsonl"
-    with signatures.open("w", encoding="utf-8") as handle:
-        for uuid in ("first", "second", "third"):
-            handle.write(json.dumps({"uuid": uuid, "signature": _sidecar(tmp_path, uuid, "a train", ["train"])}) + "\n")
     output_dir = tmp_path / "artifacts"
 
     assert cross_request_retrieval.main([
         "--workload", str(workload),
-        "--online-signatures", str(signatures),
         "--artifact-dir", str(output_dir),
         "--shuffle-seed", "0",
         "--dry-run",
@@ -298,32 +292,26 @@ def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     with (output_dir / "reports" / "request_matches.csv").open(newline="", encoding="utf-8") as handle:
         selected = list(csv.DictReader(handle))
     assert selected[0]["carnator_hit"] == "False"
-    assert selected[1]["carnator_source_uuid"] == "first"
-    assert selected[1]["nirvana_vid_source_uuid"] == "first"
+    assert selected[1]["carnator_source_uuid"] == selected[0]["uuid"]
+    assert selected[1]["nirvana_vid_source_uuid"] == selected[0]["uuid"]
     benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
-    assert benchmark["schema_version"] == "cross-request-retrieval/v2"
-    assert benchmark["methods"]["carnator"]["stage_2"] == "online_signature"
+    assert benchmark["schema_version"] == "cross-request-retrieval/v3-progressive-online"
+    assert benchmark["carnator"]["sidecar_mode"] == "arrival_order_miss_only"
+    assert benchmark["methods"]["carnator"]["stage_2"] == "progressive_online_signature"
+    assert benchmark["methods"]["carnator"]["early_probe_requests"] == 1
+    assert benchmark["methods"]["carnator"]["source_cache_entries"] == 1
+    carnator_rows = [
+        json.loads(line)
+        for line in (output_dir / "results" / "carnator.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert carnator_rows[0]["probe_collected"] is False
+    assert carnator_rows[0]["source_cached"] is True
+    assert carnator_rows[1]["probe_collected"] is True
+    assert carnator_rows[1]["source_cached"] is False
+    assert len([path for path in (output_dir / "carnator_sources").iterdir() if path.is_dir()]) == 1
     assert (output_dir / "reports" / "hit_rate_over_time.csv").is_file()
     assert (output_dir / "reports" / "retrieval_summary.csv").is_file()
     assert (output_dir / "reports" / "cache_growth.csv").is_file()
     assert set(path.name for path in (output_dir / "results").iterdir()) == {
         "nirvana_vid.jsonl", "chai.jsonl", "chorus.jsonl", "carnator.jsonl",
     }
-
-
-def test_cross_request_benchmark_allows_an_explicit_missing_carnator_sidecar_mode(tmp_path):
-    workload = tmp_path / "workload.csv"
-    workload.write_text("request_index,uuid,prompt\n0,first,a train\n1,second,a train\n", encoding="utf-8")
-    output_dir = tmp_path / "artifacts"
-
-    assert cross_request_retrieval.main([
-        "--workload", str(workload),
-        "--artifact-dir", str(output_dir),
-        "--shuffle-seed", "0",
-        "--dry-run",
-        "--allow-missing-carnator-signatures",
-    ]) == 0
-
-    benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
-    assert benchmark["methods"]["carnator"]["hits"] == 0
-    assert benchmark["carnator_missing_online_signatures"] == 2

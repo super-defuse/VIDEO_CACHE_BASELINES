@@ -159,9 +159,8 @@ conda run -n wan env PYTHONPATH=. python scripts/run/carnator_wan_matrix.py \
 conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality.py artifacts/runs/smoke
 
 # Cross-request retrieval benchmark for NIRVANA-VID, CHAI, Chorus, and Carnator.
-# It does not load Wan or run video denoising. Carnator needs one sidecar per UUID.
-PYTHONPATH=. python3 scripts/benchmark/cross_request_retrieval.py \
-  --online-signatures /path/to/carnator-sidecars.jsonl
+# Carnator creates sidecars progressively in arrival order and stops at step 10.
+PYTHONPATH=. python3 scripts/benchmark/cross_request_retrieval.py
 ```
 
 `--dry-run` 会走对应模型配置和原有推理编排，但使用确定性的测试 adapter，不执行 CUDA

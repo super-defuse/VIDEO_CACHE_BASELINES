@@ -45,7 +45,7 @@ probe 必须沿用完整 50-step scheduler，只在第 5 个 completed step 采�
 
 ## 正式测试
 
-正式 retrieval-only 测试的唯一 workload 是原始的
+正式测试的唯一 workload 是原始的
 `datasets/vbench_cross_request_prompts.csv`（694 条）。开始回放前固定执行
 `random.Random(20260821).shuffle(rows)`；该顺序是模拟真实 request arrival 的唯一顺序，并写入每条结果的 `arrival_index`。四种方法各自从空逻辑 cache 开始，按同一到达顺序处理；只有 miss 会写入该方法自己的 source cache。
 
@@ -53,4 +53,6 @@ Carnator 在每个 request 到达时，以固定的 `spaCy en_core_web_sm` `NOUN
 
 ## 评测边界
 
-`scripts/benchmark/cross_request_retrieval.py` 只测检索授权，不运行 Wan 推理。它比较 NIRVANA-VID、CHAI、Chorus 和 Carnator，并固定产出：累计 hit rate、每 request 的命中及 source、平均检索时间和逻辑 cache 增长。Carnator 使用线上 collector 写入的完整 sidecar；benchmark 启动时验证每个 sidecar 的 codec、Mbase 和 step-10 cache 契约。
+`scripts/benchmark/cross_request_retrieval.py` 比较 NIRVANA-VID、CHAI、Chorus 和 Carnator，并固定产出：累计 hit rate、每 request 的命中及 source、平均检索时间和逻辑 cache 增长。它不读取任何预先收集的 694 条 sidecar。
+
+Carnator 的 collector 与 arrival replay 同步运行：无 Stage-1 候选时直接将该 request 作为 future source 准备到 step 10；有候选时先运行到 completed step 5，并只在 signature gate 拒绝后继续到 step 10。scheduler 始终为完整 50 steps，不执行 VAE decode、也不运行 step 10 之后的去噪。命中的 target 不保留 source sidecar。报告将 Stage-1 retrieval、signature gate、Early Probe 和 source-cache preparation 分别计时，避免将 Carnator 的模型 probe 混为纯检索耗时。
