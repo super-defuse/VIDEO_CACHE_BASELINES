@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -38,10 +39,16 @@ _NOUNLESS_OVERRIDES = {"object_class_65": ("remote",)}
 def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
     """Return canonical lower-case, de-duplicated noun strings."""
 
+    def fold(value: str) -> str:
+        return "".join(
+            char for char in unicodedata.normalize("NFKD", value)
+            if not unicodedata.combining(char)
+        )
+
     if isinstance(values, str):
         values = re.split(r"[;,|]", values)
     nouns = {
-        " ".join(_NOUN_TOKEN_RE.findall(str(value).lower())).strip()
+        " ".join(_NOUN_TOKEN_RE.findall(fold(str(value)).lower())).strip()
         for value in values
     }
     return tuple(sorted(noun for noun in nouns if noun))

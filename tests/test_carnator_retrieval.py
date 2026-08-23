@@ -8,7 +8,8 @@ import torch
 
 from carnator.online_signature import compare_online_signatures, write_online_signature
 from carnator.online_flow import resolve_online_request
-from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever
+from carnator.adapters.wan_ti2v_5b import find_token_indices
+from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever, canonical_nouns
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
 from scripts.benchmark import cross_request_retrieval
@@ -270,6 +271,30 @@ def test_carnator_runtime_extractor_applies_the_explicit_nounless_override():
 
     extractor = CarnatorNounExtractor(EmptyExtractor())
     assert extractor.for_request(Request(339, "object_class_65", "a remote", 1)) == ("remote",)
+
+
+def test_carnator_folds_accents_before_matching_native_attention_tokens():
+    class Tokenizer:
+        def __call__(self, prompt, **kwargs):
+            del kwargs
+            return {
+                "offset_mapping": torch.tensor([[[0, len(prompt)]]]),
+                "attention_mask": torch.tensor([[1]]),
+            }
+
+    class Wrapper:
+        pass
+
+    class Encoder:
+        pass
+
+    wrapper = Wrapper()
+    wrapper.tokenizer = Tokenizer()
+    encoder = Encoder()
+    encoder.tokenizer = wrapper
+
+    assert canonical_nouns(["façades"]) == ("facades",)
+    assert find_token_indices(encoder, "ancient façades", "facades", 8) == [0]
 
 
 def test_cross_request_benchmark_writes_all_four_reports(tmp_path):

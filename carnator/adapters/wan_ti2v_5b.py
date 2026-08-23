@@ -383,9 +383,18 @@ def token_grid_for(latent: Any, patch_size: tuple[int, int, int]) -> tuple[int, 
 
 def find_token_indices(text_encoder, prompt: str, phrase: str, text_len: int) -> list[int]:
     import re
+    import unicodedata
 
-    prompt_norm = re.sub(r"\s+", " ", prompt.strip().lower())
-    phrase_norm = re.sub(r"\s+", " ", phrase.strip().lower())
+    def normalize(value: str) -> str:
+        # spaCy noun text may decompose accented words through the ASCII
+        # canonicalizer (e.g. ``façades`` -> ``fa ades``). Fold accents and
+        # collapse the resulting whitespace while preserving character
+        # positions for the tokenizer offset mapping.
+        folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+        return re.sub(r"\s+", " ", folded.strip().lower())
+
+    prompt_norm = normalize(prompt)
+    phrase_norm = normalize(phrase)
     tokenizer = text_encoder.tokenizer.tokenizer
     encoded = tokenizer(
         prompt,
