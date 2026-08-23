@@ -50,20 +50,8 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
 - 测试覆盖：source trajectory/cache 读写、JSON 输出校验、Grounded-SAM-2 mask 传播、TGAA token 映射失败即报错、Stage-2 TGAA/SRD/fusion 门控、Stage-3 dense/no-reuse 回归和 hook 清理。
 - 在 Wan2.2 真实验收完成前，CogVideoX1.5 所有 Chorus 指标保持 `N/A`，不得用其他方法结果代填。
 
-## 当前实跑（2026-08-17）
+## 结果归档
 
-- 产物：`artifacts/runs/wan22-ti2v-5b/dog-to-cat/chorus/`。source 完成 50 步，
-  `295.77s`；target 命中 `source_prompt` cache，执行 40 步，报告时延 `179.06s`，以现有
-  50-step dense target `300.64s` 为分母为 `1.68x`。source trajectory cache 为 `1.07GB`。
-- target Stage 2 为 step 10--39：SRD `Medit=53.24%`、`Msee=84.06%`，保留 native Wan
-  dense head，TGAA 覆盖全部 30 个 Wan blocks。目标请求的 cond/uncond 两个分支合计记录
-  `1800` 次 TGAA 调用；Stage 3 为 step 40--49 dense full computation，不执行 TGAA、SRD
-  或 source latent fusion，并在 step 40 重置 UniPC derivative history。
-- `F_k(t,m)`/`F_o(t,m)` 仍为论文未披露的细节。本轮使用并标记
-  `linear_step_decay_approximation`，而非声称与论文函数等价；token 映射失败时会直接失败。
-- LLM `31.68s`、Grounded-SAM-2 `28.60s`，合计 `60.28s`，通过
-  `excluded_latency_s` 从 target 报告时延中剔除。2026-08-17 已按锁定的 VBench snapshot
-  完成质量评估：target `CLIP-T=0.3491`、`VBench-Q=0.6218`；原始六维度和 source/target
-  分项保存在 `chorus/vbench/custom_vidprom_eval_results.json` 与 `results.jsonl`。
-- 路线一之前的 Chorus 运行目录和 cache 已移至本机回收站，不再作为 Chorus 结果；当前产物
-  只对应 Stage 2 fusion、dense head 和 Stage 3 UniPC history reset 实现。
+实跑结果、质量指标、计时口径和产物路径统一记录在
+[ACCEPTANCE.md](ACCEPTANCE.md#结果汇总)。本文件只保留复现目标、固定依赖和实现约束，
+避免与验收记录重复。

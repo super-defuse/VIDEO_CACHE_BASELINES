@@ -192,4 +192,5 @@ FlashAttention CUDA 调用、Runner 落盘，以及 Baseline、TeaCache、NIRVAN
 - `configs/`、`requirements/`、`environments/`：运行配置与三个 Conda 环境。
 - `docs/`：方法、adapter、评测、验收和来源记录。
 
-当前仅覆盖 T2V。运行结果与验收数据见 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。
+当前仅覆盖 T2V。文档职责和入口见 [docs/README.md](docs/README.md)；运行结果与验收数据见
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。

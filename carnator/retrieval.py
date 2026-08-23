@@ -1,7 +1,7 @@
 """Carnator's object-level cross-request retrieval authorization.
 
 Stage 1 ranks complete prompts, then filters their noun sets. Stage 2 accepts
-only native step-5 online-signature sidecars; legacy prompt-level ETS is
+only native step-5 Early Signature sidecars; legacy prompt-level ETS is
 intentionally unsupported.
 """
 
@@ -9,12 +9,10 @@ from __future__ import annotations
 
 import json
 import math
-import re
-import unicodedata
 from pathlib import Path
 from typing import Any, Iterable
 
-from carnator.online_signature import LATENT_FEATURE_PROFILE_ID, compare_online_signatures
+from carnator.early_signature import EARLY_SIGNATURE_PROFILE_ID, compare_early_signatures
 from core.retrieval import (
     EntityExtractor,
     LexicalTestEntityExtractor,
@@ -30,32 +28,19 @@ from core.types import CacheMatch, Request
 
 
 CARNATOR_RETRIEVER_ID = "carnator_two_stage"
-_NOUN_TOKEN_RE = re.compile(r"[a-z0-9]+(?:'[a-z0-9]+)?", re.IGNORECASE)
-# spaCy labels the noun in this one-token VBench prompt as ADJ. Keep the
-# correction tied to the request UUID rather than expanding the POS policy.
-_NOUNLESS_OVERRIDES = {"object_class_65": ("remote",)}
 
 
-def canonical_nouns(values: Iterable[str]) -> tuple[str, ...]:
-    """Return canonical lower-case, de-duplicated noun strings."""
-
-    def fold(value: str) -> str:
-        return "".join(
-            char for char in unicodedata.normalize("NFKD", value)
-            if not unicodedata.combining(char)
-        )
-
+def _noun_set(values: Iterable[str]) -> set[str]:
     if isinstance(values, str):
-        values = re.split(r"[;,|]", values)
-    nouns = {
-        " ".join(_NOUN_TOKEN_RE.findall(fold(str(value)).lower())).strip()
-        for value in values
-    }
-    return tuple(sorted(noun for noun in nouns if noun))
+        values = (values,)
+    nouns = set(values)
+    if not all(isinstance(noun, str) and noun for noun in nouns):
+        raise ValueError("noun metadata must contain non-empty strings")
+    return nouns
 
 
 class CarnatorNounExtractor:
-    """Extract canonical nouns from the prompt at request arrival time."""
+    """Use CHAI's raw spaCy ``NOUN`` token extraction for Carnator."""
 
     def __init__(self, extractor: EntityExtractor | None = None) -> None:
         self.extractor = extractor or LexicalTestEntityExtractor()
@@ -67,12 +52,8 @@ class CarnatorNounExtractor:
         return self._extract(entry.uuid, entry.prompt)
 
     def _extract(self, uuid: str, prompt: str) -> tuple[str, ...]:
-        nouns = canonical_nouns(self.extractor.extract(prompt))
-        if not nouns:
-            nouns = canonical_nouns(_NOUNLESS_OVERRIDES.get(str(uuid), ()))
-        if not nouns:
-            raise ValueError("noun extraction produced no NOUN/PROPN tokens")
-        return nouns
+        del uuid
+        return tuple(self.extractor.extract(prompt))
 
 
 class CarnatorRetriever(RetrievalStrategy):
@@ -97,9 +78,10 @@ class CarnatorRetriever(RetrievalStrategy):
         candidate_vector_backend: str = "memory",
         stage2_candidate_top_k: int = 5,
         retrieval_only: bool = False,
-        max_latent_distance: float | None = None,
         max_log_area_ratio: float | None = None,
         max_shape_distance: float | None = None,
+        max_context_color_distance: float | None = None,
+        max_changed_color_distance: float | None = None,
     ) -> None:
         if candidate_top_k <= 0 or stage2_candidate_top_k <= 0:
             raise ValueError("Carnator candidate limits must be positive")
@@ -111,9 +93,14 @@ class CarnatorRetriever(RetrievalStrategy):
         self.candidate_min_similarity = float(candidate_min_similarity)
         self.stage2_candidate_top_k = int(stage2_candidate_top_k)
         self.retrieval_only = bool(retrieval_only)
-        self.max_latent_distance = self._threshold(max_latent_distance, "max_latent_distance")
         self.max_log_area_ratio = self._threshold(max_log_area_ratio, "max_log_area_ratio")
         self.max_shape_distance = self._threshold(max_shape_distance, "max_shape_distance")
+        self.max_context_color_distance = self._threshold(
+            max_context_color_distance, "max_context_color_distance"
+        )
+        self.max_changed_color_distance = self._threshold(
+            max_changed_color_distance, "max_changed_color_distance"
+        )
         self.prompt_retriever = PromptRetriever(
             embedder,
             self.candidate_min_similarity,
@@ -129,10 +116,11 @@ class CarnatorRetriever(RetrievalStrategy):
             f"|min_similarity={self.candidate_min_similarity:.8f}"
             f"|stage2_top_k={self.stage2_candidate_top_k}"
             f"|vector_backend={self.prompt_retriever.vector_backend}"
-            f"|stage_2={LATENT_FEATURE_PROFILE_ID}"
-            f"|max_latent_distance={self._threshold_signature(self.max_latent_distance)}"
+            f"|stage_2={EARLY_SIGNATURE_PROFILE_ID}"
             f"|max_log_area_ratio={self._threshold_signature(self.max_log_area_ratio)}"
             f"|max_shape_distance={self._threshold_signature(self.max_shape_distance)}"
+            f"|max_context_color_distance={self._threshold_signature(self.max_context_color_distance)}"
+            f"|max_changed_color_distance={self._threshold_signature(self.max_changed_color_distance)}"
         )
 
     @staticmethod
@@ -157,12 +145,14 @@ class CarnatorRetriever(RetrievalStrategy):
 
     def records_for(self, entry: Any) -> list[VectorRecord]:
         nouns = self.noun_extractor.for_entry(entry)
+        if not nouns:
+            return []
         metadata = dict(getattr(entry, "metadata", None) or {})
         metadata.setdefault("source_request_index", int(entry.request_index))
         metadata.setdefault("trf_nouns", list(nouns))
         if "signature" not in metadata:
             metadata["cache_ready"] = False
-            metadata.setdefault("signature_missing_reason", "native_online_signature_required")
+            metadata.setdefault("signature_missing_reason", "native_early_signature_required")
         return [
             VectorRecord(
                 entry.uuid,
@@ -185,7 +175,9 @@ class CarnatorRetriever(RetrievalStrategy):
 
     @staticmethod
     def _prefilter(source: Iterable[str], target: Iterable[str]) -> tuple[bool, str]:
-        source_nouns, target_nouns = set(canonical_nouns(source)), set(canonical_nouns(target))
+        source_nouns, target_nouns = _noun_set(source), _noun_set(target)
+        if not source_nouns or not target_nouns:
+            return False, "nounless_prompt"
         if source_nouns == target_nouns:
             return True, "same_noun_set"
         if len(source_nouns - target_nouns) == len(target_nouns - source_nouns) == 1:
@@ -204,27 +196,38 @@ class CarnatorRetriever(RetrievalStrategy):
         *,
         target_signature: dict[str, Any] | None = None,
     ) -> CacheMatch:
+        thresholds = {
+            "max_context_color_distance": self.max_context_color_distance,
+            "max_log_area_ratio": self.max_log_area_ratio,
+            "max_shape_distance": self.max_shape_distance,
+            "max_changed_color_distance": self.max_changed_color_distance,
+        }
         metadata: dict[str, Any] = {
             "retriever": self.kind,
             "embedding": self.embedder.signature,
             "candidate_top_k": self.candidate_top_k,
             "candidate_min_similarity": self.candidate_min_similarity,
             "stage_2_candidate_top_k": self.stage2_candidate_top_k,
-            "stage_2_profile": "online_signature",
-            "stage_2_reference_profile": LATENT_FEATURE_PROFILE_ID,
-            "stage_2_operational": self.max_latent_distance is not None,
+            "stage_2_profile": "early_signature",
+            "stage_2_reference_profile": EARLY_SIGNATURE_PROFILE_ID,
+            "stage_2_operational": self.max_context_color_distance is not None,
             "single_noun_substitution_operational": (
-                self.max_log_area_ratio is not None and self.max_shape_distance is not None
+                self.max_log_area_ratio is not None
+                and self.max_shape_distance is not None
+                and self.max_changed_color_distance is not None
             ),
-            "stage_2_thresholds": {
-                "max_latent_distance": self.max_latent_distance,
-                "max_log_area_ratio": self.max_log_area_ratio,
-                "max_shape_distance": self.max_shape_distance,
-            },
+            "stage_2_thresholds": thresholds,
             "stage_2_threshold_mode": (
                 "all_gates_configured"
-                if self.max_log_area_ratio is not None and self.max_shape_distance is not None
-                else ("latent_only" if self.max_latent_distance is not None else "unconfigured")
+                if self.max_context_color_distance is not None
+                and self.max_log_area_ratio is not None
+                and self.max_shape_distance is not None
+                and self.max_changed_color_distance is not None
+                else (
+                    "context_color_only"
+                    if self.max_context_color_distance is not None
+                    else "unconfigured"
+                )
             ),
             "cache_ready": False,
             "step_2_probe_run": False,
@@ -234,6 +237,9 @@ class CarnatorRetriever(RetrievalStrategy):
             "stage_2": [],
         }
         target_nouns = self.noun_extractor.for_request(request)
+        if not target_nouns:
+            metadata["reason"] = "nounless_prompt"
+            return CacheMatch(metadata=metadata, kind="no_reuse")
         candidates = self._top_k(request, list(records))
         metadata["top_k"] = [
             {"uuid": record.uuid, "rank": rank, "score": score}
@@ -245,7 +251,7 @@ class CarnatorRetriever(RetrievalStrategy):
             source_nouns = (record.metadata or {}).get("trf_nouns", []) if isinstance(record.metadata, dict) else []
             try:
                 allowed, reason = self._prefilter(source_nouns, target_nouns)
-                display_nouns = list(canonical_nouns(source_nouns))
+                display_nouns = sorted(_noun_set(source_nouns))
             except (TypeError, ValueError):
                 allowed, reason, display_nouns = False, "invalid_noun_metadata", []
             metadata["noun_prefilter"].append({
@@ -281,19 +287,22 @@ class CarnatorRetriever(RetrievalStrategy):
                 candidate_result["reason"] = "invalid_signature:ValueError"
                 metadata["stage_2"].append(candidate_result)
                 continue
-            source_nouns = set(canonical_nouns(source_metadata.get("trf_nouns", [])))
+            source_nouns = _noun_set(source_metadata.get("trf_nouns", []))
             target_only, source_only = sorted(set(target_nouns) - source_nouns), sorted(source_nouns - set(target_nouns))
-            comparison = compare_online_signatures(
+            query_changed_noun = target_only[0] if len(target_only) == 1 and len(source_only) == 1 else None
+            candidate_changed_noun = source_only[0] if len(target_only) == 1 and len(source_only) == 1 else None
+            comparison = compare_early_signatures(
                 target_signature,
                 source_signature,
-                query_changed_noun=target_only[0] if len(target_only) == 1 and len(source_only) == 1 else None,
-                candidate_changed_noun=source_only[0] if len(target_only) == 1 and len(source_only) == 1 else None,
-                max_latent_distance=self.max_latent_distance,
+                query_changed_noun=query_changed_noun,
+                candidate_changed_noun=candidate_changed_noun,
+                max_context_color_distance=self.max_context_color_distance,
                 max_log_area_ratio=self.max_log_area_ratio,
                 max_shape_distance=self.max_shape_distance,
+                max_changed_color_distance=self.max_changed_color_distance,
                 check_cache_artifacts=not self.retrieval_only,
             )
-            candidate_result["online_signature"] = comparison
+            candidate_result["early_signature"] = comparison
             if not comparison["signature_compatible"]:
                 candidate_result["reason"] = "signature_incompatible"
                 metadata["stage_2"].append(candidate_result)
@@ -323,7 +332,7 @@ class CarnatorRetriever(RetrievalStrategy):
             "trf_nouns": list(self.noun_extractor.for_request(request)),
             "cache_ready": False,
             "latent_step": int(latent_step),
-            "signature_missing_reason": "native_online_signature_required",
+            "signature_missing_reason": "native_early_signature_required",
         }
 
 
@@ -333,7 +342,7 @@ def make_carnator_retriever(
     extractor: EntityExtractor = (
         LexicalTestEntityExtractor()
         if dry_run
-        else SpacyEntityExtractor(str(config.get("spacy_model", "en_core_web_sm")), allowed_pos=("NOUN", "PROPN"))
+        else SpacyEntityExtractor(str(config.get("spacy_model", "en_core_web_sm")))
     )
     return CarnatorRetriever(
         _make_embedder(config, dry_run=dry_run),
@@ -343,10 +352,16 @@ def make_carnator_retriever(
         candidate_vector_backend=_vector_backend(config, dry_run=dry_run, default="chroma"),
         stage2_candidate_top_k=int(config.get("stage2_candidate_top_k", 5)),
         retrieval_only=retrieval_only,
-        max_latent_distance=config.get("max_latent_distance"),
         max_log_area_ratio=config.get("max_log_area_ratio"),
         max_shape_distance=config.get("max_shape_distance"),
+        max_context_color_distance=config.get("max_context_color_distance"),
+        max_changed_color_distance=config.get("max_changed_color_distance"),
     )
 
 
-__all__ = ["CARNATOR_RETRIEVER_ID", "CarnatorNounExtractor", "CarnatorRetriever", "canonical_nouns", "make_carnator_retriever"]
+__all__ = [
+    "CARNATOR_RETRIEVER_ID",
+    "CarnatorNounExtractor",
+    "CarnatorRetriever",
+    "make_carnator_retriever",
+]

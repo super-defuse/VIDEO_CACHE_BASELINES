@@ -1,0 +1,255 @@
+{
+  "schema_version": "vidprom-cluster-carnator-noun-pairs/v1",
+  "created_at_utc": "2026-08-23T06:40:09.153538+00:00",
+  "purpose": "Static pre-signature Carnator candidate-pair audit; not an online replay or reuse-hit result.",
+  "sampling": {
+    "rule": "top-level cluster_*.csv with rows > 2000",
+    "sample_size": 2000,
+    "base_seed": 20260823,
+    "per_dataset_seed": "sha256(f'{base_seed}:{filename}')[:8] interpreted as big-endian integer",
+    "output_order": "original source CSV row order after random selection"
+  },
+  "noun_extractor": {
+    "implementation": "core.retrieval.SpacyEntityExtractor",
+    "model": "en_core_web_sm",
+    "model_version": "3.8.0",
+    "spacy_version": "3.8.11",
+    "allowed_pos": [
+      "NOUN",
+      "PROPN"
+    ],
+    "canonicalizer": "carnator.retrieval.canonical_nouns",
+    "prompt_cleanup": "split before first literal 'aesthetic score'"
+  },
+  "retrieval": {
+    "embedding": "clip:openai/clip-vit-large-patch14",
+    "device": "cuda:0",
+    "candidate_top_k": 20,
+    "candidate_min_similarity": 0.65,
+    "stage2_candidate_top_k": 5,
+    "noun_prefilter": "same canonical noun set OR exactly one noun substitution",
+    "remaining_gate": "Early Signature and cache-artifact checks were not run"
+  },
+  "datasets": [
+    {
+      "dataset": "cluster_00_2968",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_00_2968.csv",
+      "input_sha256": "aadb11f42e4cc38cbcc353fa35b49fcfce21c0db48e349439d450f52ff76a01d",
+      "source_rows": 2968,
+      "sampled_rows": 2000,
+      "sample_seed": 8899537743005949950,
+      "noun_valid_rows": 2000,
+      "nounless_rows": 0,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 224,
+        "noun_compatible_candidate_pairs_before_cap": 14,
+        "stage2_candidate_pairs": 14,
+        "stage2_same_noun_set_pairs": 6,
+        "stage2_single_noun_substitution_pairs": 8,
+        "targets_with_stage2_candidate": 14,
+        "targets_with_same_noun_candidate": 6,
+        "targets_with_single_noun_substitution_candidate": 8
+      }
+    },
+    {
+      "dataset": "cluster_02_2170",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_02_2170.csv",
+      "input_sha256": "868bc0ee5cf03cc1b4adf21b273a5d7c6c666adef2ec49614ddd7381e9ba01e2",
+      "source_rows": 2170,
+      "sampled_rows": 2000,
+      "sample_seed": 15202530624155266480,
+      "noun_valid_rows": 1999,
+      "nounless_rows": 1,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 14248,
+        "noun_compatible_candidate_pairs_before_cap": 2359,
+        "stage2_candidate_pairs": 1563,
+        "stage2_same_noun_set_pairs": 78,
+        "stage2_single_noun_substitution_pairs": 1485,
+        "targets_with_stage2_candidate": 483,
+        "targets_with_same_noun_candidate": 52,
+        "targets_with_single_noun_substitution_candidate": 476
+      }
+    },
+    {
+      "dataset": "cluster_03_3500",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_03_3500.csv",
+      "input_sha256": "9ea4c4b9984ed6c92ba8b0f7760f4611709f716c8f065fe0d5dab5ef56e79a88",
+      "source_rows": 3500,
+      "sampled_rows": 2000,
+      "sample_seed": 2221766124938115971,
+      "noun_valid_rows": 1996,
+      "nounless_rows": 4,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 1544,
+        "noun_compatible_candidate_pairs_before_cap": 80,
+        "stage2_candidate_pairs": 80,
+        "stage2_same_noun_set_pairs": 14,
+        "stage2_single_noun_substitution_pairs": 66,
+        "targets_with_stage2_candidate": 36,
+        "targets_with_same_noun_candidate": 11,
+        "targets_with_single_noun_substitution_candidate": 30
+      }
+    },
+    {
+      "dataset": "cluster_04_3227",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_04_3227.csv",
+      "input_sha256": "59dd8be900c04ed7d95bd774a155fd951b14cf664c6a243cafd7816213dd9510",
+      "source_rows": 3227,
+      "sampled_rows": 2000,
+      "sample_seed": 4045064719928673159,
+      "noun_valid_rows": 1998,
+      "nounless_rows": 2,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 17392,
+        "noun_compatible_candidate_pairs_before_cap": 993,
+        "stage2_candidate_pairs": 881,
+        "stage2_same_noun_set_pairs": 28,
+        "stage2_single_noun_substitution_pairs": 853,
+        "targets_with_stage2_candidate": 351,
+        "targets_with_same_noun_candidate": 25,
+        "targets_with_single_noun_substitution_candidate": 348
+      }
+    },
+    {
+      "dataset": "cluster_07_4250",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_07_4250.csv",
+      "input_sha256": "c054760b52b4001981087ec77c94a7926c6df8c8496fca9b9de83e42ea12a44c",
+      "source_rows": 4250,
+      "sampled_rows": 2000,
+      "sample_seed": 10498418004694346481,
+      "noun_valid_rows": 1997,
+      "nounless_rows": 3,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 17503,
+        "noun_compatible_candidate_pairs_before_cap": 1916,
+        "stage2_candidate_pairs": 1272,
+        "stage2_same_noun_set_pairs": 66,
+        "stage2_single_noun_substitution_pairs": 1206,
+        "targets_with_stage2_candidate": 434,
+        "targets_with_same_noun_candidate": 50,
+        "targets_with_single_noun_substitution_candidate": 428
+      }
+    },
+    {
+      "dataset": "cluster_08_4235",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_08_4235.csv",
+      "input_sha256": "cfec5280c4b4894f81b8f7dc604780c09bcd5d9f1217bf884150ed08f78ea701",
+      "source_rows": 4235,
+      "sampled_rows": 2000,
+      "sample_seed": 10354016126098238908,
+      "noun_valid_rows": 1999,
+      "nounless_rows": 1,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 20854,
+        "noun_compatible_candidate_pairs_before_cap": 202,
+        "stage2_candidate_pairs": 199,
+        "stage2_same_noun_set_pairs": 16,
+        "stage2_single_noun_substitution_pairs": 183,
+        "targets_with_stage2_candidate": 111,
+        "targets_with_same_noun_candidate": 16,
+        "targets_with_single_noun_substitution_candidate": 101
+      }
+    },
+    {
+      "dataset": "cluster_11_2414",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_11_2414.csv",
+      "input_sha256": "b639057cf7002c6c609854725472635d59e525eb0b36dce4df33e74b410045ca",
+      "source_rows": 2414,
+      "sampled_rows": 2000,
+      "sample_seed": 400240047879906537,
+      "noun_valid_rows": 1999,
+      "nounless_rows": 1,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 18008,
+        "noun_compatible_candidate_pairs_before_cap": 2225,
+        "stage2_candidate_pairs": 1553,
+        "stage2_same_noun_set_pairs": 199,
+        "stage2_single_noun_substitution_pairs": 1354,
+        "targets_with_stage2_candidate": 514,
+        "targets_with_same_noun_candidate": 124,
+        "targets_with_single_noun_substitution_candidate": 489
+      }
+    },
+    {
+      "dataset": "cluster_14_2547",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_14_2547.csv",
+      "input_sha256": "d158ff7dfa4f762062e50007567e9d809018a9035cb7d5d9cea38e5e68ac3a9c",
+      "source_rows": 2547,
+      "sampled_rows": 2000,
+      "sample_seed": 14478115327243571033,
+      "noun_valid_rows": 2000,
+      "nounless_rows": 0,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 17933,
+        "noun_compatible_candidate_pairs_before_cap": 16,
+        "stage2_candidate_pairs": 16,
+        "stage2_same_noun_set_pairs": 2,
+        "stage2_single_noun_substitution_pairs": 14,
+        "targets_with_stage2_candidate": 16,
+        "targets_with_same_noun_candidate": 2,
+        "targets_with_single_noun_substitution_candidate": 14
+      }
+    },
+    {
+      "dataset": "cluster_15_7565",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_15_7565.csv",
+      "input_sha256": "914b34645f3aa2d5ddab6694dd42b355c18296bbc53fa132ab58a88de1b62af3",
+      "source_rows": 7565,
+      "sampled_rows": 2000,
+      "sample_seed": 16562082752843323905,
+      "noun_valid_rows": 1995,
+      "nounless_rows": 5,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 35442,
+        "noun_compatible_candidate_pairs_before_cap": 1535,
+        "stage2_candidate_pairs": 1154,
+        "stage2_same_noun_set_pairs": 50,
+        "stage2_single_noun_substitution_pairs": 1104,
+        "targets_with_stage2_candidate": 414,
+        "targets_with_same_noun_candidate": 38,
+        "targets_with_single_noun_substitution_candidate": 406
+      }
+    },
+    {
+      "dataset": "cluster_16_2878",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_16_2878.csv",
+      "input_sha256": "5336e3e5de5615ee9d0b4b05597cb662c60407c39bd5769b2fd1e498b97971d2",
+      "source_rows": 2878,
+      "sampled_rows": 2000,
+      "sample_seed": 11276093373379195770,
+      "noun_valid_rows": 1998,
+      "nounless_rows": 2,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 2656,
+        "noun_compatible_candidate_pairs_before_cap": 49,
+        "stage2_candidate_pairs": 49,
+        "stage2_same_noun_set_pairs": 16,
+        "stage2_single_noun_substitution_pairs": 33,
+        "targets_with_stage2_candidate": 44,
+        "targets_with_same_noun_candidate": 16,
+        "targets_with_single_noun_substitution_candidate": 30
+      }
+    },
+    {
+      "dataset": "cluster_18_2505",
+      "input_file": "/home/tangxuebin/project/VidProM/clusters/cluster_18_2505.csv",
+      "input_sha256": "a23a8094fb4610bf6311c701530d505e709d269a5382360fe9d874938adbc342",
+      "source_rows": 2505,
+      "sampled_rows": 2000,
+      "sample_seed": 2948722550170107823,
+      "noun_valid_rows": 1999,
+      "nounless_rows": 1,
+      "statistics": {
+        "stage1_recalled_candidate_pairs": 667,
+        "noun_compatible_candidate_pairs_before_cap": 54,
+        "stage2_candidate_pairs": 54,
+        "stage2_same_noun_set_pairs": 14,
+        "stage2_single_noun_substitution_pairs": 40,
+        "targets_with_stage2_candidate": 47,
+        "targets_with_same_noun_candidate": 11,
+        "targets_with_single_noun_substitution_candidate": 36
+      }
+    }
+  ]
+}

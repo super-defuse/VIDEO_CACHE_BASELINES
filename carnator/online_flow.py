@@ -40,7 +40,7 @@ def resolve_online_request(
 
     ``collect_target_signature`` is responsible for running the target's
     unchanged scheduler through completed step 5 and writing a native
-    ``online_signature`` sidecar.  It is never called when stage 1 has no
+    Early Signature sidecar.  It is never called when stage 1 has no
     noun-compatible candidate.
     """
 

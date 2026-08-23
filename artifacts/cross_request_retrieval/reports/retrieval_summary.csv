@@ -1,0 +1,5 @@
+method,requests,hits,hit_rate,retrieval_total_s,retrieval_mean_ms,peak_cache_records,final_cache_records,stage_2,stage1_retrieval_total_s,signature_gate_total_s,early_probe_total_s,early_probe_requests,source_cache_total_s,source_cache_entries,step10_cache_assumed
+nirvana_vid,694,540,0.7780979827089337,8.33770170545904,12.013979402678732,154,154,,,,,,,,
+chai,694,587,0.845821325648415,5.577984052448301,8.037440997764122,101,101,,,,,,,,
+chorus,694,540,0.7780979827089337,8.751293815934332,12.609933452354946,154,154,,,,,,,,
+carnator,694,79,0.1138328530259366,48.90822667226894,70.47294909548839,615,615,progressive_online_signature,20.74211801411002,28.16610865815892,12227.007949886814,445,0.0,615,True

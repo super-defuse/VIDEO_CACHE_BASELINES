@@ -1,0 +1,38 @@
+retrieval:
+  nirvana_vid:
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:0
+    vector_backend: chroma
+    min_similarity: 0.65
+    reuse_step: 10
+  chai:
+    backend: longclip
+    longclip_checkpoint: /home/tangxuebin/models/longclip/longclip-L.pt
+    longclip_module: model.longclip
+    device: cuda:1
+    vector_backend: faiss
+    spacy_model: en_core_web_sm
+    sim_thres_for_search: 0.90
+    sim_thres_for_add: 0.95
+  chorus:
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:2
+    vector_backend: chroma
+    min_similarity: 0.65
+    stage_scheduler:
+      min_k1: 10
+      min_k2: 40
+      max_k1: 30
+      max_k2: 45
+  carnator:
+    backend: clip
+    model_id: openai/clip-vit-large-patch14
+    device: cuda:3
+    vector_backend: chroma
+    min_similarity: 0.65
+    candidate_top_k: 20
+    stage2_candidate_top_k: 5
+    spacy_model: en_core_web_sm
+    max_latent_distance: 0.15

@@ -26,6 +26,14 @@ artifacts/cache/
 **/cache/
 artifacts/vbench-cache/
 
+# Native retrieval indices and full calibration runs are local, regenerable
+# source/video/tensor payloads. Publish their compact inputs and summaries.
+artifacts/cross_request_retrieval/indices/
+artifacts/cross_request_retrieval/carnator_sources/
+artifacts/cross_request_retrieval/benchmark.log
+artifacts/cross_request_retrieval/benchmark.pid
+artifacts/early_signature_color_v1_calibration_cluster_02_2170/runs/
+
 # Regenerable persistent vector indexes; retrieval manifests and results remain
 # publishable, while Chroma/FAISS database files do not belong in Git.
 **/vector_store/

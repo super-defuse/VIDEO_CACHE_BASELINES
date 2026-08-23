@@ -38,7 +38,7 @@ retrieval:
       max_k2: 45
   carnator:
     # Shares CLIP/Chroma prompt ranking with NIRVANA and Chorus, then applies
-    # local entity filtering and the native step-5 online-signature gate.
+    # local entity filtering and the selected native step-5 signature gate.
     backend: clip
     model_id: openai/clip-vit-large-patch14
     device: cuda:0
@@ -47,9 +47,13 @@ retrieval:
     candidate_top_k: 20
     stage2_candidate_top_k: 5
     spacy_model: en_core_web_sm
-    # Temporary operational value: formal labeled-pair calibration may replace it.
-    max_latent_distance: 0.15
-    # Single-noun substitutions stay fail-closed until their two mask gates are calibrated.
+    # The sole Early Signature decodes one tail frame at step 5 and uses
+    # CIEDE2000 colour, area, and normalized-shape gates. Set these only from
+    # a frozen calibration result; absent thresholds fail closed.
+    # max_context_color_distance: ...
+    # max_log_area_ratio: ...
+    # max_shape_distance: ...
+    # max_changed_color_distance: ...
 chorus:
   stages:
     # Engineering schedule for the 50-step Wan2.2 run; Chorus does not

@@ -19,6 +19,7 @@ peft==0.17.1
 Pillow==11.3.0
 PyYAML==6.0.3
 safetensors==0.6.2
+scikit-image>=0.22
 sentencepiece==0.2.1
 tokenizers==0.21.1
 transformers==4.51.3

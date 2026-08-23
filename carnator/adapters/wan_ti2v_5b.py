@@ -386,10 +386,7 @@ def find_token_indices(text_encoder, prompt: str, phrase: str, text_len: int) ->
     import unicodedata
 
     def normalize(value: str) -> str:
-        # spaCy noun text may decompose accented words through the ASCII
-        # canonicalizer (e.g. ``façades`` -> ``fa ades``). Fold accents and
-        # collapse the resulting whitespace while preserving character
-        # positions for the tokenizer offset mapping.
+        # Match accented prompt text and noun tokens consistently.
         folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
         return re.sub(r"\s+", " ", folded.strip().lower())
 

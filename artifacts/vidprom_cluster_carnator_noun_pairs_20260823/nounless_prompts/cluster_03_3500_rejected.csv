@@ -1,0 +1,5 @@
+sample_index,source_row_index,uuid,prompt,reason
+169,307,b2cd4a52-7353-5ec0-bf1a-e21d1ed2b90a,"darling in the franxx,zero two get married",noun_extraction_produced_no_NOUN_or_PROPN
+935,1652,7431f246-bd28-53d0-84f3-bceeae6c1c17,Gandalf the gray going super saiyan,noun_extraction_produced_no_NOUN_or_PROPN
+1019,1814,6454d89c-568d-54e6-a812-9d5c6e5bf196,avatar，image，astronaut chimp，smoking,noun_extraction_produced_no_NOUN_or_PROPN
+1740,3044,4da8b994-ccfc-5e21-8b7a-1ced42866cd7,Anime_anime_protagonist_walks_up_to_a_volcano_studio_ghibli,noun_extraction_produced_no_NOUN_or_PROPN

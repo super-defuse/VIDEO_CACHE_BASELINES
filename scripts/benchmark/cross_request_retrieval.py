@@ -4,7 +4,7 @@
 The benchmark never preloads a corpus of Carnator signatures. Every source
 sidecar is created only after that request misses in its own arrival-order
 cache. Native Carnator work retains the 50-step scheduler but stops at step
-10 without decoding a video.
+10 after decoding one tail frame at step 5.
 """
 
 from __future__ import annotations
@@ -227,28 +227,29 @@ def _run_carnator(
             request = Request(
                 int(row["request_index"]), str(row["uuid"]), str(row["prompt"]), seed + int(row["request_index"])
             )
+            nouns = retriever.noun_extractor.for_request(request)
             stage1_started = time.perf_counter()
             preflight = retriever.search(request, records)
             stage1_s = time.perf_counter() - stage1_started
-            evaluator = None
-            if preflight.kind == "probe_required":
-                evaluator = lambda signature: retriever.search(request, records, target_signature=signature)
-            collection = collector.process(
-                request,
-                retriever.noun_extractor.for_request(request),
-                evaluate_probe=evaluator,
-            )
-            match = collection.match or preflight
-            lookup_s = stage1_s + collection.signature_gate_s
+            if nouns:
+                evaluator = None
+                if preflight.kind == "probe_required":
+                    evaluator = lambda signature: retriever.search(request, records, target_signature=signature)
+                collection = collector.process(request, nouns, evaluate_probe=evaluator)
+                match = collection.match or preflight
+            else:
+                collection = None
+                match = preflight
+            lookup_s = stage1_s + (collection.signature_gate_s if collection else 0.0)
             total_lookup_s += lookup_s
             total_stage1_s += stage1_s
-            total_gate_s += collection.signature_gate_s
-            total_probe_s += collection.early_probe_s
-            total_source_cache_s += collection.source_cache_s
-            probe_requests += int(collection.probe_collected)
+            total_gate_s += collection.signature_gate_s if collection else 0.0
+            total_probe_s += collection.early_probe_s if collection else 0.0
+            total_source_cache_s += collection.source_cache_s if collection else 0.0
+            probe_requests += int(collection.probe_collected) if collection else 0
             if match.hit:
                 hits += 1
-            else:
+            elif collection and collection.source_signature is not None:
                 records.extend(
                     _records_for_miss(
                         retriever,
@@ -274,13 +275,13 @@ def _run_carnator(
                 "score": match.score,
                 "retrieval_s": lookup_s,
                 "stage1_retrieval_s": stage1_s,
-                "signature_gate_s": collection.signature_gate_s,
-                "early_probe_s": collection.early_probe_s,
-                "source_cache_s": collection.source_cache_s,
-                "probe_collected": collection.probe_collected,
-                "source_cached": collection.source_cached,
-                "completed_steps": collection.completed_steps,
-                "step10_cache_assumed": collection.step10_cache_assumed,
+                "signature_gate_s": collection.signature_gate_s if collection else 0.0,
+                "early_probe_s": collection.early_probe_s if collection else 0.0,
+                "source_cache_s": collection.source_cache_s if collection else 0.0,
+                "probe_collected": collection.probe_collected if collection else False,
+                "source_cached": collection.source_cached if collection else False,
+                "completed_steps": collection.completed_steps if collection else 0,
+                "step10_cache_assumed": collection.step10_cache_assumed if collection else False,
                 "cache_records": cache_records,
                 "cache_match": match.metadata,
             })
@@ -288,7 +289,8 @@ def _run_carnator(
         collector.close()
     summary = _summary("carnator", len(rows), hits, total_lookup_s, peak_records, len({record.uuid for record in records}))
     summary.update({
-        "stage_2": "progressive_online_signature",
+        "stage_2": "progressive_early_signature",
+        "early_signature": "step5-tail-lab-ciede2000",
         "stage1_retrieval_total_s": total_stage1_s,
         "signature_gate_total_s": total_gate_s,
         "early_probe_total_s": total_probe_s,
@@ -354,7 +356,7 @@ def _write_reports(reports_dir: Path, summaries: dict[str, dict[str, Any]], resu
         "method", "requests", "hits", "hit_rate", "retrieval_total_s", "retrieval_mean_ms",
         "peak_cache_records", "final_cache_records", "stage_2", "stage1_retrieval_total_s",
         "signature_gate_total_s", "early_probe_total_s", "early_probe_requests", "source_cache_total_s",
-        "source_cache_entries", "step10_cache_assumed",
+        "source_cache_entries", "step10_cache_assumed", "early_signature",
     ]
     _write_csv(reports_dir / "retrieval_summary.csv", summary_fields, [summaries[method] for method in METHODS])
 
@@ -461,7 +463,8 @@ def main(argv: list[str] | None = None) -> int:
             "source_cache_completed_step": 10,
             "collector_max_completed_step": 5 if args.assume_step10_cache else 10,
             "step10_cache_assumed": args.assume_step10_cache,
-            "video_decoded": False,
+            "early_signature": "step5-tail-lab-ciede2000",
+            "video_decoded": True,
             "probe_seed": args.carnator_probe_seed,
         },
         "methods": summaries,

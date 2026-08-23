@@ -1,0 +1,74 @@
+{
+  "schema_version": "cross-request-retrieval/v4-retrieval-only-assumed-step10",
+  "workload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/datasets/vbench_cross_request_prompts.csv",
+  "requests": 694,
+  "seed": 20260218,
+  "shuffle_seed": 20260821,
+  "dry_run": false,
+  "carnator": {
+    "sidecar_mode": "arrival_order_miss_only_assumed_step10",
+    "scheduler_total_steps": 50,
+    "target_probe_completed_step": 5,
+    "source_cache_completed_step": 10,
+    "collector_max_completed_step": 5,
+    "step10_cache_assumed": true,
+    "video_decoded": false,
+    "probe_seed": 20260218
+  },
+  "methods": {
+    "nirvana_vid": {
+      "method": "nirvana_vid",
+      "requests": 694,
+      "hits": 540,
+      "hit_rate": 0.7780979827089337,
+      "retrieval_total_s": 8.33770170545904,
+      "retrieval_mean_ms": 12.013979402678732,
+      "peak_cache_records": 154,
+      "final_cache_records": 154
+    },
+    "chai": {
+      "method": "chai",
+      "requests": 694,
+      "hits": 587,
+      "hit_rate": 0.845821325648415,
+      "retrieval_total_s": 5.577984052448301,
+      "retrieval_mean_ms": 8.037440997764122,
+      "peak_cache_records": 101,
+      "final_cache_records": 101
+    },
+    "chorus": {
+      "method": "chorus",
+      "requests": 694,
+      "hits": 540,
+      "hit_rate": 0.7780979827089337,
+      "retrieval_total_s": 8.751293815934332,
+      "retrieval_mean_ms": 12.609933452354946,
+      "peak_cache_records": 154,
+      "final_cache_records": 154
+    },
+    "carnator": {
+      "method": "carnator",
+      "requests": 694,
+      "hits": 79,
+      "hit_rate": 0.1138328530259366,
+      "retrieval_total_s": 48.90822667226894,
+      "retrieval_mean_ms": 70.47294909548839,
+      "peak_cache_records": 615,
+      "final_cache_records": 615,
+      "stage_2": "progressive_online_signature",
+      "stage1_retrieval_total_s": 20.74211801411002,
+      "signature_gate_total_s": 28.16610865815892,
+      "early_probe_total_s": 12227.007949886814,
+      "early_probe_requests": 445,
+      "source_cache_total_s": 0.0,
+      "source_cache_entries": 615,
+      "step10_cache_assumed": true
+    }
+  },
+  "reports": {
+    "request_matches": "reports/request_matches.csv",
+    "hit_rate_over_time": "reports/hit_rate_over_time.csv",
+    "retrieval_summary": "reports/retrieval_summary.csv",
+    "cache_growth": "reports/cache_growth.csv"
+  }
+}

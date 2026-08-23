@@ -14,11 +14,11 @@ from typing import Any, Callable, Iterable
 
 import torch
 
-from carnator.online_signature import write_online_signature
+from carnator.early_signature import write_early_signature
 from core.types import CacheMatch, Request
 
 
-_SPARSE_ARTIFACT_FORMAT = "carnator-sparse-attention-artifact/v1"
+_SPARSE_ARTIFACT_FORMAT = "carnator-sparse-attention-artifact"
 
 
 @dataclass(frozen=True)
@@ -84,17 +84,41 @@ class SyntheticOnlineCollector:
         artifact_root: Path,
         *,
         probe_seed: int,
-        noun_extractor: str = "test-nouns/v1",
+        noun_extractor: str = "test-nouns",
         assume_step10_cache: bool = False,
     ) -> None:
         self.artifact_root = artifact_root.resolve()
         self.probe_seed = int(probe_seed)
         self.noun_extractor = noun_extractor
-        self.mask_policy = "synthetic-mbase/v1"
+        self.mask_policy = "synthetic-mbase"
         self.assume_step10_cache = bool(assume_step10_cache)
 
     def close(self) -> None:
         return None
+
+    def _tail_frame(self, step5_latent: torch.Tensor) -> torch.Tensor:
+        pooled = step5_latent.mean(dim=(1, 2, 3))
+        channels = torch.stack((pooled[0], pooled[-1], pooled.mean())).view(3, 1, 1)
+        return torch.tanh(channels).expand(3, 8, 10).contiguous()
+
+    def _write_signature(
+        self,
+        directory: Path,
+        *,
+        step5_latent: torch.Tensor,
+        metadata: dict[str, Any],
+        masks: dict[str, torch.Tensor],
+        decoded_tail_frame: torch.Tensor,
+        cache: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        return write_early_signature(
+            directory,
+            step5_latent=step5_latent,
+            decoded_tail_frame=decoded_tail_frame,
+            metadata=metadata,
+            mbase_by_noun=masks,
+            cache=cache,
+        )
 
     def process(
         self,
@@ -105,12 +129,11 @@ class SyntheticOnlineCollector:
     ) -> OnlineCollectionResult:
         noun_list = tuple(sorted(set(str(noun) for noun in nouns)))
         if not noun_list:
-            raise ValueError("online collector needs at least one canonical noun")
+            raise ValueError("online collector needs at least one noun token")
         source_dir = self.artifact_root / request.uuid
         source_dir.mkdir(parents=True, exist_ok=False)
         prompt_digest = hashlib.sha256(request.prompt.encode("utf-8")).digest()
         generator = torch.Generator(device="cpu").manual_seed(int.from_bytes(prompt_digest[:8], "little"))
-        initial = torch.zeros((2, 3, 4, 5), dtype=torch.float32)
         step5 = torch.randn((2, 3, 4, 5), generator=generator, dtype=torch.float32)
         masks = {noun: torch.ones((3, 4, 5), dtype=torch.bool) for noun in noun_list}
         metadata = {
@@ -127,12 +150,12 @@ class SyntheticOnlineCollector:
             "mask_policy": self.mask_policy,
         }
         probe_started = time.perf_counter()
-        signature = write_online_signature(
+        signature = self._write_signature(
             source_dir,
             step5_latent=step5,
-            initial_latent=initial,
             metadata=metadata,
-            mbase_by_noun=masks,
+            masks=masks,
+            decoded_tail_frame=self._tail_frame(step5),
         )
         early_probe_s = time.perf_counter() - probe_started
         match = None
@@ -149,12 +172,12 @@ class SyntheticOnlineCollector:
 
         if self.assume_step10_cache:
             cache = _assumed_step10_cache(metadata, request.uuid)
-            source_signature = write_online_signature(
+            source_signature = self._write_signature(
                 source_dir,
                 step5_latent=step5,
-                initial_latent=initial,
                 metadata=metadata,
-                mbase_by_noun=masks,
+                masks=masks,
+                decoded_tail_frame=self._tail_frame(step5),
                 cache=cache,
             )
             return OnlineCollectionResult(
@@ -182,12 +205,12 @@ class SyntheticOnlineCollector:
             "sparse_attention_path": str(sparse_path.resolve()),
             "sparse_attention_sha256": sparse_hash,
         }
-        source_signature = write_online_signature(
+        source_signature = self._write_signature(
             source_dir,
             step5_latent=step5,
-            initial_latent=initial,
             metadata=metadata,
-            mbase_by_noun=masks,
+            masks=masks,
+            decoded_tail_frame=self._tail_frame(step5),
             cache=cache,
         )
         return OnlineCollectionResult(
@@ -230,7 +253,7 @@ class NativeOnlineCollector:
         self.noun_extractor = noun_extractor
         self.assume_step10_cache = bool(assume_step10_cache)
         self.mask_policy = (
-            "native-cross-attention-mbase/v1"
+            "native-cross-attention-mbase"
             f"|layers={args.mask_layers}|top_p={float(args.mask_top_p):.8f}"
         )
         native.ensure_import_paths(args)
@@ -278,6 +301,31 @@ class NativeOnlineCollector:
             masks[noun] = bundle["Mbase"].detach().cpu().bool().contiguous()
         return masks
 
+    def _decoded_tail_frame(self, latent: torch.Tensor) -> torch.Tensor:
+        video = self.runtime.pipe.vae.decode([latent])[0]
+        if not isinstance(video, torch.Tensor) or video.ndim != 4 or video.shape[0] < 3 or video.shape[1] <= 0:
+            raise RuntimeError("Wan VAE did not return a [C,T,H,W] decoded video")
+        return video[:, -1].detach()
+
+    def _write_signature(
+        self,
+        directory: Path,
+        *,
+        step5_latent: torch.Tensor,
+        metadata: dict[str, Any],
+        masks: dict[str, torch.Tensor],
+        decoded_tail_frame: torch.Tensor,
+        cache: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        return write_early_signature(
+            directory,
+            step5_latent=step5_latent,
+            decoded_tail_frame=decoded_tail_frame,
+            metadata=metadata,
+            mbase_by_noun=masks,
+            cache=cache,
+        )
+
     def process(
         self,
         request: Request,
@@ -287,7 +335,7 @@ class NativeOnlineCollector:
     ) -> OnlineCollectionResult:
         noun_list = tuple(sorted(set(str(noun) for noun in nouns)))
         if not noun_list:
-            raise ValueError("online collector needs at least one canonical noun")
+            raise ValueError("online collector needs at least one noun token")
         native = self.native
         args = copy.copy(self.args)
         args.source_prompt = request.prompt
@@ -328,6 +376,8 @@ class NativeOnlineCollector:
         source_cached = False
         probe_started = time.perf_counter()
         step5_latent: torch.Tensor | None = None
+        mbase_by_noun: dict[str, torch.Tensor] | None = None
+        decoded_tail_frame: torch.Tensor | None = None
         no_sync = getattr(model, "no_sync", nullcontext)
         with torch.amp.autocast("cuda", dtype=self.runtime.pipe.param_dtype), torch.no_grad(), no_sync(), probe:
             for step_index, timestep in enumerate(scheduler.timesteps):
@@ -347,15 +397,18 @@ class NativeOnlineCollector:
 
                 if completed_steps == args.mask_probe_step:
                     torch.cuda.synchronize()
-                    prefix_to_step5_s = time.perf_counter() - probe_started
                     step5_latent = latent.detach().float().cpu().contiguous()
                     metadata = self._metadata(request, latent, token_grid)
-                    signature = write_online_signature(
+                    mbase_by_noun = self._mbase_by_noun(probe)
+                    decoded_tail_frame = self._decoded_tail_frame(latent)
+                    torch.cuda.synchronize()
+                    prefix_to_step5_s = time.perf_counter() - probe_started
+                    signature = self._write_signature(
                         source_dir,
                         step5_latent=step5_latent,
-                        initial_latent=initial_latent,
                         metadata=metadata,
-                        mbase_by_noun=self._mbase_by_noun(probe),
+                        masks=mbase_by_noun,
+                        decoded_tail_frame=decoded_tail_frame,
                     )
                     if evaluate_probe is not None:
                         early_probe_s = prefix_to_step5_s
@@ -366,12 +419,12 @@ class NativeOnlineCollector:
                             break
 
                     if self.assume_step10_cache:
-                        source_signature = write_online_signature(
+                        source_signature = self._write_signature(
                             source_dir,
                             step5_latent=step5_latent,
-                            initial_latent=initial_latent,
                             metadata=metadata,
-                            mbase_by_noun=self._mbase_by_noun(probe),
+                            masks=mbase_by_noun,
+                            decoded_tail_frame=decoded_tail_frame,
                             cache=_assumed_step10_cache(metadata, request.uuid),
                         )
                         source_cached = True
@@ -380,6 +433,10 @@ class NativeOnlineCollector:
                 if completed_steps == args.reuse_start_step:
                     if step5_latent is None:
                         raise RuntimeError("source cache reached step 10 without a step-5 latent")
+                    if mbase_by_noun is None:
+                        raise RuntimeError("source cache reached step 10 without step-5 Mbase")
+                    if decoded_tail_frame is None:
+                        raise RuntimeError("source cache reached step 10 without a decoded step-5 tail frame")
                     step10_path = source_dir / "step10.pt"
                     native.save_latent(step10_path, latent)
                     sparse_path = source_dir / "sparse_attention.json"
@@ -399,12 +456,12 @@ class NativeOnlineCollector:
                         "sparse_attention_path": str(sparse_path.resolve()),
                         "sparse_attention_sha256": sparse_hash,
                     }
-                    source_signature = write_online_signature(
+                    source_signature = self._write_signature(
                         source_dir,
                         step5_latent=step5_latent,
-                        initial_latent=initial_latent,
                         metadata=metadata,
-                        mbase_by_noun=self._mbase_by_noun(probe),
+                        masks=mbase_by_noun,
+                        decoded_tail_frame=decoded_tail_frame,
                         cache=cache,
                     )
                     source_cached = True

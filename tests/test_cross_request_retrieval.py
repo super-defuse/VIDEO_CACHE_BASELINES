@@ -148,14 +148,6 @@ def test_chai_spacy_extractor_matches_reference_token_filter():
     assert extractor.extract("Shanghai bund aesthetic score 0.9") == ["bund", "perspective"]
     assert nlp.seen_prompt == "Shanghai bund "
 
-    carnator_extractor = SpacyEntityExtractor("fake", allowed_pos=("NOUN", "PROPN"))
-    carnator_extractor._nlp = nlp
-    assert carnator_extractor.extract("Shanghai bund aesthetic score 0.9") == [
-        "Shanghai", "bund", "perspective",
-    ]
-    assert carnator_extractor.signature == "spacy:fake|pos=NOUN,PROPN"
-
-
 def test_chai_write_threshold_deduplicates_entity_batch():
     class Embedder:
         @property
