@@ -19,9 +19,9 @@ methods:
     environment: wan,cogvideo
     wan22: supported-via-matrix-cli
     cogvideox15: supported-source-latent-reuse
-  chai_carnator:
+  chorus2:
     environment: wan
-    wan22: supported-via-chai-carnator-matrix-cli
+    wan22: supported-via-native-cli
     cogvideox15: N/A
   chorus:
     environment: wan

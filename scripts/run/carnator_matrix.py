@@ -41,6 +41,12 @@ def parser() -> argparse.ArgumentParser:
         default="smoothstep",
         help="Distance-to-Mbase interpolation for boundary-blend mode.",
     )
+    value.add_argument(
+        "--middle-attention-mask",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply source block-mask selection to Medit/Msee in native Wan middle layers.",
+    )
     value.add_argument("--baselines", default="C0,B0,B1,B2,B3,B4,B5")
     value.add_argument("--check-only", action="store_true")
     value.add_argument("--dtype", choices=("bf16", "fp16"), default="bf16")
@@ -86,6 +92,8 @@ def common_command(args: argparse.Namespace, checkpoint: Path, baseline: str) ->
         "--flashinfer-plan-cache", args.flashinfer_plan_cache, "--outer-dtype", args.outer_dtype,
         "--flashinfer-wrapper", args.flashinfer_wrapper,
     ]
+    if not args.middle_attention_mask:
+        command.append("--no-middle-attention-mask")
     if args.guidance_scale is not None:
         command.extend(("--guidance-scale", str(args.guidance_scale)))
     return command
@@ -144,6 +152,8 @@ def prepare_5b_source(args: argparse.Namespace, checkpoint: Path) -> Path:
         "--outer-sparse-dtype", args.outer_dtype, "--flashinfer-plan-cache", args.flashinfer_plan_cache,
         "--flashinfer-wrapper", args.flashinfer_wrapper,
     ]
+    if not args.middle_attention_mask:
+        command.append("--no-middle-attention-mask")
     if args.guidance_scale is not None:
         command.extend(("--guidance-scale", str(args.guidance_scale)))
     subprocess.run(command, cwd=ROOT, check=True)
@@ -188,6 +198,7 @@ def main(argv: list[str] | None = None) -> int:
             "source_cache": str(source) if source else None,
             "latent_injection_mode": args.latent_injection_mode,
             "boundary_alpha_function": args.boundary_alpha_function,
+            "middle_attention_mask": args.middle_attention_mask,
             "baselines": records,
             "quality_metrics": ["clip_t", "vbench_q"],
         },

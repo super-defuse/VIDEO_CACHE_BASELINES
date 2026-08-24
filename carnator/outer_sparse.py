@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import math
 import os
 import sys
@@ -117,6 +118,73 @@ def refine_block_mask(
     return block_mask.repeat_interleave(q_repeat, dim=1).repeat_interleave(k_repeat, dim=2)[
         :, : seq_len // target_q_block_size, : seq_len // target_k_block_size
     ]
+
+
+def select_region_tokens_from_block_mask(
+    block_mask: torch.Tensor,
+    medit: torch.Tensor,
+    msee: torch.Tensor,
+    *,
+    q_block_size: int,
+    k_block_size: int,
+) -> tuple[torch.Tensor, torch.Tensor, dict[str, int | float]]:
+    """Restrict a canonical region update to source-attended token blocks.
+
+    ``block_mask`` is source attention routing in ``[head, q_block, k_block]``
+    form.  The native region path uses a shared token set across heads, so the
+    per-head routing is conservatively unioned only after it is intersected
+    with ``Msee``.  A Medit query token is retained only when its query block
+    has an allowed Msee key block; the resulting context is then limited to
+    Msee keys reachable from retained query blocks.
+    """
+
+    if block_mask.ndim != 3 or block_mask.dtype != torch.bool:
+        raise ValueError("block_mask must be a [heads, q_blocks, k_blocks] boolean tensor")
+    if medit.ndim != 1 or msee.ndim != 1 or medit.shape != msee.shape:
+        raise ValueError("Medit and Msee must be matching one-dimensional token masks")
+    if q_block_size <= 0 or k_block_size <= 0:
+        raise ValueError("block sizes must be positive")
+
+    token_count = int(medit.numel())
+    q_blocks = math.ceil(token_count / q_block_size)
+    k_blocks = math.ceil(token_count / k_block_size)
+    if tuple(block_mask.shape[1:]) != (q_blocks, k_blocks):
+        raise ValueError(
+            "block mask geometry does not match token masks: "
+            f"mask={tuple(block_mask.shape[1:])}, expected={(q_blocks, k_blocks)}"
+        )
+
+    device = medit.device
+    positions = torch.arange(token_count, device=device)
+    query_blocks = torch.div(positions, q_block_size, rounding_mode="floor")
+    key_blocks = torch.div(positions, k_block_size, rounding_mode="floor")
+    msee_key_blocks = torch.zeros(k_blocks, dtype=torch.bool, device=device)
+    msee_key_blocks[key_blocks[msee]] = True
+
+    # A query block can only be updated when at least one source-selected key
+    # block contains a region context token.  This is the Medit/block-mask
+    # intersection that lets the rest of the middle block retain its latent.
+    reachable_queries = (block_mask & msee_key_blocks.view(1, 1, -1)).any(dim=(0, 2))
+    query_mask = medit & reachable_queries.index_select(0, query_blocks)
+    active_query_blocks = torch.zeros(q_blocks, dtype=torch.bool, device=device)
+    active_query_blocks[query_blocks[query_mask]] = True
+    reachable_keys = (block_mask & active_query_blocks.view(1, -1, 1)).any(dim=(0, 1))
+    context_mask = msee & reachable_keys.index_select(0, key_blocks)
+
+    query_count = int(query_mask.sum().item())
+    context_count = int(context_mask.sum().item())
+    if query_count and not context_count:
+        raise ValueError("block-mask intersection left Medit queries without an Msee context")
+    return query_mask, context_mask, {
+        "input_medit_count": int(medit.sum().item()),
+        "input_msee_count": int(msee.sum().item()),
+        "query_count": query_count,
+        "context_count": context_count,
+        "active_query_blocks": int(active_query_blocks.sum().item()),
+        "active_key_blocks": int(reachable_keys.sum().item()),
+        "query_ratio": float(query_count / token_count) if token_count else 0.0,
+        "context_ratio": float(context_count / token_count) if token_count else 0.0,
+    }
 
 
 def cfg_branches(guidance_scale: float) -> int:
@@ -385,6 +453,8 @@ class SourceBlockMaskCache:
     """Disk-backed source masks keyed by denoising step, CFG branch and layer."""
 
     FORMAT = "carnator-source-block-mask-v1"
+    PACKED_FORMAT = "carnator-source-block-mask-bitpacked-v1"
+    CHORUS2_PACKED_FORMAT = "chorus2-normal-sparse-attention-mask-bitpacked-v1"
 
     def __init__(
         self,
@@ -403,6 +473,7 @@ class SourceBlockMaskCache:
         self.capture_seconds = 0.0
         self.write_seconds = 0.0
         self.configuration_error: str | None = None
+        self._bitpacked = False
         if create:
             if source_run_id is None or cfg_branch_count is None:
                 raise ValueError("source_run_id and cfg_branch_count are required to create a cache")
@@ -422,8 +493,10 @@ class SourceBlockMaskCache:
         if not self.metadata_path.exists():
             raise BlockMaskCacheError(f"missing source block-mask metadata: {self.metadata_path}")
         self.metadata = json.loads(self.metadata_path.read_text(encoding="utf-8"))
-        if self.metadata.get("format") != self.FORMAT:
+        cache_format = self.metadata.get("format")
+        if cache_format not in {self.FORMAT, self.PACKED_FORMAT, self.CHORUS2_PACKED_FORMAT}:
             raise BlockMaskCacheError("unsupported source block-mask cache format")
+        self._bitpacked = cache_format in {self.PACKED_FORMAT, self.CHORUS2_PACKED_FORMAT}
         cached_config = self.metadata.get("mask", {})
         if cached_config != asdict(self.config):
             self.configuration_error = "source block-mask parameters do not match this run"
@@ -495,7 +568,27 @@ class SourceBlockMaskCache:
                 f"cached shape/dtype={entry['shape']}/{entry['dtype']}, target={expected_shape}/{q.dtype}"
             )
         started = time.perf_counter()
-        mask = torch.load(self.root / entry["path"], map_location="cpu", weights_only=True)
+        path = self.root / entry["path"]
+        if self._bitpacked:
+            try:
+                payload = path.read_bytes()
+            except FileNotFoundError as exc:
+                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
+            expected_digest = entry.get("sha256")
+            if expected_digest and hashlib.sha256(payload).hexdigest() != expected_digest:
+                raise BlockMaskCacheError(f"source block-mask checksum mismatch: {path}")
+            shape = tuple(int(value) for value in entry.get("mask_shape", ()))
+            expected_elements = math.prod(shape) if len(shape) == 3 else 0
+            if expected_elements < 1 or int(entry.get("packed_elements", 0)) != expected_elements:
+                raise BlockMaskCacheError(f"invalid bit-packed source block-mask metadata: {path}")
+            if len(payload) != math.ceil(expected_elements / 8):
+                raise BlockMaskCacheError(f"bit-packed source block-mask byte size mismatch: {path}")
+            encoded = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
+            shifts = torch.arange(8, dtype=torch.uint8)
+            mask = ((encoded.unsqueeze(1) >> shifts) & 1).reshape(-1)[:expected_elements]
+            mask = mask.to(torch.bool).reshape(shape).contiguous()
+        else:
+            mask = torch.load(path, map_location="cpu", weights_only=True)
         elapsed = time.perf_counter() - started
         if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool:
             raise BlockMaskCacheError("source block mask is not a boolean tensor")
@@ -583,6 +676,7 @@ class OuterSparseExecutor:
         execution_dtype: torch.dtype = torch.float16,
         use_fp16_qk_reduction: bool = False,
         flashinfer_plan_cache: str = "layer",
+        layer_refresh_size: int = 0,
         sparge_smooth_k: bool = True,
         sparge_pv_threshold: float = 50.0,
     ) -> None:
@@ -597,14 +691,18 @@ class OuterSparseExecutor:
             raise ValueError(f"unsupported FlashInfer plan cache mode: {flashinfer_plan_cache}")
         if flashinfer_wrapper not in {"auto", "block", "variable"}:
             raise ValueError(f"unsupported FlashInfer wrapper policy: {flashinfer_wrapper}")
+        if layer_refresh_size < 0:
+            raise ValueError("layer_refresh_size must be non-negative")
         self.execution_dtype = execution_dtype
         self.flashinfer_wrapper = flashinfer_wrapper
         self.use_fp16_qk_reduction = bool(use_fp16_qk_reduction)
         self.flashinfer_plan_cache = flashinfer_plan_cache
+        self.layer_refresh_size = int(layer_refresh_size)
         self.sparge_smooth_k = bool(sparge_smooth_k)
         self.sparge_pv_threshold = float(sparge_pv_threshold)
         self.workspace: torch.Tensor | None = None
         self.wrappers: dict[tuple[Any, ...], Any] = {}
+        self._refresh_masks: dict[tuple[int, str, int], torch.Tensor] = {}
         self.flashinfer_execution_modes: set[str] = set()
         self.stats: dict[str, float | int] = {
             "runs": 0,
@@ -619,7 +717,50 @@ class OuterSparseExecutor:
             "head_density_min_sum": 0.0,
             "head_density_max_sum": 0.0,
             "head_density_cv_sum": 0.0,
+            "refresh_events": 0,
+            "refresh_added_blocks": 0,
         }
+
+    def reset_request(self) -> None:
+        """Drop per-request layer-group coverage before target denoising."""
+
+        self._refresh_masks.clear()
+
+    def _apply_layer_refresh(
+        self,
+        mask: torch.Tensor,
+        *,
+        step: int,
+        branch: str,
+        layer: int,
+    ) -> tuple[torch.Tensor, int]:
+        """Ensure the final layer in each group covers blocks missed earlier.
+
+        This is Chorus2's original layer refresh: masks remain unchanged until
+        the final layer of an eight-layer group, which receives all block
+        positions not selected by preceding layers in that group.
+        """
+
+        if self.layer_refresh_size == 0:
+            return mask, 0
+        group_start = layer // self.layer_refresh_size * self.layer_refresh_size
+        max_layer = max((key[2] for key in self.cache.entries), default=layer)
+        group_end = min(group_start + self.layer_refresh_size - 1, max_layer)
+        key = (int(step), str(branch), group_start)
+        visited = self._refresh_masks.get(key)
+        if layer == group_start or visited is None:
+            visited = torch.zeros_like(mask, dtype=torch.bool)
+            self._refresh_masks[key] = visited
+        effective_mask = mask
+        added_blocks = 0
+        if layer == group_end:
+            missing = ~visited
+            effective_mask = mask | missing
+            added_blocks = int((missing & ~mask).sum().item())
+            self.stats["refresh_events"] = int(self.stats["refresh_events"]) + 1
+            self.stats["refresh_added_blocks"] = int(self.stats["refresh_added_blocks"]) + added_blocks
+        visited |= effective_mask
+        return effective_mask, added_blocks
 
     def _workspace(self, device: torch.device) -> torch.Tensor:
         if self.workspace is None or self.workspace.device != device:
@@ -796,7 +937,6 @@ class OuterSparseExecutor:
             from spas_sage_attn import block_sparse_sage2_attn_cuda
         except ImportError as exc:
             raise RuntimeError("sparge-sage2 backend requested but SpargeAttn is unavailable") from exc
-        self.stats["planned_masks"] = int(self.stats["planned_masks"]) + 1
         mask = mask.to(device=q.device, dtype=torch.bool, non_blocking=True)
         return block_sparse_sage2_attn_cuda(
             q.transpose(0, 1).unsqueeze(0).contiguous(),
@@ -820,23 +960,29 @@ class OuterSparseExecutor:
             raise
         self.stats["cache_hits"] = int(self.stats["cache_hits"]) + 1
         self.stats["mask_load_seconds"] = float(self.stats["mask_load_seconds"]) + load_seconds
+        mask, added_blocks = self._apply_layer_refresh(mask, step=step, branch=branch, layer=layer)
         out = (
             self._flashinfer(q, k, v, mask, step=step, branch=branch, layer=layer)
             if self.backend == "flashinfer"
             else self._sparge(q, k, v, mask)
         )
         self.stats["runs"] = int(self.stats["runs"]) + 1
-        density = float(entry["density"])
+        source_density = float(entry["density"])
+        density = source_density + added_blocks / mask.numel()
         for stat, field in (
-            ("density_sum", "density"),
+            ("density_sum", "runtime_density"),
             ("source_density_sum", "density"),
             ("source_coverage_sum", "coverage"),
             ("head_density_min_sum", "head_density_min"),
             ("head_density_max_sum", "head_density_max"),
             ("head_density_cv_sum", "head_density_cv"),
         ):
-            default = density if field.startswith("head_density_") and field != "head_density_cv" else 0.0
-            self.stats[stat] = float(self.stats[stat]) + float(entry.get(field, default))
+            if field == "runtime_density":
+                value = density
+            else:
+                default = source_density if field.startswith("head_density_") and field != "head_density_cv" else 0.0
+                value = float(entry.get(field, default))
+            self.stats[stat] = float(self.stats[stat]) + value
         return out.to(dtype=output_dtype)
 
     def summary(self) -> dict[str, Any]:
@@ -863,6 +1009,9 @@ class OuterSparseExecutor:
             "flashinfer_plan_cache": self.flashinfer_plan_cache if self.backend == "flashinfer" else None,
             "flashinfer_wrapper_policy": self.flashinfer_wrapper if self.backend == "flashinfer" else None,
             "flashinfer_execution_modes": sorted(self.flashinfer_execution_modes) if self.backend == "flashinfer" else [],
+            "layer_refresh_size": self.layer_refresh_size,
+            "refresh_events": self.stats["refresh_events"],
+            "refresh_added_blocks": self.stats["refresh_added_blocks"],
             "use_fp16_qk_reduction": self.use_fp16_qk_reduction if self.backend == "flashinfer" else None,
             "sparge_smooth_k": self.sparge_smooth_k if self.backend == "sparge-sage2" else None,
             "sparge_pvthreshd": self.sparge_pv_threshold if self.backend == "sparge-sage2" else None,
@@ -957,6 +1106,7 @@ class OuterSparseAttentionHooks(AbstractContextManager):
 
     def __enter__(self):
         self.state.reset()
+        self.executor.reset_request()
         self.state._summary_callback = self.summary
         self.position_handle = self.model.blocks[0].self_attn.register_forward_pre_hook(
             lambda _module, _args: self.state.begin_model_forward()

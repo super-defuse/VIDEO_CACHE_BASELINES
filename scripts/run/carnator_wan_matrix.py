@@ -35,6 +35,12 @@ def main() -> None:
         default="smoothstep",
         help="Distance-to-Mbase interpolation for boundary-blend mode.",
     )
+    parser.add_argument(
+        "--middle-attention-mask",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply source block-mask selection to Medit/Msee in native Wan middle layers.",
+    )
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--runtime-python", type=Path, default=Path(sys.executable))
@@ -65,6 +71,8 @@ def main() -> None:
         "--boundary-alpha-function", args.boundary_alpha_function,
         "--runtime-python", str(args.runtime_python),
     ]
+    if not args.middle_attention_mask:
+        command.append("--no-middle-attention-mask")
     if args.check_only:
         command.append("--check-only")
     environment = os.environ.copy()

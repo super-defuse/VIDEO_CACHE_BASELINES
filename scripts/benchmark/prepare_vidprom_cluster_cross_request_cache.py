@@ -32,8 +32,16 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-SCHEMA_VERSION = "shared-cross-request-cache/v1"
-ATTENTION_FORMAT = "shared-canonical-block-mask/v1"
+SCHEMA_VERSION = "shared-cross-request-cache/v3"
+ATTENTION_FORMAT = "carnator-source-block-mask-bitpacked-v1"
+ALL_WAN_LAYERS = tuple(range(30))
+CHORUS2_RAW_MIDDLE_LAYERS = frozenset(range(10, 21))
+# Measured from the previous compatible run. These constants are only used by
+# --estimate-only, which deliberately performs no GPU work.
+ESTIMATED_LATENT_FILE_BYTES = 20_952_680
+ESTIMATED_SOURCE_VIDEO_BYTES = 24_788_802
+ESTIMATED_METADATA_BYTES_PER_ENTRY = 6 * 1024 * 1024
+ESTIMATED_CARNATOR_MASK_BUNDLE_BYTES = 17 * 1024 * 1024
 DEFAULT_INPUT = ROOT.parent / "VidProM" / "clusters" / "cluster_02_2170.csv"
 DEFAULT_OUTPUT = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000"
 DEFAULT_MODEL_DIR = Path(os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", "/home/tangxuebin/models/Wan2.2-TI2V-5B"))
@@ -143,6 +151,7 @@ def cache_config(args: argparse.Namespace) -> dict[str, Any]:
         "min_top_k": float(args.min_top_k),
         "attention_dtype": args.attention_dtype,
         "reuse_start_step": 10,
+        "chorus2_raw_middle_layers": sorted(CHORUS2_RAW_MIDDLE_LAYERS),
     }
 
 
@@ -228,6 +237,8 @@ class _AsyncMaskWriter:
     def __init__(self, max_pending: int) -> None:
         self._tasks: queue.Queue[_MaskWriteTask | None] = queue.Queue(maxsize=max_pending)
         self._error: BaseException | None = None
+        self.write_seconds = 0.0
+        self.bytes_written = 0
         self._thread = threading.Thread(target=self._run, name="shared-mask-writer", daemon=True)
         self._thread.start()
 
@@ -260,15 +271,18 @@ class _AsyncMaskWriter:
                 task = self._tasks.get()
                 if task is None:
                     return
+                started = time.perf_counter()
                 task.path.parent.mkdir(parents=True, exist_ok=True)
                 task.path.write_bytes(task.payload)
+                self.write_seconds += time.perf_counter() - started
+                self.bytes_written += len(task.payload)
                 task.record["sha256"] = sha256_bytes(task.payload)
         except BaseException as exc:  # Propagate writer failures to the model worker.
             self._error = exc
 
 
 class SharedAttentionCapture:
-    """Source-mask capture facade accepted by OuterSparseCaptureHooks."""
+    """Write Carnator's raw source routing in the packed format shared by Chorus2."""
 
     def __init__(
         self,
@@ -307,18 +321,20 @@ class SharedAttentionCapture:
             import torch
 
             torch.cuda.synchronize(q.device)
-        self.capture_seconds += time.perf_counter() - started
 
         mask_cpu = mask.detach().cpu().contiguous()
         payload, element_count = pack_bool_mask(mask_cpu)
         from_step = completed_step - 1
-        relative = Path("attention") / "maskbits" / f"from_step_{from_step:03d}" / branch / f"layer_{layer:02d}.bin"
+        relative = Path("maskbits") / f"from_step_{from_step:03d}" / branch / f"layer_{layer:02d}.bin"
         head_densities = mask_cpu.float().mean(dim=(1, 2))
         record = {
+            "step": int(completed_step),
             "from_step": from_step,
             "cfg_branch": branch,
             "layer": int(layer),
             "path": str(relative),
+            "shape": [int(value) for value in q.shape],
+            "dtype": str(q.dtype),
             "mask_shape": [int(value) for value in mask_cpu.shape],
             "packed_elements": element_count,
             "qkv_shape": [int(value) for value in q.shape],
@@ -329,7 +345,8 @@ class SharedAttentionCapture:
             "head_density_max": float(head_densities.max().item()),
         }
         self.records.append(record)
-        self.writer.submit(_MaskWriteTask(self.root.parent / relative, payload, record))
+        self.writer.submit(_MaskWriteTask(self.root / relative, payload, record))
+        self.capture_seconds += time.perf_counter() - started
 
     def close(self) -> dict[str, Any]:
         if not self.closed:
@@ -346,13 +363,15 @@ class SharedAttentionCapture:
             "source_uuid": self.source_uuid,
             "cfg_branches": self.cfg_branch_count,
             "mask": asdict(self.config),
-            "capture_steps": list(range(10, 50)),
+            "capture_steps": list(range(11, 51)),
             "entries": records,
             "backend_views": {
                 "flashinfer": "unpack canonical mask then build packed-BSR or VariableBlock plan",
                 "spargeattn": "unpack canonical mask then add batch dimension for mask_id",
             },
             "capture_seconds": self.capture_seconds,
+            "write_seconds": self.writer.write_seconds,
+            "bytes_written": self.writer.bytes_written,
         }
 
     def summary(self) -> dict[str, Any]:
@@ -360,6 +379,7 @@ class SharedAttentionCapture:
             "format": ATTENTION_FORMAT,
             "entries": len(self.records),
             "capture_seconds": self.capture_seconds,
+            "write_seconds": self.writer.write_seconds,
             "cfg_branches": self.cfg_branch_count,
         }
 
@@ -367,6 +387,21 @@ class SharedAttentionCapture:
 def _relative_artifact(path: Path, entry_root: Path) -> dict[str, Any]:
     relative = path.relative_to(entry_root)
     return {"path": str(relative), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def _validate_mask_cache(metadata_path: Path, expected_formats: set[str]) -> bool:
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        if metadata.get("format") not in expected_formats:
+            return False
+        root = metadata_path.parent
+        for record in metadata.get("entries", []):
+            path = root / str(record["path"])
+            if not path.is_file() or sha256_file(path) != record.get("sha256"):
+                return False
+    except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
+        return False
+    return True
 
 
 def entry_is_complete(entry_root: Path, *, expected_uuid: str, expected_config_fingerprint: str) -> bool:
@@ -385,16 +420,21 @@ def entry_is_complete(entry_root: Path, *, expected_uuid: str, expected_config_f
         ):
             return False
         artifacts = manifest["artifacts"]
-        required = [artifacts["source_video"], artifacts["attention_metadata"], *artifacts["latents"]]
+        carnator = artifacts["carnator"]
+        required = [
+            artifacts["source_video"],
+            carnator["source_manifest"],
+            carnator["initial_latent"],
+            *carnator["trajectory"],
+            *carnator["fusion_mask_files"],
+        ]
         for record in required:
             path = entry_root / str(record["path"])
             if not path.is_file() or sha256_file(path) != record["sha256"]:
                 return False
-        attention = json.loads((entry_root / artifacts["attention_metadata"]["path"]).read_text(encoding="utf-8"))
-        for record in attention["entries"]:
-            path = entry_root / str(record["path"])
-            if not path.is_file() or sha256_file(path) != record.get("sha256"):
-                return False
+        raw_metadata = entry_root / str(carnator["raw_block_mask_metadata"]["path"])
+        if not _validate_mask_cache(raw_metadata, {ATTENTION_FORMAT}):
+            return False
     except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
         return False
     return True
@@ -456,9 +496,6 @@ class NativeSharedCacheWorker:
         self.runtime.torch.cuda.empty_cache()
 
     def prepare(self, row: PromptRow) -> dict[str, Any]:
-        import torch
-        from safetensors.torch import save_file
-
         from carnator.outer_sparse import OuterSparseCaptureHooks, OuterSparseState, cfg_branches
 
         final_dir = self.root / "entries" / row.uuid
@@ -472,8 +509,10 @@ class NativeSharedCacheWorker:
             self.args.source_prompt = row.prompt
             self.args.source_positive = ""
             cfg_count = cfg_branches(self.args.guidance_scale)
+            carnator_root = staging / "carnator" / "cache" / "source_dense"
+            raw_mask_root = carnator_root / "outer_block_masks"
             capture = SharedAttentionCapture(
-                staging / "attention",
+                raw_mask_root,
                 source_uuid=row.uuid,
                 config=self.cache_config,
                 cfg_branch_count=cfg_count,
@@ -494,33 +533,74 @@ class NativeSharedCacheWorker:
                     label="shared_source",
                     prompt=row.prompt,
                     out_video=staging / "source.mp4",
-                    cache_dir=staging / "native",
+                    cache_dir=carnator_root,
+                    capture_masks=True,
                     save_trajectory=True,
+                    trajectory_start_step=0,
                     outer_sparse_state=outer_state,
+                    mask_output_dir=carnator_root / "probe_masks",
                     decode_video=True,
                 )
             attention = capture.close()
             trajectories = {
-                int(item["step_index"]) + 1: Path(item["path"])
+                int(item["step_index"]): Path(item["path"])
                 for item in stage["trajectory"]
                 if item.get("kind") == "post_scheduler"
             }
-            if sorted(trajectories) != list(range(1, 51)):
-                raise RuntimeError("native source stage did not produce its complete 50-step trajectory")
-            latent_records: list[dict[str, Any]] = []
-            for completed_step in range(10, 51):
-                value = torch.load(trajectories[completed_step], map_location="cpu", weights_only=True)
-                if not isinstance(value, torch.Tensor):
-                    raise RuntimeError(f"source latent at completed step {completed_step} is not a tensor")
-                destination = staging / "latents" / f"after_step_{completed_step:03d}.safetensors"
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                save_file({"latent": value.contiguous()}, str(destination))
-                record = _relative_artifact(destination, staging)
-                record.update({"completed_step": completed_step, "shape": list(value.shape), "dtype": str(value.dtype)})
-                latent_records.append(record)
-            shutil.rmtree(staging / "native")
-            attention_metadata = _relative_artifact(staging / "attention" / "metadata.json", staging)
-            source_video = _relative_artifact(staging / "source.mp4", staging)
+            required_trajectory_steps = list(range(self.args.steps))
+            if sorted(trajectories) != required_trajectory_steps:
+                raise RuntimeError(
+                    "native source stage did not produce the complete Carnator/Chorus trajectory: "
+                    f"expected {required_trajectory_steps[0]}..{required_trajectory_steps[-1]}"
+                )
+            self_bundle = self.native.build_native_self_contrast_mask_bundle(
+                self.runtime,
+                self.args,
+                source_trajectory=trajectories,
+                coarse_mask_dir=carnator_root / "probe_masks",
+                self_mask_dir=carnator_root / "self_contrast_masks",
+            )
+            self.native.build_native_fusion_mask_bundle(
+                self.runtime,
+                self.args,
+                source_trajectory=trajectories,
+                coarse_mask_dir=carnator_root / "probe_masks",
+                self_bundle=self_bundle,
+                self_mask_dir=carnator_root / "self_contrast_masks",
+                fusion_mask_dir=carnator_root / "fusion_masks",
+            )
+            # Stage paths are absolute while the entry is in .staging. Rewrite
+            # them to their final location before atomically publishing it.
+            native_manifest_path = carnator_root / "manifest.json"
+            native_manifest = json.loads(native_manifest_path.read_text(encoding="utf-8"))
+            final_carnator_root = final_dir / "carnator" / "cache" / "source_dense"
+            native_manifest["cache_dir"] = str(final_carnator_root)
+            native_manifest["output"] = str(final_dir / "source.mp4")
+            for record in native_manifest.get("trajectory", []):
+                record["path"] = str(final_carnator_root / Path(str(record["path"])).name)
+            write_json(native_manifest_path, native_manifest)
+
+            source_video_path = staging / "source.mp4"
+            trajectory_records: list[dict[str, Any]] = []
+            for step_index in required_trajectory_steps:
+                record = _relative_artifact(trajectories[step_index], staging)
+                record["step_index"] = step_index
+                record["completed_step"] = step_index + 1
+                trajectory_records.append(record)
+            source_manifest = _relative_artifact(native_manifest_path, staging)
+            source_initial = _relative_artifact(carnator_root / "latents_initial.pt", staging)
+            raw_mask_metadata = _relative_artifact(raw_mask_root / "metadata.json", staging)
+            source_video = _relative_artifact(source_video_path, staging)
+            fusion_mask_files = [
+                _relative_artifact(carnator_root / "fusion_masks" / filename, staging)
+                for filename in ("masks.json", "masks.pt")
+            ]
+            raw_capture_seconds = float(attention["capture_seconds"])
+            source_end_to_end = float(stage["timing"]["end_to_end_seconds"])
+            source_end_to_end_without_sync_cache = max(
+                0.0,
+                source_end_to_end - float(stage["timing"].get("cache_write_seconds", 0.0)) - raw_capture_seconds,
+            )
             manifest = {
                 "format": SCHEMA_VERSION,
                 "uuid": row.uuid,
@@ -529,18 +609,60 @@ class NativeSharedCacheWorker:
                 "created_at": utc_now(),
                 "config": self.cache_config,
                 "config_fingerprint": self.fingerprint,
+                "source": {
+                    "prompt": row.prompt,
+                    "cache_dir": str(final_carnator_root),
+                    "seed": self.args.seed,
+                    "steps": self.args.steps,
+                    "reuse_start_step": self.args.reuse_start_step,
+                },
                 "artifacts": {
                     "source_video": source_video,
-                    "latents": latent_records,
-                    "attention_metadata": attention_metadata,
+                    "carnator": {
+                        "source_manifest": source_manifest,
+                        "initial_latent": source_initial,
+                        "trajectory": trajectory_records,
+                        "fusion_mask_files": fusion_mask_files,
+                        "raw_block_mask_metadata": raw_mask_metadata,
+                    },
                 },
                 "consumers": {
-                    "nirvana_vid": {"completed_step": 10, "latent": latent_records[0]["path"]},
-                    "chorus": {"completed_steps": [10, 40], "source_video": source_video["path"]},
-                    "chorus2": {"attention_metadata": attention_metadata["path"]},
-                    "carnator": {"completed_step": 10, "latent": latent_records[0]["path"], "attention_metadata": attention_metadata["path"]},
+                    "nirvana_vid": {
+                        "completed_step": 10,
+                        "reuse_start_step": self.args.reuse_start_step,
+                        "latent": str(final_carnator_root / "latents_step_009.pt"),
+                    },
+                    "chorus": {
+                        "completed_steps": [10, 40],
+                        "source_cache": str(final_carnator_root),
+                        "source_video": str(final_dir / source_video["path"]),
+                    },
+                    "chorus2": {
+                        "source_latent_cache": str(final_carnator_root),
+                        "source_mask_cache": str(final_carnator_root / "outer_block_masks"),
+                        "normal_sparse_raw_layers": sorted(CHORUS2_RAW_MIDDLE_LAYERS),
+                    },
+                    "carnator": {
+                        "source_run_dir": str(final_dir / "carnator"),
+                        "source_cache": str(final_carnator_root),
+                        "completed_step": 10,
+                        "latent": str(final_carnator_root / "latents_step_009.pt"),
+                        "fusion_mask_dir": str(final_carnator_root / "fusion_masks"),
+                        "raw_block_mask_cache": str(final_carnator_root / "outer_block_masks"),
+                        "middle_mask_policy": "target_only_intersect_raw_mask_with_Medit_Msee",
+                    },
                 },
-                "timing": {"wall_seconds": time.perf_counter() - started, "native": stage["timing"]},
+                "timing": {
+                    "latency_policy": "target end-to-end latency excludes all source cache preparation",
+                    "source_dense_end_to_end_seconds_excluding_sync_cache": source_end_to_end_without_sync_cache,
+                    "cache_preparation": {
+                        "end_to_end_seconds": time.perf_counter() - started,
+                        "source_dense_raw_end_to_end_seconds": source_end_to_end,
+                        "trajectory_write_seconds": stage["timing"].get("cache_write_seconds", 0.0),
+                        "raw_mask_capture_seconds": raw_capture_seconds,
+                        "raw_mask_async_write_seconds": attention["write_seconds"],
+                    },
+                },
             }
             write_json(staging / "manifest.json", manifest)
             write_json(staging / "status.json", {"status": "completed", "completed_at": utc_now()})
@@ -553,7 +675,7 @@ class NativeSharedCacheWorker:
                 "uuid": row.uuid,
                 "request_index": row.request_index,
                 "bytes": entry_bytes(final_dir),
-                "wall_seconds": manifest["timing"]["wall_seconds"],
+                "cache_preparation_seconds": manifest["timing"]["cache_preparation"]["end_to_end_seconds"],
             }
         except BaseException:
             if capture is not None and not capture.closed:
@@ -627,18 +749,74 @@ def write_run_manifest(root: Path, payload: dict[str, Any]) -> None:
     write_json(root / "run_manifest.json", payload)
 
 
-def load_pilot(root: Path, fingerprint: str, input_sha256: str) -> dict[str, Any]:
-    path = root / "pilot.json"
+def load_space_estimate(root: Path, fingerprint: str, input_sha256: str) -> dict[str, Any]:
+    path = root / "space_estimate.json"
     if not path.is_file():
-        raise RuntimeError("full run requires a successful --pilot run in the same output directory")
+        raise RuntimeError("full run requires a compatible --estimate-only preflight in the same output directory")
     payload = json.loads(path.read_text(encoding="utf-8"))
     if payload.get("config_fingerprint") != fingerprint or payload.get("input_sha256") != input_sha256:
-        raise RuntimeError("pilot input/config fingerprint does not match this full run")
-    required = int(payload.get("required_free_bytes", 0))
+        raise RuntimeError("space estimate input/config fingerprint does not match this full run")
+    required = int(payload.get("required_free_bytes_with_20_percent_headroom", 0))
     available = shutil.disk_usage(root).free
     if required < 1 or available < required:
         raise RuntimeError(f"insufficient free space: available={available}, required={required}")
     return payload
+
+
+def estimate_space(args: argparse.Namespace, selected_count: int, available_bytes: int) -> dict[str, Any]:
+    """Return a deterministic, no-GPU capacity estimate for the packed layout."""
+
+    temporal_tokens = (int(args.frames) - 1) // 4 + 1
+    spatial_tokens = math.ceil(int(args.height) / 32) * math.ceil(int(args.width) / 32)
+    token_count = temporal_tokens * spatial_tokens
+    q_blocks = math.ceil(token_count / int(args.q_block_size))
+    k_blocks = math.ceil(token_count / int(args.k_block_size))
+    mask_bytes = math.ceil(24 * q_blocks * k_blocks / 8)
+    cfg_branches = 1 if float(args.guidance_scale) == 1.0 else 2
+    cached_steps = int(args.steps) - 10
+    raw_mask_bytes = mask_bytes * cached_steps * cfg_branches * len(ALL_WAN_LAYERS)
+    trajectory_bytes = ESTIMATED_LATENT_FILE_BYTES * (int(args.steps) + 1)
+    entry_bytes_estimate = (
+        raw_mask_bytes
+        + trajectory_bytes
+        + ESTIMATED_SOURCE_VIDEO_BYTES
+        + ESTIMATED_CARNATOR_MASK_BUNDLE_BYTES
+        + ESTIMATED_METADATA_BYTES_PER_ENTRY
+    )
+    total_bytes = entry_bytes_estimate * selected_count
+    required_with_headroom = math.ceil(total_bytes * 1.2)
+    return {
+        "format": SCHEMA_VERSION,
+        "method": "analytical_no_gpu",
+        "selected_requests": selected_count,
+        "assumptions": {
+            "token_count": token_count,
+            "attention_heads": 24,
+            "q_blocks": q_blocks,
+            "k_blocks": k_blocks,
+            "cfg_branches": cfg_branches,
+            "cached_mask_steps": cached_steps,
+            "chorus2_reuses_carnator_raw_masks": True,
+            "trajectory_latents": int(args.steps) + 1,
+            "latent_file_bytes": ESTIMATED_LATENT_FILE_BYTES,
+            "source_video_bytes": ESTIMATED_SOURCE_VIDEO_BYTES,
+            "carnator_mask_bundle_bytes": ESTIMATED_CARNATOR_MASK_BUNDLE_BYTES,
+            "metadata_bytes_per_entry": ESTIMATED_METADATA_BYTES_PER_ENTRY,
+        },
+        "per_entry": {
+            "carnator_raw_block_masks": raw_mask_bytes,
+            "carnator_trajectory": trajectory_bytes,
+            "source_video": ESTIMATED_SOURCE_VIDEO_BYTES,
+            "carnator_fusion_probe_masks": ESTIMATED_CARNATOR_MASK_BUNDLE_BYTES,
+            "metadata": ESTIMATED_METADATA_BYTES_PER_ENTRY,
+            "total": entry_bytes_estimate,
+        },
+        "estimated_total_bytes": total_bytes,
+        "required_free_bytes_with_20_percent_headroom": required_with_headroom,
+        "available_bytes": available_bytes,
+        "fits_without_headroom": available_bytes >= total_bytes,
+        "fits_with_20_percent_headroom": available_bytes >= required_with_headroom,
+    }
 
 
 def run_workers(root: Path, rows: list[PromptRow], *, gpus: list[int], worker_config: dict[str, Any]) -> list[dict[str, Any]]:
@@ -686,11 +864,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--limit", type=int, default=1000)
-    parser.add_argument("--gpus", default="0,1,2,3,4,5,6,7")
+    parser.add_argument("--gpus", default="3,4,5,6,7")
     parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--pilot", action="store_true", help="Run only one source request and write a space estimate.")
-    parser.add_argument("--confirm-full-run", action="store_true", help="Required after a compatible --pilot run for more than one request.")
+    parser.add_argument("--estimate-only", action="store_true", help="Write an analytical no-GPU capacity estimate and exit.")
+    parser.add_argument("--pilot", action="store_true", help="Run only one source request and record its realized size.")
+    parser.add_argument("--confirm-full-run", action="store_true", help="Required after a compatible no-GPU space estimate for more than one request.")
     parser.add_argument("--max-pending-mask-writes", type=int, default=4)
     parser.add_argument("--model-dir", type=Path, default=DEFAULT_MODEL_DIR)
     parser.add_argument("--height", type=int, default=704)
@@ -704,7 +883,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--flow-shift", type=float, default=5.0)
     parser.add_argument("--guidance-scale", type=float, default=5.0)
     parser.add_argument("--model-dtype", choices=("fp16", "bf16"), default="fp16")
-    parser.add_argument("--attention-layers", default="0-9,21-29")
+    parser.add_argument(
+        "--attention-layers",
+        default="0-29",
+        help="Must remain all 30 Wan blocks: Carnator consumes raw routing and Chorus2 needs a complete sparse mask.",
+    )
     parser.add_argument("--q-block-size", type=int, default=64)
     parser.add_argument("--k-block-size", type=int, default=128)
     parser.add_argument("--top-p", type=float, default=0.95)
@@ -719,6 +902,8 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("shared cache requires the complete 50-step source scheduler")
     if args.max_pending_mask_writes < 1:
         raise ValueError("--max-pending-mask-writes must be positive")
+    if parse_layer_ranges(args.attention_layers) != list(ALL_WAN_LAYERS):
+        raise ValueError("--attention-layers must be 0-29 so Chorus2 receives a complete 30-layer normal sparse mask")
     rows = read_prompt_rows(args.input.resolve(), args.limit)
     selected_count = len(rows)
     gpus = parse_gpus(args.gpus)
@@ -743,12 +928,21 @@ def main(argv: list[str] | None = None) -> int:
         write_run_manifest(root, {**run_manifest, "status": "dry_run"})
         print(json.dumps({"status": "dry_run", "selected_requests": len(rows), "output": str(root)}, ensure_ascii=False))
         return 0
+    if args.estimate_only:
+        estimate = estimate_space(args, selected_count, shutil.disk_usage(root).free)
+        estimate["input_sha256"] = input_sha
+        estimate["config_fingerprint"] = fingerprint
+        estimate["created_at"] = utc_now()
+        write_json(root / "space_estimate.json", estimate)
+        write_run_manifest(root, {**run_manifest, "status": "estimated", "space_estimate": str(root / "space_estimate.json")})
+        print(json.dumps({"status": "estimated", **estimate}, ensure_ascii=False))
+        return 0
     if args.pilot:
         rows = rows[:1]
     elif len(rows) > 1:
         if not args.confirm_full_run:
-            raise RuntimeError("refusing full run without --confirm-full-run; run --pilot first")
-        load_pilot(root, fingerprint, input_sha)
+            raise RuntimeError("refusing full run without --confirm-full-run; run --estimate-only first")
+        load_space_estimate(root, fingerprint, input_sha)
     todo = [
         row for row in rows
         if not args.resume or not entry_is_complete(root / "entries" / row.uuid, expected_uuid=row.uuid, expected_config_fingerprint=fingerprint)

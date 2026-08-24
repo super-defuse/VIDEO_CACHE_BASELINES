@@ -1,12 +1,12 @@
 # Video Cache Baselines
 
-一个独立的 T2V 缓存加速基线仓库，包含 Baseline、CHAI、TeaCache、NIRVANA-VID、Carnator、CHAI-Carnator 和 Chorus。方法实现位于本仓库；Wan2.2、CogVideo、SpargeAttn 等上游源码只位于 `external/`。
+一个独立的 T2V 缓存加速基线仓库，包含 Baseline、CHAI、TeaCache、NIRVANA-VID、Carnator、Chorus2 和 Chorus。方法实现位于本仓库；Wan2.2、CogVideo、SpargeAttn 等上游源码只位于 `external/`。
 
 ## Environments
 
 | Conda 环境 | 用途 |
 | --- | --- |
-| `wan` | 所有 Wan2.2 方法，包括 Carnator、CHAI-Carnator 和 Chorus |
+| `wan` | 所有 Wan2.2 方法，包括 Carnator 和 Chorus |
 | `cogvideo` | CogVideoX1.5 方法 |
 | `vbench` | CLIP-T 与 VBench-Q 质量评测 |
 
@@ -134,7 +134,7 @@ conda run -n wan env PYTHONNOUSERSITE=1 python -m pip install --no-build-isolati
 ```
 
 SpargeAttn 需要本机 CUDA 编译工具链；只运行 Baseline、CHAI、TeaCache、NIRVANA-VID
-或 Chorus 时可以跳过。
+或 Chorus 时可以跳过；Carnator 的 SpargeAttn 变体和 Chorus2 均需要安装。
 VBench、Grounded-SAM-2 的来源和固定版本见 [external/README.md](external/README.md)。
 
 ## Run
@@ -155,6 +155,17 @@ conda run -n cogvideo env PYTHONPATH=. python scripts/run/run.py \
 conda run -n wan env PYTHONPATH=. python scripts/run/carnator_wan_matrix.py \
   --source-prompt "a dog is sleeping on grass" --target-prompt "a cat is sleeping on grass" \
   --source-positive dog --run-id wan-matrix
+
+conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. python scripts/run/chorus2_wan.py \
+  --source-prompt "a dog is sleeping on a grassland, focus on the dog" \
+  --target-prompt "a cat is sleeping on a grassland, focus on the cat" \
+  --seed 20260218 --run-id dog-to-cat
+
+# One canonical source Dense cache for NIRVANA-VID, Chorus, Chorus2 and Carnator,
+# followed by the single universal target C0 Dense timing. Use only GPU 3--7.
+CUDA_VISIBLE_DEVICES=3 conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 \
+  python -m carnator.adapters.wan_ti2v_5b --no-env-setup --device cuda:0 \
+  --prepare-shared-dense-cache --run-id shared-dense
 
 conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality.py artifacts/runs/smoke
 
@@ -180,7 +191,7 @@ FlashAttention CUDA 调用、Runner 落盘，以及 Baseline、TeaCache、NIRVAN
 | --- | --- | --- |
 | Baseline / CHAI / TeaCache / NIRVANA-VID | 支持 | 支持 |
 | Carnator | 原生 C0/B0--B5 matrix | source-latent-restart adapter |
-| CHAI-Carnator | 原生 CC-B0--CC-B5 matrix | N/A |
+| Chorus2 | 原生 SpargeAttn sparse-attention CLI | N/A |
 | Chorus / TGAA and no-TGAA ablations | source/target matrix | N/A |
 | Chorus TGAA joint-gamma probes (`1.30`, `1.6`, `2.0`) | source/target matrix | N/A |
 

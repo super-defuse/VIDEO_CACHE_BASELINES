@@ -33,9 +33,9 @@ retrieval:
     # documented linear approximation for the existing 50-step Wan path.
     stage_scheduler:
       min_k1: 10
-      min_k2: 40
-      max_k1: 30
-      max_k2: 45
+      min_k2: 30
+      max_k1: 10
+      max_k2: 30
   carnator:
     # Shares CLIP/Chroma prompt ranking with NIRVANA and Chorus, then applies
     # local entity filtering and the selected native step-5 signature gate.
@@ -59,7 +59,7 @@ chorus:
     # Engineering schedule for the 50-step Wan2.2 run; Chorus does not
     # publish numeric K1/K2 values.
     k1: 10
-    k2: 40
+    k2: 30
   gamma_k: 1.15
   gamma_o: 1.05
   joint_gamma_1_6:

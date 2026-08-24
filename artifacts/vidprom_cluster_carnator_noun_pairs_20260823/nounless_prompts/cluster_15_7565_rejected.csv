@@ -1,6 +1,0 @@
-sample_index,source_row_index,uuid,prompt,reason
-398,1481,d5f7e1c6-cdb0-5b4f-90c3-93f3d1cea5a4,one plus one equals three,noun_extraction_produced_no_NOUN_or_PROPN
-513,1871,0912db2c-b24f-5c3a-9573-8175228ca889,why is love so hard to believe in,noun_extraction_produced_no_NOUN_or_PROPN
-514,1872,f4df453a-1b37-5a58-9017-c9f11bc82a6f,who let me in here to be honest,noun_extraction_produced_no_NOUN_or_PROPN
-930,3453,64804ff7-509f-523b-a2dc-1343a998b92e,Has Anyone Really Been Far Even as Decided to Use Even Go Want to do Look More Like,noun_extraction_produced_no_NOUN_or_PROPN
-1970,7437,3d778617-c211-5c9a-ac20-301522a2cb26,"can be used for good or evil,",noun_extraction_produced_no_NOUN_or_PROPN

@@ -58,6 +58,11 @@ def main() -> int:
     parser.add_argument("--seed", type=int)
     parser.add_argument("--run-prefix", required=True)
     parser.add_argument("--reset-cache", action="store_true")
+    parser.add_argument("--target-only", action="store_true",
+                        help="Retry only a cross-request target using its persisted source cache.")
+    parser.add_argument("--chai-longclip-checkpoint", type=Path)
+    parser.add_argument("--chorus-gamma-k", type=float)
+    parser.add_argument("--chorus-gamma-o", type=float)
     args = parser.parse_args()
 
     names = [item.strip() for item in args.methods.split(",") if item.strip()]
@@ -66,21 +71,49 @@ def main() -> int:
                "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}
     if not names or any(name not in allowed for name in names):
         raise SystemExit(f"--methods must be a subset of {sorted(allowed)}")
+    gamma_values = (args.chorus_gamma_k, args.chorus_gamma_o)
+    if any(value is not None for value in gamma_values):
+        if any(value is None for value in gamma_values) or "chorus" not in names:
+            raise SystemExit("--chorus-gamma-k and --chorus-gamma-o require --methods chorus")
+    cross_request = {"chai", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa",
+                     "chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
+                     "chorus_tgaa_joint_gamma_2_0"}
+    if args.target_only and (args.reset_cache or any(name not in cross_request for name in names)):
+        raise SystemExit("--target-only requires cross-request methods and cannot use --reset-cache")
     model_config = ({"model": "synthetic", "dry_run": True, "seed": 0}
                     if args.model == "synthetic" else
                     _resolve_paths(_load_yaml(ROOT / "configs" / "models" / f"{args.model}.yaml")))
     method_config = _load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = _resolve_paths({**model_config, **method_config, "dry_run": args.model == "synthetic"})
+    if args.chorus_gamma_k is not None:
+        config["chorus"] = {
+            **config.get("chorus", {}),
+            "gamma_k": args.chorus_gamma_k,
+            "gamma_o": args.chorus_gamma_o,
+        }
+    if args.chai_longclip_checkpoint is not None:
+        config["retrieval"] = {
+            **config.get("retrieval", {}),
+            "chai": {
+                **config.get("retrieval", {}).get("chai", {}),
+                "longclip_checkpoint": str(args.chai_longclip_checkpoint.expanduser().resolve()),
+            },
+        }
     seed = int(args.seed if args.seed is not None else config.get("seed", 0))
     run_root = ROOT / "artifacts" / "runs" / args.run_prefix
     run_root.mkdir(parents=True, exist_ok=True)
     summary = {"model": args.model, "source_prompt": args.source_prompt,
                "target_prompt": args.target_prompt, "seed": seed,
                "run_root": str(run_root), "methods": {}}
+    summary_path = run_root / "summary.json"
+    if args.target_only and summary_path.is_file():
+        try:
+            previous = json.loads(summary_path.read_text())
+            if isinstance(previous, dict) and isinstance(previous.get("methods"), dict):
+                summary["methods"] = previous["methods"]
+        except (OSError, ValueError):
+            pass
 
-    cross_request = {"chai", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa",
-                     "chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
-                     "chorus_tgaa_joint_gamma_2_0"}
     for name in names:
         ensure_supported(args.model, name)
         adapter = make_adapter(args.model, config)
@@ -92,33 +125,34 @@ def main() -> int:
         if args.reset_cache:
             runner.method.reset_cache()
         if name in cross_request:
-            source = Request(0, "source-000", args.source_prompt, seed)
             target = Request(1, "target-000", args.target_prompt, seed, cache_prompt=args.source_prompt)
-            requests = (source, target)
+            requests = (target,) if args.target_only else (
+                Request(0, "source-000", args.source_prompt, seed), target
+            )
         else:
             # Dense and TeaCache are not cross-request methods.  Run only the
             # target prompt; no synthetic source row or cache hit is reported.
             requests = (Request(0, "target-000", args.target_prompt, seed),)
-        results = runner.run(requests, run_dir / "results.jsonl")
+        results_path = run_dir / ("target-retry.jsonl" if args.target_only else "results.jsonl")
+        results = runner.run(requests, results_path)
         (run_dir / "config.resolved.json").write_text(json.dumps(
             {**config, "source_prompt": args.source_prompt, "target_prompt": args.target_prompt,
              "seed": seed, "cache_lookup": "target -> source_prompt"}, indent=2
         ) + "\n")
         summary["methods"][name] = {
             "run_dir": str(run_dir),
-            "source_status": results[0].status if name in cross_request else None,
+            "source_status": results[0].status if name in cross_request and not args.target_only else None,
             "target_status": results[-1].status,
             "target_cache_match": results[-1].cache_match.kind,
             "target_latency_s": results[-1].latency_s,
             "target_executed_steps": results[-1].executed_steps,
-            "source_timing": results[0].extra.get("timing") if name in cross_request else None,
+            "source_timing": results[0].extra.get("timing") if name in cross_request and not args.target_only else None,
             "target_timing": results[-1].extra.get("timing"),
             "target_extra": results[-1].extra,
         }
         adapter.reset_hooks()
 
-    output = run_root / "summary.json"
-    output.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
+    summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     return 0
 

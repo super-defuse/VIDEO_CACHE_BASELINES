@@ -1,0 +1,78 @@
+{
+  "method": "chai",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-gpu3/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-gpu3/cache/shared_dense/chai/source_tokens.pt",
+    "zero_based_denoising_steps": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "model": "Wan2.2",
+    "method": "chai",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 8,
+    "latency_s": 64.78235183598008,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/chai-shared-cache-gpu7/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/chai-shared-cache-gpu7/videos/target.mp4",
+    "output_hash": "1952fd59ec188e9377cf5b04b75bacf2c523ecefd534a78e9c75d0fd528a5743",
+    "cache_bytes": 21271978,
+    "extra": {
+      "executed_steps": 8,
+      "cache_attention_steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "timing": {
+        "cache_lookup_s": 0.00011369097046554089,
+        "cache_load_s": 0.61103438900318,
+        "generation_s": 61.43189246096881,
+        "save_video_s": 2.7181596809532493,
+        "hash_s": 0.02114754304056987,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 64.78235183598008
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-gpu3/cache/shared_dense/chai/source_tokens.pt",
+        "zero_based_denoising_steps": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-gpu3/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": 294.07844376104185,
+    "speedup": 4.5394839092228025
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "7",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

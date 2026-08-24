@@ -42,6 +42,12 @@ def parser() -> argparse.ArgumentParser:
         default="smoothstep",
         help="Distance-to-Mbase interpolation for boundary-blend mode.",
     )
+    value.add_argument(
+        "--middle-attention-mask",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Apply source block-mask selection to Medit/Msee in native Wan middle layers.",
+    )
     value.add_argument("--source-run-dir", type=Path, help="Required by B0--B5 when source assets were prepared separately.")
     value.add_argument("--target-dense-manifest", type=Path, help="Optional matched C0 manifest for B0--B5 timing references.")
     value.add_argument("--check-only", action="store_true")
@@ -91,6 +97,8 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
         "--outer-sparse-dtype", args.outer_dtype, "--flashinfer-plan-cache", args.flashinfer_plan_cache,
         "--flashinfer-wrapper", args.flashinfer_wrapper,
     ]
+    if not args.middle_attention_mask:
+        command.append("--no-middle-attention-mask")
     if args.guidance_scale is not None:
         command.extend(("--guidance-scale", str(args.guidance_scale)))
     if args.skip_w8a8_dense_diagnostic:

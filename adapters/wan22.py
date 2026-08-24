@@ -660,6 +660,35 @@ class Wan22Adapter(ModelAdapter):
     def load_latent(self, path: Path):
         import json
 
+        path = Path(path)
+        if path.is_dir():
+            manifest_path = path / "manifest.json"
+            try:
+                native_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                raise ValueError(f"invalid native Chorus source cache: {manifest_path}") from exc
+            steps = int(native_manifest.get("steps", -1))
+            trajectory = {
+                int(item["step_index"]): Path(item["path"])
+                for item in native_manifest.get("trajectory", [])
+                if item.get("kind") == "post_scheduler"
+            }
+            initial = path / "latents_initial.pt"
+            if steps < 1 or sorted(trajectory) != list(range(steps)) or not initial.is_file():
+                raise ValueError(f"native Chorus source trajectory is incomplete: {path}")
+            paths = [initial, *(trajectory[index] for index in range(steps))]
+            if any(not item.is_file() for item in paths):
+                raise ValueError(f"native Chorus source trajectory is missing files: {path}")
+            return {
+                "format": "chorus-trajectory-v2",
+                "steps": steps,
+                "k1": 10,
+                "k2": 40,
+                "target_shape": list(native_manifest.get("latent_shape", [])),
+                "seed": int(native_manifest.get("seed", -1)),
+                "trajectory_paths": paths,
+                "source_format": "native-carnator-source-cache-v1",
+            }
         try:
             manifest = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):

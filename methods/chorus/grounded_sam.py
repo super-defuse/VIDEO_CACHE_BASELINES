@@ -93,8 +93,15 @@ class GroundedSam2Segmenter:
         device = str(self.config.get("device", "cuda" if torch.cuda.is_available() else "cpu"))
         grounding_model = load_model(str(gdino_config), str(gdino_checkpoint), device=device)
         sam_config_name = str(sam_config.relative_to(root / "sam2"))
-        video_predictor = build_sam2_video_predictor(sam_config_name, str(sam_checkpoint), device=device)
-        image_predictor = SAM2ImagePredictor(build_sam2(sam_config_name, str(sam_checkpoint), device=device))
+        # The optional SAM2 C++ extension only performs mask postprocessing.
+        # This pinned checkout is used directly, so disable that extension-only
+        # path and retain the model's detection and video propagation kernels.
+        video_predictor = build_sam2_video_predictor(
+            sam_config_name, str(sam_checkpoint), device=device, apply_postprocessing=False
+        )
+        image_predictor = SAM2ImagePredictor(
+            build_sam2(sam_config_name, str(sam_checkpoint), device=device, apply_postprocessing=False)
+        )
         self._models = grounding_model, video_predictor, image_predictor
         return self._models
 
@@ -122,16 +129,13 @@ class GroundedSam2Segmenter:
         return paths, height, width
 
     def segment(self, video_path: Path, phrase: str) -> tuple[np.ndarray, dict[str, Any]]:
-        import sys
-        sam_config_path = self._paths()[0]
-        repo_root = sam_config_path.parents[3]
-        if str(repo_root) not in sys.path:
-            sys.path.insert(0, str(repo_root))
         import torch
         from torchvision.ops import box_convert
-        from groundingdino.util.inference import load_image, predict
 
         grounding_model, video_predictor, image_predictor = self._load()
+        # `_load` adds the pinned GroundingDINO checkout before importing it.
+        # Importing these helpers earlier could resolve an unrelated package.
+        from groundingdino.util.inference import load_image, predict
         phrase = phrase.strip().rstrip(".")
         if not phrase:
             raise ValueError("Grounded-SAM-2 requires a non-empty source object phrase")

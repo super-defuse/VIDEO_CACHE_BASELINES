@@ -9,6 +9,7 @@ import json
 import math
 import os
 import shutil
+import subprocess
 import sys
 import time
 import types
@@ -95,6 +96,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--mask-spatial-msee-radius", type=int, default=3)
     parser.add_argument("--sparse-layers", default="10-20")
     parser.add_argument(
+        "--middle-attention-mask",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Intersect the source block-attention cache with Medit/Msee in region-update layers.",
+    )
+    parser.add_argument(
         "--outer-attn-backend",
         choices=("dense", "flashinfer", "sparge-sage2"),
         default="dense",
@@ -129,6 +136,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--w8a8-verify-tokens", type=int, default=0)
     parser.add_argument("--source-run-dir", type=Path, help="Reuse source dense trajectories, masks and block-mask cache from this artifact run.")
     parser.add_argument("--source-only", action="store_true", help="Prepare only the shared source dense trajectory and masks.")
+    parser.add_argument(
+        "--prepare-shared-dense-cache",
+        action="store_true",
+        help=(
+            "Run one source Dense preparation, write one canonical cache for NIRVANA-VID/Chorus/Chorus2/Carnator, "
+            "then time only the target C0 Dense end-to-end path."
+        ),
+    )
     parser.add_argument(
         "--target-dense-only",
         action="store_true",
@@ -210,6 +225,15 @@ def outer_sparse_execution_dtype(args: argparse.Namespace):
     return torch.float16 if args.outer_sparse_dtype == "fp16" else torch.bfloat16
 
 
+def block_mask_capture_layers(args: argparse.Namespace) -> list[int]:
+    """Return the source layers whose attention routing must be persisted."""
+
+    layers = set(parse_int_ranges(args.outer_sparse_layers))
+    if args.middle_attention_mask or getattr(args, "prepare_shared_dense_cache", False):
+        layers.update(parse_int_ranges(args.sparse_layers))
+    return sorted(layers)
+
+
 def model_execution_dtype(args: argparse.Namespace):
     import torch
 
@@ -234,6 +258,12 @@ def validate_experiment_config(args: argparse.Namespace) -> None:
         raise ValueError("--target-dense-only cannot be combined with source/reuse options")
     if args.capture_outer_block_masks and args.source_run_dir:
         raise ValueError("--capture-outer-block-masks cannot be combined with --source-run-dir")
+    if args.prepare_shared_dense_cache and (
+        args.source_only or args.target_dense_only or args.source_run_dir or args.target_dense_manifest
+    ):
+        raise ValueError(
+            "--prepare-shared-dense-cache requires a fresh source Dense run and a fresh target C0 Dense run"
+        )
 def task_mode(args: argparse.Namespace) -> str:
     return "T2V"
 
@@ -684,6 +714,7 @@ class SparseTokenIndexCache:
     def __init__(self, mask_bundle: dict[str, Any]):
         self.mask_bundle = mask_bundle
         self.cache: dict[tuple[str, int], tuple[Any, Any]] = {}
+        self.token_masks: dict[tuple[str, int], tuple[Any, Any]] = {}
         self.records: dict[tuple[str, int], dict[str, Any]] = {}
 
     def get(self, hidden_states):
@@ -704,6 +735,7 @@ class SparseTokenIndexCache:
         if query_idx.numel() == 0 or context_idx.numel() == 0:
             raise ValueError("empty sparse token set for canonical attention mask")
         self.cache[key] = (query_idx, context_idx)
+        self.token_masks[key] = (medit, msee)
         self.records[key] = {
             "source_completed_step": int(self.mask_bundle["source_completed_step"]),
             "token_count": token_count,
@@ -714,6 +746,27 @@ class SparseTokenIndexCache:
         }
         return query_idx, context_idx
 
+    def select_from_block_mask(self, hidden_states, block_mask, *, q_block_size: int, k_block_size: int):
+        """Return the Medit/Msee token subset reachable through a source mask."""
+
+        import torch
+
+        from carnator.outer_sparse import select_region_tokens_from_block_mask
+
+        key = (str(hidden_states.device), int(hidden_states.shape[1]))
+        self.get(hidden_states)
+        medit, msee = self.token_masks[key]
+        query_mask, context_mask, stats = select_region_tokens_from_block_mask(
+            block_mask,
+            medit,
+            msee,
+            q_block_size=q_block_size,
+            k_block_size=k_block_size,
+        )
+        query_idx = torch.nonzero(query_mask, as_tuple=False).flatten()
+        context_idx = torch.nonzero(context_mask, as_tuple=False).flatten()
+        return query_idx, context_idx, stats
+
     def summary(self) -> list[dict[str, Any]]:
         return [self.records[key] for key in sorted(self.records)]
 
@@ -723,6 +776,9 @@ class NativeSparseState:
     model_module: Any
     mask_bundle: dict[str, Any]
     layers: list[int]
+    attention_mask_cache: Any | None = None
+    attention_mask_execution_dtype: Any | None = None
+    cfg_branch_count: int = 1
     index_cache: SparseTokenIndexCache = field(init=False)
     enabled: bool = False
     originals: list[tuple[Any, Any]] = field(default_factory=list)
@@ -730,11 +786,86 @@ class NativeSparseState:
     dense_fallback_count: int = 0
     sparse_forward_elapsed_seconds: float = 0.0
     calls_by_layer: dict[str, int] = field(default_factory=dict)
+    current_completed_step: int = 0
+    current_branch: str = "cond"
+    _forward_index: int = -1
+    attention_mask_cache_hits: int = 0
+    attention_mask_load_seconds: float = 0.0
+    attention_mask_query_ratio_sum: float = 0.0
+    attention_mask_context_ratio_sum: float = 0.0
+    attention_mask_records: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self):
         self.index_cache = SparseTokenIndexCache(self.mask_bundle)
+        if self.attention_mask_cache is not None and self.attention_mask_execution_dtype is None:
+            raise ValueError("attention_mask_execution_dtype is required with an attention mask cache")
+
+    @property
+    def middle_attention_mask_enabled(self) -> bool:
+        return self.attention_mask_cache is not None
+
+    def reset(self) -> None:
+        self.enabled = False
+        self.current_completed_step = 0
+        self.current_branch = "cond"
+        self._forward_index = -1
+
+    def set_step(self, completed_step: int) -> None:
+        self.current_completed_step = int(completed_step)
+        self.enabled = True
+
+    def begin_model_forward(self) -> None:
+        self._forward_index += 1
+        self.current_branch = "cond" if self.cfg_branch_count == 1 or self._forward_index % 2 == 0 else "uncond"
+
+    def masked_token_indices(self, hidden_states, *, heads: int, head_dim: int, layer: int):
+        """Load this layer's source routing and intersect it with Medit/Msee."""
+
+        import torch
+
+        if self.attention_mask_cache is None:
+            query_idx, context_idx = self.index_cache.get(hidden_states)
+            return query_idx, context_idx
+        placeholder = torch.empty(
+            (hidden_states.shape[1], heads, head_dim),
+            device=hidden_states.device,
+            dtype=self.attention_mask_execution_dtype,
+        )
+        block_mask, entry, load_seconds = self.attention_mask_cache.get(
+            self.current_completed_step,
+            self.current_branch,
+            layer,
+            placeholder,
+        )
+        query_idx, context_idx, stats = self.index_cache.select_from_block_mask(
+            hidden_states,
+            block_mask,
+            q_block_size=self.attention_mask_cache.config.q_block_size,
+            k_block_size=self.attention_mask_cache.config.k_block_size,
+        )
+        if query_idx.numel() == 0:
+            raise ValueError(
+                "source block-attention mask selected no Medit query tokens; "
+                "use --no-middle-attention-mask to run the legacy region path"
+            )
+        self.attention_mask_cache_hits += 1
+        self.attention_mask_load_seconds += load_seconds
+        self.attention_mask_query_ratio_sum += float(stats["query_ratio"])
+        self.attention_mask_context_ratio_sum += float(stats["context_ratio"])
+        if len(self.attention_mask_records) < 4:
+            self.attention_mask_records.append(
+                {
+                    "step": self.current_completed_step,
+                    "cfg_branch": self.current_branch,
+                    "layer": int(layer),
+                    "source_mask_density": float(entry["density"]),
+                    **stats,
+                }
+            )
+        return query_idx, context_idx
 
     def summary(self) -> dict[str, Any]:
+        mask_calls = self.attention_mask_cache_hits
         return {
             "enabled": True,
             "layers": self.layers,
@@ -743,6 +874,15 @@ class NativeSparseState:
             "sparse_forward_elapsed_seconds": self.sparse_forward_elapsed_seconds,
             "calls_by_layer": dict(sorted(self.calls_by_layer.items(), key=lambda item: int(item[0]))),
             "index_cache": self.index_cache.summary(),
+            "middle_attention_mask": {
+                "enabled": self.middle_attention_mask_enabled,
+                "source_mask_cache_path": str(self.attention_mask_cache.root) if self.attention_mask_cache is not None else None,
+                "cache_hits": mask_calls,
+                "mask_load_seconds": self.attention_mask_load_seconds,
+                "avg_query_ratio": self.attention_mask_query_ratio_sum / mask_calls if mask_calls else None,
+                "avg_context_ratio": self.attention_mask_context_ratio_sum / mask_calls if mask_calls else None,
+                "sample_records": self.attention_mask_records,
+            },
         }
 
 
@@ -801,6 +941,7 @@ class NativeSparseBlockHooks(AbstractContextManager):
         self.state = state
 
     def __enter__(self):
+        self.state.reset()
         for layer_idx in self.state.layers:
             block = self.model.blocks[layer_idx]
             original_forward = block.forward
@@ -811,7 +952,12 @@ class NativeSparseBlockHooks(AbstractContextManager):
                     if not self.state.enabled:
                         self.state.dense_fallback_count += 1
                         return original_forward_ref(x, e, seq_lens, grid_sizes, freqs, context, context_lens)
-                    query_idx, context_idx = self.state.index_cache.get(x)
+                    query_idx, context_idx = self.state.masked_token_indices(
+                        x,
+                        heads=block_ref.self_attn.num_heads,
+                        head_dim=block_ref.self_attn.head_dim,
+                        layer=current_layer_idx,
+                    )
                     start = time.perf_counter()
                     out = native_sparse_block_forward(
                         block_ref,
@@ -885,6 +1031,36 @@ def load_runtime(args: argparse.Namespace) -> NativeRuntime:
     profiler = CudaModuleProfiler()
     profiler.attach(pipe.model)
     return NativeRuntime(torch=torch, wan=wan, pipe=pipe, cfg=cfg, device=device, profiler=profiler)
+
+
+def runtime_hardware_summary(runtime: NativeRuntime) -> dict[str, Any]:
+    """Record the actual accelerator without coupling a run to a fixed card."""
+
+    props = runtime.torch.cuda.get_device_properties(runtime.device)
+    payload: dict[str, Any] = {"device": str(runtime.device), "gpu_name": props.name}
+    visible = [item.strip() for item in os.environ.get("CUDA_VISIBLE_DEVICES", "").split(",") if item.strip()]
+    visible_device = visible[int(runtime.device.index)] if visible and runtime.device.index is not None else str(runtime.device.index)
+    if visible_device:
+        payload["visible_device"] = visible_device
+    try:
+        query = subprocess.run(
+            [
+                "nvidia-smi",
+                "--id",
+                visible_device,
+                "--query-gpu=uuid,pci.bus_id",
+                "--format=csv,noheader",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if query.returncode == 0 and query.stdout.strip():
+            uuid, bus_id = (part.strip() for part in query.stdout.strip().split(",", maxsplit=1))
+            payload.update({"gpu_uuid": uuid, "pci_bus_id": bus_id})
+    except OSError:
+        pass
+    return payload
 
 
 def build_scheduler(runtime: NativeRuntime, args: argparse.Namespace):
@@ -1088,6 +1264,7 @@ def stage_paths(args: argparse.Namespace) -> dict[str, Path]:
         "target_dense_cache": artifact_run / "cache" / "target_dense",
         "target_dense_w8a8_cache": artifact_run / "cache" / "target_dense_w8a8",
         "target_reuse_cache": artifact_run / "cache" / "target_latent_reuse",
+        "shared_cache": artifact_run / "cache" / "shared_dense",
         "coarse_mask_dir": artifact_run / "cache" / "source_dense" / "probe_masks",
         "self_mask_dir": artifact_run / "cache" / "source_dense" / "self_contrast_masks",
         "mask_dir": artifact_run / "cache" / "source_dense" / "fusion_masks",
@@ -1096,6 +1273,139 @@ def stage_paths(args: argparse.Namespace) -> dict[str, Path]:
         "summary": result_run / "summary.json",
         "report": result_run / "report.md",
     }
+
+
+class NativeChaiSourceTokenCapture(AbstractContextManager):
+    """Capture the exact block-0 attention inputs used by CHAI's source path."""
+
+    def __init__(self, model: Any, outer_state: Any, source_steps: tuple[int, ...] = (1, 2, 3, 4)) -> None:
+        self.model = model
+        self.outer_state = outer_state
+        self.source_steps = tuple(int(step) for step in source_steps)
+        self.captures: dict[int, Any] = {}
+        self._attention: Any | None = None
+        self._original: Any | None = None
+
+    def __enter__(self):
+        attention = self.model.blocks[0].self_attn
+        original = attention.forward
+        self._attention = attention
+        self._original = original
+
+        def capture_forward(attn_self, x, *args, **kwargs):
+            # CHAI counts zero-based denoising indices and only captures the
+            # conditional CFG call. OuterSparseState's block-0 pre-hook has
+            # already established both values before this wrapper is entered.
+            step = int(self.outer_state.current_completed_step) - 1
+            if (
+                self.outer_state.branch == "cond"
+                and step in self.source_steps
+                and step not in self.captures
+            ):
+                self.captures[step] = x.detach().cpu()
+            return original(x, *args, **kwargs)
+
+        attention.forward = types.MethodType(capture_forward, attention)
+        return self
+
+    def payload(self) -> dict[int, Any]:
+        missing = sorted(set(self.source_steps) - set(self.captures))
+        if missing:
+            raise RuntimeError(f"shared Dense source did not capture CHAI block-0 tokens at steps {missing}")
+        return dict(self.captures)
+
+    def __exit__(self, exc_type, exc, tb):
+        if self._attention is not None and self._original is not None:
+            self._attention.forward = self._original
+        self._attention = None
+        self._original = None
+        return False
+
+
+def export_shared_dense_cache(
+    args: argparse.Namespace,
+    *,
+    shared_root: Path,
+    source: dict[str, Any],
+    source_trajectory: dict[int, Path],
+    source_mask_cache: Any,
+) -> dict[str, Any]:
+    """Publish references to one canonical Carnator source cache.
+
+    No per-baseline source payload is materialized. NIRVANA-VID reads the
+    post-step-10 latent, Chorus reads the native trajectory and source video,
+    and Chorus2 reads the same unfiltered packed raw block masks. Carnator
+    applies its Medit/Msee intersection only during target execution.
+    """
+
+    if shared_root.exists():
+        raise FileExistsError(f"shared Dense cache already exists: {shared_root}")
+    required_steps = set(range(args.steps))
+    missing_trajectory = sorted(required_steps - set(source_trajectory))
+    if missing_trajectory:
+        raise RuntimeError(f"source Dense trajectory is incomplete: missing step indices {missing_trajectory[:3]}")
+    expected_branches = ("cond",) if args.guidance_scale == 1.0 else ("cond", "uncond")
+    expected_masks = {
+        (step, branch, layer)
+        for step in range(args.reuse_start_step + 1, args.steps + 1)
+        for branch in expected_branches
+        for layer in range(30)
+    }
+    missing_masks = sorted(expected_masks - set(source_mask_cache.entries))
+    if missing_masks:
+        step, branch, layer = missing_masks[0]
+        raise RuntimeError(
+            "shared Dense source mask cache is incomplete for Chorus2; "
+            f"missing step={step}/{branch}/layer={layer}"
+        )
+
+    shared_root.mkdir(parents=True)
+    source_cache_root = Path(source["cache_dir"])
+    restart_path = source_trajectory[args.reuse_start_step - 1]
+    source_video = Path(source.get("output") or "")
+
+    manifest = {
+        "format": "wan22-shared-dense-cache-v2",
+        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "source": {
+            "prompt": args.source_prompt,
+            "cache_dir": str(source_cache_root),
+            "source_manifest": source.get("manifest_path"),
+            "source_video": str(source_video) if source_video.is_file() else None,
+            "seed": int(args.seed),
+            "steps": int(args.steps),
+            "reuse_start_step": int(args.reuse_start_step),
+        },
+        "consumers": {
+            "carnator": {
+                "source_cache": str(source_cache_root),
+                "fusion_masks": str(source_cache_root / "fusion_masks"),
+                "raw_block_masks": str(source_mask_cache.root),
+            },
+            "nirvana_vid": {
+                "latent": str(restart_path),
+                "completed_step": int(args.reuse_start_step),
+                "reuse_start_step": int(args.reuse_start_step),
+            },
+            "chorus": {
+                "source_cache": str(source_cache_root),
+                "source_video": str(source_video) if source_video.is_file() else None,
+            },
+            "chorus2": {
+                "source_latent_cache": str(source_cache_root),
+                "source_mask_cache": str(source_mask_cache.root),
+                "normal_sparse_raw_layers": list(range(10, 21)),
+            },
+        },
+        "export": {
+            "canonical_source_cache": str(source_cache_root),
+            "baseline_cache_copies": 0,
+            "chai_exported": False,
+        },
+    }
+    manifest_path = shared_root / "manifest.json"
+    write_json(manifest_path, manifest)
+    return {"root": str(shared_root), "manifest_path": str(manifest_path), **manifest}
 
 
 def run_native_t2v_stage(
@@ -1108,6 +1418,7 @@ def run_native_t2v_stage(
     cache_dir: Path,
     capture_masks: bool = False,
     save_trajectory: bool = False,
+    trajectory_start_step: int = 0,
     resume_latent_path: Path | None = None,
     resume_start_step: int = 0,
     source_trajectory: dict[int, Path] | None = None,
@@ -1154,8 +1465,14 @@ def run_native_t2v_stage(
         probe = NativeCrossAttentionProbe(model, parse_int_list(args.mask_layers), positive_indices, token_grid)
 
     trajectory: dict[int, Path] = {}
+    cache_write_seconds = 0.0
     if save_trajectory:
-        save_latent(cache_dir / "latents_initial.pt", latent)
+        if trajectory_start_step < 0 or trajectory_start_step >= args.steps:
+            raise ValueError("trajectory_start_step must be in [0, steps)")
+        if trajectory_start_step == 0:
+            cache_write_started = time.perf_counter()
+            save_latent(cache_dir / "latents_initial.pt", latent)
+            cache_write_seconds += time.perf_counter() - cache_write_started
 
     if args.offload_model or pipe.init_on_cpu:
         model.to(runtime.device)
@@ -1180,15 +1497,19 @@ def run_native_t2v_stage(
                 probe.enabled = (step_index + 1) == args.mask_probe_step
                 probe.current_step_index = step_index
             if sparse_state is not None:
-                sparse_state.enabled = True
+                sparse_state.set_step(step_index + 1)
             if outer_sparse_state is not None:
                 outer_sparse_state.set_step(step_index + 1)
 
             timestep_input = timestep_for(runtime, latent, timestep, seq_len)
+            if sparse_state is not None:
+                sparse_state.begin_model_forward()
             noise_pred_cond = model([latent], t=timestep_input, context=context, seq_len=seq_len)[0]
             if args.guidance_scale == 1.0:
                 noise_pred = noise_pred_cond
             else:
+                if sparse_state is not None:
+                    sparse_state.begin_model_forward()
                 noise_pred_uncond = model([latent], t=timestep_input, context=context_null, seq_len=seq_len)[0]
                 noise_pred = noise_pred_uncond + args.guidance_scale * (noise_pred_cond - noise_pred_uncond)
 
@@ -1216,8 +1537,10 @@ def run_native_t2v_stage(
                 injection_mask_source_step = source_step
                 if not injection_stats:
                     injection_stats = current_injection_stats
-            if save_trajectory:
+            if save_trajectory and step_index >= trajectory_start_step:
+                cache_write_started = time.perf_counter()
                 trajectory[step_index] = Path(save_latent(cache_dir / f"latents_step_{step_index:03d}.pt", latent))
+                cache_write_seconds += time.perf_counter() - cache_write_started
 
             if not args.disable_progress:
                 print(f"[{label}] step={step_index + 1:03d}/{args.steps}", flush=True)
@@ -1261,6 +1584,7 @@ def run_native_t2v_stage(
         torch.cuda.empty_cache()
     gc.collect()
 
+    injection_mode = getattr(args, "latent_injection_mode", None)
     manifest = {
         "label": label,
         "prompt": prompt,
@@ -1268,6 +1592,7 @@ def run_native_t2v_stage(
         "condition_image": None,
         "model_dir": str(args.model_dir.expanduser()),
         "wan_root": str(DEFAULT_WAN_ROOT),
+        "hardware": runtime_hardware_summary(runtime),
         "dtype": str(pipe.param_dtype),
         "output": str(out_video) if decode_video else None,
         "height": args.height,
@@ -1275,7 +1600,7 @@ def run_native_t2v_stage(
         "frames": args.frames,
         "fps": args.fps,
         "steps": args.steps,
-        "completed_steps": len(trajectory) if save_trajectory else args.steps,
+        "completed_steps": len(trajectory) if save_trajectory else args.steps - resume_start_step,
         "scheduler": args.scheduler,
         "solver_order": args.solver_order if args.scheduler == "unipc" else None,
         "flow_shift": args.flow_shift,
@@ -1299,13 +1624,21 @@ def run_native_t2v_stage(
         },
         "masked_injection": {
             "enabled": source_trajectory is not None and mask_bundle is not None,
-            "mode": args.latent_injection_mode,
-            "alpha_function": args.boundary_alpha_function if args.latent_injection_mode == "boundary-blend" else None,
+            "mode": injection_mode,
+            "alpha_function": (
+                getattr(args, "boundary_alpha_function", None)
+                if injection_mode == "boundary-blend"
+                else None
+            ),
             "formula": (
                 "L_new = Mbase * L_target + Mband * ((1 - alpha) * L_target + alpha * L_source) + "
                 "(1 - Medit) * L_source"
-                if args.latent_injection_mode == "boundary-blend"
-                else "L_new = Medit * L_target + (1 - Medit) * L_source_cache"
+                if injection_mode == "boundary-blend"
+                else (
+                    "L_new = Medit * L_target + (1 - Medit) * L_source_cache"
+                    if injection_mode == "hard"
+                    else None
+                )
             ),
             "calls": injection_calls,
             "total_seconds": injection_seconds,
@@ -1319,6 +1652,7 @@ def run_native_t2v_stage(
         "timing": {
             "loop_denoise_seconds": denoising_seconds,
             "finalize_output_seconds": finalize_seconds,
+            "cache_write_seconds": cache_write_seconds,
             "end_to_end_seconds": time.perf_counter() - stage_started,
         },
         "profile": profile,
@@ -1522,6 +1856,7 @@ def compact_run(manifest: dict[str, Any]) -> dict[str, Any]:
         "latent_shape": manifest.get("latent_shape"),
         "token_grid": manifest.get("token_grid"),
         "peak_gpu_memory_gib": manifest.get("peak_gpu_memory_gib"),
+        "hardware": manifest.get("hardware"),
         "masked_injection": manifest.get("masked_injection"),
         "sparse_blocks": manifest.get("sparse_blocks"),
         "outer_sparse": manifest.get("outer_sparse"),
@@ -1566,6 +1901,8 @@ def build_summary(
     target_reuse: dict[str, Any] | None,
     status: str,
     error: str | None = None,
+    cache_preparation: dict[str, Any] | None = None,
+    shared_cache: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     runs = {}
     if source is not None:
@@ -1617,9 +1954,12 @@ def build_summary(
             "mask_fusion_gamma": args.mask_fusion_gamma,
             "sparse_layers": args.sparse_layers,
             "region_update_layers": args.sparse_layers,
+            "middle_attention_mask": args.middle_attention_mask,
+            "block_mask_capture_layers": block_mask_capture_layers(args),
             "outer_attn_backend": args.outer_attn_backend,
             "outer_flashinfer_wrapper": args.flashinfer_wrapper if args.outer_attn_backend == "flashinfer" else "n/a",
             "capture_outer_block_masks": args.capture_outer_block_masks,
+            "prepare_shared_dense_cache": args.prepare_shared_dense_cache,
             "outer_sparse_layers": args.outer_sparse_layers,
             "outer_sparse_dtype": args.outer_sparse_dtype,
             "use_fp16_qk_reduction": args.use_fp16_qk_reduction,
@@ -1645,6 +1985,10 @@ def build_summary(
             "end_to_end_vs_reference": safe_ratio(speedup_reference.get("end_to_end_seconds"), reuse.get("end_to_end_seconds")),
         },
     }
+    if cache_preparation is not None:
+        summary["cache_preparation"] = cache_preparation
+    if shared_cache is not None:
+        summary["shared_cache"] = shared_cache
     if paths["mask_dir"].exists():
         summary["masks"] = mask_area_summary(paths["mask_dir"])
     if paths["source_first_frame"].exists() or paths["target_first_frame"].exists():
@@ -1668,6 +2012,7 @@ def write_report(
     dense_w8a8 = runs.get("target_dense_w8a8", {})
     reuse = runs.get("target_latent_reuse", {})
     density = reuse.get("sparse_density", {})
+    middle_mask = (reuse.get("sparse_blocks") or {}).get("middle_attention_mask", {})
     masks = summary.get("masks", {})
     frames = summary.get("first_frames", {})
     speedups = summary.get("speedups", {})
@@ -1691,7 +2036,7 @@ def write_report(
             f"- Prompts: source `{summary['config']['source_prompt']}`, target `{summary['config']['target_prompt']}`",
             f"- Shape: `{summary['config']['width']}x{summary['config']['height']}`, frames `{summary['config']['frames']}`, fps `{summary['config']['fps']}`",
             f"- Sampling: `{summary['config']['steps']}` steps, `{summary['config']['scheduler']}`, solver order `{summary['config']['solver_order']}`, flow shift `{summary['config']['flow_shift']}`",
-            f"- Guidance: `{summary['config']['guidance_scale']}` ({summary['config']['effective_guidance']}), region-update layers `{summary['config']['region_update_layers']}`, outer `{summary['config']['outer_attn_backend']}` ({summary['config']['outer_flashinfer_wrapper']}) on `{summary['config']['outer_sparse_layers']}`, FFN `{summary['config']['ffn_backend']}`, reuse start step `{summary['config']['reuse_start_step']}`",
+            f"- Guidance: `{summary['config']['guidance_scale']}` ({summary['config']['effective_guidance']}), region-update layers `{summary['config']['region_update_layers']}` with middle attention-mask `{summary['config']['middle_attention_mask']}`, outer `{summary['config']['outer_attn_backend']}` ({summary['config']['outer_flashinfer_wrapper']}) on `{summary['config']['outer_sparse_layers']}`, FFN `{summary['config']['ffn_backend']}`, reuse start step `{summary['config']['reuse_start_step']}`",
             f"- latent injection: `{summary['config']['latent_injection_mode']}` (alpha `{summary['config']['boundary_alpha_function']}`)",
             f"- attention mask: `{summary['config']['mask_method']}`, completed probe step `{summary['config']['mask_probe_step']}`, self layer `{summary['config']['mask_self_layer']}`",
             "",
@@ -1776,6 +2121,7 @@ def write_report(
             f"- Dense fallback calls: `{density.get('dense_fallback_count')}`",
             f"- Avg Medit query ratio: `{fmt_percent(density.get('avg_medit_query_ratio'))}`",
             f"- Avg Msee context ratio: `{fmt_percent(density.get('avg_msee_context_ratio'))}`",
+            f"- Middle attention-mask: `{middle_mask.get('enabled')}`; masked Medit query ratio `{fmt_percent(middle_mask.get('avg_query_ratio'))}`; masked Msee context ratio `{fmt_percent(middle_mask.get('avg_context_ratio'))}`",
             f"- Latent injection: `{reuse.get('masked_injection')}`",
             *([f"- {reuse_note}"] if reuse_note else []),
             f"- attention mask variant: `{masks.get('mask_variant')}`",
@@ -1826,6 +2172,29 @@ def source_assets_from_run(args: argparse.Namespace, source_run_dir: Path) -> tu
     return source, trajectory, mask_dir, outer_mask_dir
 
 
+def verify_middle_attention_mask_coverage(args: argparse.Namespace, cache: Any) -> None:
+    """Require a complete 10--20 block-mask cache for the default region path."""
+
+    if not args.middle_attention_mask:
+        return
+    branches = ("cond",) if args.guidance_scale == 1.0 else ("cond", "uncond")
+    layers = parse_int_ranges(args.sparse_layers)
+    missing = [
+        (step, branch, layer)
+        for step in range(args.reuse_start_step + 1, args.steps + 1)
+        for branch in branches
+        for layer in layers
+        if (step, branch, layer) not in cache.entries
+    ]
+    if missing:
+        sample = ", ".join(f"step={step}/{branch}/layer={layer}" for step, branch, layer in missing[:3])
+        raise ValueError(
+            "source block-mask cache does not cover Carnator middle layers; "
+            f"missing {len(missing)} entries, including {sample}. "
+            "Recreate the source cache or pass --no-middle-attention-mask for legacy reuse."
+        )
+
+
 def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
     from carnator.masks import load_mask_bundle
     from carnator.outer_sparse import (
@@ -1869,6 +2238,10 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
             return summary
         source_outer_mask_dir = paths["outer_mask_dir"]
         sparse_execution_dtype = outer_sparse_execution_dtype(args)
+        cache_preparation_started = time.perf_counter() if args.prepare_shared_dense_cache else None
+        shared_cache = None
+        cache_preparation = None
+        source_block_mask_cache = None
         if args.source_run_dir:
             source, source_trajectory, source_mask_dir, source_outer_mask_dir = source_assets_from_run(args, args.source_run_dir)
             paths["mask_dir"] = source_mask_dir
@@ -1876,7 +2249,12 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
             source_initial_latent = Path(source["cache_dir"]) / "latents_initial.pt"
         else:
             source_outer_state = None
-            if args.capture_outer_block_masks or args.outer_attn_backend != "dense":
+            if (
+                args.capture_outer_block_masks
+                or args.outer_attn_backend != "dense"
+                or args.middle_attention_mask
+                or args.prepare_shared_dense_cache
+            ):
                 source_cache = SourceBlockMaskCache(
                     source_outer_mask_dir,
                     outer_mask_config(args),
@@ -1888,14 +2266,17 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     cfg_branch_count=cfg_branches(args.guidance_scale),
                     start_completed_step=args.reuse_start_step + 1,
                 )
-                with OuterSparseCaptureHooks(
-                    runtime.pipe.model,
-                    runtime.wan["model_module"],
-                    source_outer_state,
-                    source_cache,
-                    parse_int_ranges(args.outer_sparse_layers),
-                    execution_dtype=sparse_execution_dtype,
-                ):
+                with ExitStack() as stack:
+                    stack.enter_context(
+                        OuterSparseCaptureHooks(
+                            runtime.pipe.model,
+                            runtime.wan["model_module"],
+                            source_outer_state,
+                            source_cache,
+                            block_mask_capture_layers(args),
+                            execution_dtype=sparse_execution_dtype,
+                        )
+                    )
                     source = run_native_t2v_stage(
                         runtime,
                         args,
@@ -1909,6 +2290,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                         mask_output_dir=paths["coarse_mask_dir"],
                         decode_video=True,
                     )
+                source_block_mask_cache = source_cache
             else:
                 source = run_native_t2v_stage(
                     runtime,
@@ -1946,6 +2328,29 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
             source_mask_dir = paths["mask_dir"]
             source_initial_latent = paths["source_cache"] / "latents_initial.pt"
 
+            if args.prepare_shared_dense_cache:
+                if source_block_mask_cache is None:
+                    raise RuntimeError("shared Dense cache preparation did not initialize the source block-mask capture")
+                shared_cache = export_shared_dense_cache(
+                    args,
+                    shared_root=paths["shared_cache"],
+                    source=source,
+                    source_trajectory=source_trajectory,
+                    source_mask_cache=source_block_mask_cache,
+                )
+                cache_preparation = {
+                    "includes": [
+                        "source Dense end-to-end generation",
+                        "Carnator fusion-mask construction",
+                        "source block-mask capture and cache writes",
+                        "single-cache NIRVANA-VID, Chorus, Chorus2 and Carnator manifest export",
+                    ],
+                    "excludes": ["target C0 Dense timing", "all target-method timings"],
+                    "end_to_end_seconds": time.perf_counter() - cache_preparation_started,
+                    "source_dense_end_to_end_seconds": source["timing"]["end_to_end_seconds"],
+                    "shared_cache_manifest": shared_cache["manifest_path"],
+                }
+
         if args.source_only:
             summary = build_summary(args, paths, source, None, None, None, status="source_prepared")
             write_summary_and_reports(paths, summary)
@@ -1970,6 +2375,21 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 cache_dir=paths["target_dense_cache"],
             )
 
+        if args.prepare_shared_dense_cache:
+            summary = build_summary(
+                args,
+                paths,
+                source,
+                target_dense,
+                None,
+                None,
+                status="completed",
+                cache_preparation=cache_preparation,
+                shared_cache=shared_cache,
+            )
+            write_summary_and_reports(paths, summary)
+            return summary
+
         target_dense_w8a8 = None
         if args.ffn_backend == "w8a8" and not args.skip_w8a8_dense_diagnostic:
             quantized_hooks = QuantizedFFNHooks(runtime.pipe.model)
@@ -1987,23 +2407,31 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     ffn_state=quantized_ffn,
                 )
 
+        outer_state = None
+        outer_executor = None
+        source_block_mask_cache = None
+        if args.outer_attn_backend != "dense" or args.middle_attention_mask:
+            source_cache = SourceBlockMaskCache(source_outer_mask_dir, outer_mask_config(args))
+            source_cache.expect_cfg_branches(cfg_branches(args.guidance_scale))
+            verify_middle_attention_mask_coverage(args, source_cache)
+            source_block_mask_cache = source_cache
         mask_bundle = load_mask_bundle(source_mask_dir, None)
         sparse_state = NativeSparseState(
             model_module=runtime.wan["model_module"],
             mask_bundle=mask_bundle,
             layers=parse_int_ranges(args.sparse_layers),
+            attention_mask_cache=source_block_mask_cache if args.middle_attention_mask else None,
+            attention_mask_execution_dtype=sparse_execution_dtype if args.middle_attention_mask else None,
+            cfg_branch_count=cfg_branches(args.guidance_scale),
         )
-        outer_state = None
-        outer_executor = None
         if args.outer_attn_backend != "dense":
-            source_cache = SourceBlockMaskCache(source_outer_mask_dir, outer_mask_config(args))
-            source_cache.expect_cfg_branches(cfg_branches(args.guidance_scale))
+            assert source_block_mask_cache is not None
             outer_state = OuterSparseState(
                 cfg_branch_count=cfg_branches(args.guidance_scale),
                 start_completed_step=args.reuse_start_step + 1,
             )
             outer_executor = OuterSparseExecutor(
-                source_cache,
+                source_block_mask_cache,
                 args.outer_attn_backend,
                 flashinfer_wrapper=args.flashinfer_wrapper,
                 workspace_mib=args.outer_workspace_mib,

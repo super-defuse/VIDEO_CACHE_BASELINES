@@ -1,7 +1,7 @@
 # Methods
 
 常规插件只实现 `BaselineMethod.generate()`，模型调用由 adapter 完成；Wan 原生矩阵
-runner（Carnator、CHAI-Carnator）直接接管 native sampling loop，以便同时安装 attention、
+runner（Carnator）直接接管 native sampling loop，以便同时安装 attention、
 latent 和 FFN hook。
 
 | 插件 | capability | 来源 |
@@ -10,8 +10,8 @@ latent 和 FFN hook。
 | `chai` | 跨请求缓存、跳步、Cache Attention | `methods/chai/` |
 | `teacache` | adapter 内跳步 | `adapters/teacache.py` |
 | `nirvana_vid` | 跨请求扩散 latent、跳步、source trajectory | `adapters/{wan22,cogvideox15}.py` |
-| `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；CogVideoX1.5 使用 source latent restart 适配 | `carnator/` + `scripts/run/carnator_matrix.py` |
-| `chai_carnator` | Wan 专用 `CHAI-Carnator`：8-step source/target；block 0 在 CHAI local steps 1--4 读取对应 source token，其余 block 按 CC-B0--CC-B5 使用 Carnator sparse attention、latent injection 和可选 W8A8 FFN | `scripts/run/chai_carnator_matrix.py` + `carnator/` |
+| `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；默认将 10--20 的原始 block mask 与 `Medit`/`Msee` 相交；可一次导出所有共享缓存 | `carnator/` + `scripts/run/carnator_matrix.py` |
+| `chorus2` | Wan 专用：从共享 source 的第 10 步 latent 恢复，只计算后 40 步；全部 30 个 block 使用普通 SpargeAttn mask，每 8 层 refresh | `chorus2/` + `scripts/run/chorus2_wan.py` |
 | `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、Stage-2 SRD/TGAA/latent fusion、Stage-3 dense no-reuse、LLM prompt diff、Grounded-SAM-2 v1.0 mask；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
 | `chorus_no_tgaa` | Wan2.2 Chorus 消融；保留同一 source trajectory、SRD、latent fusion、Stage-3 dense/no-reuse 和 mask，仅关闭 Stage-2 TGAA；CogVideoX1.5 为 N/A | `methods/chorus_no_tgaa` + `adapters/wan22.py` |
 | `chorus_tgaa_joint_gamma_1_6` | Wan2.2 Chorus TGAA 工程探针；同步设置 `gamma_k=gamma_o=1.30`，其余 Chorus 配置不变；CogVideoX1.5 为 N/A | `methods/chorus_tgaa_joint_gamma_1_6` + `adapters/wan22.py` |
@@ -40,15 +40,10 @@ mask，不再保留 per-step region-mask 副本。
 CogVideoX1.5 使用明确标注的 source-latent-restart adapter，不将 Wan 专用的
 mask/FFN 路径标成 CogVideoX1.5 结果。synthetic adapter 只用于协议测试。
 
-`CHAI-Carnator` 是独立的 Wan native matrix runner，不复用已清理的旧组合基线：
-source 与 target 都从同一 8-step scheduler 的初始 latent 开始。source 保存 initial
-latent 及每个 post-scheduler step 1--8 的 latent；同时在 block 0 保存 CHAI 约定的
-local steps 1--4 条件分支 transformer 输入。source completed step 5 的 cross/self
-attention 生成一份融合 `Mbase/Medit/Msee`，并固定供 target 全部八步使用；不会再复制为多个
-去噪步的 region-mask key。
-
-target 的 block 0 仅在 local steps 1--4 使用对应的 Cache Attention；其他四步为 dense
-attention。block 1--9、21--29 按 B1/B2/B4/B5 启用 outer sparse backend（B0/B3 保持
-dense），block 10--20 始终执行 Carnator region update，B3/B4/B5 另启用 W8A8 FFN。
-每个 target step 都以固定的 source completed-step-5 `Medit` 执行 latent injection；
-matrix manifest 审计 8 次注入、source completed step 5、cache steps、outer backend 和 FFN backend。
+`python -m carnator.adapters.wan_ti2v_5b --prepare-shared-dense-cache` 是 Wan 的统一
+source cache 入口。一次 source Dense 导出 Carnator 原始 trajectory/fusion mask/block masks、
+NIRVANA-VID 的 step-10 latent、CHAI 的 block-0 source tokens、Chorus 的
+`chorus-trajectory-v2` sidecar，以及 Chorus2 的完整 block-mask cache。Chorus2 的 10--20
+层会额外保存未筛选的普通 sparse mask；Carnator 的更稀疏 `Medit`/`Msee` 交集只在 Carnator
+target 运行时构造。缓存准备时延与 target C0 的端到端时延分开记录，后者是所有 speedup 的
+唯一分母。

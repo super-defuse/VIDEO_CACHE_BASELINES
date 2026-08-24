@@ -96,6 +96,45 @@ def clip_t(rows: list[dict[str, Any]], sample_frames: int, model_path: Path, dev
     return scores
 
 
+def install_opencv_vbench_video_loader() -> None:
+    """Avoid the Decord/FFmpeg incompatibility in the shared VBench env."""
+    import cv2
+    import numpy as np
+    import torch
+    import vbench.aesthetic_quality as aesthetic_quality
+    import vbench.background_consistency as background_consistency
+    import vbench.imaging_quality as imaging_quality
+    import vbench.subject_consistency as subject_consistency
+    from vbench.utils import get_frame_indices
+
+    def load_video(video_path: str, num_frames: int | None = None, return_tensor: bool = True, data_transform: Any = None, width: int | None = None, height: int | None = None) -> Any:
+        reader = cv2.VideoCapture(video_path)
+        frames: list[Any] = []
+        try:
+            while True:
+                ok, frame = reader.read()
+                if not ok:
+                    break
+                if width is not None or height is not None:
+                    frame = cv2.resize(frame, (width or frame.shape[1], height or frame.shape[0]))
+                frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        finally:
+            reader.release()
+        if not frames:
+            raise RuntimeError(f"OpenCV could not decode video: {video_path}")
+        buffer = np.stack(frames).astype(np.uint8, copy=False)
+        if num_frames:
+            buffer = buffer[get_frame_indices(num_frames, len(buffer), sample="middle")]
+        if data_transform:
+            return data_transform(buffer)
+        return torch.Tensor(buffer).permute(0, 3, 1, 2) if return_tensor else buffer
+
+    subject_consistency.load_video = load_video
+    background_consistency.load_video = load_video
+    aesthetic_quality.load_video = load_video
+    imaging_quality.load_video = load_video
+
+
 def vbench_quality(
     rows: list[dict[str, Any]], output_dir: Path, dimensions: list[str], device: str
 ) -> tuple[float | None, dict[int, dict[str, float | None]]]:
@@ -114,8 +153,15 @@ def vbench_quality(
     sys.path.insert(0, str(vbench_root))
     from vbench import VBench
 
+    install_opencv_vbench_video_loader()
     output_dir.mkdir(parents=True, exist_ok=True)
-    prompts = {str(Path(row["video_path"]).resolve()): row["prompt"] for row in rows}
+    prompts: dict[str, str] = {}
+    for row in rows:
+        video_path = Path(row["video_path"])
+        # VBench enumerates staged symlink paths, while result manifests may
+        # record the resolved source path. Support both representations.
+        prompts[str(video_path.absolute())] = row["prompt"]
+        prompts[str(video_path.resolve())] = row["prompt"]
     runner = VBench(
         device,
         str(vbench_root / "vbench" / "VBench_full_info.json"),
@@ -133,7 +179,11 @@ def vbench_quality(
     payload = json.loads(result_file.read_text())
     averages: dict[str, float] = {}
     per_request: dict[int, dict[str, float | None]] = {row["request_index"]: {} for row in rows}
-    path_to_index = {str(Path(row["video_path"]).resolve()): row["request_index"] for row in rows}
+    path_to_index: dict[str, int] = {}
+    for row in rows:
+        video_path = Path(row["video_path"])
+        path_to_index[str(video_path.absolute())] = row["request_index"]
+        path_to_index[str(video_path.resolve())] = row["request_index"]
     for dimension in dimensions:
         result = payload.get(dimension)
         if not isinstance(result, list) or not result:
@@ -144,14 +194,21 @@ def vbench_quality(
             request_index = path_to_index.get(video_path)
             if request_index is not None:
                 value = video_result.get("video_results")
-                per_request[request_index][dimension] = float(value) if value is not None and not isinstance(value, bool) else (float(value) if value is not None else None)
+                if value is None:
+                    per_request[request_index][dimension] = None
+                elif isinstance(value, bool):
+                    per_request[request_index][dimension] = float(value)
+                else:
+                    score = float(value)
+                    per_request[request_index][dimension] = score / 100.0 if dimension == "imaging_quality" else score
 
     missing = [dimension for dimension in TASK_INFO if dimension not in averages]
     if missing:
         raise RuntimeError(f"VBench did not return required CHAI dimensions: {missing}")
     final_score = aggregate_vbench_scores(averages)
     for request_index, values in per_request.items():
-        values["vbench_q"] = final_score
+        if all(values.get(dimension) is not None for dimension in TASK_INFO):
+            values["vbench_q"] = aggregate_vbench_scores({dimension: float(values[dimension]) for dimension in TASK_INFO})
     return final_score, per_request
 
 
@@ -166,10 +223,13 @@ def _rewrite_results(
     for row in rows:
         if row["request_index"] in clip_scores:
             row["clip_t"] = clip_scores[row["request_index"]]
-        if row["request_index"] in evaluated_indices and vbench_score is not None:
-            row["vbench_q"] = vbench_score
         if vbench_dimensions and row["request_index"] in vbench_dimensions:
-            row["vbench_dimensions"] = vbench_dimensions[row["request_index"]]
+            dimensions = vbench_dimensions[row["request_index"]]
+            row["vbench_dimensions"] = dimensions
+            if dimensions.get("vbench_q") is not None:
+                row["vbench_q"] = dimensions["vbench_q"]
+        elif row["request_index"] in evaluated_indices and vbench_score is not None:
+            row["vbench_q"] = vbench_score
     path.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8")
 
 

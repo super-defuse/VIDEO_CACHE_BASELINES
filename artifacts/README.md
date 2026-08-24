@@ -1,47 +1,24 @@
 # Artifact Layout
 
-所有本轮 Wan2.2 TI2V-5B dog -> cat 结果按同一实验根目录归档：
+`artifacts/` 只保留当前验收、仍在使用的共享缓存和明确可复现的实验产物。
 
-```text
-artifacts/
-├── runs/wan22-ti2v-5b/dog-to-cat/
-│   ├── chai/
-│   ├── chorus/
-│   ├── nirvana-vid/
-│   ├── teacache/
-│   ├── carnator-quality/
-│   └── chai-carnator-quality/
-├── carnator/ti2v-5b/<run-id>/          # Carnator 原生 source/mask/latent/video
-├── carnator-results/ti2v-5b/<run-id>/  # Carnator matrix 和质量结果
-├── chai-carnator/<run-id>/              # CHAI-Carnator source/cache/video
-├── chai-carnator-results/<run-id>/      # CHAI-Carnator matrix
-├── videos/wan2.2-ti2v-5b/dog-to-cat/   # 面向验收的统一视频符号链接
-└── cache/Wan2.2/<method>/               # 本地持久缓存，不提交 Git
-```
+## 当前验收
 
-## 命名约定
+2026-08-24 的 Wan2.2 TI2V-5B dog -> cat 验收入口：
 
-- 运行目录使用 `<model>-<task>/<method>`，模型名和方法名统一使用小写 kebab-case。
-- 每个方法目录包含 `config.resolved.json`、`results.jsonl`；跨请求运行的摘要统一为该目录内的 `summary.json`。
-- 质量评测目录使用 `<method>-quality`，指标文件固定为 `metrics.json`。
-- 视频使用 `videos/0000_source-000.mp4` 和 `videos/0001_target-000.mp4`；对外入口只放在 `videos/wan2.2-ti2v-5b/dog-to-cat/`。
-- `cache/`、latent、模型权重和其他大体积运行缓存保留在本机，受 `.gitignore` 保护，不作为仓库产物推送。
+- `videos/wan2.2-ti2v-5b/dog-to-cat/`：18 个当前 target 视频的符号链接和视频索引。
+- `acceptance/wan22-ti2v-5b/20260824/`：运行目录、质量指标与视频入口的总索引。
+- `runs/wan22-ti2v-5b/rerun-20260824/`：NIRVANA-VID、CHAI、TeaCache 的原始结果和质量评测。
+- `runs/wan22-ti2v-5b/rerun-20260824/chorus-gamma-1-5-fixed-k1-10-k2-30/`：当前 Chorus 原始结果和质量评测。
+- `carnator/ti2v-5b/dog-to-cat-fast-refresh-20260824/`：Dense baseline 与 Carnator B0--B1 的原始缓存和视频。
+- `ti2v-5b/dog-to-cat-fast-refresh-20260824*/`：Carnator B2--B5 及 boundary-blend 的原始缓存和视频。
+- `chorus2/dog-to-cat-fast-refresh-20260824-gpu3/`：Chorus2 的原始缓存和视频。
 
-## 当前验收产物
+## 长期保留
 
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus/` 是当前 Chorus source/target 结果；target 只在 Stage 2 (`10 <= step < 40`) 使用 source latent fusion、SRD 和 TGAA，Stage 3 为 dense full computation，不复用 latent。Stage 2 保留 native Wan head dense，Stage 3 在 step 40 清空 UniPC derivative history 并保留全局 timestep index。
-- Chorus 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6218`；逐请求字段写回该目录的 `results.jsonl`。
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/` 是 Chorus 仅去掉 TGAA 的严格消融；source trajectory、SRD、mask、latent fusion 和 Stage 3 均相同，target 的 `chorus_tgaa.enabled=false` 且 `calls=0`。
-- Chorus-no-TGAA 质量结果位于 `runs/wan22-ti2v-5b/dog-to-cat/chorus-no-tgaa/vbench/`，target `CLIP-T=0.3491`、`VBench-Q=0.6332`；逐请求字段写回该目录的 `results.jsonl`。
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-3/chorus-tgaa-joint-gamma-1-3/` 与
-  `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-1-6/chorus-tgaa-joint-gamma-1-6/` 分别是
-  同步设置 `gamma_k=gamma_o=1.30`、`1.6` 的工程敏感性探针。
-- `runs/wan22-ti2v-5b/dog-to-cat/chorus-tgaa-joint-gamma-2-0/` 是同步设置
-  `gamma_k=gamma_o=2.0` 的工程敏感性探针；target 质量结果已写回 `results.jsonl`，六维
-  VBench 原始结果位于该目录的 `vbench/`。
-- `runs/wan22-ti2v-5b/dog-to-cat/carnator-quality/` 包含原生 Carnator B1/B3/B4、NIRVANA-VID 和 TeaCache 的质量补跑。
-- `runs/wan22-ti2v-5b/dog-to-cat/chai-carnator-quality/` 包含 CC-B0--CC-B5 的质量结果。
-- `videos/wan2.2-ti2v-5b/dog-to-cat/README.md` 是全部 target 视频的稳定入口索引。
+- `shared_cross_request_cache/`、`early_signature_color_v1_calibration_cluster_02_2170/`：当前跨请求缓存和校准实验，不能按常规验收缓存清理。
+- `cross_request_retrieval/`：检索产物。
+- `vbench-cache/`：质量评测模型缓存。
+- `cache/synthetic/`：测试夹具，不用于验收结果。
 
-CogVideoX1.5 本轮按要求不运行，因此不在 `artifacts` 中保留 CogVideo 运行目录或缓存。新运行应通过
-`scripts/run/source_target_matrix.py --run-prefix wan22-ti2v-5b/dog-to-cat` 写入上述稳定目录，不要在 `artifacts/runs` 根目录创建临时结果。
+历史 Wan 基线缓存、历史 Carnator 结果以及早期重复 Chorus2 运行已移动到系统回收站的 `VIDEO_CACHE_BASELINES-cleanup-20260824/`，未永久删除。
