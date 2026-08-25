@@ -1,0 +1,25 @@
+{
+  "prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "positive_phrase": "cat",
+  "video": "artifacts/static-prompt-defaults/cat-sleeping-grassland/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults/cat-sleeping-grassland/cache/source_dense/fusion_masks/masks.pt",
+  "frame_count": 121,
+  "resolution": [
+    1280,
+    704
+  ],
+  "selected_frames": {
+    "start": 0
+  },
+  "mask_areas": {
+    "mbase": 0.2737170159816742,
+    "medit": 0.5044354796409607,
+    "msee": 0.8574780225753784
+  },
+  "files_per_position": [
+    "original",
+    "mbase",
+    "medit",
+    "msee"
+  ]
+}

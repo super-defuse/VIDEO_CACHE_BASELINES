@@ -1,0 +1,25 @@
+{
+  "prompt": "a single ripe peach in the foreground on a mountain, photorealistic, static camera",
+  "positive_phrase": "peach",
+  "video": "artifacts/static-prompt-defaults/mountain-peach/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/fusion_masks/masks.pt",
+  "frame_count": 121,
+  "resolution": [
+    1280,
+    704
+  ],
+  "selected_frames": {
+    "start": 0
+  },
+  "mask_areas": {
+    "mbase": 0.4793621599674225,
+    "medit": 0.6108871102333069,
+    "msee": 0.7753665447235107
+  },
+  "files_per_position": [
+    "original",
+    "mbase",
+    "medit",
+    "msee"
+  ]
+}
