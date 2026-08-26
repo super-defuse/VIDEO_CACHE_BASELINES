@@ -150,6 +150,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Run the unmodified C0 target trajectory only; no source cache or latent reuse is created.",
     )
     parser.add_argument("--target-dense-manifest", type=Path, help="Use this FP target-dense manifest as the timing reference.")
+    parser.add_argument(
+        "--target-resume-latent",
+        type=Path,
+        help="Resume target-dense sampling from an online probe latent (used after a target prefix).",
+    )
+    parser.add_argument(
+        "--target-resume-step",
+        type=int,
+        default=0,
+        help="Completed scheduler steps represented by --target-resume-latent.",
+    )
     return parser
 
 
@@ -2225,6 +2236,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
     runtime = load_runtime(args)
     try:
         if args.target_dense_only:
+            if args.target_resume_latent is not None and args.target_resume_step <= 0:
+                raise ValueError("--target-resume-step must be positive with --target-resume-latent")
             target_dense = run_native_t2v_stage(
                 runtime,
                 args,
@@ -2232,6 +2245,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 prompt=args.target_prompt,
                 out_video=paths["target_dense_video"],
                 cache_dir=paths["target_dense_cache"],
+                resume_latent_path=args.target_resume_latent,
+                resume_start_step=args.target_resume_step,
             )
             summary = build_summary(args, paths, None, target_dense, None, None, status="completed")
             write_summary_and_reports(paths, summary)

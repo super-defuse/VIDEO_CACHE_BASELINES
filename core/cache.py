@@ -25,6 +25,12 @@ class CacheEntry:
     metadata: dict[str, Any] | None = None
 
 
+def _payload_exists(path: Path) -> bool:
+    """Return true for both file-backed and directory-backed cache payloads."""
+
+    return path.is_file() or path.is_dir()
+
+
 class NamespaceCache:
     """Persistent cache with a method-specific namespace."""
 
@@ -79,7 +85,7 @@ class NamespaceCache:
         if self._retrieval_signature != strategy.signature:
             self._records = []
             for entry in self._entries.values():
-                if Path(entry.latent_path).is_file():
+                if _payload_exists(Path(entry.latent_path)):
                     self._records.extend(strategy.records_for_add(entry, self._records))
             self._retrieval_signature = strategy.signature
             self._save_retrieval()
@@ -121,7 +127,7 @@ class NamespaceCache:
     def find(self, request: Request, strategy: RetrievalStrategy | None = None) -> CacheMatch:
         if strategy is not None:
             self._ensure_retrieval_index(strategy)
-            valid_uuids = {entry.uuid for entry in self._entries.values() if Path(entry.latent_path).is_file()}
+            valid_uuids = {entry.uuid for entry in self._entries.values() if _payload_exists(Path(entry.latent_path))}
             valid_records = [record for record in self._records if record.uuid in valid_uuids]
             record_is_valid = getattr(strategy, "record_is_valid", None)
             if record_is_valid is not None:
@@ -145,7 +151,7 @@ class NamespaceCache:
             return match
         lookup_prompt = request.cache_prompt or request.prompt
         exact = next((e for e in self._entries.values() if e.prompt == lookup_prompt), None)
-        if exact is None or not Path(exact.latent_path).is_file():
+        if exact is None or not _payload_exists(Path(exact.latent_path)):
             return CacheMatch()
         exact.accessed_at = time.time()
         exact.hit_count += 1

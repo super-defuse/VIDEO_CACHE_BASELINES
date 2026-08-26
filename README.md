@@ -185,6 +185,25 @@ PYTHONPATH=. python3 scripts/benchmark/cross_request_retrieval.py --assume-step1
 FlashAttention CUDA 调用、Runner 落盘，以及 Baseline、TeaCache、NIRVANA-VID、CHAI、Chorus
 的接线均通过；这不替代完整实验。
 
+### VidProM 300-request experiment
+
+正式实验的唯一入口是 [`scripts/benchmark/run_vidprom_300_experiment.py`](scripts/benchmark/run_vidprom_300_experiment.py)。
+它按 CSV 到达顺序在 GPU 3--7 分别运行五个基线，使用 923-entry source view；Carnator
+仅在有候选时在线执行 step-5 Early Signature probe，所有新请求不写入 cache。
+
+```bash
+# 每个基线先执行一次 --check-only，再在独立终端运行 --limit 300
+conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. python scripts/benchmark/run_vidprom_300_experiment.py \
+  --method nirvana_vid --gpu 3 --limit 300
+
+# 生成质量和汇总结果（全部基线完成后）
+conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality_runner.py \
+  --results artifacts/vidprom_1000cache_300input/results/<method>/results.jsonl
+PYTHONPATH=. python scripts/benchmark/aggregate_vidprom_300_results.py
+```
+
+GPU 分配、固定阈值、日志字段和产物清理规则见 [`docs/VIDPROM_1000CACHE_300INPUT_EXPERIMENT_PLAN.md`](docs/VIDPROM_1000CACHE_300INPUT_EXPERIMENT_PLAN.md)。
+
 ## Support
 
 | 方法 | Wan2.2 | CogVideoX1.5 |

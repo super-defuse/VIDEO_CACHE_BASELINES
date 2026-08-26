@@ -54,7 +54,7 @@ class Chorus(BaselineMethod):
                 self.adapter.__dict__.pop("chorus_stage_boundaries", None)
             else:
                 self.adapter.chorus_stage_boundaries = previous_boundaries
-        if is_source:
+        if is_source and bool(self.config.get("persist_target_cache", True)):
             entries = getattr(self._cache, "entries", None)
             if entries is None:
                 raise RuntimeError("Chorus source requires an attached namespace cache")

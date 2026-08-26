@@ -109,6 +109,25 @@ def _save_bytes(value, path: Path) -> None:
     path.write_bytes(value)
 
 
+def _save_directory(value, path: Path) -> None:
+    path.mkdir()
+    (path / "payload.bin").write_bytes(value)
+
+
+def test_directory_backed_cache_payload_is_searchable(tmp_path):
+    strategy = PromptRetriever(
+        LexicalTestEmbedder(), 0.10, result_kind="chorus_prompt",
+        schedule={"min_k1": 10, "min_k2": 30, "max_k1": 10, "max_k2": 30},
+        vector_backend="memory",
+    )
+    cache = NamespaceCache(tmp_path, "chorus-directory")
+    source = Request(0, "source", "a red train at night", 1)
+    cache.put(source, b"trajectory", 5, _save_directory, strategy=strategy)
+    match = cache.find(Request(1, "target", "a red train at night", 1), strategy)
+    assert match.hit
+    assert match.source_uuid == source.uuid
+
+
 def test_chai_uses_faiss_inner_product_index_when_installed(tmp_path):
     if importlib.util.find_spec("faiss") is None:
         return

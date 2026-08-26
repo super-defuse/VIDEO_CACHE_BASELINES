@@ -14,9 +14,13 @@ from .types import CacheMatch, Request, RequestResult
 
 class Runner:
     def __init__(self, adapter: ModelAdapter, method: BaselineMethod, *, model: str,
-                 output_dir: Path, cache_root: Path) -> None:
+                 output_dir: Path, cache_root: Path,
+                 persist_target_cache: bool = True,
+                 exclude_preprocess_latency: bool = True) -> None:
         self.adapter, self.method, self.model = adapter, method, model
         self.output_dir = output_dir
+        self.persist_target_cache = persist_target_cache
+        self.exclude_preprocess_latency = exclude_preprocess_latency
         self.video_dir = output_dir / "videos"
         self.video_dir.mkdir(parents=True, exist_ok=True)
         # A method's latent representation is model-specific. Keep both axes
@@ -65,7 +69,8 @@ class Runner:
             self.adapter.save_video(generation.video, output_path)
             timing["save_video_s"] = time.perf_counter() - save_start
             cache_save_start = time.perf_counter()
-            if not match.hit and generation.latent is not None and self.method.capabilities.cross_request_cache:
+            if (self.persist_target_cache and not match.hit and generation.latent is not None
+                    and self.method.capabilities.cross_request_cache):
                 self.cache.put(request, generation.latent, generation.latent_step or -1, self.adapter.save_latent,
                                strategy=self.method.retriever, eviction_policy=self.method.cache_policy)
             timing["cache_save_s"] = time.perf_counter() - cache_save_start
@@ -75,7 +80,9 @@ class Runner:
             elapsed = time.perf_counter() - start
             excluded = float(generation.extra.get("excluded_latency_s", 0.0))
             timing["excluded_preprocess_s"] = excluded
-            timing["reported_latency_s"] = max(0.0, elapsed - excluded)
+            timing["reported_latency_s"] = (
+                max(0.0, elapsed - excluded) if self.exclude_preprocess_latency else elapsed
+            )
             extra = dict(generation.extra)
             extra["timing"] = timing
             return RequestResult(request.request_index, request.uuid, request.prompt, self.model, self.method.name,

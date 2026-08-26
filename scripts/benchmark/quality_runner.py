@@ -252,7 +252,7 @@ def main() -> None:
             {row["request_index"]: 0.0 for row in rows},
             0.0,
             {row["request_index"] for row in rows},
-            {row["request_index"]: {dimension: 0.0 for dimension in TASK_INFO} for row in rows},
+            {row["request_index"]: {**{dimension: 0.0 for dimension in TASK_INFO}, "vbench_q": 0.0} for row in rows},
         )
         return
     root = Path(__file__).resolve().parents[2]
