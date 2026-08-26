@@ -1,7 +1,7 @@
 {
   "status": "source_prepared",
   "error": null,
-  "updated_at": "2026-08-25 11:03:24 UTC",
+  "updated_at": "2026-08-25 14:24:54 UTC",
   "config": {
     "model_family": "Wan2.2-TI2V-5B",
     "backend": "native Wan2.2",
@@ -15,7 +15,7 @@
     "frames": 121,
     "fps": 24,
     "steps": 50,
-    "seed": 42,
+    "seed": 20260218,
     "scheduler": "unipc",
     "solver_order": 2,
     "flow_shift": 5.0,
@@ -134,21 +134,21 @@
     }
   },
   "paths": {
-    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby",
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby",
     "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-rugby",
-    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/source_dense.mp4",
-    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/target_dense.mp4",
-    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/target_dense_w8a8.mp4",
-    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/target_latent_reuse.mp4",
-    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense",
-    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/outer_block_masks",
-    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/target_dense",
-    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/target_dense_w8a8",
-    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/target_latent_reuse",
-    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/shared_dense",
-    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/probe_masks",
-    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/self_contrast_masks",
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/fusion_masks",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/target_latent_reuse",
+    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/shared_dense",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/fusion_masks",
     "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-rugby/frames/source_dense_first_frame.png",
     "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-rugby/frames/target_dense_first_frame.png",
     "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-rugby/summary.json",
@@ -156,13 +156,13 @@
   },
   "runs": {
     "source_dense": {
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/source_dense.mp4",
-      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/manifest.json",
-      "denoising_seconds": 447.4810490030213,
-      "end_to_end_seconds": 475.84433496097336,
-      "self_attn_seconds": 351.5151130943298,
-      "cross_attn_seconds": 16.140476997375487,
-      "ffn_seconds": 36.18215969276428,
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/manifest.json",
+      "denoising_seconds": 452.2372126240516,
+      "end_to_end_seconds": 487.55995672999416,
+      "self_attn_seconds": 355.8856102104187,
+      "cross_attn_seconds": 16.131475972175597,
+      "ffn_seconds": 36.404354555130006,
       "latent_shape": [
         48,
         31,
@@ -235,14 +235,14 @@
           29
         ],
         "source_mask_cache_id": "playground-rugby",
-        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/outer_block_masks",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/outer_block_masks",
         "format": "carnator-source-block-mask-v1",
         "cfg_branches": 2,
         "entries": 2400,
-        "capture_seconds": 341.4218220800976,
-        "write_seconds": 5.404651595046744,
-        "avg_density": 0.3876754233551522,
-        "avg_coverage": 0.9547262179851532
+        "capture_seconds": 342.4494411565829,
+        "write_seconds": 6.269256706757005,
+        "avg_density": 0.38467188430329163,
+        "avg_coverage": 0.9543204288681348
       },
       "ffn": {
         "enabled": false,
@@ -257,22 +257,22 @@
   },
   "masks": {
     "available": true,
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/fusion_masks",
     "mask_variant": "self_contrast_cross_attention_fusion",
     "source_completed_step": 5,
     "token_area": {
-      "mbase": 0.15520527958869934,
-      "medit": 0.32404690980911255,
-      "msee": 0.6346407532691956,
-      "original_mbase": 0.30432552099227905
+      "mbase": 0.2938416302204132,
+      "medit": 0.5870967507362366,
+      "msee": 0.8386363387107849,
+      "original_mbase": 0.5703079104423523
     },
     "latent_area": {
-      "mbase": 0.15520527958869934,
-      "medit": 0.32404690980911255,
-      "msee": 0.6346407532691956,
-      "mband": 0.1688416451215744
+      "mbase": 0.2938416302204132,
+      "medit": 0.5870967507362366,
+      "msee": 0.8386363387107849,
+      "mband": 0.29325512051582336
     },
-    "raw_coverage_area": 0.15520527958869934,
+    "raw_coverage_area": 0.2938416302204132,
     "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
   }
 }

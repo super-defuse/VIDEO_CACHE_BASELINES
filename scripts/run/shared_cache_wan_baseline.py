@@ -42,6 +42,8 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--target-prompt", default=TARGET_PROMPT)
     value.add_argument("--seed", type=int, default=20260218)
     value.add_argument("--device", default="cuda:0")
+    value.add_argument("--chorus-gamma-k", type=float)
+    value.add_argument("--chorus-gamma-o", type=float)
     return value
 
 
@@ -51,7 +53,9 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 
-def resolved_config(device: str) -> dict[str, Any]:
+def resolved_config(
+    device: str, chorus_gamma_k: float | None = None, chorus_gamma_o: float | None = None
+) -> dict[str, Any]:
     model = load_yaml(ROOT / "configs" / "models" / "wan22.yaml")
     methods = load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = {**model, **methods, "dry_run": False, "device": device}
@@ -63,6 +67,12 @@ def resolved_config(device: str) -> dict[str, Any]:
     checkpoint = chai.get("longclip_checkpoint")
     if checkpoint and not Path(checkpoint).is_absolute():
         chai["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
+    if chorus_gamma_k is not None:
+        config["chorus"] = {
+            **config.get("chorus", {}),
+            "gamma_k": chorus_gamma_k,
+            "gamma_o": chorus_gamma_o,
+        }
     return config
 
 
@@ -82,6 +92,12 @@ def child_path(root: Path, run_id: str) -> Path:
     if not child.is_relative_to(root):
         raise ValueError("--run-id must remain below its configured root")
     return child
+
+
+def build_target_request(source_prompt: str, target_prompt: str, seed: int) -> Request:
+    """Build a target request that retains the source prompt for Chorus diffing."""
+
+    return Request(0, "target-000", target_prompt, seed, cache_prompt=source_prompt)
 
 
 def hash_file(path: Path) -> str:
@@ -184,6 +200,10 @@ def hardware(device: str) -> dict[str, Any]:
 def main() -> int:
     args = parser().parse_args()
     ensure_supported("wan22", args.method)
+    if (args.chorus_gamma_k is None) != (args.chorus_gamma_o is None):
+        raise ValueError("--chorus-gamma-k and --chorus-gamma-o must be provided together")
+    if args.method != "chorus" and args.chorus_gamma_k is not None:
+        raise ValueError("Chorus gamma overrides are only valid with --method chorus")
     artifact_run = child_path(args.artifact_root, args.run_id)
     result_run = child_path(args.results_root, args.run_id)
     if artifact_run.exists() or result_run.exists():
@@ -201,8 +221,10 @@ def main() -> int:
     videos = artifact_run / "videos"
     videos.mkdir()
     result_run.mkdir(parents=True)
-    request = Request(0, "target-000", args.target_prompt, args.seed)
-    adapter = make_adapter("wan22", resolved_config(args.device))
+    request = build_target_request(args.source_prompt, args.target_prompt, args.seed)
+    adapter = make_adapter(
+        "wan22", resolved_config(args.device, args.chorus_gamma_k, args.chorus_gamma_o)
+    )
     output = videos / "target.mp4"
     row: dict[str, Any]
     summary: dict[str, Any]
@@ -293,7 +315,8 @@ def main() -> int:
     results.write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
     (artifact_run / "config.resolved.json").write_text(
         json.dumps({"method": args.method, "source_prompt": args.source_prompt, "target_prompt": args.target_prompt,
-                    "seed": args.seed, "shared_cache_manifest": str(shared_manifest_path)}, indent=2) + "\n",
+                    "seed": args.seed, "shared_cache_manifest": str(shared_manifest_path),
+                    "chorus_gamma_k": args.chorus_gamma_k, "chorus_gamma_o": args.chorus_gamma_o}, indent=2) + "\n",
         encoding="utf-8",
     )
     (result_run / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

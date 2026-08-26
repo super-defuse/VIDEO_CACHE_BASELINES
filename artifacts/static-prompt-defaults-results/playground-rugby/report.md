@@ -1,6 +1,6 @@
 # CARNATOR Latent Reuse Report
 
-Updated: `2026-08-25 11:03:24 UTC`
+Updated: `2026-08-25 14:24:54 UTC`
 Status: `source_prepared`
 
 ## Config
@@ -19,13 +19,13 @@ Status: `source_prepared`
 
 | Run | Self-attn | Cross-attn | FFN | Outer sparse density | Outer mask mass coverage | Latency denoising | Speed Up denoising | Latency End2End | Speed Up End2End | Peak reserved |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Source dense | 351.515 s | 16.140 s | 36.182 s | n/a | n/a | 447.481 s | n/a | 475.844 s | n/a | 52.93 GiB |
+| Source dense | 355.886 s | 16.131 s | 36.404 s | n/a | n/a | 452.237 s | n/a | 487.560 s | n/a | 52.93 GiB |
 | C0 full dense target | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Target latent reuse | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 
 ## Artifacts
 
-- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/videos/source_dense.mp4`
+- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/source_dense.mp4`
 - Source first frame: `None`
 - Target dense video: `None`
 - Target first frame: `None`
@@ -41,9 +41,9 @@ Status: `source_prepared`
 - Middle attention-mask: `None`; masked Medit query ratio `n/a`; masked Msee context ratio `n/a`
 - Latent injection: `None`
 - attention mask variant: `self_contrast_cross_attention_fusion`
-- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/fusion_masks`
-- attention mask token area: `{'mbase': 0.15520527958869934, 'medit': 0.32404690980911255, 'msee': 0.6346407532691956, 'original_mbase': 0.30432552099227905}`
-- attention mask latent area: `{'mbase': 0.15520527958869934, 'medit': 0.32404690980911255, 'msee': 0.6346407532691956, 'mband': 0.1688416451215744}`
+- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/fusion_masks`
+- attention mask token area: `{'mbase': 0.2938416302204132, 'medit': 0.5870967507362366, 'msee': 0.8386363387107849, 'original_mbase': 0.5703079104423523}`
+- attention mask latent area: `{'mbase': 0.2938416302204132, 'medit': 0.5870967507362366, 'msee': 0.8386363387107849, 'mband': 0.29325512051582336}`
 
 ## Environment
 

@@ -35,6 +35,7 @@ if str(ROOT) not in sys.path:
 SCHEMA_VERSION = "shared-cross-request-cache/v3"
 ATTENTION_FORMAT = "carnator-source-block-mask-bitpacked-v1"
 ALL_WAN_LAYERS = tuple(range(30))
+NATIVE_OUTER_SPARSE_LAYERS = "0-9,21-29"
 CHORUS2_RAW_MIDDLE_LAYERS = frozenset(range(10, 21))
 # Measured from the previous compatible run. These constants are only used by
 # --estimate-only, which deliberately performs no GPU work.
@@ -479,7 +480,10 @@ class NativeSharedCacheWorker:
         args.disable_progress = True
         args.capture_outer_block_masks = False
         args.outer_attn_backend = "dense"
-        args.outer_sparse_layers = ",".join(str(layer) for layer in self.cache_config["attention_layers"])
+        # Native validation reserves 10--20 for Carnator's region path. The
+        # independent capture hook below still persists all 30 raw layers for
+        # Chorus2 and Carnator from the same source forward pass.
+        args.outer_sparse_layers = NATIVE_OUTER_SPARSE_LAYERS
         args.outer_mask_q_block = int(self.cache_config["q_block_size"])
         args.outer_mask_k_block = int(self.cache_config["k_block_size"])
         args.outer_mask_top_p = float(self.cache_config["top_p"])
@@ -496,6 +500,8 @@ class NativeSharedCacheWorker:
         self.runtime.torch.cuda.empty_cache()
 
     def prepare(self, row: PromptRow) -> dict[str, Any]:
+        import torch
+
         from carnator.outer_sparse import OuterSparseCaptureHooks, OuterSparseState, cfg_branches
 
         final_dir = self.root / "entries" / row.uuid
@@ -683,7 +689,7 @@ class NativeSharedCacheWorker:
                     capture.close()
                 except BaseException:
                     pass
-            write_json(staging / "status.json", {"status": "failed", "failed_at": utc_now()})
+            shutil.rmtree(staging, ignore_errors=True)
             raise
 
 
@@ -713,6 +719,8 @@ def worker_main(tasks: Any, results: Any, worker_config: dict[str, Any]) -> None
             result["at"] = utc_now()
             append_jsonl(log_path, result)
             results.put(result)
+            if result["status"] == "failed":
+                return
     except BaseException as exc:
         failure = {"status": "worker_failed", "gpu": gpu, "error": f"{type(exc).__name__}: {exc}", "traceback": traceback.format_exc()}
         append_jsonl(log_path, failure)
@@ -849,6 +857,8 @@ def run_workers(root: Path, rows: list[PromptRow], *, gpus: list[int], worker_co
             if result.get("status") == "worker_failed":
                 raise RuntimeError(f"GPU {result['gpu']} failed to initialize: {result['error']}")
             received.append(result)
+            if result.get("status") == "failed":
+                return received
     finally:
         for worker in workers:
             worker.join(timeout=10)

@@ -1,25 +1,0 @@
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 91.84it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B3-gpu4/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B3-gpu4/report.md
-speedup_reference=target_dense
-denoising_speedup=1.6092546236716336
-end_to_end_speedup=1.5044065967043034
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 90.41it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B4-gpu4/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B4-gpu4/report.md
-speedup_reference=target_dense
-denoising_speedup=1.6030316052294402
-end_to_end_speedup=1.4422952099309183
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 89.85it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-Warning: Sage2++ NOT enabled
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B5-gpu4/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-hard-B5-gpu4/report.md
-speedup_reference=target_dense
-denoising_speedup=2.19961869802247
-end_to_end_speedup=1.8690280772703316

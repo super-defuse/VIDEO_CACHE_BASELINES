@@ -1,0 +1,125 @@
+{
+  "created_at": "2026-08-25T16:28:28.987598Z",
+  "endpoint": "https://openrouter.ai/api/v1/images",
+  "model": "bytedance-seed/seedream-4.5",
+  "resolution": "4K",
+  "seed": 20260826,
+  "canvas_size": {
+    "width": 4096,
+    "height": 3072
+  },
+  "images": [
+    {
+      "filename": "apple_snowy_mountainside.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: controlled visual comparison. Landscape 4:3 framing. A single ripe, glossy red apple rests on a continuous, gently sloping alpine mountainside. The camera is aimed directly at the apple from a moderate middle distance, with its optical axis meeting the apple. Place the center of the apple at 50 percent image width and 42 percent image height, in the upper-middle central area, with clearly visible snow both above and below it; do not place it in the foreground, lower third, or near any edge. The whole apple is visible, with a natural short stem, and occupies approximately 18 percent of the image height. This is a balanced medium-wide scene, not an oversized foreground product close-up. Scene/backdrop: the foreground slope rises diagonally from the lower left toward the upper right behind the apple, then continues to a distinct rocky ridgeline and distant jagged peaks. Every ground surface is covered in fresh white snow; the setting is unmistakably a wintry mountain slope, not a flat snowfield. Style/medium: realistic outdoor editorial photograph, 50 mm lens, camera level with the apple and square to the slope, shallow but natural depth of field, cold diffuse daylight, true-to-life apple skin and snow textures. Constraints: exactly one apple; keep its full silhouette inside the central area of the frame with generous clear margin on every side, especially below it; no people, animals, buildings, labels, logos, text, watermark, basket, or other objects.",
+      "input_reference": null,
+      "size": {
+        "width": 4096,
+        "height": 3072
+      },
+      "usage": {
+        "prompt_tokens": 380,
+        "completion_tokens": 16384,
+        "total_tokens": 16764,
+        "cost": 0.04,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.04,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0.04
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 16384
+        }
+      }
+    },
+    {
+      "filename": "peach_grassy_mountainside.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: controlled visual comparison. Landscape 4:3 framing. Use the input reference as a strict reference for the same mountainside: preserve the exact camera position, level viewpoint, framing, diagonal slope direction, rocky ridgeline, distant peak shapes, depth of field, and upper-middle central subject placement. Replace the apple with a single ripe peach at exactly the same position (50 percent image width, 42 percent image height) and the same apparent scale, approximately 18 percent of the image height. Change the reference scene from winter to a normal snow-free mountainside in the same location: replace every snow-covered ground surface with natural green grass and the matching exposed gray rock, while retaining the same terrain geometry. There must be no snow, ice, glaciers, snowcaps, or white winter patches anywhere in the image. Style/medium: realistic outdoor editorial photograph, 50 mm lens, warm diffuse daylight, true-to-life peach fuzz, grass, and stone textures. Constraints: exactly one peach; no apple remains; keep its full silhouette in the upper-middle central area of the frame with generous clear margin on every side, especially below it; no people, animals, buildings, labels, logos, text, watermark, basket, or other objects.",
+      "input_reference": "apple_snowy_mountainside.png",
+      "size": {
+        "width": 4096,
+        "height": 3072
+      },
+      "usage": {
+        "prompt_tokens": 327,
+        "completion_tokens": 16384,
+        "total_tokens": 16711,
+        "cost": 0.04,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.04,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0.04
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 16384
+        }
+      }
+    },
+    {
+      "filename": "american_football_field.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: controlled visual comparison. Landscape 4:3 framing. One brown leather American football with visible white laces, lying horizontally near the exact center of an outdoor stadium practice field. The entire football is visible and occupies approximately 34 percent of the image width. Scene/backdrop: fresh green artificial turf with subtle white yard lines, low metal bleachers far behind the subject, an overcast bright sky, no crowd. Style/medium: realistic sports editorial photograph, 50 mm lens, low eye-level camera, centered composition, soft background bokeh, neutral overcast daylight, accurate leather and turf texture. Constraints: exactly one American football; no people, animals, helmets, hands, other sports equipment, labels, logos, text, watermark, or extra objects.",
+      "input_reference": null,
+      "size": {
+        "width": 4096,
+        "height": 3072
+      },
+      "usage": {
+        "prompt_tokens": 207,
+        "completion_tokens": 16384,
+        "total_tokens": 16591,
+        "cost": 0.04,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.04,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0.04
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 16384
+        }
+      }
+    },
+    {
+      "filename": "olympic_barbell_field.png",
+      "prompt": "Use case: photorealistic-natural. Asset type: controlled visual comparison. Landscape 4:3 framing. Use the input reference as a strict reference for the stadium field, camera position, lighting, background, depth of field, and centered object placement. Replace only the American football with one Olympic barbell: a straight black steel bar with two large round black weight plates, lying horizontally on the turf. Keep the entire barbell visible and make its overall width, including plates, approximately 34 percent of the image width, matching the apparent scale and central placement of the football in the reference. Preserve the same green artificial turf, subtle white yard lines, low distant metal bleachers, and neutral overcast daylight. Style/medium: realistic sports editorial photograph, 50 mm lens, low eye-level camera, accurate rubber, steel, and turf textures. Constraints: exactly one barbell; no football remains; no people, animals, hands, other sports equipment, labels, logos, text, watermark, or extra objects.",
+      "input_reference": "american_football_field.png",
+      "size": {
+        "width": 4096,
+        "height": 3072
+      },
+      "usage": {
+        "prompt_tokens": 259,
+        "completion_tokens": 16384,
+        "total_tokens": 16643,
+        "cost": 0.04,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.04,
+          "upstream_inference_prompt_cost": 0,
+          "upstream_inference_completions_cost": 0.04
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 16384
+        }
+      }
+    }
+  ]
+}

@@ -1,25 +1,0 @@
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 41.79it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B3-gpu3/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B3-gpu3/report.md
-speedup_reference=target_dense
-denoising_speedup=1.6162315432502088
-end_to_end_speedup=1.4753202417563993
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 90.16it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B4-gpu3/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B4-gpu3/report.md
-speedup_reference=target_dense
-denoising_speedup=1.5984548589761314
-end_to_end_speedup=1.4717046755425227
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 90.72it/s]
-/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
-  with amp.autocast(dtype=self.dtype):
-Warning: Sage2++ NOT enabled
-summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B5-gpu3/summary.json
-report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/results/carnator-boundary-B5-gpu3/report.md
-speedup_reference=target_dense
-denoising_speedup=2.2120582493586474
-end_to_end_speedup=1.9711749687700402

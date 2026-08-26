@@ -1,0 +1,188 @@
+{
+    "subject_consistency": [
+        0.983421381107635,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": 0.9880533379813036
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": 0.9782462025682132
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": 0.9784631041189035
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": 0.9846513616542022
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": 0.9824273323019346
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": 0.9886869480212529
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9834092881944444,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": 0.9876627604166667,
+                "video_sim": 118.51953125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": 0.9715596516927083,
+                "video_sim": 116.587158203125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": 0.986822509765625,
+                "video_sim": 118.418701171875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": 0.9822957356770833,
+                "video_sim": 117.87548828125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": 0.9857157389322917,
+                "video_sim": 118.285888671875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": 0.9863993326822916,
+                "video_sim": 118.367919921875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9907863380400396,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": 0.9905666844078422
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": 0.9931019167432598
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": 0.9892064055943163
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": 0.9907126115726042
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": 0.9904059586898009
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": 0.9907244512324145
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6224504510561625,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": 0.6909623742103577
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": 0.5875881314277649
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": 0.553615927696228
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": 0.5056621432304382
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": 0.7013356685638428
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": 0.6955384612083435
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7306213971603016,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus2.mp4",
+                "video_results": 73.07091478079803
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/teacache.mp4",
+                "video_results": 76.71242724962471
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chai.mp4",
+                "video_results": 67.46717929051927
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/chorus.mp4",
+                "video_results": 76.18978768340813
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/dense-c0.mp4",
+                "video_results": 71.53700401369206
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/quality/videos/nirvana.mp4",
+                "video_results": 73.39552527813872
+            }
+        ]
+    ]
+}

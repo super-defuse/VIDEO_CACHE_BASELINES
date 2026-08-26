@@ -250,8 +250,8 @@ class Wan22Adapter(ModelAdapter):
                       "excluded_latency_s": preprocess_s,
                       "chorus_tgaa": {
                           "enabled": tgaa_enabled,
-                          "gamma_k": chorus_cfg.get("gamma_k", 1.15),
-                          "gamma_o": chorus_cfg.get("gamma_o", 1.05),
+                          "gamma_k": chorus_cfg.get("gamma_k", 1.5),
+                          "gamma_o": chorus_cfg.get("gamma_o", 1.5),
                           "schedule": "linear_step_decay_approximation",
                           "paper_exact_schedule": "not specified",
                           "scope": "stage2",
@@ -364,8 +364,8 @@ class Wan22Adapter(ModelAdapter):
             blocks = set(range(len(model.blocks)))
         else:
             blocks = set(int(item) for item in configured_blocks)
-        gamma_k = float(chorus_cfg.get("gamma_k", 1.15))
-        gamma_o = float(chorus_cfg.get("gamma_o", 1.05))
+        gamma_k = float(chorus_cfg.get("gamma_k", 1.5))
+        gamma_o = float(chorus_cfg.get("gamma_o", 1.5))
         token_indices = list(differential_tokens)
         if not token_indices:
             raise ValueError("TGAA requires at least one mapped differential token")

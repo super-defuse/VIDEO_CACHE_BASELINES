@@ -1,8 +1,8 @@
 {
-  "prompt": "a single red apple in the foreground on a snowy mountain, photorealistic, static camera",
+  "prompt": "a red apple rolling down a snowy mountain, camera focus on the apple",
   "positive_phrase": "apple",
-  "video": "artifacts/static-prompt-defaults/snowy-mountain-apple/videos/source_dense.mp4",
-  "mask_bundle": "artifacts/static-prompt-defaults/snowy-mountain-apple/cache/source_dense/fusion_masks/masks.pt",
+  "video": "artifacts/static-prompt-defaults-seed20260218/snowy-mountain-apple/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults-seed20260218/snowy-mountain-apple/cache/source_dense/fusion_masks/masks.pt",
   "frame_count": 121,
   "resolution": [
     1280,
@@ -12,9 +12,9 @@
     "start": 0
   },
   "mask_areas": {
-    "mbase": 0.2856304943561554,
-    "medit": 0.42038121819496155,
-    "msee": 0.6081011891365051
+    "mbase": 0.36480939388275146,
+    "medit": 0.7488636374473572,
+    "msee": 0.9425586462020874
   },
   "files_per_position": [
     "original",

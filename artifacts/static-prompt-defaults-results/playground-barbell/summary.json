@@ -1,7 +1,7 @@
 {
   "status": "source_prepared",
   "error": null,
-  "updated_at": "2026-08-25 11:51:09 UTC",
+  "updated_at": "2026-08-25 14:35:02 UTC",
   "config": {
     "model_family": "Wan2.2-TI2V-5B",
     "backend": "native Wan2.2",
@@ -15,7 +15,7 @@
     "frames": 121,
     "fps": 24,
     "steps": 50,
-    "seed": 42,
+    "seed": 20260218,
     "scheduler": "unipc",
     "solver_order": 2,
     "flow_shift": 5.0,
@@ -134,21 +134,21 @@
     }
   },
   "paths": {
-    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell",
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell",
     "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell",
-    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/source_dense.mp4",
-    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/target_dense.mp4",
-    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/target_dense_w8a8.mp4",
-    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/target_latent_reuse.mp4",
-    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense",
-    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/outer_block_masks",
-    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/target_dense",
-    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/target_dense_w8a8",
-    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/target_latent_reuse",
-    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/shared_dense",
-    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/probe_masks",
-    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/self_contrast_masks",
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/fusion_masks",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/target_latent_reuse",
+    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/shared_dense",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/fusion_masks",
     "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell/frames/source_dense_first_frame.png",
     "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell/frames/target_dense_first_frame.png",
     "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell/summary.json",
@@ -156,13 +156,13 @@
   },
   "runs": {
     "source_dense": {
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/source_dense.mp4",
-      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/manifest.json",
-      "denoising_seconds": 437.8855125840055,
-      "end_to_end_seconds": 466.725002798019,
-      "self_attn_seconds": 344.4492404060364,
-      "cross_attn_seconds": 15.724969954967499,
-      "ffn_seconds": 34.4788611536026,
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/manifest.json",
+      "denoising_seconds": 449.79981544299517,
+      "end_to_end_seconds": 483.04093619203195,
+      "self_attn_seconds": 353.4758715438843,
+      "cross_attn_seconds": 16.169436857700347,
+      "ffn_seconds": 36.382042699813844,
       "latent_shape": [
         48,
         31,
@@ -181,9 +181,9 @@
       "hardware": {
         "device": "cuda:0",
         "gpu_name": "NVIDIA H100 PCIe",
-        "visible_device": "0",
-        "gpu_uuid": "GPU-ac84e5e6-ce04-8377-95b0-18039b4df163",
-        "pci_bus_id": "00000000:16:00.0"
+        "visible_device": "2",
+        "gpu_uuid": "GPU-0ce8ccea-5749-50ea-6f93-6f6fe3a0f904",
+        "pci_bus_id": "00000000:49:00.0"
       },
       "masked_injection": {
         "enabled": false,
@@ -235,14 +235,14 @@
           29
         ],
         "source_mask_cache_id": "playground-barbell",
-        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/outer_block_masks",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/outer_block_masks",
         "format": "carnator-source-block-mask-v1",
         "cfg_branches": 2,
         "entries": 2400,
-        "capture_seconds": 333.96726409101393,
-        "write_seconds": 5.347158383985516,
-        "avg_density": 0.38609435530379416,
-        "avg_coverage": 0.9551077122241258
+        "capture_seconds": 342.7142341185245,
+        "write_seconds": 5.632539912359789,
+        "avg_density": 0.3652198845768968,
+        "avg_coverage": 0.956978158801794
       },
       "ffn": {
         "enabled": false,
@@ -257,22 +257,22 @@
   },
   "masks": {
     "available": true,
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/fusion_masks",
     "mask_variant": "self_contrast_cross_attention_fusion",
     "source_completed_step": 5,
     "token_area": {
-      "mbase": 0.3528958857059479,
-      "medit": 0.8690982460975647,
-      "msee": 0.9864369630813599,
-      "original_mbase": 0.6659824252128601
+      "mbase": 0.4230571985244751,
+      "medit": 0.9189516305923462,
+      "msee": 0.9976539611816406,
+      "original_mbase": 0.7092008590698242
     },
     "latent_area": {
-      "mbase": 0.3528958857059479,
-      "medit": 0.8690982460975647,
-      "msee": 0.9864369630813599,
-      "mband": 0.5162023305892944
+      "mbase": 0.4230571985244751,
+      "medit": 0.9189516305923462,
+      "msee": 0.9976539611816406,
+      "mband": 0.4958944320678711
     },
-    "raw_coverage_area": 0.3528958857059479,
+    "raw_coverage_area": 0.4230571985244751,
     "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
   }
 }

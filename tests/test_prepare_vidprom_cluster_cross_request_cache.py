@@ -6,6 +6,7 @@ import pytest
 import torch
 
 from adapters.wan22 import Wan22Adapter
+from carnator.adapters import wan_ti2v_5b as native
 from carnator.outer_sparse import BlockMaskConfig, SourceBlockMaskCache
 from scripts.benchmark import prepare_vidprom_cluster_cross_request_cache as prepare
 
@@ -145,6 +146,18 @@ def test_estimate_includes_one_canonical_cache_without_baseline_copies(tmp_path)
     assert "nirvana_vid_step_10_payload" not in estimate["per_entry"]
     assert estimate["assumptions"]["trajectory_latents"] == 51
     assert estimate["fits_without_headroom"] is False
+
+
+def test_native_source_capture_configuration_reserves_carnator_region_layers():
+    config = prepare.cache_config(prepare.build_parser().parse_args([]))
+    native_args = native.build_parser().parse_args([])
+    native_args.outer_sparse_layers = prepare.NATIVE_OUTER_SPARSE_LAYERS
+
+    assert config["attention_layers"] == list(range(30))
+    assert set(native.parse_int_ranges(native_args.sparse_layers)).isdisjoint(
+        native.parse_int_ranges(native_args.outer_sparse_layers)
+    )
+    native.validate_experiment_config(native_args)
 
 
 def test_dry_run_writes_frozen_run_manifest_without_creating_entries(tmp_path):

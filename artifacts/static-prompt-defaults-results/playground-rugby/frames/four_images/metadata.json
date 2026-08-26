@@ -1,8 +1,8 @@
 {
   "prompt": "a single brown rugby ball on a green sports field, photorealistic, static camera",
   "positive_phrase": "rugby ball",
-  "video": "artifacts/static-prompt-defaults/playground-rugby/videos/source_dense.mp4",
-  "mask_bundle": "artifacts/static-prompt-defaults/playground-rugby/cache/source_dense/fusion_masks/masks.pt",
+  "video": "artifacts/static-prompt-defaults-seed20260218/playground-rugby/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults-seed20260218/playground-rugby/cache/source_dense/fusion_masks/masks.pt",
   "frame_count": 121,
   "resolution": [
     1280,
@@ -12,9 +12,9 @@
     "start": 0
   },
   "mask_areas": {
-    "mbase": 0.15520527958869934,
-    "medit": 0.32404690980911255,
-    "msee": 0.6346407532691956
+    "mbase": 0.2938416302204132,
+    "medit": 0.5870967507362366,
+    "msee": 0.8386363387107849
   },
   "files_per_position": [
     "original",

@@ -1,0 +1,178 @@
+{
+  "method": "chorus2",
+  "status": "completed",
+  "config": {
+    "model": "Wan2.2-TI2V-5B",
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "seed": 20260218,
+    "steps": 50,
+    "guidance_scale": 5.0,
+    "source_mask_cache": {
+      "mode": "external",
+      "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense/outer_block_masks"
+    },
+    "source_latent_cache": {
+      "mode": "external",
+      "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense"
+    },
+    "sparse_attention": {
+      "backend": "sparge-sage2",
+      "layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "start_step": 11,
+      "q_block_size": 64,
+      "k_block_size": 128,
+      "top_p": 0.95,
+      "min_top_k": 0.1,
+      "layer_refresh_size": 8
+    },
+    "latent_reuse": true,
+    "reuse_start_step": 10,
+    "target_denoising_steps": 40,
+    "speedup_reference": {
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/target_dense/manifest.json",
+      "end_to_end_seconds": 293.46618294599466
+    }
+  },
+  "paths": {
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6",
+    "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/results/chorus2-shared-cache-gpu6",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/videos/source.mp4",
+    "target_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/videos/target.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/cache/source",
+    "target_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/cache/target",
+    "mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/cache/source/block_masks"
+  },
+  "runs": {
+    "target": {
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/videos/target.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/chorus2-shared-cache-gpu6/cache/target/manifest.json",
+      "denoising_seconds": 147.51219222904183,
+      "end_to_end_seconds": 173.3007987490273,
+      "outer_sparse": {
+        "backend": "sparge-sage2",
+        "execution_dtype": "torch.float16",
+        "source_mask_cache_id": "shared-dense-gpu3",
+        "source_mask_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense/outer_block_masks",
+        "quantization": "QK INT8 and PV FP8",
+        "runs": 2400,
+        "cache_hits": 2400,
+        "cache_misses": 0,
+        "planned_masks": 0,
+        "plan_seconds": 0.0,
+        "mask_load_seconds": 1.658727826725226,
+        "routing_time_ms": 0.0,
+        "avg_runtime_density": 0.3578096604959977,
+        "avg_source_per_head_density": 0.32931394478306175,
+        "avg_source_gt_coverage": 0.9606457643955946,
+        "avg_head_density_min": 0.11350658289777736,
+        "avg_head_density_max": 0.8046538272996744,
+        "avg_head_density_cv": 0.6852487416689594,
+        "flashinfer_plan_cache": null,
+        "flashinfer_wrapper_policy": null,
+        "flashinfer_execution_modes": [],
+        "layer_refresh_size": 8,
+        "refresh_events": 320,
+        "refresh_added_blocks": 149983575,
+        "use_fp16_qk_reduction": null,
+        "sparge_smooth_k": true,
+        "sparge_pvthreshd": 50.0,
+        "enabled": true,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "dense_fallback_count": 0
+      },
+      "resume": {
+        "resume_latent_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense/latents_step_009.pt",
+        "resume_start_step": 10
+      },
+      "masked_injection": {
+        "enabled": false,
+        "mode": null,
+        "alpha_function": null,
+        "formula": null,
+        "calls": 0,
+        "total_seconds": 0.0,
+        "avg_ms": 0.0,
+        "mask_source_completed_step": null,
+        "mask_statistics": {}
+      },
+      "peak_gpu_memory_gib": {
+        "allocated": 44.41982984542847,
+        "reserved": 53.185546875
+      },
+      "hardware": {
+        "device": "cuda:0",
+        "gpu_name": "NVIDIA H100 PCIe",
+        "visible_device": "6",
+        "gpu_uuid": "GPU-7d00509f-e0bf-bcf5-38c3-77d52e5e2308",
+        "pci_bus_id": "00000000:9D:00.0"
+      }
+    }
+  },
+  "speedups": {
+    "reference": "shared_target_c0_end_to_end",
+    "end_to_end_vs_reference": 1.6933919812509912
+  }
+}

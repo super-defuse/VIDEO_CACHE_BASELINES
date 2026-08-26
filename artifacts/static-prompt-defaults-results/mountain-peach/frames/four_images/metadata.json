@@ -1,8 +1,8 @@
 {
-  "prompt": "a single ripe peach in the foreground on a mountain, photorealistic, static camera",
+  "prompt": "a ripe peach rolling down a mountain, camera focus on the peach",
   "positive_phrase": "peach",
-  "video": "artifacts/static-prompt-defaults/mountain-peach/videos/source_dense.mp4",
-  "mask_bundle": "artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/fusion_masks/masks.pt",
+  "video": "artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/fusion_masks/masks.pt",
   "frame_count": 121,
   "resolution": [
     1280,
@@ -12,9 +12,9 @@
     "start": 0
   },
   "mask_areas": {
-    "mbase": 0.4793621599674225,
-    "medit": 0.6108871102333069,
-    "msee": 0.7753665447235107
+    "mbase": 0.5527859330177307,
+    "medit": 0.778555691242218,
+    "msee": 0.9364736080169678
   },
   "files_per_position": [
     "original",

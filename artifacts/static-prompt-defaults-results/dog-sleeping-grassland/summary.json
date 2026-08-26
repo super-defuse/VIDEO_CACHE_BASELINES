@@ -1,7 +1,7 @@
 {
   "status": "source_prepared",
   "error": null,
-  "updated_at": "2026-08-25 12:38:24 UTC",
+  "updated_at": "2026-08-25 14:02:24 UTC",
   "config": {
     "model_family": "Wan2.2-TI2V-5B",
     "backend": "native Wan2.2",
@@ -15,7 +15,7 @@
     "frames": 121,
     "fps": 24,
     "steps": 50,
-    "seed": 42,
+    "seed": 20260218,
     "scheduler": "unipc",
     "solver_order": 2,
     "flow_shift": 5.0,
@@ -134,21 +134,21 @@
     }
   },
   "paths": {
-    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland",
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland",
     "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/dog-sleeping-grassland",
-    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/source_dense.mp4",
-    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/target_dense.mp4",
-    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/target_dense_w8a8.mp4",
-    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/target_latent_reuse.mp4",
-    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense",
-    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/outer_block_masks",
-    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/target_dense",
-    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/target_dense_w8a8",
-    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/target_latent_reuse",
-    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/shared_dense",
-    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/probe_masks",
-    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/self_contrast_masks",
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/fusion_masks",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/target_latent_reuse",
+    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/shared_dense",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/fusion_masks",
     "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/dog-sleeping-grassland/frames/source_dense_first_frame.png",
     "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/dog-sleeping-grassland/frames/target_dense_first_frame.png",
     "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/dog-sleeping-grassland/summary.json",
@@ -156,13 +156,13 @@
   },
   "runs": {
     "source_dense": {
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/source_dense.mp4",
-      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/manifest.json",
-      "denoising_seconds": 438.8746607559733,
-      "end_to_end_seconds": 466.4923783830018,
-      "self_attn_seconds": 345.3187740974426,
-      "cross_attn_seconds": 15.702781726360321,
-      "ffn_seconds": 34.63057656669617,
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/manifest.json",
+      "denoising_seconds": 479.7210662270081,
+      "end_to_end_seconds": 541.3435124050011,
+      "self_attn_seconds": 382.6263866271973,
+      "cross_attn_seconds": 16.265985124588013,
+      "ffn_seconds": 34.788866394996646,
       "latent_shape": [
         48,
         31,
@@ -235,14 +235,14 @@
           29
         ],
         "source_mask_cache_id": "dog-sleeping-grassland",
-        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/outer_block_masks",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/outer_block_masks",
         "format": "carnator-source-block-mask-v1",
         "cfg_branches": 2,
         "entries": 2400,
-        "capture_seconds": 335.4032878074795,
-        "write_seconds": 5.225067776278593,
-        "avg_density": 0.3694208826000492,
-        "avg_coverage": 0.9562382370481889
+        "capture_seconds": 337.022731502424,
+        "write_seconds": 9.858630744565744,
+        "avg_density": 0.32931394478306175,
+        "avg_coverage": 0.9606457643955946
       },
       "ffn": {
         "enabled": false,
@@ -257,22 +257,22 @@
   },
   "masks": {
     "available": true,
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/fusion_masks",
     "mask_variant": "self_contrast_cross_attention_fusion",
     "source_completed_step": 5,
     "token_area": {
-      "mbase": 0.21085043251514435,
-      "medit": 0.4136730134487152,
-      "msee": 0.7307184934616089,
-      "original_mbase": 0.26301318407058716
+      "mbase": 0.16942815482616425,
+      "medit": 0.3520527780056,
+      "msee": 0.6788123250007629,
+      "original_mbase": 0.2219574749469757
     },
     "latent_area": {
-      "mbase": 0.21085043251514435,
-      "medit": 0.4136730134487152,
-      "msee": 0.7307184934616089,
-      "mband": 0.20282258093357086
+      "mbase": 0.16942815482616425,
+      "medit": 0.3520527780056,
+      "msee": 0.6788123250007629,
+      "mband": 0.18262463808059692
     },
-    "raw_coverage_area": 0.21085043251514435,
+    "raw_coverage_area": 0.16942815482616425,
     "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
   }
 }

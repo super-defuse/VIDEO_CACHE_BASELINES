@@ -1,15 +1,15 @@
 {
   "status": "source_prepared",
   "error": null,
-  "updated_at": "2026-08-25 11:03:17 UTC",
+  "updated_at": "2026-08-25 14:51:20 UTC",
   "config": {
     "model_family": "Wan2.2-TI2V-5B",
     "backend": "native Wan2.2",
     "mode": "T2V",
     "model_dtype": "fp16",
     "convert_model_dtype": true,
-    "source_prompt": "a single ripe peach in the foreground on a mountain, photorealistic, static camera",
-    "target_prompt": "a single ripe peach in the foreground on a mountain, photorealistic, static camera",
+    "source_prompt": "a ripe peach rolling down a mountain, camera focus on the peach",
+    "target_prompt": "a ripe peach rolling down a mountain, camera focus on the peach",
     "height": 704,
     "width": 1280,
     "frames": 121,
@@ -134,21 +134,21 @@
     }
   },
   "paths": {
-    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach",
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach",
     "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/mountain-peach",
-    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/source_dense.mp4",
-    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/target_dense.mp4",
-    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/target_dense_w8a8.mp4",
-    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/target_latent_reuse.mp4",
-    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense",
-    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/outer_block_masks",
-    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/target_dense",
-    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/target_dense_w8a8",
-    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/target_latent_reuse",
-    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/shared_dense",
-    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/probe_masks",
-    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/self_contrast_masks",
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/fusion_masks",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/target_latent_reuse",
+    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/shared_dense",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/fusion_masks",
     "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/mountain-peach/frames/source_dense_first_frame.png",
     "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/mountain-peach/frames/target_dense_first_frame.png",
     "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/mountain-peach/summary.json",
@@ -156,13 +156,13 @@
   },
   "runs": {
     "source_dense": {
-      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/source_dense.mp4",
-      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/manifest.json",
-      "denoising_seconds": 446.43517213105224,
-      "end_to_end_seconds": 475.32472067902563,
-      "self_attn_seconds": 351.0490621109009,
-      "cross_attn_seconds": 15.99791482400894,
-      "ffn_seconds": 35.67764032077789,
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/source_dense.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/manifest.json",
+      "denoising_seconds": 452.39138055301737,
+      "end_to_end_seconds": 483.381630937045,
+      "self_attn_seconds": 356.52717002105715,
+      "cross_attn_seconds": 16.01610937452316,
+      "ffn_seconds": 35.922628076553345,
       "latent_shape": [
         48,
         31,
@@ -235,14 +235,14 @@
           29
         ],
         "source_mask_cache_id": "mountain-peach",
-        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/outer_block_masks",
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/outer_block_masks",
         "format": "carnator-source-block-mask-v1",
         "cfg_branches": 2,
         "entries": 2400,
-        "capture_seconds": 340.55108283349546,
-        "write_seconds": 5.298799836542457,
-        "avg_density": 0.37785902291536333,
-        "avg_coverage": 0.9546900053819021
+        "capture_seconds": 343.3069733810262,
+        "write_seconds": 5.964155310415663,
+        "avg_density": 0.3417127053625882,
+        "avg_coverage": 0.9578967379281919
       },
       "ffn": {
         "enabled": false,
@@ -257,22 +257,22 @@
   },
   "masks": {
     "available": true,
-    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/fusion_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/fusion_masks",
     "mask_variant": "self_contrast_cross_attention_fusion",
     "source_completed_step": 5,
     "token_area": {
-      "mbase": 0.4793621599674225,
-      "medit": 0.6108871102333069,
-      "msee": 0.7753665447235107,
-      "original_mbase": 0.5528225898742676
+      "mbase": 0.5527859330177307,
+      "medit": 0.778555691242218,
+      "msee": 0.9364736080169678,
+      "original_mbase": 0.6785557270050049
     },
     "latent_area": {
-      "mbase": 0.4793621599674225,
-      "medit": 0.6108871102333069,
-      "msee": 0.7753665447235107,
-      "mband": 0.131524920463562
+      "mbase": 0.5527859330177307,
+      "medit": 0.778555691242218,
+      "msee": 0.9364736080169678,
+      "mband": 0.2257697880268097
     },
-    "raw_coverage_area": 0.4793621599674225,
+    "raw_coverage_area": 0.5527859330177307,
     "coverage_note": "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
   }
 }

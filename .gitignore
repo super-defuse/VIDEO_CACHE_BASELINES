@@ -32,6 +32,11 @@ artifacts/cross_request_retrieval/indices/
 artifacts/cross_request_retrieval/carnator_sources/
 artifacts/cross_request_retrieval/benchmark.log
 artifacts/cross_request_retrieval/benchmark.pid
+
+# Full shared cross-request payloads are local and regenerable; keep manifests.
+artifacts/shared_cross_request_cache/*/entries/
+artifacts/shared_cross_request_cache/*/workers/
+artifacts/shared_cross_request_cache/*/full_run.log
 artifacts/early_signature_color_v1_calibration_cluster_02_2170/runs/
 
 # Regenerable persistent vector indexes; retrieval manifests and results remain
@@ -42,6 +47,7 @@ artifacts/early_signature_color_v1_calibration_cluster_02_2170/runs/
 # Local source trajectories for the static Carnator figure examples are
 # multi-gigabyte regenerable data.  Their compact PNG exports are tracked.
 /artifacts/static-prompt-defaults/
+/artifacts/static-prompt-defaults-seed*/
 
 # Generated package metadata is recreated by installation.
 /video_cache_baselines.egg-info/

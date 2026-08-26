@@ -1,6 +1,6 @@
 # CARNATOR Latent Reuse Report
 
-Updated: `2026-08-25 11:03:17 UTC`
+Updated: `2026-08-25 14:51:20 UTC`
 Status: `source_prepared`
 
 ## Config
@@ -8,7 +8,7 @@ Status: `source_prepared`
 - Backend: `native Wan2.2`
 - Model: `Wan2.2-TI2V-5B`
 - Task: `T2V`
-- Prompts: source `a single ripe peach in the foreground on a mountain, photorealistic, static camera`, target `a single ripe peach in the foreground on a mountain, photorealistic, static camera`
+- Prompts: source `a ripe peach rolling down a mountain, camera focus on the peach`, target `a ripe peach rolling down a mountain, camera focus on the peach`
 - Shape: `1280x704`, frames `121`, fps `24`
 - Sampling: `50` steps, `unipc`, solver order `2`, flow shift `5.0`
 - Guidance: `5.0` (CFG), region-update layers `10-20` with middle attention-mask `True`, outer `dense` (n/a) on `0-9,21-29`, FFN `fp`, reuse start step `10`
@@ -19,13 +19,13 @@ Status: `source_prepared`
 
 | Run | Self-attn | Cross-attn | FFN | Outer sparse density | Outer mask mass coverage | Latency denoising | Speed Up denoising | Latency End2End | Speed Up End2End | Peak reserved |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Source dense | 351.049 s | 15.998 s | 35.678 s | n/a | n/a | 446.435 s | n/a | 475.325 s | n/a | 52.93 GiB |
+| Source dense | 356.527 s | 16.016 s | 35.923 s | n/a | n/a | 452.391 s | n/a | 483.382 s | n/a | 52.93 GiB |
 | C0 full dense target | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Target latent reuse | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 
 ## Artifacts
 
-- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/videos/source_dense.mp4`
+- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/videos/source_dense.mp4`
 - Source first frame: `None`
 - Target dense video: `None`
 - Target first frame: `None`
@@ -41,9 +41,9 @@ Status: `source_prepared`
 - Middle attention-mask: `None`; masked Medit query ratio `n/a`; masked Msee context ratio `n/a`
 - Latent injection: `None`
 - attention mask variant: `self_contrast_cross_attention_fusion`
-- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/mountain-peach/cache/source_dense/fusion_masks`
-- attention mask token area: `{'mbase': 0.4793621599674225, 'medit': 0.6108871102333069, 'msee': 0.7753665447235107, 'original_mbase': 0.5528225898742676}`
-- attention mask latent area: `{'mbase': 0.4793621599674225, 'medit': 0.6108871102333069, 'msee': 0.7753665447235107, 'mband': 0.131524920463562}`
+- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/mountain-peach/cache/source_dense/fusion_masks`
+- attention mask token area: `{'mbase': 0.5527859330177307, 'medit': 0.778555691242218, 'msee': 0.9364736080169678, 'original_mbase': 0.6785557270050049}`
+- attention mask latent area: `{'mbase': 0.5527859330177307, 'medit': 0.778555691242218, 'msee': 0.9364736080169678, 'mband': 0.2257697880268097}`
 
 ## Environment
 

@@ -1,6 +1,6 @@
 # CARNATOR Latent Reuse Report
 
-Updated: `2026-08-25 11:51:09 UTC`
+Updated: `2026-08-25 14:35:02 UTC`
 Status: `source_prepared`
 
 ## Config
@@ -19,13 +19,13 @@ Status: `source_prepared`
 
 | Run | Self-attn | Cross-attn | FFN | Outer sparse density | Outer mask mass coverage | Latency denoising | Speed Up denoising | Latency End2End | Speed Up End2End | Peak reserved |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Source dense | 344.449 s | 15.725 s | 34.479 s | n/a | n/a | 437.886 s | n/a | 466.725 s | n/a | 52.93 GiB |
+| Source dense | 353.476 s | 16.169 s | 36.382 s | n/a | n/a | 449.800 s | n/a | 483.041 s | n/a | 52.93 GiB |
 | C0 full dense target | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Target latent reuse | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 
 ## Artifacts
 
-- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/videos/source_dense.mp4`
+- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/videos/source_dense.mp4`
 - Source first frame: `None`
 - Target dense video: `None`
 - Target first frame: `None`
@@ -41,9 +41,9 @@ Status: `source_prepared`
 - Middle attention-mask: `None`; masked Medit query ratio `n/a`; masked Msee context ratio `n/a`
 - Latent injection: `None`
 - attention mask variant: `self_contrast_cross_attention_fusion`
-- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/playground-barbell/cache/source_dense/fusion_masks`
-- attention mask token area: `{'mbase': 0.3528958857059479, 'medit': 0.8690982460975647, 'msee': 0.9864369630813599, 'original_mbase': 0.6659824252128601}`
-- attention mask latent area: `{'mbase': 0.3528958857059479, 'medit': 0.8690982460975647, 'msee': 0.9864369630813599, 'mband': 0.5162023305892944}`
+- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/playground-barbell/cache/source_dense/fusion_masks`
+- attention mask token area: `{'mbase': 0.4230571985244751, 'medit': 0.9189516305923462, 'msee': 0.9976539611816406, 'original_mbase': 0.7092008590698242}`
+- attention mask latent area: `{'mbase': 0.4230571985244751, 'medit': 0.9189516305923462, 'msee': 0.9976539611816406, 'mband': 0.4958944320678711}`
 
 ## Environment
 

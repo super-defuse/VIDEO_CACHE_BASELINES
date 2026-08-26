@@ -60,8 +60,8 @@ chorus:
     # publish numeric K1/K2 values.
     k1: 10
     k2: 30
-  gamma_k: 1.15
-  gamma_o: 1.05
+  gamma_k: 1.5
+  gamma_o: 1.5
   joint_gamma_1_6:
     gamma_k: 1.30
     gamma_o: 1.30

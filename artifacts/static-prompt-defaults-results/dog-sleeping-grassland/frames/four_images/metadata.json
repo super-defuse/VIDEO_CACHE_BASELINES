@@ -1,8 +1,8 @@
 {
   "prompt": "a dog is sleeping on a grassland, focus on the dog",
   "positive_phrase": "dog",
-  "video": "artifacts/static-prompt-defaults/dog-sleeping-grassland/videos/source_dense.mp4",
-  "mask_bundle": "artifacts/static-prompt-defaults/dog-sleeping-grassland/cache/source_dense/fusion_masks/masks.pt",
+  "video": "artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults-seed20260218/dog-sleeping-grassland/cache/source_dense/fusion_masks/masks.pt",
   "frame_count": 121,
   "resolution": [
     1280,
@@ -12,9 +12,9 @@
     "start": 0
   },
   "mask_areas": {
-    "mbase": 0.21085043251514435,
-    "medit": 0.4136730134487152,
-    "msee": 0.7307184934616089
+    "mbase": 0.16942815482616425,
+    "medit": 0.3520527780056,
+    "msee": 0.6788123250007629
   },
   "files_per_position": [
     "original",

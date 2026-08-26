@@ -1,0 +1,9 @@
+{
+  "method": "chorus",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/shared_dense/manifest.json",
+  "chorus_gamma_k": 1.5,
+  "chorus_gamma_o": 1.5
+}

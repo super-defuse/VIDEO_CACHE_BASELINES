@@ -1,0 +1,27 @@
+{
+  "protocol": {
+    "model": "Wan2.2-TI2V-5B",
+    "seed": 20260218,
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "chorus_tgaa": {"gamma_k": 1.5, "gamma_o": 1.5},
+    "clip_sample_frames": 8,
+    "vbench_dimensions": [
+      "subject_consistency",
+      "background_consistency",
+      "motion_smoothness",
+      "dynamic_degree",
+      "aesthetic_quality",
+      "imaging_quality"
+    ]
+  },
+  "scores": {
+    "dense_baseline": {"clip_t": 0.337158203125, "vbench_q": 0.6330714069844214},
+    "nirvana_vid": {"clip_t": 0.355712890625, "vbench_q": 0.6362940693916224},
+    "chorus": {"clip_t": 0.35546875, "vbench_q": 0.6112559992677009},
+    "chorus2": {"clip_t": 0.35595703125, "vbench_q": 0.6352634557365161},
+    "chai": {"clip_t": 0.35546875, "vbench_q": 0.6046212329043557},
+    "teacache": {"clip_t": 0.3330078125, "vbench_q": 0.6219078426602153}
+  },
+  "source_manifest": "results.jsonl",
+  "status": "completed"
+}

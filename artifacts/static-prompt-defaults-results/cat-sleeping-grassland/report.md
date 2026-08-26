@@ -1,6 +1,6 @@
 # CARNATOR Latent Reuse Report
 
-Updated: `2026-08-25 12:38:34 UTC`
+Updated: `2026-08-25 14:02:21 UTC`
 Status: `source_prepared`
 
 ## Config
@@ -19,13 +19,13 @@ Status: `source_prepared`
 
 | Run | Self-attn | Cross-attn | FFN | Outer sparse density | Outer mask mass coverage | Latency denoising | Speed Up denoising | Latency End2End | Speed Up End2End | Peak reserved |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Source dense | 351.025 s | 16.014 s | 35.839 s | n/a | n/a | 446.658 s | n/a | 474.309 s | n/a | 52.93 GiB |
+| Source dense | 389.320 s | 16.564 s | 35.958 s | n/a | n/a | 487.672 s | n/a | 542.659 s | n/a | 52.93 GiB |
 | C0 full dense target | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Target latent reuse | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 
 ## Artifacts
 
-- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/cat-sleeping-grassland/videos/source_dense.mp4`
+- Source dense video: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/cat-sleeping-grassland/videos/source_dense.mp4`
 - Source first frame: `None`
 - Target dense video: `None`
 - Target first frame: `None`
@@ -41,9 +41,9 @@ Status: `source_prepared`
 - Middle attention-mask: `None`; masked Medit query ratio `n/a`; masked Msee context ratio `n/a`
 - Latent injection: `None`
 - attention mask variant: `self_contrast_cross_attention_fusion`
-- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults/cat-sleeping-grassland/cache/source_dense/fusion_masks`
-- attention mask token area: `{'mbase': 0.2737170159816742, 'medit': 0.5044354796409607, 'msee': 0.8574780225753784, 'original_mbase': 0.3574046790599823}`
-- attention mask latent area: `{'mbase': 0.2737170159816742, 'medit': 0.5044354796409607, 'msee': 0.8574780225753784, 'mband': 0.2307184785604477}`
+- attention mask dir: `/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed20260218/cat-sleeping-grassland/cache/source_dense/fusion_masks`
+- attention mask token area: `{'mbase': 0.1860337257385254, 'medit': 0.3852272629737854, 'msee': 0.6859604120254517, 'original_mbase': 0.29076245427131653}`
+- attention mask latent area: `{'mbase': 0.1860337257385254, 'medit': 0.3852272629737854, 'msee': 0.6859604120254517, 'mband': 0.1991935521364212}`
 
 ## Environment
 

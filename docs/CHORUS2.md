@@ -20,24 +20,25 @@ Prepare the source cache and the universal C0 Dense denominator on GPU 3--7:
 ```bash
 CUDA_VISIBLE_DEVICES=3 conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 \
   python -m carnator.adapters.wan_ti2v_5b --no-env-setup --device cuda:0 \
-  --artifact-root artifacts/acceptance --results-root results/acceptance \
-  --prepare-shared-dense-cache --run-id shared-dense-20260825-gpu3
+  --artifact-root artifacts/acceptance/wan22-ti2v-5b-dog-to-cat \
+  --results-root artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/results \
+  --prepare-shared-dense-cache --run-id shared-dense-gpu3
 ```
 
 Then point Chorus2 at the exported cache:
 
 ```bash
 conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. python scripts/run/chorus2_wan.py \
-  --artifact-root artifacts/acceptance --results-root results/acceptance \
+  --artifact-root artifacts/acceptance/wan22-ti2v-5b-dog-to-cat \
+  --results-root artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/results \
   --source-prompt "a dog is sleeping on a grassland, focus on the dog" \
   --target-prompt "a cat is sleeping on a grassland, focus on the cat" \
-  --source-mask-cache artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-20260825-gpu3/cache/source_dense/outer_block_masks \
-  --source-latent-cache artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-20260825-gpu3/cache/source_dense \
-  --speedup-reference-manifest artifacts/acceptance/wan22-ti2v-5b-dog-to-cat-20260825/shared-dense-20260825-gpu3/cache/target_dense/manifest.json \
-  --seed 20260218 --run-id chorus2-shared-cache-gpu4
+  --source-mask-cache artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense/outer_block_masks \
+  --source-latent-cache artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/source_dense \
+  --speedup-reference-manifest artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/shared-dense-gpu3/cache/target_dense/manifest.json \
+  --seed 20260218 --run-id chorus2-shared-cache-gpu6
 ```
 
 The result summary verifies the 40-step source-latent restart, SpargeAttn coverage,
 layer refresh, and no dense fallback; the stage manifest records the GPU used for
-each run. Its speedup is always calculated against the shared run's target C0
-end-to-end time, not a second Chorus2-only Dense run.
+each run. Its speedup uses the shared run's target C0 end-to-end time.
