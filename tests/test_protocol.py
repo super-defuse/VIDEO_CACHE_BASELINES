@@ -55,6 +55,32 @@ def test_chorus_no_tgaa_is_registered_as_a_cross_request_variant():
     assert method.capabilities.source_trajectory
 
 
+def test_chorus_mbase_only_is_registered_as_a_cross_request_variant():
+    method = make_method("chorus_mbase_only", {"dry_run": True})
+    assert method.name == "chorus_mbase_only"
+    assert method.capabilities.cross_request_cache
+    assert method.capabilities.source_trajectory
+
+
+def test_chorus_mbase_only_selects_base_for_updates_and_keeps_see_context():
+    import torch
+
+    from adapters.wan22 import Wan22Adapter
+
+    bundle = {
+        "token_base": torch.tensor([True, False, False]),
+        "token_edit": torch.tensor([True, True, False]),
+        "token_see": torch.tensor([True, True, True]),
+        "latent_base": torch.tensor([[[True, False]]]),
+        "latent_edit": torch.tensor([[[True, True]]]),
+    }
+    selected = Wan22Adapter._select_chorus_update_masks(bundle, "Mbase")
+    assert torch.equal(selected["token_edit"], bundle["token_base"])
+    assert torch.equal(selected["latent_edit"], bundle["latent_base"])
+    assert torch.equal(selected["token_see"], bundle["token_see"])
+    assert selected["update_mask"] == "Mbase"
+
+
 def test_chorus_tgaa_probes_are_registered():
     for name in ("chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
                  "chorus_tgaa_joint_gamma_2_0"):

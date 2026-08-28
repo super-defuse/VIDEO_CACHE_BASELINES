@@ -2,33 +2,12 @@ from __future__ import annotations
 
 import json
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
 import torch
 import torch.nn.functional as F
-
-
-@dataclass(frozen=True)
-class CoarseMaskConfig:
-    mask_steps: tuple[int, ...] = (5,)
-    top_p: float = 0.02
-    coarse_shape: str = "capsule"
-    coarse_frame_top_p: float = 0.05
-    coarse_min_seed_tokens: int = 4
-    coarse_expand_w: float = 2.1
-    coarse_expand_h: float = 1.6
-    coarse_min_width_ratio: float = 0.16
-    coarse_min_height_ratio: float = 0.16
-    coarse_min_area_ratio: float = 0.10
-    coarse_max_area_ratio: float = 0.55
-    coarse_size_rule: str = "max"
-    coarse_smooth_radius: int = 1
-    coarse_temporal_union_radius: int = 1
-    spatial_medit_radius: int = 2
-    spatial_msee_radius: int = 3
-    score_normalization: str = "minmax"
 
 
 @dataclass(frozen=True)
@@ -84,265 +63,36 @@ def top_fraction_mask(score: torch.Tensor, top_frac: float, largest: bool = True
     return out.reshape_as(score)
 
 
-def coarse_top_fraction_mask(score: torch.Tensor, top_frac: float) -> torch.Tensor:
-    """Threshold-style top fraction used by the coarse cross-attention mask."""
+def build_cross_attention_seed_scores(
+    records: list[dict[str, Any]],
+    *,
+    completed_step: int,
+) -> dict[str, Any]:
+    """Normalize completed-step cross-attention scores for self-attention seeds.
 
-    flat = score.flatten()
-    k = max(1, int(round(flat.numel() * float(top_frac))))
-    threshold = torch.topk(flat, k).values.min()
-    mask = score >= threshold
-    if int(mask.sum().item()) <= k:
-        return mask.bool()
+    This deliberately returns scores only. Cross attention is never a
+    standalone Mbase source.
+    """
 
-    top_idx = torch.topk(flat, k).indices
-    out = torch.zeros_like(flat, dtype=torch.bool)
-    out[top_idx] = True
-    return out.reshape_as(score)
-
-
-def _fill_missing_centers(
-    centers: list[Optional[tuple[float, float]]],
-    fallback: tuple[float, float],
-) -> list[tuple[float, float]]:
-    filled = list(centers)
-    prev = None
-    for idx, center in enumerate(filled):
-        if center is None and prev is not None:
-            filled[idx] = prev
-        elif center is not None:
-            prev = center
-
-    nxt = None
-    for idx in range(len(filled) - 1, -1, -1):
-        center = filled[idx]
-        if center is None and nxt is not None:
-            filled[idx] = nxt
-        elif center is not None:
-            nxt = center
-
-    return [center if center is not None else fallback for center in filled]
-
-
-def _filled_centers(centers: list[Optional[tuple[float, float]]]) -> list[tuple[float, float]]:
-    valid = [center for center in centers if center is not None]
-    if not valid:
-        raise ValueError("cannot build attention mask: no valid attention center")
-    return _fill_missing_centers(centers, valid[len(valid) // 2])
-
-
-def _smooth(values: list[float], radius: int) -> list[float]:
-    if radius <= 0:
-        return values
-    out = []
-    for idx in range(len(values)):
-        lo = max(0, idx - radius)
-        hi = min(len(values), idx + radius + 1)
-        out.append(sum(values[lo:hi]) / max(1, hi - lo))
-    return out
-
-
-def _smooth_boxes(
-    boxes: list[tuple[float, float, float, float]],
-    radius: int,
-) -> list[tuple[float, float, float, float]]:
-    if radius <= 0:
-        return boxes
-    cy = _smooth([(box[0] + box[2]) * 0.5 for box in boxes], radius)
-    cx = _smooth([(box[1] + box[3]) * 0.5 for box in boxes], radius)
-    hh = _smooth([(box[2] - box[0]) * 0.5 for box in boxes], radius)
-    hw = _smooth([(box[3] - box[1]) * 0.5 for box in boxes], radius)
-    return [(y - h, x - w, y + h, x + w) for y, x, h, w in zip(cy, cx, hh, hw)]
-
-
-def _union_boxes(
-    boxes: list[tuple[float, float, float, float]],
-    radius: int,
-) -> list[tuple[float, float, float, float]]:
-    if radius <= 0:
-        return boxes
-    out = []
-    for idx in range(len(boxes)):
-        lo = max(0, idx - radius)
-        hi = min(len(boxes), idx + radius + 1)
-        out.append(
-            (
-                min(box[0] for box in boxes[lo:hi]),
-                min(box[1] for box in boxes[lo:hi]),
-                max(box[2] for box in boxes[lo:hi]),
-                max(box[3] for box in boxes[lo:hi]),
-            )
-        )
-    return out
-
-
-def _clamp_box(
-    box: tuple[float, float, float, float],
-    height: int,
-    width: int,
-) -> tuple[float, float, float, float]:
-    y0, x0, y1, x1 = box
-    box_h = max(1.0, y1 - y0)
-    box_w = max(1.0, x1 - x0)
-    cy = (y0 + y1) * 0.5
-    cx = (x0 + x1) * 0.5
-    y0, y1 = cy - box_h * 0.5, cy + box_h * 0.5
-    x0, x1 = cx - box_w * 0.5, cx + box_w * 0.5
-
-    if y0 < 0:
-        y1 -= y0
-        y0 = 0.0
-    if x0 < 0:
-        x1 -= x0
-        x0 = 0.0
-    if y1 > height:
-        y0 -= y1 - height
-        y1 = float(height)
-    if x1 > width:
-        x0 -= x1 - width
-        x1 = float(width)
-    return max(0.0, y0), max(0.0, x0), min(float(height), y1), min(float(width), x1)
-
-
-def _box_mask(
-    box: tuple[float, float, float, float],
-    height: int,
-    width: int,
-    shape: str,
-    device: torch.device,
-) -> torch.Tensor:
-    y0, x0, y1, x1 = _clamp_box(box, height, width)
-    yy, xx = torch.meshgrid(torch.arange(height, device=device), torch.arange(width, device=device), indexing="ij")
-    inside = (yy.float() >= y0) & (yy.float() <= y1) & (xx.float() >= x0) & (xx.float() <= x1)
-    if shape == "bbox":
-        return inside
-    if shape != "capsule":
-        raise ValueError("coarse_shape must be 'bbox' or 'capsule'")
-
-    cy = (y0 + y1) * 0.5
-    cx = (x0 + x1) * 0.5
-    ry = max((y1 - y0) * 0.5, 0.5)
-    rx = max((x1 - x0) * 0.5, 0.5)
-    abs_y = (yy.float() - cy).abs()
-    abs_x = (xx.float() - cx).abs()
-    if rx >= ry:
-        core = max(rx - ry, 0.0)
-        return inside & ((abs_x <= core) | ((abs_x - core).clamp_min(0.0).square() + abs_y.square() <= ry * ry))
-    core = max(ry - rx, 0.0)
-    return inside & ((abs_y <= core) | ((abs_y - core).clamp_min(0.0).square() + abs_x.square() <= rx * rx))
-
-
-def _frame_box(
-    frame_score: torch.Tensor,
-    global_seed_frame: torch.Tensor,
-    config: CoarseMaskConfig,
-) -> tuple[tuple[float, float, float, float], Optional[tuple[float, float]], int, int]:
-    height, width = frame_score.shape
-    seed = global_seed_frame.bool()
-    if int(seed.sum().item()) < config.coarse_min_seed_tokens:
-        seed = coarse_top_fraction_mask(frame_score, config.coarse_frame_top_p)
-
-    ys, xs = torch.where(seed)
-    if ys.numel() == 0:
-        return (0.0, 0.0, float(height), float(width)), None, 0, 0
-
-    weights = frame_score[ys, xs].float().clamp_min(1e-6)
-    cy = float((ys.float() * weights).sum().item() / weights.sum().item())
-    cx = float((xs.float() * weights).sum().item() / weights.sum().item())
-    seed_h = float(ys.max().item() - ys.min().item() + 1)
-    seed_w = float(xs.max().item() - xs.min().item() + 1)
-
-    box_h = max(seed_h * config.coarse_expand_h, height * config.coarse_min_height_ratio)
-    box_w = max(seed_w * config.coarse_expand_w, width * config.coarse_min_width_ratio)
-    area = box_h * box_w
-    min_area = height * width * config.coarse_min_area_ratio
-    max_area = height * width * config.coarse_max_area_ratio
-    if area < min_area:
-        scale = math.sqrt(min_area / max(area, 1.0))
-        box_h *= scale
-        box_w *= scale
-    if box_h * box_w > max_area:
-        scale = math.sqrt(max_area / max(box_h * box_w, 1.0))
-        box_h *= scale
-        box_w *= scale
-
-    box_h = min(box_h, float(height))
-    box_w = min(box_w, float(width))
-    box = (cy - box_h * 0.5, cx - box_w * 0.5, cy + box_h * 0.5, cx + box_w * 0.5)
-    return _clamp_box(box, height, width), (cy, cx), int(seed.sum().item()), int(global_seed_frame.sum().item())
-
-
-def _center_boxes(
-    boxes: list[tuple[float, float, float, float]],
-    centers: list[tuple[float, float]],
-    height: int,
-    width: int,
-) -> list[tuple[float, float, float, float]]:
-    out = []
-    for box, (cy, cx) in zip(boxes, centers):
-        box_h = box[2] - box[0]
-        box_w = box[3] - box[1]
-        out.append(_clamp_box((cy - box_h * 0.5, cx - box_w * 0.5, cy + box_h * 0.5, cx + box_w * 0.5), height, width))
-    return out
-
-
-def _apply_size_rule(
-    boxes: list[tuple[float, float, float, float]],
-    centers: list[tuple[float, float]],
-    height: int,
-    width: int,
-    size_rule: str,
-) -> list[tuple[float, float, float, float]]:
-    if size_rule == "per-frame":
-        return boxes
-    if size_rule != "max":
-        raise ValueError("coarse_size_rule must be 'per-frame' or 'max'")
-    max_h = max(box[2] - box[0] for box in boxes)
-    max_w = max(box[3] - box[1] for box in boxes)
-    return [_clamp_box((cy - max_h * 0.5, cx - max_w * 0.5, cy + max_h * 0.5, cx + max_w * 0.5), height, width) for cy, cx in centers]
-
-
-def build_attention_step_mask(score: torch.Tensor, config: CoarseMaskConfig) -> dict[str, Any]:
-    """Build one completed-step attention mask token mask from a `[T, H, W]` score tensor."""
-
-    if score.ndim != 3:
-        raise ValueError(f"score must have shape [T,H,W], got {tuple(score.shape)}")
-
-    score = minmax_norm(score) if config.score_normalization == "minmax" else score.float()
-    seed = coarse_top_fraction_mask(score, config.top_p)
-    height, width = int(score.shape[1]), int(score.shape[2])
-
-    boxes = []
-    centers = []
-    seed_counts = []
-    global_seed_counts = []
-    for t in range(score.shape[0]):
-        box, center, seed_count, global_seed_count = _frame_box(score[t], seed[t], config)
-        boxes.append(box)
-        centers.append(center)
-        seed_counts.append(seed_count)
-        global_seed_counts.append(global_seed_count)
-
-    filled_centers = _filled_centers(centers)
-    boxes = _center_boxes(boxes, filled_centers, height, width)
-    boxes = _apply_size_rule(boxes, filled_centers, height, width, config.coarse_size_rule)
-    boxes = _smooth_boxes(boxes, config.coarse_smooth_radius)
-    boxes = _union_boxes(boxes, config.coarse_temporal_union_radius)
-    mbase = torch.stack(
-        [_box_mask(box, height, width, config.coarse_shape, score.device) for box in boxes],
-        dim=0,
-    ).bool()
-
-    areas = [float(mask.float().mean().item()) for mask in mbase]
-    best_frame = int(max(range(len(areas)), key=lambda idx: areas[idx]))
+    selected = [item for item in records if int(item["step_index"]) + 1 == int(completed_step)]
+    if not selected:
+        raise RuntimeError(f"missing probe records for completed_step={completed_step}")
+    score = torch.stack([(item.get("noun_score", item.get("positive"))).float() for item in selected]).mean(dim=0)
     return {
-        "score": score,
-        "raw_coverage": seed,
-        "Mbase": mbase,
-        "best_frame": best_frame,
-        "boxes": [[float(v) for v in box] for box in boxes],
-        "centers": [[float(y), float(x)] for y, x in filled_centers],
-        "seed_counts": seed_counts,
-        "global_seed_counts": global_seed_counts,
+        "seed_score_mode": "single-step",
+        "seed_variant": "cross_attention_seed_scores",
+        "source_completed_step": int(completed_step),
+        "score_normalization": "minmax",
+        "attention_layer_fusion_rule": "mean_across_probe_records",
+        "score": minmax_norm(score),
+        "records": [
+            {
+                "step_index": int(item["step_index"]),
+                "completed_step": int(item["step_index"]) + 1,
+                "layer_index": int(item["layer_index"]),
+            }
+            for item in selected
+        ],
     }
 
 
@@ -376,55 +126,6 @@ def _mask_area(mbase: torch.Tensor, medit: torch.Tensor, msee: torch.Tensor) -> 
         "mbase": float(mbase.float().mean().item()),
         "medit": float(medit.float().mean().item()),
         "msee": float(msee.float().mean().item()),
-    }
-
-
-def build_canonical_cross_attention_mask(
-    records: list[dict[str, Any]],
-    config: CoarseMaskConfig,
-    *,
-    completed_step: int,
-) -> dict[str, Any]:
-    """Build the one source-calibrated cross-attention mask used by native Wan."""
-
-    selected = [item for item in records if int(item["step_index"]) + 1 == int(completed_step)]
-    if not selected:
-        raise RuntimeError(f"missing probe records for completed_step={completed_step}")
-    score = torch.stack([(item.get("noun_score", item.get("positive"))).float() for item in selected]).mean(dim=0)
-    built = build_attention_step_mask(score, config)
-    mbase = built["Mbase"]
-    medit = dilate_spatial(mbase, config.spatial_medit_radius)
-    msee = dilate_spatial(medit, config.spatial_msee_radius)
-    attention_config = asdict(config)
-    attention_config.pop("mask_steps", None)
-    return {
-        "attention_mask_mode": "single-step",
-        "mask_variant": "offline_cross_attention_probe",
-        "source_completed_step": int(completed_step),
-        "attention_config": attention_config,
-        "attention_layer_fusion_rule": "mean_across_probe_records",
-        "score": built["score"],
-        "raw_coverage": built["raw_coverage"],
-        "Mbase": mbase,
-        "Medit": medit,
-        "Msee": msee,
-        "token_area": _mask_area(mbase, medit, msee),
-        "coarse": {
-            "shape": config.coarse_shape,
-            "best_frame_for_mbase": int(built["best_frame"]),
-            "boxes": built["boxes"],
-            "centers": built["centers"],
-            "seed_counts": built["seed_counts"],
-            "global_seed_counts": built["global_seed_counts"],
-        },
-        "records": [
-            {
-                "step_index": int(item["step_index"]),
-                "completed_step": int(item["step_index"]) + 1,
-                "layer_index": int(item["layer_index"]),
-            }
-            for item in selected
-        ],
     }
 
 
@@ -651,6 +352,32 @@ def build_mbase_from_hysteresis_score(
         "support_area": float(support.float().mean().item()),
         "hysteresis_area": float(hysteresis.float().mean().item()),
         "closed_area": float(closed.float().mean().item()),
+    }
+
+
+def ensure_tail_mbase_support(mask: torch.Tensor) -> tuple[torch.Tensor, dict[str, Any]]:
+    """Keep the signature token covered without changing fusion thresholds."""
+
+    if mask.ndim != 3:
+        raise ValueError(f"Mbase must have shape [T,H,W], got {tuple(mask.shape)}")
+    nonempty = mask.bool().flatten(1).any(dim=1)
+    if not bool(nonempty.any()):
+        raise ValueError("fused Mbase is empty at every time token")
+    trailing_empty = 0
+    for present in reversed(nonempty.tolist()):
+        if present:
+            break
+        trailing_empty += 1
+    if trailing_empty == 0:
+        return mask.bool(), {"applied": False, "mode": "none", "filled_slices": 0}
+    source_index = int(torch.where(nonempty)[0][-1].item())
+    repaired = mask.bool().clone()
+    repaired[-trailing_empty:] = repaired[source_index]
+    return repaired, {
+        "applied": True,
+        "mode": "nearest_nonempty_tail_slice",
+        "filled_slices": trailing_empty,
+        "source_slice": source_index,
     }
 
 
@@ -932,6 +659,9 @@ def build_canonical_fusion_mask(
         low_threshold=config.low_threshold,
         keep_isolated=config.keep_isolated,
     )
+    mbase, tail_support_meta = ensure_tail_mbase_support(mbase)
+    postprocess_meta = dict(postprocess_meta)
+    postprocess_meta["tail_support_fallback"] = tail_support_meta
     medit = dilate_spatial(mbase, config.spatial_medit_radius)
     msee = dilate_spatial(medit, config.spatial_msee_radius)
     token_area = _mask_area(mbase, medit, msee)
@@ -968,79 +698,6 @@ def build_canonical_fusion_mask(
         "mask_spatial_msee_radius": config.spatial_msee_radius,
         "token_shape": list(fusion_score.shape),
     }
-
-
-def build_masks_from_records(
-    records: list[dict[str, Any]],
-    config: CoarseMaskConfig,
-) -> dict[str, Any]:
-    if not records:
-        raise ValueError("records is empty")
-
-    by_step: dict[int, list[dict[str, Any]]] = {}
-    for record in records:
-        completed_step = int(record["step_index"]) + 1
-        by_step.setdefault(completed_step, []).append(record)
-
-    bundle: dict[str, Any] = {
-        "attention_mask_mode": "attention-stepwise-coarse",
-        "mask_variant": "offline_cross_attention_probe",
-        "attention_config": asdict(config),
-        "attention_layer_fusion_rule": "mean_across_probe_records",
-        "mask_steps": list(config.mask_steps),
-        "step_metadata": {},
-    }
-
-    for completed_step in config.mask_steps:
-        step_records = by_step.get(int(completed_step))
-        if not step_records:
-            raise RuntimeError(f"missing probe records for completed_step={completed_step}")
-
-        score = torch.stack([(item.get("noun_score", item.get("positive"))).float() for item in step_records]).mean(dim=0)
-        built = build_attention_step_mask(score, config)
-        mbase = built["Mbase"]
-        medit = dilate_spatial(mbase, config.spatial_medit_radius)
-        msee = dilate_spatial(medit, config.spatial_msee_radius)
-
-        step_key = f"step{completed_step:03d}"
-        bundle[f"{step_key}_score"] = built["score"]
-        bundle[f"{step_key}_raw_coverage"] = built["raw_coverage"]
-        bundle[f"{step_key}_Mbase"] = mbase
-        bundle[f"{step_key}_Medit"] = medit
-        bundle[f"{step_key}_Msee"] = msee
-
-        layers = sorted({int(item["layer_index"]) for item in step_records})
-        bundle["step_metadata"][str(completed_step)] = {
-            "record_count": len(step_records),
-            "probe_layers": layers,
-            "best_frame_for_mbase": int(built["best_frame"]),
-            "token_area": {
-                "mbase": float(mbase.float().mean().item()),
-                "medit": float(medit.float().mean().item()),
-                "msee": float(msee.float().mean().item()),
-            },
-            "coarse": {
-                "shape": config.coarse_shape,
-                "boxes": built["boxes"],
-                "centers": built["centers"],
-                "seed_counts": built["seed_counts"],
-                "global_seed_counts": built["global_seed_counts"],
-            },
-        }
-
-    bundle["records"] = [
-        {
-            "step_index": int(item["step_index"]),
-            "completed_step": int(item["step_index"]) + 1,
-            "layer_index": int(item["layer_index"]),
-        }
-        for item in records
-    ]
-    return bundle
-
-
-def build_coarse_masks_from_records(records: list[dict[str, Any]], config: CoarseMaskConfig) -> dict[str, Any]:
-    return build_masks_from_records(records, config)
 
 
 def save_mask_bundle(mask_dir: Path, bundle: dict[str, Any], save_cpu: bool = True) -> str:

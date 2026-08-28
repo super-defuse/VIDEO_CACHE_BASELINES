@@ -16,7 +16,7 @@
 
 对每个 `cached_prompt` 完整运行 50-step scheduler：
 
-- 第 5 步保存 Early Signature、`Mbase` 和 tail frame；
+- 第 5 步以 cross-attention seed 和 self-attention contrast 融合生成 `Mbase`，并保存 Early Signature 与 tail frame；尾部空切片仅使用最近非空切片补齐，不降低阈值；若整个时间轴均为空则 fail-closed，不写入空 mask；
 - 第 10 步保存 joint reuse 所需 latent、sparse-attention artifact 及 hash；
 - 继续运行至视频输出，并持久化 source 视频、可执行 cache 和运行 manifest。
 
@@ -32,7 +32,7 @@
 
 - target 视频；
 - target 复用执行 cache（所用 source cache 的引用、`Medit`、`Msee` 和运行 manifest）；
-- 第 5 步的 `online_color_signature.json`、`step5_tail_frame.png`、`mbase.safetensors`。
+- 第 5 步的融合 `online_color_signature.json`、`step5_tail_frame.png`、`mbase.safetensors`；不得使用仅 cross-attention Mbase。
 
 对每条 target 视频及其 target prompt 单独计算并记录：
 

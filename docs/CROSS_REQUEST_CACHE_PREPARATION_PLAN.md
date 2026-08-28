@@ -18,7 +18,7 @@ artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000/
       manifest.json
       latents_initial.pt
       latents_step_000.pt ... latents_step_049.pt
-      probe_masks/ self_contrast_masks/ fusion_masks/
+      cross_seed_scores/ self_contrast_masks/ fusion_masks/
       outer_block_masks/metadata.json
       outer_block_masks/maskbits/from_step_010/{cond,uncond}/layer_00.bin ...
     status.json
@@ -33,7 +33,8 @@ artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000/
   从 native `cache/source_dense` 读取 trajectory、fusion mask 和 raw block mask。四者没有
   私有 cache 目录，也不创建硬链接或副本。
 - 不为 CHAI 导出或保留 source token cache。
-- Carnator 的 completed-step-5 Early Signature 属于 target 在线流程，不预采集、不保存。
+- `cross_seed_scores` 只保存用于 self-attention 的 cross-attention score；不包含 Mbase、Medit 或 Msee。
+  Carnator 的 completed-step-5 Early Signature 属于 target 在线流程，不预采集、不保存。
 - Carnator 保留完整 30-layer 的 bit-packed raw `bool[heads,q_blocks,k_blocks]`，覆盖
   `cond`/`uncond`。Chorus2 使用这同一份完整的普通 sparse attention mask；尤其 10--20 层
   保持未筛选的 raw mask。Carnator 仅在 target 端将其与 `Medit`/`Msee` 相交。metadata 固化

@@ -15,7 +15,7 @@ hit rate 只统计跨请求检索命中。TeaCache 没有跨请求检索，相�
 | TeaCache | 4 | target-only TeaCache, relative L1 threshold 0.08 | 300 | N/A | N/A | TBD | N/A | TBD | 0 | TBD | TBD | TBD | TBD | `results/teacache/` |
 | Chorus | 5 | CLIP/Chroma Top-1, threshold 0.65, K1/K2 10/30, TGAA | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus/` |
 | Chorus2 | 6 | shared NIRVANA/Chorus CLIP/Chroma Top-1, threshold 0.65; SpargeAttn | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus2/` |
-| Carnator Boundary B5 | 7 | CLIP/Chroma candidates + Early Signature (`0.8569418522546745`, `0.7643009491051245`, `0.3015873015873016`, `1.0714081281330827`); Boundary B5 | 300 | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | `results/carnator_boundary_b5/` |
+| Carnator Boundary B5 | 3, 4, 5, 7 | CLIP/Chroma candidates + step-5 self/cross-fusion Early Signature (`0.8569418522546745`, `0.7643009491051245`, `0.3015873015873016`, `1.0714081281330827`); Boundary B5 | 300 | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | `results/carnator_boundary_b5/` |
 
 ### 字段定义
 

@@ -47,9 +47,10 @@ PYTHONPATH=. python scripts/benchmark/cross_request_retrieval.py
 ## Carnator 在线决策
 
 Early Signature 是唯一实现：在 step 5 VAE decode 一次 tail frame，以对象级 CIELAB、面积和
-形状 gate 决定是否复用。决策只有 `Reuse` 和 `No Reuse`：命中后使用 source 的 step-10
-latent 与 sparse-attention artifact 执行 joint reuse；未通过任一 gate 时继续 target 的 dense
-generation。
+形状 gate 决定是否复用。每个 Mbase 由 noun-specific cross-attention seed 与 self-attention
+contrast 融合生成，禁止将 cross-attention mask 单独作为 Mbase。决策只有 `Reuse` 和 `No Reuse`：
+命中后使用 source 的 step-10 latent 和融合 Mbase/sparse-attention artifact 执行 joint reuse；
+未通过任一 gate 时继续 target 的 dense generation。
 
 1. 新 request 用完整 prompt 做 CLIP recall，保留最多 20 个且分数达到下限的历史 cache。
 2. 比较 `NOUN` token set。只保留 noun set 相同、或恰好一个 noun substitution 的候选，最多 5 条，保持 CLIP 排名。
@@ -65,11 +66,15 @@ signature 或写入 source cache。
 ### Early Signature
 
 signature 绑定 model、scheduler、CFG、completed step、latent token grid、noun extractor 和
-mask policy，并保存每个 `NOUN` token 的 binary `Mbase`。第 5 个 completed step 会持久化
+融合 mask policy，并保存每个 `NOUN` token 的 binary `Mbase`。第 5 个 completed step 会先用
+cross-attention 定位 seed，再以 self-attention contrast 与 cross score 融合得到 Mbase，随后持久化
 decoded tail frame、内容 hash 和每个 noun 的平均 CIELAB。`Mbase` 的 tail token 通过
 nearest-neighbor 投影到该帧；source sidecar 还包含 step-10 latent 与 sparse-attention artifact
 的路径、内容 hash 和兼容性元数据。`Medit` 和 `Msee` 是命中后的执行数据，不参与 retrieval
 gate。
+
+若融合后的 noun-specific `Mbase` 尾部时间切片为空，只复制最近的非空切片并记录元数据；不降低融合阈值。若整个时间轴均为空，probe
+fail-closed，放弃 Stage-2 命中并回退完整 dense generation，不写入空 mask。
 
 probe 必须沿用完整 50-step scheduler，只在第 5 个 completed step 采集，不能把总步数改为 5。
 线上入口只在 Stage 1 有合格候选时采集一次 target sidecar。必须显式配置

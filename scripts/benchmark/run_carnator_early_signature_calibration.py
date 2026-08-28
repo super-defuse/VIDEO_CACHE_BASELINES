@@ -189,6 +189,8 @@ def native_args(args: argparse.Namespace, *, pair: Pair, phase: str, gpu: int):
 
 
 def signature_metadata(runtime, native_args: argparse.Namespace, prompt: str, latent, token_grid: tuple[int, int, int]) -> dict[str, Any]:
+    from carnator.adapters import wan_ti2v_5b as native
+
     return {
         "prompt": prompt,
         "model": "Wan2.2-TI2V-5B",
@@ -204,26 +206,7 @@ def signature_metadata(runtime, native_args: argparse.Namespace, prompt: str, la
         "latent_shape": list(latent.shape),
         "latent_token_grid": list(token_grid),
         "noun_extractor": NOUN_EXTRACTOR,
-        "mask_policy": (
-            "native-cross-attention-mbase"
-            f"|layers={native_args.mask_layers}|top_p={float(native_args.mask_top_p):.8f}"
-        ),
-    }
-
-
-def mbase_by_noun(native_args: argparse.Namespace, probe: Any) -> dict[str, Any]:
-    from carnator.masks import CoarseMaskConfig, build_canonical_cross_attention_mask
-
-    config = CoarseMaskConfig(
-        top_p=native_args.mask_top_p,
-        spatial_medit_radius=native_args.mask_spatial_medit_radius,
-        spatial_msee_radius=native_args.mask_spatial_msee_radius,
-    )
-    return {
-        noun: build_canonical_cross_attention_mask(
-            records, config, completed_step=native_args.mask_probe_step
-        )["Mbase"].detach().cpu().bool().contiguous()
-        for noun, records in probe.records_by_noun.items()
+        "mask_policy": native.fused_mbase_policy(native_args),
     }
 
 
@@ -238,7 +221,7 @@ def capture_early_signature(
     directory: Path,
     cache: dict[str, Any] | None,
 ) -> Path:
-    """Capture per-noun cross attention for a completed-step-5 latent."""
+    """Build a completed-step-5 signature from the native fused Mbase path."""
 
     import torch
 
@@ -271,10 +254,20 @@ def capture_early_signature(
         probe.current_step_index = step_index
         _ = model([attention_input], t=timestep_input, context=context, seq_len=seq_len)[0]
         torch.cuda.synchronize()
-        decoded = runtime.pipe.vae.decode([step5_latent])[0]
-        torch.cuda.synchronize()
     if not probe.records_by_noun or any(not records for records in probe.records_by_noun.values()):
         raise RuntimeError("step-5 multi-noun attention probe produced incomplete records")
+    fused_mbase_by_noun = native.build_fused_mbase_by_noun(
+        runtime,
+        native_args,
+        prompt=prompt,
+        token_grid=token_grid,
+        noun_token_indices=indices,
+        cross_records_by_noun=probe.records_by_noun,
+        self_attention_input=step5_latent,
+    )
+    with torch.amp.autocast("cuda", dtype=runtime.pipe.param_dtype), torch.no_grad():
+        decoded = runtime.pipe.vae.decode([step5_latent])[0]
+        torch.cuda.synchronize()
     if decoded.ndim != 4 or decoded.shape[0] < 3 or decoded.shape[1] < 1:
         raise RuntimeError("Wan VAE did not return a [C,T,H,W] video for the step-5 signature")
     result = write_early_signature(
@@ -282,7 +275,7 @@ def capture_early_signature(
         step5_latent=step5_latent.detach().float().cpu().contiguous(),
         decoded_tail_frame=decoded[:, -1].detach(),
         metadata=signature_metadata(runtime, native_args, prompt, step5_latent, token_grid),
-        mbase_by_noun=mbase_by_noun(native_args, probe),
+        mbase_by_noun=fused_mbase_by_noun,
         cache=cache,
     )
     return Path(result["signature_path"])
@@ -335,21 +328,30 @@ def run_target_probe(runtime, native_args: argparse.Namespace, pair: Pair, direc
         torch.cuda.synchronize()
     if attention_input is None:
         raise RuntimeError("target step-5 probe did not capture its pre-step latent")
-    # Capture already happened inside the same denoising pass; writing the
-    # sidecar only needs the final step-5 latent and the collected records.
+    # Cross scores were captured during step 5; the final Mbase is fused with
+    # one self-attention contrast pass on the completed step-5 latent.
     from carnator.early_signature import write_early_signature
 
+    if not probe.records_by_noun or any(not records for records in probe.records_by_noun.values()):
+        raise RuntimeError("target step-5 multi-noun attention probe produced incomplete records")
+    fused_mbase_by_noun = native.build_fused_mbase_by_noun(
+        runtime,
+        native_args,
+        prompt=prompt,
+        token_grid=token_grid,
+        noun_token_indices=indices,
+        cross_records_by_noun=probe.records_by_noun,
+        self_attention_input=latent,
+    )
     with torch.amp.autocast("cuda", dtype=runtime.pipe.param_dtype), torch.no_grad():
         decoded = runtime.pipe.vae.decode([latent])[0]
         torch.cuda.synchronize()
-    if not probe.records_by_noun or any(not records for records in probe.records_by_noun.values()):
-        raise RuntimeError("target step-5 multi-noun attention probe produced incomplete records")
     result = write_early_signature(
         directory,
         step5_latent=latent.detach().float().cpu().contiguous(),
         decoded_tail_frame=decoded[:, -1].detach(),
         metadata=signature_metadata(runtime, native_args, pair.target_prompt, latent, token_grid),
-        mbase_by_noun=mbase_by_noun(native_args, probe),
+        mbase_by_noun=fused_mbase_by_noun,
         cache=None,
     )
     return Path(result["signature_path"])
@@ -398,9 +400,9 @@ def run_source_worker(args: argparse.Namespace, pair: Pair, gpu: int) -> dict[st
             prompt=pair.cached_prompt,
             out_video=paths["source_video"],
             cache_dir=paths["source_cache"],
-            capture_masks=True,
+            capture_cross_seed_scores=True,
             save_trajectory=True,
-            mask_output_dir=paths["coarse_mask_dir"],
+            cross_seed_output_dir=paths["cross_seed_dir"],
             decode_video=True,
         )
         trajectory = {
@@ -412,14 +414,14 @@ def run_source_worker(args: argparse.Namespace, pair: Pair, gpu: int) -> dict[st
             runtime,
             native_args,
             source_trajectory=trajectory,
-            coarse_mask_dir=paths["coarse_mask_dir"],
+            cross_seed_dir=paths["cross_seed_dir"],
             self_mask_dir=paths["self_mask_dir"],
         )
         native.build_native_fusion_mask_bundle(
             runtime,
             native_args,
             source_trajectory=trajectory,
-            coarse_mask_dir=paths["coarse_mask_dir"],
+            cross_seed_dir=paths["cross_seed_dir"],
             self_bundle=self_bundle,
             self_mask_dir=paths["self_mask_dir"],
             fusion_mask_dir=paths["mask_dir"],

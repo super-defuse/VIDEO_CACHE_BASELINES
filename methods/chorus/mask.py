@@ -51,11 +51,13 @@ def build_edit_mask(
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Build the SRD base/edit/visible masks from Grounded-SAM-2 output.
 
-    ``Medit`` selects tokens whose features are recomputed. ``Msee`` is the
-    larger context window used as the self-attention K/V set. Both masks are
-    projected with max pooling so a token is retained when any covered latent
-    cell belongs to the corresponding pixel-space region. The returned latent
-    edit mask is then expanded back through the same patch grid for injection.
+    ``Mbase`` is the un-dilated object region, ``Medit`` selects the larger
+    region whose features are normally recomputed, and ``Msee`` is the context
+    window used as the self-attention K/V set. All masks are projected with
+    max pooling so a token is retained when any covered latent cell belongs to
+    the corresponding pixel-space region. Both Mbase and Medit are expanded
+    back through the same patch grid for latent injection; the caller chooses
+    which one is active for a given ablation.
     """
     import torch
     import torch.nn.functional as F
@@ -90,14 +92,18 @@ def build_edit_mask(
             pooled = F.interpolate(pooled, size=(latent_frames, token_height, token_width), mode="nearest")
         return pooled[0, 0].reshape(-1).gt(0)
 
+    token_base = project(base)
     token_edit = project(edit)
     token_see = project(see)
+    if not bool(token_base.any()):
+        raise RuntimeError("Grounded-SAM-2 produced an empty Mbase token mask")
     token_see |= token_edit
     if not bool(token_edit.any()):
         raise RuntimeError("Grounded-SAM-2 produced an empty SRD edit mask")
     metadata.update({
         "grid": [latent_frames, token_height, token_width],
         "base_fraction": round(float(base.mean().item()), 4),
+        "base_token_fraction": round(float(token_base.float().mean().item()), 4),
         "edit_fraction": round(float(token_edit.float().mean().item()), 4),
         "see_fraction": round(float(token_see.float().mean().item()), 4),
         "dilation": {"edit": radius_edit, "see": radius_see},
@@ -106,14 +112,22 @@ def build_edit_mask(
     # Latent injection must use the same patch-aligned mask as SRD token
     # selection. A pixel mask would otherwise split a Wan (1, 2, 2) patch and
     # leave the scheduler/model operating on different regions.
+    latent_base = _token_mask_to_latent_mask(
+        token_base,
+        (latent_frames, latent_height, latent_width),
+        (latent_frames, token_height, token_width),
+    )
     latent_edit = _token_mask_to_latent_mask(
         token_edit,
         (latent_frames, latent_height, latent_width),
         (latent_frames, token_height, token_width),
     )
     return {
+        "latent_base": latent_base,
         "latent_edit": latent_edit,
+        "pixel_base": base.to(dtype=torch.float32)[0, 0],
         "pixel_edit": edit.to(dtype=torch.float32)[0, 0],
+        "token_base": token_base,
         "token_edit": token_edit,
         "token_see": token_see,
     }, metadata

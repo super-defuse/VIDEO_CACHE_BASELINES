@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the persistent Carnator step-5 signatures for the 923 source view.
+"""Generate fused-Mbase Carnator step-5 signatures for the 923 source view.
 
 Only the artifacts consumed by ``compare_early_signatures`` are written into
 each existing source cache directory: ``online_color_signature.json``,
@@ -28,6 +28,7 @@ DEFAULT_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_clus
 DEFAULT_MODEL = Path(os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", "/home/tangxuebin/models/Wan2.2-TI2V-5B"))
 DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input" / "early_signature_generation"
 NOUN_EXTRACTOR = "spacy:en_core_web_sm"
+FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
 
 
 def sha256_file(path: Path) -> str:
@@ -96,10 +97,18 @@ def cache_metadata(cache_dir: Path, token_grid: tuple[int, int, int], uuid: str)
 
 
 def sidecar_complete(cache_dir: Path) -> bool:
-    return all(
+    required = all(
         (cache_dir / name).is_file() and (cache_dir / name).stat().st_size > 0
         for name in ("online_color_signature.json", "mbase.safetensors", "step5_tail_frame.png")
     )
+    if not required:
+        return False
+    try:
+        signature = json.loads((cache_dir / "online_color_signature.json").read_text(encoding="utf-8"))
+        policy = signature["compatibility"]["mask_policy"]
+    except (KeyError, OSError, TypeError, json.JSONDecodeError):
+        return False
+    return isinstance(policy, str) and policy.startswith(FUSED_MBASE_POLICY_PREFIX)
 
 
 def canonical_nouns(values: list[str] | tuple[str, ...]) -> tuple[str, ...]:

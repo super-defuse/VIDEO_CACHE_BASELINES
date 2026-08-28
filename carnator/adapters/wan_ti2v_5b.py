@@ -31,6 +31,17 @@ TARGET_PROMPT = "a cat is sleeping on a grassland, focus on the cat"
 EXPECTED_TOKEN_GRID = [31, 22, 40]
 
 
+def fused_mbase_policy(args: argparse.Namespace) -> str:
+    """Stable identity for the only Mbase policy used by Early Signature."""
+
+    return (
+        "native-self-cross-fusion-mbase"
+        f"|cross_layers={args.mask_layers}|self_layer={int(args.mask_self_layer)}"
+        f"|top_p={float(args.mask_top_p):.8f}|eps={float(args.mask_fusion_eps):.8f}"
+        f"|gamma={float(args.mask_fusion_gamma):.8f}"
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run CARNATOR latent reuse on the native Wan2.2-TI2V-5B checkpoint."
@@ -721,6 +732,172 @@ class NativeSelfAttentionContrastProbe(AbstractContextManager):
         }
 
 
+class NativeMultiNounSelfAttentionContrastProbe(AbstractContextManager):
+    """Capture self-attention contrast volumes for all Early Signature nouns."""
+
+    def __init__(
+        self,
+        model,
+        model_module,
+        layer: int,
+        seed_indices_by_noun: dict[str, tuple[Any, Any]],
+        token_grid: tuple[int, int, int],
+        chunk_size: int = 512,
+    ) -> None:
+        if not seed_indices_by_noun:
+            raise ValueError("multi-noun self-attention probe needs at least one noun")
+        self.model = model
+        self.model_module = model_module
+        self.layer = int(layer)
+        self.seed_indices_by_noun = dict(seed_indices_by_noun)
+        self.token_grid = token_grid
+        self.token_count = int(math.prod(token_grid))
+        self.chunk_size = int(chunk_size)
+        self.records_by_noun: dict[str, dict[str, Any]] = {}
+        self.handle = None
+
+    def __enter__(self):
+        self.handle = self.model.blocks[self.layer].self_attn.register_forward_pre_hook(self._hook)
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if self.handle is not None:
+            self.handle.remove()
+        self.handle = None
+        return False
+
+    def _hook(self, attn, inputs):
+        if self.records_by_noun:
+            return
+        import torch
+
+        hidden_states, _seq_lens, grid_sizes, freqs = inputs
+        batch, sequence, heads, head_dim = (
+            hidden_states.shape[0],
+            hidden_states.shape[1],
+            attn.num_heads,
+            attn.head_dim,
+        )
+        query = attn.norm_q(attn.q(hidden_states)).view(batch, sequence, heads, head_dim)
+        key = attn.norm_k(attn.k(hidden_states)).view(batch, sequence, heads, head_dim)
+        query = self.model_module.rope_apply(query, grid_sizes, freqs)[:, : self.token_count]
+        key = self.model_module.rope_apply(key, grid_sizes, freqs)[:, : self.token_count]
+        scale = head_dim**-0.5
+        time, height, width = self.token_grid
+
+        for noun, (noun_indices, background_indices) in self.seed_indices_by_noun.items():
+            noun_key = key.index_select(1, noun_indices.to(device=hidden_states.device))
+            background_key = key.index_select(1, background_indices.to(device=hidden_states.device))
+            noun_max_parts = []
+            background_max_parts = []
+            for start in range(0, self.token_count, self.chunk_size):
+                stop = min(self.token_count, start + self.chunk_size)
+                query_chunk = query[:, start:stop]
+                noun_logits = torch.einsum("bqhd,bkhd->bhqk", query_chunk, noun_key).mul(scale)
+                background_logits = torch.einsum("bqhd,bkhd->bhqk", query_chunk, background_key).mul(scale)
+                noun_max_parts.append(noun_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu())
+                background_max_parts.append(background_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu())
+                del noun_logits, background_logits
+            noun_max = torch.cat(noun_max_parts).reshape(time, height, width)
+            background_max = torch.cat(background_max_parts).reshape(time, height, width)
+            self.records_by_noun[noun] = {
+                "self_noun_max": noun_max,
+                "self_bg_max": background_max,
+                "self_contrast_max": noun_max - background_max,
+            }
+
+
+def build_fused_mbase_by_noun(
+    runtime: NativeRuntime,
+    args: argparse.Namespace,
+    *,
+    prompt: str,
+    token_grid: tuple[int, int, int],
+    noun_token_indices: dict[str, list[int]],
+    cross_records_by_noun: dict[str, list[dict[str, Any]]],
+    self_attention_input,
+) -> dict[str, Any]:
+    """Build each Early Signature Mbase from the native self/cross fusion path.
+
+    Cross attention only provides per-noun seed locations.  The persisted
+    Mbase is always derived from the self-attention contrast and cross-score
+    fusion used by native B5 target reuse.
+    """
+    import torch
+
+    from carnator.masks import (
+        FusionMaskConfig,
+        SelfContrastMaskConfig,
+        build_cross_attention_seed_scores,
+        build_canonical_fusion_mask,
+        build_canonical_self_contrast_mask,
+        seed_indices_from_cross_score,
+    )
+
+    if set(noun_token_indices) != set(cross_records_by_noun):
+        raise ValueError("cross-attention records do not match Early Signature nouns")
+    cross_scores: dict[str, torch.Tensor] = {}
+    seed_indices: dict[str, tuple[Any, Any]] = {}
+    for noun, records in cross_records_by_noun.items():
+        if not records:
+            raise RuntimeError(f"Early Signature cross-attention records are empty for {noun!r}")
+        cross_seed = build_cross_attention_seed_scores(
+            records,
+            completed_step=args.mask_probe_step,
+        )
+        cross_scores[noun] = cross_seed["score"].float()
+        seed_indices[noun] = seed_indices_from_cross_score(
+            cross_scores[noun],
+            top_p=args.mask_top_p,
+            background_p=args.mask_background_p,
+        )
+
+    scheduler = build_scheduler(runtime, args)
+    step_index = int(args.mask_probe_step) - 1
+    timestep = scheduler.timesteps[step_index]
+    seq_len = seq_len_for(runtime, self_attention_input)
+    timestep_input = timestep_for(runtime, self_attention_input, timestep, seq_len)
+    context, _ = encode_prompts(runtime, args, prompt)
+    model = runtime.pipe.model
+    if args.offload_model or runtime.pipe.init_on_cpu:
+        model.to(runtime.device)
+        torch.cuda.empty_cache()
+    no_sync = getattr(model, "no_sync", nullcontext)
+    with (
+        torch.amp.autocast("cuda", dtype=runtime.pipe.param_dtype),
+        torch.no_grad(),
+        no_sync(),
+        NativeMultiNounSelfAttentionContrastProbe(
+            model,
+            runtime.wan["model_module"],
+            args.mask_self_layer,
+            seed_indices,
+            token_grid,
+        ) as self_probe,
+    ):
+        _ = model([self_attention_input], t=timestep_input, context=context, seq_len=seq_len)[0]
+        torch.cuda.synchronize()
+
+    if set(self_probe.records_by_noun) != set(cross_scores):
+        raise RuntimeError("Early Signature self-attention probe produced incomplete records")
+    fusion_config = FusionMaskConfig(
+        completed_step=args.mask_probe_step,
+        eps=args.mask_fusion_eps,
+        gamma=args.mask_fusion_gamma,
+        spatial_medit_radius=args.mask_spatial_medit_radius,
+        spatial_msee_radius=args.mask_spatial_msee_radius,
+    )
+    return {
+        noun: build_canonical_fusion_mask(
+            self_probe.records_by_noun[noun]["self_contrast_max"],
+            cross_scores[noun],
+            fusion_config,
+            original_mbase=None,
+        )["Mbase"].detach().cpu().bool().contiguous()
+        for noun in sorted(cross_scores)
+    }
+
+
 class SparseTokenIndexCache:
     def __init__(self, mask_bundle: dict[str, Any]):
         self.mask_bundle = mask_bundle
@@ -1276,7 +1453,7 @@ def stage_paths(args: argparse.Namespace) -> dict[str, Path]:
         "target_dense_w8a8_cache": artifact_run / "cache" / "target_dense_w8a8",
         "target_reuse_cache": artifact_run / "cache" / "target_latent_reuse",
         "shared_cache": artifact_run / "cache" / "shared_dense",
-        "coarse_mask_dir": artifact_run / "cache" / "source_dense" / "probe_masks",
+        "cross_seed_dir": artifact_run / "cache" / "source_dense" / "cross_seed_scores",
         "self_mask_dir": artifact_run / "cache" / "source_dense" / "self_contrast_masks",
         "mask_dir": artifact_run / "cache" / "source_dense" / "fusion_masks",
         "source_first_frame": result_run / "frames" / "source_dense_first_frame.png",
@@ -1427,7 +1604,7 @@ def run_native_t2v_stage(
     prompt: str,
     out_video: Path,
     cache_dir: Path,
-    capture_masks: bool = False,
+    capture_cross_seed_scores: bool = False,
     save_trajectory: bool = False,
     trajectory_start_step: int = 0,
     resume_latent_path: Path | None = None,
@@ -1437,17 +1614,12 @@ def run_native_t2v_stage(
     sparse_state: NativeSparseState | None = None,
     outer_sparse_state: Any | None = None,
     ffn_state: Any | None = None,
-    mask_output_dir: Path | None = None,
+    cross_seed_output_dir: Path | None = None,
     decode_video: bool = True,
 ) -> dict[str, Any]:
     import torch
 
-    from carnator.masks import (
-        CoarseMaskConfig,
-        add_canonical_latent_masks,
-        build_canonical_cross_attention_mask,
-        save_mask_bundle,
-    )
+    from carnator.masks import build_cross_attention_seed_scores, save_mask_bundle
 
     stage_started = time.perf_counter()
     pipe = runtime.pipe
@@ -1471,7 +1643,7 @@ def run_native_t2v_stage(
         scheduler.set_begin_index(resume_start_step)
 
     probe = None
-    if capture_masks:
+    if capture_cross_seed_scores:
         positive_indices = find_token_indices(pipe.text_encoder, prompt, args.source_positive, pipe.config.text_len)
         probe = NativeCrossAttentionProbe(model, parse_int_list(args.mask_layers), positive_indices, token_grid)
 
@@ -1560,25 +1732,18 @@ def run_native_t2v_stage(
     denoising_seconds = time.perf_counter() - denoise_start
     profile = runtime.profiler.summary()
 
-    mask_path = None
+    cross_seed_path = None
     if probe is not None:
         if not probe.records:
             raise RuntimeError("attention mask probe produced no records")
-        config = CoarseMaskConfig(
-            top_p=args.mask_top_p,
-            spatial_medit_radius=args.mask_spatial_medit_radius,
-            spatial_msee_radius=args.mask_spatial_msee_radius,
-        )
-        built_masks = build_canonical_cross_attention_mask(
+        seed_scores = build_cross_attention_seed_scores(
             probe.records,
-            config,
             completed_step=args.mask_probe_step,
         )
-        add_canonical_latent_masks(built_masks, latent.unsqueeze(0))
-        built_masks["prompt"] = prompt
-        built_masks["mask_positive"] = args.source_positive
-        selected_mask_output_dir = mask_output_dir or stage_paths(args)["mask_dir"]
-        mask_path = save_mask_bundle(selected_mask_output_dir, built_masks, save_cpu=True)
+        seed_scores["prompt"] = prompt
+        seed_scores["mask_positive"] = args.source_positive
+        selected_cross_seed_dir = cross_seed_output_dir or stage_paths(args)["cross_seed_dir"]
+        cross_seed_path = save_mask_bundle(selected_cross_seed_dir, seed_scores, save_cpu=True)
 
     finalize_seconds = 0.0
     if decode_video:
@@ -1623,11 +1788,13 @@ def run_native_t2v_stage(
             {"kind": "post_scheduler", "step_index": step, "path": str(path), "shape": list(latent.shape)}
             for step, path in sorted(trajectory.items())
         ],
-        "masks": {
-            "enabled": capture_masks,
-            "path": mask_path,
-            "mask_dir": str(mask_output_dir or stage_paths(args)["mask_dir"]) if capture_masks else None,
-            "source_completed_step": args.mask_probe_step if capture_masks else None,
+        "cross_seed_scores": {
+            "enabled": capture_cross_seed_scores,
+            "path": cross_seed_path,
+            "dir": str(cross_seed_output_dir or stage_paths(args)["cross_seed_dir"])
+            if capture_cross_seed_scores else None,
+            "source_completed_step": args.mask_probe_step if capture_cross_seed_scores else None,
+            "purpose": "self_attention_seed_scores_only",
         },
         "resume": {
             "resume_latent_path": str(resume_latent_path) if resume_latent_path else None,
@@ -1684,7 +1851,7 @@ def build_native_self_contrast_mask_bundle(
     args: argparse.Namespace,
     *,
     source_trajectory: dict[int, Path],
-    coarse_mask_dir: Path,
+    cross_seed_dir: Path,
     self_mask_dir: Path,
 ) -> dict[str, Any]:
     import torch
@@ -1703,8 +1870,8 @@ def build_native_self_contrast_mask_bundle(
     if source_path is None:
         raise KeyError(f"source trajectory missing completed step {completed_step}")
 
-    coarse_bundle = load_mask_bundle(coarse_mask_dir, None)
-    cross_score = coarse_bundle["score"].float()
+    cross_seed_bundle = load_mask_bundle(cross_seed_dir, None)
+    cross_score = cross_seed_bundle["score"].float()
     positive_idx, background_idx = seed_indices_from_cross_score(
         cross_score,
         top_p=args.mask_top_p,
@@ -1758,7 +1925,7 @@ def build_native_self_contrast_mask_bundle(
     add_canonical_latent_masks(bundle, latent.unsqueeze(0).cpu())
     bundle["prompt"] = args.source_prompt
     bundle["mask_positive"] = args.source_positive
-    bundle["source_seed_mask_dir"] = str(coarse_mask_dir)
+    bundle["cross_seed_dir"] = str(cross_seed_dir)
     save_mask_bundle(self_mask_dir, bundle, save_cpu=True)
     return bundle
 
@@ -1768,7 +1935,7 @@ def build_native_fusion_mask_bundle(
     args: argparse.Namespace,
     *,
     source_trajectory: dict[int, Path],
-    coarse_mask_dir: Path,
+    cross_seed_dir: Path,
     self_bundle: dict[str, Any],
     self_mask_dir: Path,
     fusion_mask_dir: Path,
@@ -1788,7 +1955,7 @@ def build_native_fusion_mask_bundle(
     if source_path is None:
         raise KeyError(f"source trajectory missing completed step {completed_step}")
 
-    coarse_bundle = load_mask_bundle(coarse_mask_dir, None)
+    cross_seed_bundle = load_mask_bundle(cross_seed_dir, None)
     config = FusionMaskConfig(
         completed_step=completed_step,
         eps=args.mask_fusion_eps,
@@ -1798,7 +1965,7 @@ def build_native_fusion_mask_bundle(
     )
     bundle = build_canonical_fusion_mask(
         self_bundle["score"].float(),
-        coarse_bundle["score"].float(),
+        cross_seed_bundle["score"].float(),
         config,
         original_mbase=self_bundle.get("Mbase"),
     )
@@ -1807,7 +1974,7 @@ def build_native_fusion_mask_bundle(
     bundle["prompt"] = args.source_prompt
     bundle["mask_positive"] = args.source_positive
     bundle["self_mask_dir"] = str(self_mask_dir)
-    bundle["cross_mask_dir"] = str(coarse_mask_dir)
+    bundle["cross_seed_dir"] = str(cross_seed_dir)
     save_mask_bundle(fusion_mask_dir, bundle, save_cpu=True)
     return bundle
 
@@ -1836,9 +2003,7 @@ def mask_area_summary(mask_dir: Path) -> dict[str, Any]:
     meta = read_json(meta_path)
     tensors = torch.load(tensor_path, map_location="cpu")
     mask_variant = meta.get("mask_variant")
-    coverage_note = "raw_coverage_area is mask-bundle Mbase area; no external GT mask is used."
-    if mask_variant == "offline_cross_attention_probe":
-        coverage_note = "raw_coverage_area is attention mask cross-attention seed area; no external GT mask is used."
+    coverage_note = "raw_coverage_area is fusion-mask Mbase area; no external GT mask is used."
     raw = tensors.get("raw_coverage")
     token_area = meta.get("token_area", {})
     latent_area = meta.get("latent_area", {})
@@ -2299,10 +2464,10 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                         prompt=args.source_prompt,
                         out_video=paths["source_video"],
                         cache_dir=paths["source_cache"],
-                        capture_masks=True,
+                        capture_cross_seed_scores=True,
                         save_trajectory=True,
                         outer_sparse_state=source_outer_state,
-                        mask_output_dir=paths["coarse_mask_dir"],
+                        cross_seed_output_dir=paths["cross_seed_dir"],
                         decode_video=True,
                     )
                 source_block_mask_cache = source_cache
@@ -2314,9 +2479,9 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     prompt=args.source_prompt,
                     out_video=paths["source_video"],
                     cache_dir=paths["source_cache"],
-                    capture_masks=True,
+                    capture_cross_seed_scores=True,
                     save_trajectory=True,
-                    mask_output_dir=paths["coarse_mask_dir"],
+                    cross_seed_output_dir=paths["cross_seed_dir"],
                     decode_video=True,
                 )
             source_trajectory = {
@@ -2328,14 +2493,14 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 runtime,
                 args,
                 source_trajectory=source_trajectory,
-                coarse_mask_dir=paths["coarse_mask_dir"],
+                cross_seed_dir=paths["cross_seed_dir"],
                 self_mask_dir=paths["self_mask_dir"],
             )
             build_native_fusion_mask_bundle(
                 runtime,
                 args,
                 source_trajectory=source_trajectory,
-                coarse_mask_dir=paths["coarse_mask_dir"],
+                cross_seed_dir=paths["cross_seed_dir"],
                 self_bundle=self_bundle,
                 self_mask_dir=paths["self_mask_dir"],
                 fusion_mask_dir=paths["mask_dir"],

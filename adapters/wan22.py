@@ -33,8 +33,9 @@ class Wan22Adapter(ModelAdapter):
             return self._generate_teacache(request)
         if method == "nirvana_vid":
             return self._generate_nirvana(request, cached_latent=cached_latent, capture=capture)
-        if method in {"chorus", "chorus_no_tgaa", "chorus_tgaa_joint_gamma_1_6",
-                      "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}:
+        if method in {"chorus", "chorus_no_tgaa", "chorus_mbase_only",
+                      "chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
+                      "chorus_tgaa_joint_gamma_2_0"}:
             return self._generate_chorus(request, cached_latent=cached_latent, capture=capture, method=method)
         delegate = self._load_delegate()
         result = delegate.generate(request.prompt, request.seed, fast=fast, cached_latent=cached_latent, capture=capture)
@@ -142,12 +143,20 @@ class Wan22Adapter(ModelAdapter):
             "tgaa_calls": 0,
         }
         llm_s = sam_s = 0.0
-        tgaa_enabled = method in {"chorus", "chorus_tgaa_joint_gamma_1_6",
+        tgaa_enabled = method in {"chorus", "chorus_mbase_only", "chorus_tgaa_joint_gamma_1_6",
                                   "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}
         if not is_source:
             source_prompt = request.cache_prompt or request.prompt
             llm_started = time.perf_counter()
-            llm_diff = extract_prompt_diff(source_prompt, request.prompt)
+            prompt_diff_override = chorus_cfg.get("prompt_diff_override")
+            if prompt_diff_override is not None:
+                if not isinstance(prompt_diff_override, dict):
+                    raise ValueError("Chorus prompt_diff_override must be a mapping")
+                llm_diff = dict(prompt_diff_override)
+                llm_diff.setdefault("backend", "manual_override")
+                llm_diff.setdefault("latency_s", 0.0)
+            else:
+                llm_diff = extract_prompt_diff(source_prompt, request.prompt)
             llm_s = time.perf_counter() - llm_started
             # Keep the original Chorus entity selection unchanged. The
             # no-TGAA ablation prefers removed tokens so LLM-added scene nouns
@@ -175,6 +184,11 @@ class Wan22Adapter(ModelAdapter):
                         "mask_dilation_see": chorus_cfg.get("mask_dilation_see", 14)},
             )
             sam_s = time.perf_counter() - sam_started
+            update_mask_name = "Mbase" if method == "chorus_mbase_only" else "Medit"
+            latent_edit_mask = self._select_chorus_update_masks(
+                latent_edit_mask, update_mask_name
+            )
+            mask_metadata = {**mask_metadata, "update_mask": update_mask_name}
             if tgaa_enabled:
                 diff_indices = self._differential_token_indices(
                     pipeline.text_encoder, request.prompt, target_entities
@@ -263,24 +277,47 @@ class Wan22Adapter(ModelAdapter):
                           "stage3_history_reset_step": k2,
                           "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index",
                       },
-                      "chorus_cache": {"source_trajectory_steps": steps,
-                                       "format": "per_step_manifest",
-                                       "stage2_latent_fusion": True,
-                                       "latent_fusion_from_step": k1,
-                                       "latent_fusion_through_step": k2 - 1,
-                                       "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
-                                       "srd": {"enabled": True,
-                                               "edit_fraction": mask_metadata.get("edit_fraction") if mask_metadata else None,
-                                               "see_fraction": mask_metadata.get("see_fraction") if mask_metadata else None,
-                                               "self_attention": "Medit queries / Msee keys-values",
-                                               "cross_attention": "Medit queries",
-                                               "ffn": "Medit tokens"}}})
+                      "chorus_cache": {
+                          "source_trajectory_steps": steps,
+                          "format": "per_step_manifest",
+                          "stage2_latent_fusion": True,
+                          "latent_fusion_update_mask": mask_metadata.get("update_mask", "Medit"),
+                          "latent_fusion_from_step": k1,
+                          "latent_fusion_through_step": k2 - 1,
+                          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+                          "srd": {
+                              "enabled": True,
+                              "update_mask": mask_metadata.get("update_mask", "Medit"),
+                              "edit_fraction": mask_metadata.get("edit_fraction") if mask_metadata else None,
+                              "see_fraction": mask_metadata.get("see_fraction") if mask_metadata else None,
+                              "self_attention": f"{mask_metadata.get('update_mask', 'Medit')} queries / Msee keys-values",
+                              "cross_attention": f"{mask_metadata.get('update_mask', 'Medit')} queries",
+                              "ffn": f"{mask_metadata.get('update_mask', 'Medit')} tokens",
+                          },
+                      },
+                  })
         return Generation(video=video, latent=None, latent_step=k1,
                           executed_steps=steps - k1, extra=extra)
 
     @staticmethod
+    def _select_chorus_update_masks(mask_bundle: dict[str, Any], update_mask: str) -> dict[str, Any]:
+        """Select the region updated by Chorus while retaining Msee context."""
+        if update_mask not in {"Mbase", "Medit"}:
+            raise ValueError(f"unsupported Chorus update mask: {update_mask}")
+        token_key = "token_base" if update_mask == "Mbase" else "token_edit"
+        latent_key = "latent_base" if update_mask == "Mbase" else "latent_edit"
+        missing = [key for key in (token_key, latent_key, "token_see") if key not in mask_bundle]
+        if missing:
+            raise KeyError(f"Chorus mask bundle is missing {missing} for {update_mask}")
+        selected = dict(mask_bundle)
+        selected["token_edit"] = mask_bundle[token_key]
+        selected["latent_edit"] = mask_bundle[latent_key]
+        selected["update_mask"] = update_mask
+        return selected
+
+    @staticmethod
     def _fuse_chorus_latent(sample: Any, source_state: Any, edit_mask: Any) -> Any:
-        """Keep target values in Medit and source values everywhere else.
+        """Keep target values in the active update region and source elsewhere.
 
         This mirrors Carnator's ``torch.where(latent_medit, latent,
         source_latent)`` while accepting the unbatched Wan latent layout
@@ -406,7 +443,7 @@ class Wan22Adapter(ModelAdapter):
         return patches
 
     def _install_native_srd(self, model: Any, masks: dict[str, Any], state: dict[str, Any]) -> list[tuple[Any, Any]]:
-        """Patch Wan blocks to compute only Medit queries with Msee context."""
+        """Patch Wan blocks to compute active update queries with Msee context."""
         import torch
 
         patches: list[tuple[Any, Any]] = []

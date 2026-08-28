@@ -11,6 +11,10 @@
 | 6 | Chorus2 | 暂无独立检索器；与 NIRVANA-VID/Chorus 共用完整 prompt CLIP/Chroma Top-1（同一排序与阈值），命中后使用 source step-10 latent + 普通 SpargeAttn mask |
 | 7 | Carnator Boundary B5 | CLIP/Chroma 候选排序后执行 Carnator noun/step-5 Early Signature gate；target 端固定 Boundary B5（SpargeAttn + W8A8） |
 
+TeaCache 完成后，Carnator 正式实验拆分为四个互不重叠的 arrival shard：GPU3/4/5/7 分别处理
+`0--74`、`75--149`、`150--224`、`225--299`；合并 JSONL 后再进入质量评估。每条 Carnator Early Signature 的 Mbase 固定为
+step-5 cross-attention seed 与 self-attention contrast 的融合结果，不能使用仅 cross-attention mask；尾部空切片仅复制最近非空融合切片，不降低阈值；整个时间轴为空时 probe fail-closed 并回退完整 dense generation。
+
 实验固定使用与 shared cache `run_manifest.config.seed` 相同的 `seed=20260218`。Carnator
 Early Signature 四个 gate 阈值（依次为 context color、log area、shape、changed color）固定为
 `0.8569418522546745`、`0.7643009491051245`、`0.3015873015873016`、`1.0714081281330827`；
@@ -73,8 +77,9 @@ VBench-Q 及每请求分数，最后合并到大表。
 
 实验脚本默认不持久化新请求的 target cache；native 方法只保留顶层视频、summary/report 和 JSONL
 记录，删除每请求的中间 artifact。Carnator 对有候选的目标请求在线执行 step-5 Early Signature
-probe，只有 probe 实际完成且通过 Stage-2 gate 后才允许 reuse；probe 不通过时继续 dense，并在
-request record 中记录 probe 时间、比较结果和执行原因，不能把候选直接记为命中。
+probe：cross-attention 仅提供 noun seed，Mbase 必须融合 self-attention contrast；只有 probe 实际
+完成且通过 Stage-2 gate 后才允许 reuse。命中推理只读取候选 source 的 fusion Mbase，不生成 target
+执行 mask；probe 不通过时继续 dense，并在 request record 中记录 probe 时间、比较结果和执行原因。
 
 ## 4. 推荐脚本拆分
 

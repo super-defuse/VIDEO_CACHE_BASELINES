@@ -11,6 +11,7 @@
 | [VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md](VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md) | 300 条请求的汇总表字段和时延/质量口径。 |
 | [CHORUS2.md](CHORUS2.md) | Chorus2 的 SpargeAttn 稀疏 attention 基线与运行入口。 |
 | [CHORUS_REPRODUCTION_PLAN.md](CHORUS_REPRODUCTION_PLAN.md) | Chorus 的实现范围、固定依赖和复现约束。 |
+| [CHORUS_MBASE_FAILURE_CASE.md](CHORUS_MBASE_FAILURE_CASE.md) | 独立的苹果/桃子背景错配失败案例实验和运行产物约定。 |
 | [EVALUATION.md](EVALUATION.md) | 结果记录和性能/质量评测口径。 |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | 已完成运行的验收结果、产物索引及定性分析。 |
 | [PROVENANCE.md](PROVENANCE.md) | 仓库内实现的冻结来源。 |

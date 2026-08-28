@@ -40,6 +40,7 @@ EARLY_SIGNATURE_THRESHOLDS = {
     "max_shape_distance": 0.3015873015873016,
     "max_changed_color_distance": 1.0714081281330827,
 }
+FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
 DEFAULT_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000" / "cached_requests_923"
 DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input/cluster_02_2170_random300_input.csv")
 DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input" / "results"
@@ -82,16 +83,21 @@ def resolved_config(device: str, dry_run: bool) -> dict[str, Any]:
     return config
 
 
-def read_rows(path: Path, limit: int) -> list[dict[str, Any]]:
+def read_rows(path: Path, limit: int, *, arrival_start: int = 0, arrival_stop: int | None = None) -> list[dict[str, Any]]:
     with path.expanduser().open(newline="", encoding="utf-8-sig") as stream:
         rows = list(csv.DictReader(stream))
     required = {"uuid", "prompt"}
     if not rows or required - set(rows[0]):
         raise ValueError(f"input CSV must contain {sorted(required)}: {path}")
     selected = rows[:limit]
+    stop = len(selected) if arrival_stop is None else arrival_stop
+    if not 0 <= arrival_start < stop <= len(selected):
+        raise ValueError(f"arrival range must satisfy 0 <= start < stop <= {len(selected)}")
     seen: set[str] = set()
     result = []
     for arrival_index, row in enumerate(selected):
+        if not arrival_start <= arrival_index < stop:
+            continue
         uuid = str(row["uuid"]).strip()
         prompt = str(row["prompt"]).strip()
         if not uuid or Path(uuid).name != uuid or uuid in seen or not prompt:
@@ -121,10 +127,34 @@ def load_view(view: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def has_fused_mbase_signature(signature_path: Path) -> bool:
+    try:
+        payload = json.loads(signature_path.read_text(encoding="utf-8"))
+        policy = payload["compatibility"]["mask_policy"]
+    except (KeyError, OSError, TypeError, json.JSONDecodeError):
+        return False
+    return isinstance(policy, str) and policy.startswith(FUSED_MBASE_POLICY_PREFIX)
+
+
+def validate_carnator_signature_view(view: Path, rows: list[dict[str, Any]]) -> None:
+    invalid: list[str] = []
+    for row in rows:
+        cache_dir = view / "entries" / str(row["uuid"]) / "carnator" / "cache" / "source_dense"
+        signature = cache_dir / "online_color_signature.json"
+        if not has_fused_mbase_signature(signature) or not (cache_dir / "fusion_masks" / "masks.pt").is_file():
+            invalid.append(str(row["uuid"]))
+            if len(invalid) == 5:
+                break
+    if invalid:
+        raise ValueError(f"Carnator requires fused self/cross Mbase signatures; invalid source UUIDs: {invalid}")
+
+
 def check_only(args: argparse.Namespace) -> dict[str, Any]:
     if args.gpu not in range(3, 8):
         raise ValueError("--gpu must be one of 3,4,5,6,7")
     view_rows = load_view(args.cache_view.expanduser().resolve())
+    if args.method == "carnator_boundary_b5":
+        validate_carnator_signature_view(args.cache_view.expanduser().resolve(), view_rows)
     config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
     if not args.dry_run:
         # Carnator's native TI2V runner is intentionally separate from the
@@ -354,12 +384,13 @@ def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_nam
             row["uuid"], int(row.get("request_index", 0)), row["prompt"], "", 10, 1, 0.0
         )
         nouns = carnator.noun_extractor.for_entry(entry)
-        signature_path = view / "entries" / row["uuid"] / "carnator" / "cache" / "source_dense" / "online_color_signature.json"
+        cache_dir = view / "entries" / row["uuid"] / "carnator" / "cache" / "source_dense"
+        signature_path = cache_dir / "online_color_signature.json"
         metadata = {
             "source_request_index": int(row.get("request_index", 0)),
             "trf_nouns": list(nouns),
-            "cache_ready": signature_path.is_file(),
-            "signature": {"signature_path": str(signature_path)} if signature_path.is_file() else None,
+            "cache_ready": has_fused_mbase_signature(signature_path) and (cache_dir / "fusion_masks" / "masks.pt").is_file(),
+            "signature": {"signature_path": str(signature_path)} if has_fused_mbase_signature(signature_path) else None,
         }
         carnator_records.append(VectorRecord(row["uuid"], row["prompt"], vector, metadata, int(row.get("request_index", 0))))
     return retriever, records, source_by_uuid, (carnator, carnator_records)
@@ -450,22 +481,30 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
             req_root = output / "native" / f"request-{arrival:04d}"
             req_root.mkdir(parents=True, exist_ok=True)
             probe_result = None
+            probe_failure = None
             if carnator_matcher is not None and carnator_match is not None and carnator_match.kind == "probe_required":
                 target_nouns = carnator_retriever.noun_extractor.for_request(target)
                 probe_root = req_root / "target_probe"
                 collector = make_native_target_collector(args, config, probe_root, args.seed)
                 try:
-                    probe_result = collector.process(
-                        target,
-                        target_nouns,
-                        evaluate_probe=lambda signature: carnator_retriever.search(
-                            target, carnator_records, target_signature=signature
-                        ),
-                    )
+                    try:
+                        probe_result = collector.process(
+                            target,
+                            target_nouns,
+                            evaluate_probe=lambda signature: carnator_retriever.search(
+                                target, carnator_records, target_signature=signature
+                            ),
+                        )
+                    except ValueError as exc:
+                        if str(exc) != "fused Mbase is empty at every time token":
+                            raise
+                        probe_failure = "fused_mbase_empty_at_all_time_tokens"
+                        shutil.rmtree(probe_root, ignore_errors=True)
                 finally:
                     collector.close()
-                carnator_match = probe_result.match or carnator_match
-                retrieval_s += probe_result.signature_gate_s
+                if probe_result is not None:
+                    carnator_match = probe_result.match or carnator_match
+                    retrieval_s += probe_result.signature_gate_s
             carnator_dense_miss = (
                 args.method == "carnator_boundary_b5"
                 and (carnator_match is None or not carnator_match.hit or carnator_match.kind == "probe_required")
@@ -554,6 +593,8 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                         "completed_steps": probe_result.completed_steps,
                         "probe_collected": probe_result.probe_collected,
                     }
+                if probe_failure is not None:
+                    retrieval_metadata["target_probe_failure"] = probe_failure
             if not match.hit:
                 retrieval_metadata = dict(retrieval_metadata)
                 retrieval_metadata["execution_reason"] = "no_stage_1_candidate"
@@ -587,7 +628,10 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--cache-view", type=Path, default=DEFAULT_VIEW)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--run-dir", type=Path, help="Write this worker's results directly here instead of <output-root>/<method>.")
     parser.add_argument("--limit", type=int, default=1)
+    parser.add_argument("--arrival-start", type=int, default=0, help="Inclusive global CSV arrival index for this worker.")
+    parser.add_argument("--arrival-stop", type=int, help="Exclusive global CSV arrival index for this worker.")
     parser.add_argument("--seed", type=int, default=20260218)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--check-only", action="store_true")
@@ -603,14 +647,20 @@ def main() -> int:
     args.input = args.input.expanduser().resolve()
     args.cache_view = args.cache_view.expanduser().resolve()
     args.output_root = args.output_root.expanduser().resolve()
+    args.run_dir = args.run_dir.expanduser().resolve() if args.run_dir else None
     if args.limit < 1 or args.limit > 300:
         raise ValueError("--limit must be in [1, 300]")
+    args.arrival_stop = args.limit if args.arrival_stop is None else args.arrival_stop
+    if not 0 <= args.arrival_start < args.arrival_stop <= args.limit:
+        raise ValueError(f"arrival range must satisfy 0 <= --arrival-start < --arrival-stop <= --limit ({args.limit})")
     if args.check_only:
         print(json.dumps(check_only(args), indent=2, ensure_ascii=False))
         return 0
-    rows = read_rows(args.input, args.limit)
-    load_view(args.cache_view)
-    output = args.output_root / args.method
+    rows = read_rows(args.input, args.limit, arrival_start=args.arrival_start, arrival_stop=args.arrival_stop)
+    view_rows = load_view(args.cache_view)
+    if args.method == "carnator_boundary_b5":
+        validate_carnator_signature_view(args.cache_view, view_rows)
+    output = args.run_dir or args.output_root / args.method
     if output.exists() and not args.resume:
         raise FileExistsError(f"refusing to overwrite existing run: {output}; use --resume")
     output.mkdir(parents=True, exist_ok=True)
@@ -620,6 +670,7 @@ def main() -> int:
         revision = "unknown"
     resolved = resolved_config(f"cuda:{args.gpu}", args.dry_run)
     (output / "run_config.json").write_text(json.dumps({"method": args.method, "gpu": args.gpu, "seed": args.seed, "limit": args.limit,
+                                                          "arrival_start": args.arrival_start, "arrival_stop": args.arrival_stop,
                                                           "input": str(args.input), "cache_view": str(args.cache_view),
                                                           "input_sha256": sha256_file(args.input),
                                                           "view_manifest_sha256": sha256_file(args.cache_view / "view_manifest.json"),

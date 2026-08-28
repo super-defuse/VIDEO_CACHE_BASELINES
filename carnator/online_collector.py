@@ -252,10 +252,7 @@ class NativeOnlineCollector:
         self.probe_seed = int(probe_seed)
         self.noun_extractor = noun_extractor
         self.assume_step10_cache = bool(assume_step10_cache)
-        self.mask_policy = (
-            "native-cross-attention-mbase"
-            f"|layers={args.mask_layers}|top_p={float(args.mask_top_p):.8f}"
-        )
+        self.mask_policy = native.fused_mbase_policy(args)
         native.ensure_import_paths(args)
         native.validate_experiment_config(args)
         self.runtime = native.load_runtime(args)
@@ -284,22 +281,6 @@ class NativeOnlineCollector:
             "noun_extractor": self.noun_extractor,
             "mask_policy": self.mask_policy,
         }
-
-    def _mbase_by_noun(self, probe: Any) -> dict[str, torch.Tensor]:
-        from carnator.masks import CoarseMaskConfig, build_canonical_cross_attention_mask
-
-        config = CoarseMaskConfig(
-            top_p=self.args.mask_top_p,
-            spatial_medit_radius=self.args.mask_spatial_medit_radius,
-            spatial_msee_radius=self.args.mask_spatial_msee_radius,
-        )
-        masks: dict[str, torch.Tensor] = {}
-        for noun, records in probe.records_by_noun.items():
-            bundle = build_canonical_cross_attention_mask(
-                records, config, completed_step=self.args.mask_probe_step
-            )
-            masks[noun] = bundle["Mbase"].detach().cpu().bool().contiguous()
-        return masks
 
     def _decoded_tail_frame(self, latent: torch.Tensor) -> torch.Tensor:
         video = self.runtime.pipe.vae.decode([latent])[0]
@@ -399,7 +380,15 @@ class NativeOnlineCollector:
                     torch.cuda.synchronize()
                     step5_latent = latent.detach().float().cpu().contiguous()
                     metadata = self._metadata(request, latent, token_grid)
-                    mbase_by_noun = self._mbase_by_noun(probe)
+                    mbase_by_noun = native.build_fused_mbase_by_noun(
+                        self.runtime,
+                        args,
+                        prompt=request.prompt,
+                        token_grid=token_grid,
+                        noun_token_indices=index_by_noun,
+                        cross_records_by_noun=probe.records_by_noun,
+                        self_attention_input=latent,
+                    )
                     decoded_tail_frame = self._decoded_tail_frame(latent)
                     torch.cuda.synchronize()
                     prefix_to_step5_s = time.perf_counter() - probe_started

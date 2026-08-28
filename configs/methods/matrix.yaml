@@ -31,6 +31,10 @@ methods:
     environment: wan
     wan22: supported-via-source-target-matrix
     cogvideox15: N/A
+  chorus_mbase_only:
+    environment: wan
+    wan22: supported-via-dedicated-failure-case-script
+    cogvideox15: N/A
   chorus_tgaa_joint_gamma_1_6:
     environment: wan
     wan22: supported-via-source-target-matrix

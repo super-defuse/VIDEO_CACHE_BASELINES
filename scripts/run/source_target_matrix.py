@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
 METHOD_RUN_NAMES = {
     "nirvana_vid": "nirvana-vid",
     "chorus_no_tgaa": "chorus-no-tgaa",
+    "chorus_mbase_only": "chorus-mbase-only",
     "chorus_tgaa_joint_gamma_1_6": "chorus-tgaa-joint-gamma-1-3",
     "chorus_tgaa_joint_gamma_2_1": "chorus-tgaa-joint-gamma-1-6",
     "chorus_tgaa_joint_gamma_2_0": "chorus-tgaa-joint-gamma-2-0",
@@ -67,7 +68,7 @@ def main() -> int:
 
     names = [item.strip() for item in args.methods.split(",") if item.strip()]
     allowed = {"baseline", "chai", "teacache", "nirvana_vid", "carnator", "chorus",
-               "chorus_no_tgaa", "chorus_tgaa_joint_gamma_1_6",
+               "chorus_no_tgaa", "chorus_mbase_only", "chorus_tgaa_joint_gamma_1_6",
                "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}
     if not names or any(name not in allowed for name in names):
         raise SystemExit(f"--methods must be a subset of {sorted(allowed)}")
@@ -75,7 +76,7 @@ def main() -> int:
     if any(value is not None for value in gamma_values):
         if any(value is None for value in gamma_values) or "chorus" not in names:
             raise SystemExit("--chorus-gamma-k and --chorus-gamma-o require --methods chorus")
-    cross_request = {"chai", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa",
+    cross_request = {"chai", "nirvana_vid", "carnator", "chorus", "chorus_no_tgaa", "chorus_mbase_only",
                      "chorus_tgaa_joint_gamma_1_6", "chorus_tgaa_joint_gamma_2_1",
                      "chorus_tgaa_joint_gamma_2_0"}
     if args.target_only and (args.reset_cache or any(name not in cross_request for name in names)):

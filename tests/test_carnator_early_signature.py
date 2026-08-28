@@ -11,6 +11,7 @@ from carnator.early_signature import (
     compare_early_signatures,
     write_early_signature,
 )
+from carnator.masks import build_cross_attention_seed_scores, ensure_tail_mbase_support
 from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
@@ -59,6 +60,36 @@ def _sidecar(tmp_path, name: str, prompt: str, noun: str, colour: tuple[float, f
             "sparse_attention_sha256": hashlib.sha256(sparse.read_bytes()).hexdigest(),
         },
     )
+
+
+def test_cross_attention_seed_scores_do_not_construct_a_mask():
+    records = [
+        {"step_index": 4, "layer_index": 0, "noun_score": torch.tensor([[[0.0, 1.0]]])},
+        {"step_index": 4, "layer_index": 1, "noun_score": torch.tensor([[[1.0, 3.0]]])},
+    ]
+
+    bundle = build_cross_attention_seed_scores(records, completed_step=5)
+
+    assert bundle["seed_variant"] == "cross_attention_seed_scores"
+    assert set(bundle).isdisjoint({"Mbase", "Medit", "Msee", "raw_coverage"})
+    assert torch.equal(bundle["score"], torch.tensor([[[0.0, 1.0]]]))
+
+
+def test_fused_mbase_tail_support_copies_only_trailing_empty_slices():
+    mask = torch.zeros((4, 3, 3), dtype=torch.bool)
+    mask[1, 1, 1] = True
+
+    repaired, metadata = ensure_tail_mbase_support(mask)
+
+    assert repaired[0].sum() == 0
+    assert repaired[1].equal(repaired[2])
+    assert repaired[2].equal(repaired[3])
+    assert metadata == {
+        "applied": True,
+        "mode": "nearest_nonempty_tail_slice",
+        "filled_slices": 2,
+        "source_slice": 1,
+    }
 
 
 def test_early_signature_persists_step5_tail_frame_and_accepts_matching_colour(tmp_path):
