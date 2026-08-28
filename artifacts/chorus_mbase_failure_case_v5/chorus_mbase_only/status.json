@@ -1,0 +1,128 @@
+{
+  "stage": "chorus_mbase_only",
+  "status": "completed",
+  "method": "chorus_mbase_only",
+  "result": {
+    "chorus_stage": "target_reuse",
+    "chorus_stages": {
+      "steps": 50,
+      "k1": 0,
+      "k2": 30,
+      "stage1": [
+        0,
+        0
+      ],
+      "stage2": [
+        0,
+        30
+      ],
+      "stage3": [
+        30,
+        50
+      ]
+    },
+    "executed_steps": 50,
+    "chorus_llm": {
+      "source_entities": [
+        "red apple"
+      ],
+      "target_entities": [
+        "yellow peach"
+      ],
+      "removed_tokens": [
+        "red",
+        "apple"
+      ],
+      "added_tokens": [
+        "yellow",
+        "peach"
+      ],
+      "edit_summary": "replace red apple with yellow peach; preserve the snow background difference",
+      "background_tokens_ignored": [
+        "snow"
+      ],
+      "backend": "manual_override",
+      "latency_s": 0.0
+    },
+    "chorus_mask": {
+      "backend": "grounded_sam2",
+      "release": "v1.0",
+      "commit": "dd4c514",
+      "sam_checkpoint": "sam2.1_hiera_large.pt",
+      "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+      "phrase": "red apple",
+      "boxes": 1,
+      "box_confidence_max": 0.9741,
+      "pixel_edit_fraction": 0.0375,
+      "grid": [
+        31,
+        22,
+        40
+      ],
+      "base_fraction": 0.0359,
+      "base_token_fraction": 0.0428,
+      "edit_fraction": 0.2287,
+      "see_fraction": 0.4111,
+      "dilation": {
+        "edit": 8,
+        "see": 14
+      },
+      "pooling": "max",
+      "update_mask": "Mbase"
+    },
+    "chorus_preprocess_s": 28.69842783000786,
+    "chorus_llm_s": 8.684000931680202e-06,
+    "chorus_sam_s": 28.698419146006927,
+    "excluded_latency_s": 28.69842783000786,
+    "chorus_tgaa": {
+      "enabled": true,
+      "gamma_k": 1.5,
+      "gamma_o": 1.5,
+      "schedule": "linear_step_decay_approximation",
+      "paper_exact_schedule": "not specified",
+      "scope": "stage2",
+      "blocks": "all",
+      "calls": 1800
+    },
+    "chorus_scheduler": {
+      "stage3_history_reset": true,
+      "stage3_history_reset_step": 30,
+      "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+    },
+    "chorus_cache": {
+      "source_trajectory_steps": 50,
+      "format": "per_step_manifest",
+      "stage2_latent_fusion": true,
+      "latent_fusion_update_mask": "Mbase",
+      "latent_fusion_from_step": 0,
+      "latent_fusion_through_step": 29,
+      "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+      "srd": {
+        "enabled": true,
+        "update_mask": "Mbase",
+        "edit_fraction": 0.2287,
+        "see_fraction": 0.4111,
+        "self_attention": "Mbase queries / Msee keys-values",
+        "cross_attention": "Mbase queries",
+        "ffn": "Mbase tokens"
+      }
+    },
+    "timing": {
+      "cache_lookup_s": 1.4098681459436193,
+      "cache_load_s": 0.000572246965020895,
+      "generation_s": 206.03037792805117,
+      "save_video_s": 2.8722262600203976,
+      "cache_save_s": 6.887596100568771e-05,
+      "hash_s": 0.008099273080006242,
+      "excluded_preprocess_s": 28.69842783000786,
+      "reported_latency_s": 181.62298452109098
+    }
+  },
+  "cache_match": {
+    "hit": true,
+    "kind": "source_prompt",
+    "score": 1.0000000563461195,
+    "source_uuid": "source-apple-snow"
+  },
+  "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/chorus_mbase_only/videos/0001_target-peach-mountain.mp4"
+}

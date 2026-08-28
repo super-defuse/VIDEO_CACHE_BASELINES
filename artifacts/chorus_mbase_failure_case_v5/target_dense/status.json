@@ -1,0 +1,19 @@
+{
+  "stage": "target_dense",
+  "status": "completed",
+  "method": "baseline",
+  "result": {
+    "executed_steps": 50,
+    "timing": {
+      "cache_lookup_s": 1.064402749761939e-05,
+      "cache_load_s": 1.0337971616536379e-05,
+      "generation_s": 281.000269451004,
+      "save_video_s": 2.899198475992307,
+      "cache_save_s": 8.077011443674564e-06,
+      "hash_s": 0.011141417024191469,
+      "excluded_preprocess_s": 0.0,
+      "reported_latency_s": 283.91076911002165
+    }
+  },
+  "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/target_dense/videos/0001_target-peach-mountain.mp4"
+}

@@ -1,0 +1,32 @@
+{
+  "prompt": "a single barbell on a green sports field, photorealistic, static camera",
+  "positive_phrase": "barbell",
+  "seed": 42,
+  "mask_variant": "self_contrast_cross_attention_fusion",
+  "mask_source_completed_step": 5,
+  "mask_self_layer": 15,
+  "mask_fusion_formula": "F = robust_norm(S * (eps + (1 - eps) * C ** gamma))",
+  "mask_fusion_eps": 0.2,
+  "mask_fusion_gamma": 1.0,
+  "video": "artifacts/static-prompt-defaults-seed42/playground-barbell/videos/source_dense.mp4",
+  "mask_bundle": "artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense/fusion_masks/masks.pt",
+  "frame_count": 121,
+  "resolution": [
+    1280,
+    704
+  ],
+  "selected_frames": {
+    "start": 0
+  },
+  "mask_areas": {
+    "mbase": 0.3528958857059479,
+    "medit": 0.8690982460975647,
+    "msee": 0.9864369630813599
+  },
+  "files_per_position": [
+    "original",
+    "mbase",
+    "medit",
+    "msee"
+  ]
+}

@@ -60,6 +60,14 @@ artifacts/vidprom_1000cache_300input/results/*/videos/
 artifacts/vidprom_1000cache_300input/results/carnator_boundary_b5/shards/
 artifacts/vidprom_1000cache_300input/results/*/requests.jsonl
 
+# Forced-pair Early Signature calibration media and per-request payloads are
+# local, regenerable outputs; keep only the compact pairs and manifest.
+artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/sources/
+artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/targets/
+artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/logs/
+artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/quality/
+artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/quality
+
 # Regenerable persistent vector indexes; retrieval manifests and results remain
 # publishable, while Chroma/FAISS database files do not belong in Git.
 **/vector_store/

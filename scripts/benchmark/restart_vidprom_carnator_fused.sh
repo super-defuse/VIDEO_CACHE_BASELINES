@@ -35,23 +35,25 @@ if ! /data/shared/miniconda/bin/conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPA
   fail "fused Carnator source-signature validation failed"
 fi
 
-tmux new-session -d -s vidprom-formal-carnator-gpu3 -c "$root" \
-  "env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 /data/shared/miniconda/bin/conda run -n wan python scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu 3 --allow-gpu-remap --limit 300 --arrival-start 0 --arrival-stop 75 --run-dir $carnator_root/shards/gpu3 > $logs_root/carnator_gpu3.log 2>&1"
-tmux new-session -d -s vidprom-formal-carnator-gpu4 -c "$root" \
-  "env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 /data/shared/miniconda/bin/conda run -n wan python scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu 4 --allow-gpu-remap --limit 300 --arrival-start 75 --arrival-stop 150 --run-dir $carnator_root/shards/gpu4 > $logs_root/carnator_gpu4.log 2>&1"
-tmux new-session -d -s vidprom-formal-carnator-gpu5 -c "$root" \
-  "env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 /data/shared/miniconda/bin/conda run -n wan python scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu 5 --allow-gpu-remap --limit 300 --arrival-start 150 --arrival-stop 225 --run-dir $carnator_root/shards/gpu5 > $logs_root/carnator_gpu5.log 2>&1"
-tmux new-session -d -s vidprom-formal-carnator-gpu7 -c "$root" \
-  "env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 /data/shared/miniconda/bin/conda run -n wan python scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu 7 --limit 300 --arrival-start 225 --arrival-stop 300 --run-dir $carnator_root/shards/gpu7 > $logs_root/carnator_gpu7.log 2>&1"
+for shard in 3 4 5 6 7; do
+  start=$(( (shard - 3) * 60 ))
+  stop=$(( start + 60 ))
+  remap="--allow-gpu-remap"
+  if [[ "$shard" -eq 7 ]]; then
+    remap=""
+  fi
+  tmux new-session -d -s "vidprom-formal-carnator-gpu${shard}" -c "$root" \
+    "env PYTHONNOUSERSITE=1 PYTHONPATH=. CARNATOR_ENV_READY=1 /data/shared/miniconda/bin/conda run -n wan python scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu ${shard} ${remap} --limit 300 --arrival-start ${start} --arrival-stop ${stop} --run-dir $carnator_root/shards/gpu${shard} > $logs_root/carnator_gpu${shard}.log 2>&1"
+done
 
-for session in vidprom-formal-carnator-gpu3 vidprom-formal-carnator-gpu4 vidprom-formal-carnator-gpu5 vidprom-formal-carnator-gpu7; do
+for session in vidprom-formal-carnator-gpu3 vidprom-formal-carnator-gpu4 vidprom-formal-carnator-gpu5 vidprom-formal-carnator-gpu6 vidprom-formal-carnator-gpu7; do
   wait_for_session "$session"
 done
 
 if ! /data/shared/miniconda/bin/conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. \
   python scripts/benchmark/merge_vidprom_carnator_shards.py \
   --output "$carnator_root" \
-  --shard-dir "$carnator_root/shards/gpu3" "$carnator_root/shards/gpu4" "$carnator_root/shards/gpu5" "$carnator_root/shards/gpu7" \
+  --shard-dir "$carnator_root/shards/gpu3" "$carnator_root/shards/gpu4" "$carnator_root/shards/gpu5" "$carnator_root/shards/gpu6" "$carnator_root/shards/gpu7" \
   > "$logs_root/carnator_merge.log" 2>&1; then
   fail "Carnator shard merge failed"
 fi

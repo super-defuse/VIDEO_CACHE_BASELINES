@@ -1,0 +1,12 @@
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/motioner.py:30: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/motioner.py:41: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/model_s2v.py:61: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/model_s2v.py:79: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:00,  6.94it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 18.55it/s]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+{"status": "completed", "output_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_medit_failure_case_v1", "gpu_allocation": {"source_dense": 0, "target_dense": 1, "clip_score": 1, "chorus_reuse": 2}}

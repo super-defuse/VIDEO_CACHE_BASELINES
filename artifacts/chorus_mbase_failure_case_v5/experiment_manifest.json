@@ -1,0 +1,276 @@
+{
+  "experiment": "chorus_mbase_failure_case",
+  "seed": 20260218,
+  "source_prompt": "a red apple rolling down a snow mountain, camera focus on the apple",
+  "target_prompt": "a yellow peach rolling down a mountain, camera focus on the peach",
+  "retrieval_policy": "forced_source_cache; CLIP threshold intentionally waived",
+  "target_schedule": {
+    "stage2_mbase": [
+      0,
+      30
+    ],
+    "stage3_dense": [
+      30,
+      50
+    ]
+  },
+  "gpu_allocation": {
+    "source_dense": 0,
+    "target_dense": 0,
+    "clip_score": 0,
+    "chorus_mbase_only": 0
+  },
+  "source_dense": {
+    "request_index": 0,
+    "uuid": "source-apple-snow",
+    "prompt": "a red apple rolling down a snow mountain, camera focus on the apple",
+    "model": "Wan2.2",
+    "method": "chorus_mbase_only",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": false,
+      "source_uuid": null,
+      "source_request_index": null,
+      "kind": "miss",
+      "score": null,
+      "metadata": {}
+    },
+    "executed_steps": 50,
+    "latency_s": 289.34094001096673,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/source_dense/videos/0000_source-apple-snow.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/source_dense/videos/0000_source-apple-snow.mp4",
+    "output_hash": "cd18bb0c62a06e00189061038b8a84e26f97334ea5cbad182671dce0a1721935",
+    "cache_bytes": 1068588230,
+    "error": null,
+    "extra": {
+      "chorus_stage": "source_capture",
+      "chorus_stages": {
+        "steps": 50,
+        "k1": 0,
+        "k2": 30,
+        "stage1": [
+          0,
+          0
+        ],
+        "stage2": [
+          0,
+          30
+        ],
+        "stage3": [
+          30,
+          50
+        ]
+      },
+      "executed_steps": 50,
+      "timing": {
+        "cache_lookup_s": 1.6092304280027747,
+        "cache_load_s": 8.38498817756772e-06,
+        "generation_s": 284.89323501399485,
+        "save_video_s": 1.692249957995955,
+        "cache_save_s": 1.1415305519476533,
+        "hash_s": 0.004538615990895778,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 289.34094001096673
+      }
+    }
+  },
+  "target_dense": {
+    "request_index": 1,
+    "uuid": "target-peach-mountain",
+    "prompt": "a yellow peach rolling down a mountain, camera focus on the peach",
+    "model": "Wan2.2",
+    "method": "baseline",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": false,
+      "source_uuid": null,
+      "source_request_index": null,
+      "kind": "miss",
+      "score": null,
+      "metadata": {}
+    },
+    "executed_steps": 50,
+    "latency_s": 283.91076911002165,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/target_dense/videos/0001_target-peach-mountain.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/target_dense/videos/0001_target-peach-mountain.mp4",
+    "output_hash": "caea383d4ab0b1de9f7d32f9e561b0718ad5cc6a4d16af5cd4c2c3293ad5a813",
+    "cache_bytes": 0,
+    "error": null,
+    "extra": {
+      "executed_steps": 50,
+      "timing": {
+        "cache_lookup_s": 1.064402749761939e-05,
+        "cache_load_s": 1.0337971616536379e-05,
+        "generation_s": 281.000269451004,
+        "save_video_s": 2.899198475992307,
+        "cache_save_s": 8.077011443674564e-06,
+        "hash_s": 0.011141417024191469,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 283.91076911002165
+      }
+    }
+  },
+  "chorus_mbase_only": {
+    "request_index": 1,
+    "uuid": "target-peach-mountain",
+    "prompt": "a yellow peach rolling down a mountain, camera focus on the peach",
+    "model": "Wan2.2",
+    "method": "chorus_mbase_only",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "source_uuid": "source-apple-snow",
+      "source_request_index": 0,
+      "kind": "source_prompt",
+      "score": 1.0000000563461195,
+      "metadata": {
+        "retriever": "chorus_prompt",
+        "embedding": "clip:openai/clip-vit-large-patch14",
+        "query_term": "a red apple rolling down a snow mountain, camera focus on the apple",
+        "matched_term": "a red apple rolling down a snow mountain, camera focus on the apple",
+        "stage_boundaries": {
+          "k1": 0,
+          "k2": 30
+        },
+        "stage_scheduler": "linear_similarity_approximation"
+      }
+    },
+    "executed_steps": 50,
+    "latency_s": 181.62298452109098,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/chorus_mbase_only/videos/0001_target-peach-mountain.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_mbase_failure_case_v5/chorus_mbase_only/videos/0001_target-peach-mountain.mp4",
+    "output_hash": "8a12932c01e56e7928217b7b1117200542121054ca9c62e23c6354b792e223b6",
+    "cache_bytes": 1068588230,
+    "error": null,
+    "extra": {
+      "chorus_stage": "target_reuse",
+      "chorus_stages": {
+        "steps": 50,
+        "k1": 0,
+        "k2": 30,
+        "stage1": [
+          0,
+          0
+        ],
+        "stage2": [
+          0,
+          30
+        ],
+        "stage3": [
+          30,
+          50
+        ]
+      },
+      "executed_steps": 50,
+      "chorus_llm": {
+        "source_entities": [
+          "red apple"
+        ],
+        "target_entities": [
+          "yellow peach"
+        ],
+        "removed_tokens": [
+          "red",
+          "apple"
+        ],
+        "added_tokens": [
+          "yellow",
+          "peach"
+        ],
+        "edit_summary": "replace red apple with yellow peach; preserve the snow background difference",
+        "background_tokens_ignored": [
+          "snow"
+        ],
+        "backend": "manual_override",
+        "latency_s": 0.0
+      },
+      "chorus_mask": {
+        "backend": "grounded_sam2",
+        "release": "v1.0",
+        "commit": "dd4c514",
+        "sam_checkpoint": "sam2.1_hiera_large.pt",
+        "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+        "phrase": "red apple",
+        "boxes": 1,
+        "box_confidence_max": 0.9741,
+        "pixel_edit_fraction": 0.0375,
+        "grid": [
+          31,
+          22,
+          40
+        ],
+        "base_fraction": 0.0359,
+        "base_token_fraction": 0.0428,
+        "edit_fraction": 0.2287,
+        "see_fraction": 0.4111,
+        "dilation": {
+          "edit": 8,
+          "see": 14
+        },
+        "pooling": "max",
+        "update_mask": "Mbase"
+      },
+      "chorus_preprocess_s": 28.69842783000786,
+      "chorus_llm_s": 8.684000931680202e-06,
+      "chorus_sam_s": 28.698419146006927,
+      "excluded_latency_s": 28.69842783000786,
+      "chorus_tgaa": {
+        "enabled": true,
+        "gamma_k": 1.5,
+        "gamma_o": 1.5,
+        "schedule": "linear_step_decay_approximation",
+        "paper_exact_schedule": "not specified",
+        "scope": "stage2",
+        "blocks": "all",
+        "calls": 1800
+      },
+      "chorus_scheduler": {
+        "stage3_history_reset": true,
+        "stage3_history_reset_step": 30,
+        "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+      },
+      "chorus_cache": {
+        "source_trajectory_steps": 50,
+        "format": "per_step_manifest",
+        "stage2_latent_fusion": true,
+        "latent_fusion_update_mask": "Mbase",
+        "latent_fusion_from_step": 0,
+        "latent_fusion_through_step": 29,
+        "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+        "srd": {
+          "enabled": true,
+          "update_mask": "Mbase",
+          "edit_fraction": 0.2287,
+          "see_fraction": 0.4111,
+          "self_attention": "Mbase queries / Msee keys-values",
+          "cross_attention": "Mbase queries",
+          "ffn": "Mbase tokens"
+        }
+      },
+      "timing": {
+        "cache_lookup_s": 1.4098681459436193,
+        "cache_load_s": 0.000572246965020895,
+        "generation_s": 206.03037792805117,
+        "save_video_s": 2.8722262600203976,
+        "cache_save_s": 6.887596100568771e-05,
+        "hash_s": 0.008099273080006242,
+        "excluded_preprocess_s": 28.69842783000786,
+        "reported_latency_s": 181.62298452109098
+      }
+    }
+  },
+  "clip_similarity": {
+    "status": "completed",
+    "embedder": "clip:openai/clip-vit-large-patch14",
+    "source_prompt": "a red apple rolling down a snow mountain, camera focus on the apple",
+    "target_prompt": "a yellow peach rolling down a mountain, camera focus on the peach",
+    "cosine_similarity": 0.627954887281304,
+    "chorus_threshold": 0.65,
+    "passes_threshold": false,
+    "physical_gpu": 0
+  },
+  "stage2_update_mask": "Mbase"
+}

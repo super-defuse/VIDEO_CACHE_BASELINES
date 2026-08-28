@@ -1,0 +1,38 @@
+{
+  "stage": "source_dense",
+  "status": "completed",
+  "method": "chorus",
+  "dense_capture": true,
+  "result": {
+    "chorus_stage": "source_capture",
+    "chorus_stages": {
+      "steps": 50,
+      "k1": 0,
+      "k2": 30,
+      "stage1": [
+        0,
+        0
+      ],
+      "stage2": [
+        0,
+        30
+      ],
+      "stage3": [
+        30,
+        50
+      ]
+    },
+    "executed_steps": 50,
+    "timing": {
+      "cache_lookup_s": 1.3178300720173866,
+      "cache_load_s": 2.649961970746517e-06,
+      "generation_s": 283.5300031740917,
+      "save_video_s": 1.3793216700432822,
+      "cache_save_s": 1.1502570490119979,
+      "hash_s": 0.0045593209797516465,
+      "excluded_preprocess_s": 0.0,
+      "reported_latency_s": 287.382069993997
+    }
+  },
+  "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_medit_failure_case_v1/source_dense/videos/0000_source-apple-snow.mp4"
+}

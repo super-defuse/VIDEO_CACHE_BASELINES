@@ -1,0 +1,22 @@
+{
+  "source_prompt": "a red apple rolling down a snow mountain, camera focus on the apple",
+  "target_prompt": "a yellow peach rolling down a mountain, camera focus on the peach",
+  "seed": 20260218,
+  "target_schedule": {
+    "stage2_medit": [
+      0,
+      30
+    ],
+    "stage3_dense": [
+      30,
+      50
+    ]
+  },
+  "stage2_update_mask": "Medit",
+  "gpu_allocation": {
+    "source_dense": 0,
+    "target_dense": 1,
+    "clip_score": 1,
+    "chorus_reuse": 2
+  }
+}

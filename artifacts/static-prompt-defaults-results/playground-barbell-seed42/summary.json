@@ -1,0 +1,163 @@
+{
+  "status": "failed",
+  "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 2.60 GiB. GPU 0 has a total capacity of 79.17 GiB of which 1.46 GiB is free. Process 1928966 has 38.47 GiB memory in use. Including non-PyTorch memory, this process has 39.23 GiB memory in use. Of the allocated memory 28.58 GiB is allocated by PyTorch, and 9.77 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+  "updated_at": "2026-08-26 07:27:13 UTC",
+  "config": {
+    "model_family": "Wan2.2-TI2V-5B",
+    "backend": "native Wan2.2",
+    "mode": "T2V",
+    "model_dtype": "fp16",
+    "convert_model_dtype": true,
+    "source_prompt": "a single barbell on a green sports field, photorealistic, static camera",
+    "target_prompt": "a single barbell on a green sports field, photorealistic, static camera",
+    "height": 704,
+    "width": 1280,
+    "frames": 121,
+    "fps": 24,
+    "steps": 50,
+    "seed": 42,
+    "scheduler": "unipc",
+    "solver_order": 2,
+    "flow_shift": 5.0,
+    "guidance_scale": 5.0,
+    "effective_guidance": "CFG",
+    "reuse_start_step": 10,
+    "latent_injection_mode": "hard",
+    "boundary_alpha_function": "smoothstep",
+    "mask_method": "fusion",
+    "mask_probe_step": 5,
+    "mask_self_layer": 15,
+    "mask_fusion_eps": 0.2,
+    "mask_fusion_gamma": 1.0,
+    "sparse_layers": "10-20",
+    "region_update_layers": "10-20",
+    "middle_attention_mask": true,
+    "block_mask_capture_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "outer_attn_backend": "dense",
+    "outer_flashinfer_wrapper": "n/a",
+    "capture_outer_block_masks": false,
+    "prepare_shared_dense_cache": false,
+    "outer_sparse_layers": "0-9,21-29",
+    "outer_sparse_dtype": "fp16",
+    "use_fp16_qk_reduction": false,
+    "flashinfer_plan_cache": "layer",
+    "sparge_smooth_k": true,
+    "sparge_pvthreshd": 50.0,
+    "outer_block_mask": {
+      "q_block_size": 64,
+      "k_block_size": 128,
+      "top_p": 0.95,
+      "min_top_k": 0.1
+    },
+    "ffn_backend": "fp",
+    "skip_w8a8_dense_diagnostic": false,
+    "expected_token_grid": [
+      31,
+      22,
+      40
+    ]
+  },
+  "environment": {
+    "python": "/data/shared/conda_envs/wan/bin/python",
+    "model_dir": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+    "wan_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2",
+    "model_layout": {
+      "exists": true,
+      "native_config_json": true,
+      "vae_checkpoint": true,
+      "t5_checkpoint": true,
+      "t5_tokenizer": true
+    },
+    "torch": "2.8.0+cu128",
+    "cuda_available": true,
+    "gpu": {
+      "name": "NVIDIA H100 PCIe",
+      "total_memory_gib": 79.171142578125
+    },
+    "native_wan_available": true,
+    "flash_attention": {
+      "fa2": true,
+      "fa3": false
+    },
+    "wan_config": {
+      "num_layers": 30,
+      "num_heads": 24,
+      "patch_size": [
+        1,
+        2,
+        2
+      ],
+      "vae_stride": [
+        4,
+        16,
+        16
+      ]
+    },
+    "outer_attention": {
+      "backend": "dense",
+      "available": true
+    },
+    "w8a8": {
+      "available": true,
+      "kernel": "torch._int_mm"
+    }
+  },
+  "paths": {
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell",
+    "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell-seed42",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/videos/source_dense.mp4",
+    "target_dense_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/videos/target_dense.mp4",
+    "target_dense_w8a8_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/videos/target_dense_w8a8.mp4",
+    "target_reuse_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/videos/target_latent_reuse.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense",
+    "outer_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense/outer_block_masks",
+    "target_dense_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/target_dense",
+    "target_dense_w8a8_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/target_dense_w8a8",
+    "target_reuse_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/target_latent_reuse",
+    "shared_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/shared_dense",
+    "coarse_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense/probe_masks",
+    "self_mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense/self_contrast_masks",
+    "mask_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-seed42/playground-barbell/cache/source_dense/fusion_masks",
+    "source_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell-seed42/frames/source_dense_first_frame.png",
+    "target_first_frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell-seed42/frames/target_dense_first_frame.png",
+    "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell-seed42/summary.json",
+    "report": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/static-prompt-defaults-results/playground-barbell-seed42/report.md"
+  },
+  "runs": {},
+  "speedups": {
+    "reference_run": "target_dense",
+    "denoising_vs_reference": null,
+    "end_to_end_vs_reference": null
+  }
+}

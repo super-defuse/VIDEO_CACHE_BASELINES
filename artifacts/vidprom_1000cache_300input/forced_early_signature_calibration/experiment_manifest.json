@@ -1,0 +1,29 @@
+{
+  "clip": {
+    "device": "cuda:3",
+    "model_id": "openai/clip-vit-large-patch14"
+  },
+  "generation": {
+    "mask_probe_step": 5,
+    "reuse_start_step": 10,
+    "signature": "fused-self-cross",
+    "steps": 50
+  },
+  "input": "/home/tangxuebin/datasets/1000cache_300input/cluster_02_2170_random300_input.csv",
+  "input_sha256": "26beae30f189cb8e09bb06c24cd3abce2299eca8bc7767a8f0983f22df5fc49f",
+  "pair_count": 300,
+  "pair_source": "CLIP nearest source excluding identical target UUID",
+  "pairs_csv": {
+    "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/pairs.csv",
+    "sha256": "a2fb2673da27191f3e92a629ebc53d94ab54a8b8f1deba8770bf514f2f70de91"
+  },
+  "quality_thresholds": {
+    "clip_t_min": null,
+    "confidence": 0.95,
+    "coverage_min": 0.9,
+    "q_min": null
+  },
+  "schema_version": "vidprom-forced-early-signature-calibration/v1",
+  "source_view": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000/cached_requests_923",
+  "source_view_manifest_sha256": "64c86323ce46224b85d8d6f8bd65f19c39ba86d897de0a80e489294ef3807466"
+}

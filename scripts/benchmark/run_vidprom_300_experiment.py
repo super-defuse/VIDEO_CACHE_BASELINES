@@ -35,10 +35,12 @@ METHODS = ("nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5
 GPU_BY_METHOD = {"nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 GPU_COUNT = 8
 EARLY_SIGNATURE_THRESHOLDS = {
-    "max_context_color_distance": 0.8569418522546745,
-    "max_log_area_ratio": 0.7643009491051245,
-    "max_shape_distance": 0.3015873015873016,
-    "max_changed_color_distance": 1.0714081281330827,
+    # Frozen from the forced-pair calibration: 84/93 comparable pairs pass
+    # the gate, with a one-sided 95% CP quality lower bound of 0.8943.
+    "max_context_color_distance": 2.2635538336347514,
+    "max_log_area_ratio": 2.7357336654774373,
+    "max_shape_distance": 0.924812030075188,
+    "max_changed_color_distance": 2.540308037689532,
 }
 FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
 DEFAULT_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000" / "cached_requests_923"
