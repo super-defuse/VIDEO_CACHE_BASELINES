@@ -1,0 +1,90 @@
+{
+  "schema": "carnator-insight-fig1-v1",
+  "fixed_sample": {
+    "source": {
+      "request": {
+        "request_id": "fig1_source_cat",
+        "group": "fig1",
+        "role": "source",
+        "prompt": "a cat is sleeping on a grassland, focus on the cat",
+        "positive": "cat",
+        "seed": 20260218,
+        "capture_mass": true,
+        "capture_residual": false
+      },
+      "entry": {
+        "step": 20,
+        "cfg_branch": "cond",
+        "layer": 15,
+        "path": "masks/step020_cond_layer15.pt",
+        "shape": [
+          27280,
+          24,
+          128
+        ],
+        "dtype": "torch.float16",
+        "q_blocks": 427,
+        "k_blocks": 214,
+        "density": 0.46559256315231323,
+        "coverage": 0.9509047865867615,
+        "head_density_min": 0.15766377747058868,
+        "head_density_max": 0.8581824898719788,
+        "head_density_cv": 0.46050506830215454,
+        "block_mass_path": "block_mass/step020_cond_layer15.pt",
+        "block_mass_dtype": "torch.float32"
+      },
+      "frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/source_frame.png"
+    },
+    "target": {
+      "request": {
+        "request_id": "fig1_target_dog",
+        "group": "fig1",
+        "role": "target",
+        "prompt": "a dog is sleeping on a grassland, focus on the dog",
+        "positive": "dog",
+        "seed": 20260218,
+        "capture_mass": true,
+        "capture_residual": false
+      },
+      "entry": {
+        "step": 20,
+        "cfg_branch": "cond",
+        "layer": 15,
+        "path": "masks/step020_cond_layer15.pt",
+        "shape": [
+          27280,
+          24,
+          128
+        ],
+        "dtype": "torch.float16",
+        "q_blocks": 427,
+        "k_blocks": 214,
+        "density": 0.4698040187358856,
+        "coverage": 0.9508976340293884,
+        "head_density_min": 0.1563505381345749,
+        "head_density_max": 0.8517805337905884,
+        "head_density_cv": 0.44692695140838623,
+        "block_mass_path": "block_mass/step020_cond_layer15.pt",
+        "block_mass_dtype": "torch.float32"
+      },
+      "frame": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/target_frame.png"
+    }
+  },
+  "render": {
+    "step": 20,
+    "layer": 15,
+    "branch": "cond",
+    "head_consensus": 0.5,
+    "mass_color_limits": [
+      2.518277601666341e-06,
+      0.04630858555436135
+    ]
+  },
+  "outputs": [
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/source_block_mass_and_sparse_mask.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/source_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/target_block_mass_and_sparse_mask.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/target_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1/routing_metrics.csv"
+  ]
+}

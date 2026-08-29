@@ -1,0 +1,93 @@
+{
+  "schema": "carnator-insight-request-set-v1",
+  "requests": [
+    {
+      "request_id": "fig1_source_cat",
+      "group": "fig1",
+      "role": "source",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "positive": "cat",
+      "seed": 20260218,
+      "capture_mass": true,
+      "capture_residual": false
+    },
+    {
+      "request_id": "fig1_target_dog",
+      "group": "fig1",
+      "role": "target",
+      "prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "positive": "dog",
+      "seed": 20260218,
+      "capture_mass": true,
+      "capture_residual": false
+    },
+    {
+      "request_id": "fig2_similar_source",
+      "group": "fig2_similar",
+      "role": "source",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "positive": "cat",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    },
+    {
+      "request_id": "fig2_similar_target",
+      "group": "fig2_similar",
+      "role": "target",
+      "prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "positive": "dog",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    },
+    {
+      "request_id": "fig2_hard_negative_source",
+      "group": "fig2_hard_negative",
+      "role": "source",
+      "prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "positive": "dog",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    },
+    {
+      "request_id": "fig2_hard_negative_target",
+      "group": "fig2_hard_negative",
+      "role": "target",
+      "prompt": "a dog is running through a snowy forest, focus on the dog",
+      "positive": "dog",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    },
+    {
+      "request_id": "fig2_easy_negative_source",
+      "group": "fig2_easy_negative",
+      "role": "source",
+      "prompt": "a red sports car driving through a rainy city at night",
+      "positive": "car",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    },
+    {
+      "request_id": "fig2_easy_negative_target",
+      "group": "fig2_easy_negative",
+      "role": "target",
+      "prompt": "a close-up of a yellow sunflower swaying in a sunlit field",
+      "positive": "sunflower",
+      "seed": 20260218,
+      "capture_mass": false,
+      "capture_residual": true
+    }
+  ],
+  "gpus": [
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "independent_artifact_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/runs"
+}

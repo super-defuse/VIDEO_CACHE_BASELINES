@@ -1,0 +1,4 @@
+pair,source_prompt,target_prompt,delta_latent_global_cosine,delta_latent_cosine_distance,energy_mae,cfg_residual_global_cosine,cfg_residual_cosine_distance,cfg_residual_norm_mae
+similar,"a cat is sleeping on a grassland, focus on the cat","a dog is sleeping on a grassland, focus on the dog",0.9628288149833679,0.03717118501663208,0.005414468701928854,0.41357120871543884,0.5864287614822388,0.21146713197231293
+hard_negative,"a dog is sleeping on a grassland, focus on the dog","a dog is running through a snowy forest, focus on the dog",0.559727668762207,0.44027233123779297,0.020379722118377686,0.0606444776058197,0.9393554925918579,0.2805633842945099
+easy_negative,a red sports car driving through a rainy city at night,a close-up of a yellow sunflower swaying in a sunlit field,0.205121710896492,0.7948783040046692,0.00949651189148426,0.024057405069470406,0.9759426116943359,0.29505011439323425

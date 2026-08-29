@@ -123,6 +123,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Capture source outer-attention block masks without enabling an outer sparse target backend.",
     )
+    parser.add_argument(
+        "--capture-block-mass",
+        action="store_true",
+        help="Persist the continuous block-attention mass used to create captured masks.",
+    )
+    parser.add_argument(
+        "--capture-cfg-residual-step",
+        type=int,
+        default=0,
+        help="Persist eps_cond-eps_uncond after this completed step (0 disables capture).",
+    )
+    parser.add_argument(
+        "--capture-cfg-residual-path",
+        type=Path,
+        help="Output path for --capture-cfg-residual-step.",
+    )
     parser.add_argument("--outer-sparse-layers", default="0-9,21-29")
     parser.add_argument("--outer-sparse-dtype", choices=("fp16", "bf16"), default="fp16")
     parser.add_argument("--outer-mask-q-block", type=int, default=64)
@@ -272,6 +288,12 @@ def validate_experiment_config(args: argparse.Namespace) -> None:
     if overlap:
         raise ValueError(f"region-update and outer sparse layers must not overlap: {overlap}")
     outer_mask_config(args)
+    if args.capture_cfg_residual_step < 0 or args.capture_cfg_residual_step > args.steps:
+        raise ValueError("--capture-cfg-residual-step must be in [0, steps]")
+    if args.capture_cfg_residual_step and args.capture_cfg_residual_path is None:
+        raise ValueError("--capture-cfg-residual-path is required when CFG residual capture is enabled")
+    if args.capture_cfg_residual_step and args.guidance_scale == 1.0:
+        raise ValueError("CFG residual capture requires guidance_scale != 1")
     if args.source_only and args.source_run_dir:
         raise ValueError("--source-only cannot be combined with --source-run-dir")
     if args.source_only and args.target_dense_manifest:
@@ -1616,6 +1638,8 @@ def run_native_t2v_stage(
     ffn_state: Any | None = None,
     cross_seed_output_dir: Path | None = None,
     decode_video: bool = True,
+    capture_cfg_residual_step: int = 0,
+    capture_cfg_residual_path: Path | None = None,
 ) -> dict[str, Any]:
     import torch
 
@@ -1694,6 +1718,10 @@ def run_native_t2v_stage(
                 if sparse_state is not None:
                     sparse_state.begin_model_forward()
                 noise_pred_uncond = model([latent], t=timestep_input, context=context_null, seq_len=seq_len)[0]
+                if (step_index + 1) == capture_cfg_residual_step:
+                    if capture_cfg_residual_path is None:
+                        raise ValueError("capture_cfg_residual_path is required for CFG residual capture")
+                    save_latent(capture_cfg_residual_path, noise_pred_cond - noise_pred_uncond)
                 noise_pred = noise_pred_uncond + args.guidance_scale * (noise_pred_cond - noise_pred_uncond)
 
             latent = scheduler.step(
@@ -1795,6 +1823,10 @@ def run_native_t2v_stage(
             if capture_cross_seed_scores else None,
             "source_completed_step": args.mask_probe_step if capture_cross_seed_scores else None,
             "purpose": "self_attention_seed_scores_only",
+        },
+        "cfg_residual": {
+            "completed_step": int(capture_cfg_residual_step) if capture_cfg_residual_step else None,
+            "path": str(capture_cfg_residual_path) if capture_cfg_residual_path else None,
         },
         "resume": {
             "resume_latent_path": str(resume_latent_path) if resume_latent_path else None,
@@ -2440,6 +2472,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     outer_mask_config(args),
                     source_run_id=args.run_id,
                     cfg_branch_count=cfg_branches(args.guidance_scale),
+                    capture_block_mass=args.capture_block_mass,
                     create=True,
                 )
                 source_outer_state = OuterSparseState(
@@ -2469,6 +2502,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                         outer_sparse_state=source_outer_state,
                         cross_seed_output_dir=paths["cross_seed_dir"],
                         decode_video=True,
+                        capture_cfg_residual_step=args.capture_cfg_residual_step,
+                        capture_cfg_residual_path=args.capture_cfg_residual_path,
                     )
                 source_block_mask_cache = source_cache
             else:
@@ -2483,6 +2518,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     save_trajectory=True,
                     cross_seed_output_dir=paths["cross_seed_dir"],
                     decode_video=True,
+                    capture_cfg_residual_step=args.capture_cfg_residual_step,
+                    capture_cfg_residual_path=args.capture_cfg_residual_path,
                 )
             source_trajectory = {
                 int(item["step_index"]): Path(item["path"])
@@ -2678,6 +2715,8 @@ def main(argv: list[str] | None = None) -> int:
         args.source_run_dir = args.source_run_dir.expanduser()
     if args.target_dense_manifest:
         args.target_dense_manifest = args.target_dense_manifest.expanduser()
+    if args.capture_cfg_residual_path:
+        args.capture_cfg_residual_path = args.capture_cfg_residual_path.expanduser()
     ensure_runtime_environment(args)
     ensure_import_paths(args)
     paths = stage_paths(args)

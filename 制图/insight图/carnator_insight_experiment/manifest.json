@@ -1,0 +1,18 @@
+{
+  "schema": "carnator-insight-experiment-v1",
+  "plan": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/CARNATOR_INSIGHT_FIGURES_PLAN.md",
+  "model": "Wan2.2-TI2V-5B",
+  "seed": 20260218,
+  "steps": 50,
+  "resolution": [
+    704,
+    1280
+  ],
+  "frames": 121,
+  "cfg": 5.0,
+  "outputs": {
+    "fig1": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig1",
+    "fig2": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2",
+    "request_pool": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/request_pool.jsonl"
+  }
+}

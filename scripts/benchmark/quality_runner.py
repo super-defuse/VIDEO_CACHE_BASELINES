@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -55,6 +57,59 @@ def _successful_rows(path: Path) -> list[dict[str, Any]]:
     if any(row.get("split") == "evaluation" for row in rows):
         rows = [row for row in rows if row.get("split") == "evaluation"]
     return [row for row in rows if row.get("status") == "ok" and row.get("video_path")]
+
+
+def _is_finite_number(value: Any) -> bool:
+    return not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(float(value))
+
+
+def has_complete_quality(rows: list[dict[str, Any]]) -> bool:
+    """Return whether every generated video already has the full quality record."""
+
+    if not rows:
+        return False
+    for row in rows:
+        dimensions = row.get("vbench_dimensions")
+        if not _is_finite_number(row.get("clip_t")) or not _is_finite_number(row.get("vbench_q")):
+            return False
+        if not isinstance(dimensions, dict) or any(not _is_finite_number(dimensions.get(name)) for name in TASK_INFO):
+            return False
+    return True
+
+
+def has_complete_vbench_quality(row: dict[str, Any]) -> bool:
+    dimensions = row.get("vbench_dimensions")
+    return (
+        _is_finite_number(row.get("vbench_q"))
+        and isinstance(dimensions, dict)
+        and all(_is_finite_number(dimensions.get(name)) for name in TASK_INFO)
+    )
+
+
+def stage_videos(rows: list[dict[str, Any]], output_dir: Path) -> tuple[Path, dict[str, str]]:
+    """Expose videos from multiple worker directories under one VBench input root."""
+
+    sources = [(row, Path(str(row["video_path"])).expanduser().resolve()) for row in rows]
+    fingerprint = hashlib.sha256(
+        "\n".join(f"{row['request_index']}\t{row['uuid']}\t{source}" for row, source in sources).encode("utf-8")
+    ).hexdigest()[:16]
+    staged_dir = output_dir / f"input_videos_{fingerprint}"
+    staged_dir.mkdir(parents=True, exist_ok=True)
+    staged_paths: dict[str, str] = {}
+    for row, source in sources:
+        if not source.is_file():
+            raise FileNotFoundError(f"quality video is missing: {source}")
+        suffix = source.suffix or ".mp4"
+        destination = staged_dir / f"{int(row['request_index']):04d}_{row['uuid']}{suffix}"
+        if destination.is_symlink():
+            if destination.resolve() != source:
+                raise RuntimeError(f"staged quality video points to a different source: {destination}")
+        elif destination.exists():
+            raise FileExistsError(f"refusing to replace non-symlink quality input: {destination}")
+        else:
+            destination.symlink_to(source)
+        staged_paths[str(source)] = str(destination.absolute())
+    return staged_dir, staged_paths
 
 
 def clip_t(rows: list[dict[str, Any]], sample_frames: int, model_path: Path, device: str) -> dict[int, float]:
@@ -155,20 +210,24 @@ def vbench_quality(
 
     install_opencv_vbench_video_loader()
     output_dir.mkdir(parents=True, exist_ok=True)
+    staged_videos, staged_paths = stage_videos(rows, output_dir)
     prompts: dict[str, str] = {}
     for row in rows:
         video_path = Path(row["video_path"])
+        staged_path = Path(staged_paths[str(video_path.resolve())])
         # VBench enumerates staged symlink paths, while result manifests may
         # record the resolved source path. Support both representations.
         prompts[str(video_path.absolute())] = row["prompt"]
         prompts[str(video_path.resolve())] = row["prompt"]
+        prompts[str(staged_path)] = row["prompt"]
+        prompts[str(staged_path.resolve())] = row["prompt"]
     runner = VBench(
         device,
         str(vbench_root / "vbench" / "VBench_full_info.json"),
         str(output_dir),
     )
     runner.evaluate(
-        videos_path=str(Path(rows[0]["video_path"]).parent),
+        videos_path=str(staged_videos),
         name="custom_vidprom",
         prompt_list=prompts,
         dimension_list=dimensions,
@@ -182,8 +241,11 @@ def vbench_quality(
     path_to_index: dict[str, int] = {}
     for row in rows:
         video_path = Path(row["video_path"])
+        staged_path = Path(staged_paths[str(video_path.resolve())])
         path_to_index[str(video_path.absolute())] = row["request_index"]
         path_to_index[str(video_path.resolve())] = row["request_index"]
+        path_to_index[str(staged_path.absolute())] = row["request_index"]
+        path_to_index[str(staged_path.resolve())] = row["request_index"]
     for dimension in dimensions:
         result = payload.get(dimension)
         if not isinstance(result, list) or not result:
@@ -241,8 +303,21 @@ def main() -> None:
     parser.add_argument("--vbench-dimensions", nargs="*", default=list(TASK_INFO))
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--skip-if-complete",
+        action="store_true",
+        help="Exit successfully when all successful requests already have CLIP-T and six-dimensional VBench-Q.",
+    )
+    parser.add_argument(
+        "--reuse-existing-metrics",
+        action="store_true",
+        help="Keep existing CLIP-T and per-request VBench metrics, evaluating only requests with missing values.",
+    )
     args = parser.parse_args()
     rows = _successful_rows(args.results)
+    if args.skip_if_complete and has_complete_quality(rows):
+        print(json.dumps({"status": "skipped_existing_quality", "requests": len(rows)}, ensure_ascii=False))
+        return
     dry_media = bool(rows) and Path(rows[0]["video_path"]).read_bytes().startswith(b"CHAI-DRY-RUN:")
     if args.dry_run or dry_media:
         # Dry-run media is protocol-only, so expose deterministic placeholders
@@ -257,13 +332,23 @@ def main() -> None:
         return
     root = Path(__file__).resolve().parents[2]
     clip_weights = args.clip_weights or root / "artifacts" / "vbench-cache" / "clip_model" / "ViT-B-32.pt"
-    scores = clip_t(rows, args.sample_frames, clip_weights, args.device) if rows else {}
+    existing_clip_scores = {
+        row["request_index"]: float(row["clip_t"])
+        for row in rows
+        if args.reuse_existing_metrics and _is_finite_number(row.get("clip_t"))
+    }
+    clip_rows = [row for row in rows if row["request_index"] not in existing_clip_scores]
+    scores = {
+        **existing_clip_scores,
+        **(clip_t(clip_rows, args.sample_frames, clip_weights, args.device) if clip_rows else {}),
+    }
+    vbench_rows = [row for row in rows if not args.reuse_existing_metrics or not has_complete_vbench_quality(row)]
     score, dimensions = (
-        vbench_quality(rows, args.results.parent / "vbench", args.vbench_dimensions, args.device)
-        if rows
+        vbench_quality(vbench_rows, args.results.parent / "vbench", args.vbench_dimensions, args.device)
+        if vbench_rows
         else (None, {})
     )
-    _rewrite_results(args.results, scores, score, {row["request_index"] for row in rows}, dimensions)
+    _rewrite_results(args.results, scores, score, {row["request_index"] for row in vbench_rows}, dimensions)
 
 
 if __name__ == "__main__":

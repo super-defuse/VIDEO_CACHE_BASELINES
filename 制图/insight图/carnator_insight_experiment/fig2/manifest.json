@@ -1,0 +1,66 @@
+{
+  "schema": "carnator-insight-fig2-v1",
+  "completed_step": 5,
+  "token_grid": [
+    31,
+    22,
+    40
+  ],
+  "cfg_residual_color_limits": {
+    "norm_vmax": 1.963446855545044,
+    "difference_vmax": 1.5733773708343506
+  },
+  "pairs": [
+    {
+      "pair": "similar",
+      "source_prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "target_prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "delta_latent_global_cosine": 0.9628288149833679,
+      "delta_latent_cosine_distance": 0.03717118501663208,
+      "energy_mae": 0.005414468701928854,
+      "cfg_residual_global_cosine": 0.41357120871543884,
+      "cfg_residual_cosine_distance": 0.5864287614822388,
+      "cfg_residual_norm_mae": 0.21146713197231293
+    },
+    {
+      "pair": "hard_negative",
+      "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "target_prompt": "a dog is running through a snowy forest, focus on the dog",
+      "delta_latent_global_cosine": 0.559727668762207,
+      "delta_latent_cosine_distance": 0.44027233123779297,
+      "energy_mae": 0.020379722118377686,
+      "cfg_residual_global_cosine": 0.0606444776058197,
+      "cfg_residual_cosine_distance": 0.9393554925918579,
+      "cfg_residual_norm_mae": 0.2805633842945099
+    },
+    {
+      "pair": "easy_negative",
+      "source_prompt": "a red sports car driving through a rainy city at night",
+      "target_prompt": "a close-up of a yellow sunflower swaying in a sunlit field",
+      "delta_latent_global_cosine": 0.205121710896492,
+      "delta_latent_cosine_distance": 0.7948783040046692,
+      "energy_mae": 0.00949651189148426,
+      "cfg_residual_global_cosine": 0.024057405069470406,
+      "cfg_residual_cosine_distance": 0.9759426116943359,
+      "cfg_residual_norm_mae": 0.29505011439323425
+    }
+  ],
+  "outputs": [
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_easy_negative_cfg_residual.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_easy_negative_latent_affinity.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_easy_negative_latent_energy.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_easy_negative_source_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_easy_negative_target_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_hard_negative_cfg_residual.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_hard_negative_latent_affinity.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_hard_negative_latent_energy.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_hard_negative_source_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_hard_negative_target_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_similar_cfg_residual.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_similar_latent_affinity.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_similar_latent_energy.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_similar_source_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_similar_target_frame.png",
+    "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/制图/insight图/carnator_insight_experiment/fig2/pair_feature_summary.csv"
+  ]
+}

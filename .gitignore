@@ -78,6 +78,10 @@ artifacts/vidprom_1000cache_300input/forced_early_signature_calibration/quality
 /artifacts/static-prompt-defaults/
 /artifacts/static-prompt-defaults-seed*/
 
+# Insight-figure run payloads are likewise regenerable.  Publish the figure
+# PNGs, CSVs, manifests, and generation script outside this directory.
+/制图/insight图/carnator_insight_experiment/runs/artifacts/
+
 # Generated package metadata is recreated by installation.
 /video_cache_baselines.egg-info/
 

@@ -463,6 +463,7 @@ class SourceBlockMaskCache:
         *,
         source_run_id: str | None = None,
         cfg_branch_count: int | None = None,
+        capture_block_mass: bool = False,
         create: bool = False,
     ) -> None:
         self.root = Path(root)
@@ -474,6 +475,7 @@ class SourceBlockMaskCache:
         self.write_seconds = 0.0
         self.configuration_error: str | None = None
         self._bitpacked = False
+        self.capture_block_mass = bool(capture_block_mass)
         if create:
             if source_run_id is None or cfg_branch_count is None:
                 raise ValueError("source_run_id and cfg_branch_count are required to create a cache")
@@ -483,6 +485,7 @@ class SourceBlockMaskCache:
                 "source_run_id": source_run_id,
                 "cfg_branches": int(cfg_branch_count),
                 "mask": asdict(config),
+                "block_mass": {"enabled": self.capture_block_mass},
                 "entries": [],
             }
             self._write_metadata()
@@ -497,6 +500,7 @@ class SourceBlockMaskCache:
         if cache_format not in {self.FORMAT, self.PACKED_FORMAT, self.CHORUS2_PACKED_FORMAT}:
             raise BlockMaskCacheError("unsupported source block-mask cache format")
         self._bitpacked = cache_format in {self.PACKED_FORMAT, self.CHORUS2_PACKED_FORMAT}
+        self.capture_block_mass = bool(self.metadata.get("block_mass", {}).get("enabled", False))
         cached_config = self.metadata.get("mask", {})
         if cached_config != asdict(self.config):
             self.configuration_error = "source block-mask parameters do not match this run"
@@ -530,8 +534,13 @@ class SourceBlockMaskCache:
         (self.root / rel_path).parent.mkdir(parents=True, exist_ok=True)
         torch.save(mask.cpu(), self.root / rel_path)
         self.write_seconds += time.perf_counter() - write_started
+        mass_path: Path | None = None
+        if self.capture_block_mass:
+            mass_path = Path("block_mass") / f"step{step:03d}_{branch}_layer{layer:02d}.pt"
+            (self.root / mass_path).parent.mkdir(parents=True, exist_ok=True)
+            torch.save(mass.cpu(), self.root / mass_path)
         head_densities = mask.float().mean(dim=(1, 2))
-        self.entries[key] = {
+        entry = {
             "step": int(step),
             "cfg_branch": str(branch),
             "layer": int(layer),
@@ -550,6 +559,10 @@ class SourceBlockMaskCache:
                 else 0.0
             ),
         }
+        if mass_path is not None:
+            entry["block_mass_path"] = str(mass_path)
+            entry["block_mass_dtype"] = str(mass.dtype)
+        self.entries[key] = entry
         self._write_metadata()
 
     def get(self, step: int, branch: str, layer: int, q: torch.Tensor) -> tuple[torch.Tensor, dict[str, Any], float]:

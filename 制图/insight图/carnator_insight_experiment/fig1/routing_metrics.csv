@@ -1,0 +1,2 @@
+sample,pair_type,mask_iou_all_heads,block_mass_spearman_all_heads,source_mask_retained_mass_on_target
+fig1_cat_dog,compatible,0.8747007846832275,0.9645669417646151,0.9450134634971619
