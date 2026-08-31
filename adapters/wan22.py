@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import time
 from typing import Any
 
 from core.protocol import ModelAdapter
@@ -14,11 +15,27 @@ class Wan22Adapter(ModelAdapter):
     def __init__(self, config):
         super().__init__(config)
         self._delegate = None
+        self._native_dense_c0_dir: Path | None = None
+        self._native_dense_c0_runtime = None
+
+    def enable_native_dense_c0(self, video_dir: Path) -> None:
+        """Use the resident generic Wan pipeline with native Dense C0."""
+        if self._delegate is not None:
+            raise RuntimeError("native Dense C0 must be configured before loading Wan")
+        self._native_dense_c0_dir = Path(video_dir).resolve()
+
+    def set_native_dense_c0_output_dir(self, video_dir: Path) -> None:
+        if self._native_dense_c0_dir is None:
+            raise RuntimeError("native Dense C0 is not enabled")
+        self._native_dense_c0_dir = Path(video_dir).resolve()
 
     def _load_delegate(self):
         if self._delegate is None:
             from methods.chai.adapters.wan_t2v import WanT2VAdapter
-            self._delegate = WanT2VAdapter(self.config)
+            config = dict(self.config)
+            if self._native_dense_c0_dir is not None:
+                config["native_dense_c0"] = True
+            self._delegate = WanT2VAdapter(config)
         return self._delegate
 
     def prepare(self):
@@ -41,6 +58,84 @@ class Wan22Adapter(ModelAdapter):
         result = delegate.generate(request.prompt, request.seed, fast=fast, cached_latent=cached_latent, capture=capture)
         return Generation(result.video, result.latent, result.latent_step, result.extra.get("executed_steps"), extra=result.extra)
 
+    @staticmethod
+    def _ensure_model_on_device(pipeline: Any) -> None:
+        if getattr(pipeline, "init_on_cpu", False):
+            pipeline.model.to(pipeline.device)
+
+    def _generate_native_dense_c0(self, request: Request) -> Generation | None:
+        if self._native_dense_c0_dir is None:
+            return None
+        from carnator.adapters import wan_ti2v_5b as native
+
+        delegate = self._load_delegate()
+        delegate._load()
+        pipeline = delegate.pipeline
+        assert pipeline is not None
+        if self._native_dense_c0_runtime is None:
+            profiler = native.CudaModuleProfiler()
+            profiler.attach(pipeline.model)
+            self._native_dense_c0_runtime = native.NativeRuntime(
+                torch=delegate.torch,
+                wan=native.bootstrap_wan(),
+                pipe=pipeline,
+                cfg=pipeline.config,
+                device=pipeline.device,
+                profiler=profiler,
+            )
+        args = native.build_parser().parse_args([
+            "--no-env-setup", "--model-dir", str(self.config["model_path"]),
+            "--device", str(self.config["device"]), "--height", str(self.config["height"]),
+            "--width", str(self.config["width"]), "--frames", str(self.config["frames"]),
+            "--fps", str(self.config.get("fps", 24)), "--steps", str(self.config["baseline_steps"]),
+            "--seed", str(request.seed), "--scheduler", str(self.config["solver"]),
+            "--flow-shift", str(self.config["shift"]), "--guidance-scale", str(self.config["guidance_scale"]),
+            "--outer-attn-backend", "dense", "--ffn-backend", "fp", "--disable-progress",
+        ])
+        video_path = self._native_dense_c0_dir / f"{request.request_index:04d}_{request.uuid}.mp4"
+        cache_dir = self._native_dense_c0_dir / ".dense-c0" / request.uuid
+        if video_path.exists():
+            raise FileExistsError(f"native Dense C0 output already exists: {video_path}")
+        import shutil
+
+        try:
+            stage = native.run_native_t2v_stage(
+                self._native_dense_c0_runtime,
+                args,
+                label="dense_c0",
+                prompt=request.prompt,
+                out_video=video_path,
+                cache_dir=cache_dir,
+            )
+        finally:
+            shutil.rmtree(cache_dir, ignore_errors=True)
+            try:
+                cache_dir.parent.rmdir()
+            except OSError:
+                pass
+        if not video_path.is_file():
+            raise RuntimeError(f"native Dense C0 did not write {video_path}")
+        timing = dict(stage.get("timing", {}))
+        dit_forward_s = timing.get("dit_forward_seconds")
+        if dit_forward_s is None:
+            raise RuntimeError("native Dense C0 did not report DiT forward time")
+        return Generation(
+            video=None,
+            video_path=video_path,
+            executed_steps=int(stage["completed_steps"]),
+            extra={
+                "executed_steps": int(stage["completed_steps"]),
+                "restart_step": 0,
+                "source_trajectory": False,
+                "cache_steps": [10],
+            "dit_forward_s": float(dit_forward_s),
+            "dense_c0": {"version": "wan22-dense-c0-v1", "steps": int(args.steps),
+                             "executor": "native.run_native_t2v_stage",
+                             "dtype": str(pipeline.param_dtype)},
+                "native_dense_c0_timing": timing,
+            },
+        )
+
     def _generate_chorus(self, request: Request, *, cached_latent: Any, capture: bool,
                          method: str = "chorus") -> Generation:
         """Run Chorus full reuse, SRD, and dense refinement on native Wan."""
@@ -61,6 +156,8 @@ class Wan22Adapter(ModelAdapter):
         from methods.chorus.mask import build_edit_mask
         from wan.utils.fm_solvers_unipc import FlowUniPCMultistepScheduler
         from wan.utils.utils import masks_like
+
+        self._ensure_model_on_device(pipeline)
 
         chorus_cfg = dict(self.config.get("chorus", {}))
         if method == "chorus_tgaa_joint_gamma_1_6":
@@ -86,6 +183,8 @@ class Wan22Adapter(ModelAdapter):
                               cached_latent.get("format") != "chorus-trajectory-v2" or
                               "trajectory_paths" not in cached_latent):
             raise ValueError("Chorus cache is not a per-step trajectory; clear the old chorus namespace")
+        if is_source and not capture:
+            raise RuntimeError("Chorus cache miss must be handled before generation")
 
         frame_num = int(self.config["frames"])
         size = (int(self.config["width"]), int(self.config["height"]))
@@ -111,10 +210,11 @@ class Wan22Adapter(ModelAdapter):
 
         if is_source:
             initial = torch.randn(*target_shape, dtype=torch.float32, device=pipeline.device, generator=generator)
-            trajectories: list[Any] = [initial.detach().cpu()]
+            trajectories: list[Any] | None = [initial.detach().cpu()] if capture else None
             latents = [initial]
             start = 0
         else:
+            trajectories = None
             source_trajectory = [Path(item) for item in cached_latent["trajectory_paths"]]
             if len(source_trajectory) != steps + 1 or any(not path.is_file() for path in source_trajectory):
                 raise ValueError(f"Chorus source trajectory is incomplete; expected {steps + 1} per-step files")
@@ -143,6 +243,7 @@ class Wan22Adapter(ModelAdapter):
             "tgaa_calls": 0,
         }
         llm_s = sam_s = 0.0
+        dit_forward_s = 0.0
         tgaa_enabled = method in {"chorus", "chorus_mbase_only", "chorus_tgaa_joint_gamma_1_6",
                                   "chorus_tgaa_joint_gamma_2_1", "chorus_tgaa_joint_gamma_2_0"}
         if not is_source:
@@ -223,8 +324,12 @@ class Wan22Adapter(ModelAdapter):
                     timestep = torch.stack([timestep_value])
                     temp_ts = (mask2[0][0][:, ::2, ::2] * timestep).flatten()
                     timestep = torch.cat([temp_ts, temp_ts.new_ones(seq_len - temp_ts.size(0)) * timestep]).unsqueeze(0)
+                    torch.cuda.synchronize()
+                    model_started = time.perf_counter()
                     cond = pipeline.model(latents, t=timestep, **arg_c)[0]
                     uncond = pipeline.model(latents, t=timestep, **arg_null)[0]
+                    torch.cuda.synchronize()
+                    dit_forward_s += time.perf_counter() - model_started
                     noise_pred = uncond + float(self.config["guidance_scale"]) * (cond - uncond)
                     sample = scheduler.step(
                         noise_pred.unsqueeze(0), timestep_value, latents[0].unsqueeze(0),
@@ -240,7 +345,7 @@ class Wan22Adapter(ModelAdapter):
                         edit = latent_edit_mask["latent_edit"].to(device=sample.device, dtype=sample.dtype)
                         sample = self._fuse_chorus_latent(sample, source_state, edit)
                     latents = [sample]
-                    if is_source:
+                    if trajectories is not None:
                         trajectories.append(sample.detach().cpu())
                 video = pipeline.vae.decode(latents)[0]
         finally:
@@ -252,10 +357,13 @@ class Wan22Adapter(ModelAdapter):
             "chorus_stages": {"steps": steps, "k1": k1, "k2": k2,
                               "stage1": [0, k1], "stage2": [k1, k2], "stage3": [k2, steps]},
             "executed_steps": steps if is_source else steps - k1,
+            "dit_forward_s": dit_forward_s,
         }
         if is_source:
-            payload = {"trajectory": trajectories, "steps": steps, "k1": k1, "k2": k2,
-                       "target_shape": list(target_shape), "seed": seed}
+            payload = None
+            if trajectories is not None:
+                payload = {"trajectory": trajectories, "steps": steps, "k1": k1, "k2": k2,
+                           "target_shape": list(target_shape), "seed": seed}
             return Generation(video=video, latent=payload, latent_step=k1, executed_steps=steps, extra=extra)
         preprocess_s = llm_s + sam_s
         extra.update({"chorus_llm": llm_diff, "chorus_mask": mask_metadata,
@@ -572,7 +680,8 @@ class Wan22Adapter(ModelAdapter):
         return Generation(
             video=video,
             executed_steps=len(controller.executed_steps),
-            extra={"executed_steps": len(controller.executed_steps), "skipped_steps": steps - len(controller.executed_steps)},
+            extra={"executed_steps": len(controller.executed_steps), "skipped_steps": steps - len(controller.executed_steps),
+                   "dit_forward_s": controller.forward_seconds},
         )
 
     def _generate_nirvana(self, request: Request, *, cached_latent: Any, capture: bool) -> Generation:
@@ -581,6 +690,8 @@ class Wan22Adapter(ModelAdapter):
         delegate._load()
         pipeline = delegate.pipeline
         assert pipeline is not None
+        if cached_latent is None and not capture:
+            raise RuntimeError("NIRVANA-VID cache miss must be handled before generation")
         if self.config["solver"] != "unipc":
             raise ValueError("NIRVANA-VID Wan adapter currently requires solver=unipc")
 
@@ -592,6 +703,7 @@ class Wan22Adapter(ModelAdapter):
         from wan.utils.utils import masks_like
 
         torch = delegate.torch
+        self._ensure_model_on_device(pipeline)
         steps = int(self.config["baseline_steps"])
         reuse_start = int(getattr(self, "nirvana_reuse_start_step", self.config["nirvana_vid"]["reuse_start_step"]))
         if not 0 < reuse_start < steps:
@@ -632,6 +744,7 @@ class Wan22Adapter(ModelAdapter):
         arg_c = {"context": context, "seq_len": seq_len}
         arg_null = {"context": context_null, "seq_len": seq_len}
         captured: dict[int, Any] = {}
+        dit_forward_s = 0.0
 
         @contextmanager
         def noop_no_sync():
@@ -643,8 +756,12 @@ class Wan22Adapter(ModelAdapter):
                 timestep = torch.stack([timestep_value])
                 temp_ts = (mask2[0][0][:, ::2, ::2] * timestep).flatten()
                 timestep = torch.cat([temp_ts, temp_ts.new_ones(seq_len - temp_ts.size(0)) * timestep]).unsqueeze(0)
+                torch.cuda.synchronize()
+                model_started = time.perf_counter()
                 cond = pipeline.model(latents, t=timestep, **arg_c)[0]
                 uncond = pipeline.model(latents, t=timestep, **arg_null)[0]
+                torch.cuda.synchronize()
+                dit_forward_s += time.perf_counter() - model_started
                 noise_pred = uncond + float(self.config["guidance_scale"]) * (cond - uncond)
                 sample = scheduler.step(
                     noise_pred.unsqueeze(0), timestep_value, latents[0].unsqueeze(0), return_dict=False, generator=generator
@@ -660,7 +777,8 @@ class Wan22Adapter(ModelAdapter):
             latent_step=max(cache_steps),
             executed_steps=steps - start,
             extra={"executed_steps": steps - start, "restart_step": start, "source_trajectory": cached_latent is not None,
-                   "cache_steps": list(cache_steps)},
+                   "cache_steps": list(cache_steps), "dit_forward_s": dit_forward_s,
+                   "dense_c0": ({"version": "wan22-dense-c0-v1", "steps": steps} if cached_latent is None else None)},
         )
 
     def save_latent(self, latent, path: Path):

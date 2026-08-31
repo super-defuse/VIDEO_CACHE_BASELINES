@@ -33,10 +33,18 @@ def rows_for(path: Path) -> list[dict[str, Any]]:
 
 def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path) -> dict[str, Any]:
     ok = [row for row in rows if row.get("status") == "ok"]
-    hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in ok)
-    retrieval = [float(row.get("retrieval_s", 0.0)) for row in ok]
+    hit_rows = [row for row in rows if bool(row.get("hit", row.get("cache_match", {}).get("hit")))]
+    hits = len(hit_rows)
     denoise = [float(row.get("denoising_s", 0.0)) for row in ok if row.get("denoising_s") is not None]
     latency = [float(row.get("latency_s", 0.0)) for row in ok]
+    hit_latency = [
+        float(row.get("hit_e2e_s") if row.get("hit_e2e_s") is not None else row.get("latency_s", 0.0))
+        for row in hit_rows
+    ]
+    hit_denoise = [
+        float(row.get("hit_denoising_s") if row.get("hit_denoising_s") is not None else row.get("denoising_s", 0.0))
+        for row in hit_rows
+    ]
     external = [float(row.get("external_s", 0.0)) for row in ok]
     clip = [float(row["clip_t"]) for row in ok if row.get("clip_t") is not None]
     vbench = [float(row["vbench_q"]) for row in ok if row.get("vbench_q") is not None]
@@ -50,10 +58,12 @@ def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path)
     return {
         "baseline": DISPLAY[method], "method": method, "gpu": gpu,
         "requests": len(rows), "successful": len(ok), "hits": "N/A" if method == "teacache" else hits,
-        "hit_rate": "N/A" if method == "teacache" else (hits / len(ok) if ok else 0.0),
+        "hit_rate": "N/A" if method == "teacache" else (hits / len(rows) if rows else 0.0),
         "e2e_s_per_request": mean(latency) if latency else None,
-        "retrieval_ms_per_request": mean(retrieval) * 1000.0 if retrieval else None,
+        "hit_timed_requests": len(hit_latency),
+        "hit_e2e_s_per_hit": mean(hit_latency) if hit_latency else None,
         "denoising_s_per_request": mean(denoise) if denoise else None,
+        "hit_denoising_s_per_hit": mean(hit_denoise) if hit_denoise else None,
         "external_s_per_request": mean(external) if external else 0.0,
         "clip_t": mean(clip) if clip else None, "vbench_q": mean(vbench) if vbench else None,
     }
@@ -106,17 +116,17 @@ def write_plot(root: Path, all_rows: dict[str, list[dict[str, Any]]]) -> None:
 
 def write_results_table(root: Path, summaries: list[dict[str, Any]]) -> None:
     request_count = max((int(item.get("requests", 0)) for item in summaries), default=0)
-    lines = [f"# VidProM results ({request_count} request{'s' if request_count != 1 else ''})", "", "Carnator records Stage-1 candidates, noun prefilter, Stage-2 Early Signature probe/gate, and the selected source. The source view supplies precomputed sidecars; External is Chorus-only LLM + Grounded-SAM2 time and is zero for other baselines.", "", "| Baseline | GPU | Requests | Hits | Hit rate | E2E s/request | Retrieval ms/request | Denoising s/request | External s/request | CLIP-T | VBench-Q |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
+    lines = [f"# VidProM results ({request_count} request{'s' if request_count != 1 else ''})", "", "Denoising is CUDA-synchronized DiT forward time; Carnator also includes its B5 probe. Source cache preparation is outside E2E and denoising. External is Chorus-only LLM + Grounded-SAM2 time and remains in E2E. Warm-up is unscored. Misses are recorded without generation; timing means use generated requests only.", "", "| Baseline | GPU | Requests | Hits | Hit rate | E2E s/request | Hit E2E s/hit | Denoising s/request | Hit denoising s/hit | External s/request | CLIP-T | VBench-Q |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
     for item in summaries:
         def fmt(value: Any) -> str:
             return "N/A" if value in (None, "N/A") else f"{value:.6f}" if isinstance(value, float) else str(value)
-        lines.append("| {baseline} | {gpu} | {requests} | {hits} | {hit_rate} | {e2e_s_per_request} | {retrieval_ms_per_request} | {denoising_s_per_request} | {external_s_per_request} | {clip_t} | {vbench_q} |".format(**{key: fmt(value) for key, value in item.items()}))
+        lines.append("| {baseline} | {gpu} | {requests} | {hits} | {hit_rate} | {e2e_s_per_request} | {hit_e2e_s_per_hit} | {denoising_s_per_request} | {hit_denoising_s_per_hit} | {external_s_per_request} | {clip_t} | {vbench_q} |".format(**{key: fmt(value) for key, value in item.items()}))
     (root / "VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--results-root", type=Path, default=ROOT / "artifacts" / "vidprom_1000cache_300input" / "results")
+    parser.add_argument("--results-root", type=Path, default=ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "results")
     args = parser.parse_args()
     root = args.results_root.expanduser().resolve(); root.mkdir(parents=True, exist_ok=True)
     all_rows = {method: rows_for(root / method / "requests.jsonl") for method in METHODS}

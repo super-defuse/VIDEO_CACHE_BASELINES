@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate fused-Mbase Carnator step-5 signatures for the 923 source view.
+"""Generate fused-Mbase Carnator step-5 signatures for the source view.
 
 Only the artifacts consumed by ``compare_early_signatures`` are written into
 each existing source cache directory: ``online_color_signature.json``,
@@ -16,7 +16,6 @@ import hashlib
 import json
 import os
 import sys
-import time
 from pathlib import Path
 from typing import Any
 
@@ -24,9 +23,9 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-DEFAULT_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000" / "cached_requests_923"
+DEFAULT_VIEW = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
 DEFAULT_MODEL = Path(os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", "/home/tangxuebin/models/Wan2.2-TI2V-5B"))
-DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input" / "early_signature_generation"
+DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "early_signature_generation"
 NOUN_EXTRACTOR = "spacy:en_core_web_sm"
 FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
 
@@ -41,11 +40,12 @@ def sha256_file(path: Path) -> str:
 
 def read_rows(view: Path) -> list[dict[str, Any]]:
     manifest = json.loads((view / "view_manifest.json").read_text(encoding="utf-8"))
-    if int(manifest.get("selected_requests", -1)) != 923:
-        raise ValueError(f"expected 923 selected requests, got {manifest.get('selected_requests')}")
+    selected = int(manifest.get("selected_requests", -1))
+    if selected <= 0:
+        raise ValueError(f"invalid selected_requests={selected}")
     rows = [json.loads(line) for line in (view / "index.jsonl").read_text(encoding="utf-8").splitlines() if line]
-    if len(rows) != 923 or len({row.get("uuid") for row in rows}) != 923:
-        raise ValueError("view index must contain 923 unique UUIDs")
+    if len(rows) != selected or len({row.get("uuid") for row in rows}) != selected:
+        raise ValueError(f"view index must contain {selected} unique UUIDs")
     for row in rows:
         if not row.get("uuid") or not row.get("prompt"):
             raise ValueError(f"invalid source row: {row}")
@@ -133,7 +133,6 @@ def generate_one(runtime, args, row: dict[str, Any], source_root: Path, nouns: t
     post_step5 = cache_dir / "latents_step_004.pt"
     if not pre_step5.is_file() or not post_step5.is_file():
         raise FileNotFoundError(f"step-5 trajectory is incomplete for {uuid}")
-    started = time.perf_counter()
     attention_input = native.load_latent(pre_step5, runtime.device, torch.float32)
     step5_latent = native.load_latent(post_step5, runtime.device, torch.float32)
     token_grid = native.token_grid_for(step5_latent, runtime.pipe.patch_size)
@@ -155,7 +154,6 @@ def generate_one(runtime, args, row: dict[str, Any], source_root: Path, nouns: t
         "status": "completed",
         "nouns": list(nouns),
         "signature": str(signature_path),
-        "seconds": time.perf_counter() - started,
     }
 
 

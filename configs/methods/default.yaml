@@ -8,7 +8,7 @@ retrieval:
     device: cuda:0
     vector_backend: chroma
     min_similarity: 0.65
-    reuse_step: 10
+    reuse_step: 5
   chai:
     # Reference CHAI uses one LongCLIP vector per spaCy NOUN token.
     backend: longclip
@@ -32,13 +32,14 @@ retrieval:
     # The paper only specifies that F(score, N) is monotonic. This is a
     # documented linear approximation for the existing 50-step Wan path.
     stage_scheduler:
-      min_k1: 10
+      min_k1: 5
       min_k2: 30
-      max_k1: 10
+      max_k1: 5
       max_k2: 30
   carnator:
-    # Shares CLIP/Chroma prompt ranking with NIRVANA and Chorus, then applies
-    # local entity filtering and the selected native step-5 signature gate.
+    # Noun prefilter -> Early Signature gate -> CLIP top-1 for the current
+    # noun-match VidProM experiment.
+    retrieval_version: v2
     backend: clip
     model_id: openai/clip-vit-large-patch14
     device: cuda:0
@@ -50,15 +51,15 @@ retrieval:
     # The sole Early Signature decodes one tail frame at step 5 and uses
     # CIEDE2000 colour, area, and normalized-shape gates. Set these only from
     # a frozen calibration result; absent thresholds fail closed.
-    max_context_color_distance: 2.2635538336347514
-    max_log_area_ratio: 2.7357336654774373
-    max_shape_distance: 0.924812030075188
-    max_changed_color_distance: 2.540308037689532
+    max_context_color_distance: 2.5460641772840114
+    max_log_area_ratio: 1.6755377126043391
+    max_shape_distance: 1.0
+    max_changed_color_distance: 2.2003341853972085
 chorus:
   stages:
     # Engineering schedule for the 50-step Wan2.2 run; Chorus does not
     # publish numeric K1/K2 values.
-    k1: 10
+    k1: 5
     k2: 30
   gamma_k: 1.5
   gamma_o: 1.5

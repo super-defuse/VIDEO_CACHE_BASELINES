@@ -22,5 +22,5 @@ teacache:
   relative_l1_threshold: 0.08
   max_skip_steps: 2
 nirvana_vid:
-  reuse_start_step: 10
-  cache_steps: [10]
+  reuse_start_step: 5
+  cache_steps: [5]

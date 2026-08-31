@@ -48,6 +48,19 @@ def test_middle_attention_mask_is_enabled_by_default_and_captures_all_layers():
     assert native.block_mask_capture_layers(legacy) == list(range(10)) + list(range(21, 30))
 
 
+def test_source_mask_prewarm_reports_cache_contents(tmp_path):
+    config = BlockMaskConfig(q_block_size=2, k_block_size=2, top_p=0.9, min_top_k=0.0)
+    cache = SourceBlockMaskCache(tmp_path / "masks", config, source_run_id="source", cfg_branch_count=1, create=True)
+    q = torch.ones((4, 1, 2), dtype=torch.float16)
+    cache.capture(1, "cond", 0, q, q)
+
+    prewarm = cache.prewarm()
+
+    assert prewarm["entries"] == 1
+    assert prewarm["file_bytes"] > 0
+    assert prewarm["elapsed_seconds"] >= 0.0
+
+
 def test_shared_dense_export_references_one_canonical_source_cache(tmp_path):
     args = native.build_parser().parse_args([
         "--prepare-shared-dense-cache",

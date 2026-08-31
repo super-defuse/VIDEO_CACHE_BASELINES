@@ -26,6 +26,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 import torch
 from PIL import Image
@@ -35,6 +36,12 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 DEFAULT_OUTPUT_ROOT = HERE / "carnator_insight_experiment"
 DEFAULT_MODEL = ROOT / "models" / "Wan2.2-TI2V-5B"
+FONT_PATH = Path("/home/tangxuebin/font/arial.ttf")
+if not FONT_PATH.is_file():
+    raise FileNotFoundError(f"Arial font file not found: {FONT_PATH}")
+font_manager.fontManager.addfont(str(FONT_PATH))
+ARIAL_FAMILY = font_manager.FontProperties(fname=str(FONT_PATH)).get_name()
+matplotlib.rcParams.update({"font.family": ARIAL_FAMILY, "font.sans-serif": [ARIAL_FAMILY]})
 DEFAULT_GPUS = "3,4,5,6,7"
 PROMPT_NEGATIVE = "text, watermark, logo, captions, people, extra objects, distorted object"
 BLOCK_CONFIG = {"q_block_size": 64, "k_block_size": 128, "top_p": 0.95, "min_top_k": 0.10}

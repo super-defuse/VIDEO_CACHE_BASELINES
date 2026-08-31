@@ -1,0 +1,40 @@
+{
+  "clip": {
+    "device": "cuda:3",
+    "model_id": "openai/clip-vit-large-patch14"
+  },
+  "generation": {
+    "mask_probe_step": 5,
+    "reuse_start_step": 10,
+    "signature": "fused-self-cross",
+    "steps": 50
+  },
+  "input": "/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv",
+  "input_sha256": "345538f1e7bfb0988b40747150694246b11daaa74f78b8d803fa67f494283e9b",
+  "noun_filter": "same_noun_set_or_single_noun_substitution",
+  "pair_count": 300,
+  "pair_source": "noun filter then CLIP nearest source excluding identical target UUID",
+  "pairs_csv": {
+    "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/pairs.csv",
+    "sha256": "237b47ca175144cfb96e40bc4aa15be181411fd0a8dc1deda65ef447931552e4"
+  },
+  "quality_thresholds": {
+    "clip_t_min": 0.0,
+    "confidence": 0.95,
+    "coverage_denominator": "all",
+    "coverage_min": 0.9,
+    "q_min": 0.0
+  },
+  "retrieval": {
+    "method": "Carnator",
+    "selection_order": [
+      "noun_prefilter",
+      "early_signature",
+      "clip_top_1"
+    ],
+    "version": "v2"
+  },
+  "schema_version": "vidprom-forced-early-signature-calibration/v1",
+  "source_view": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/source_view",
+  "source_view_manifest_sha256": "99b69b28a0e8888791152fa7c8b7b91a401f999a387fd8d23552d1c5683cb1fe"
+}

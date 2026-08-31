@@ -31,9 +31,9 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input/cluster_02_2170_random300_input.csv")
-DEFAULT_SOURCE_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000" / "cached_requests_923"
-DEFAULT_RUN_ROOT = ROOT / "artifacts" / "vidprom_1000cache_300input" / "forced_early_signature_calibration"
+DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv")
+DEFAULT_SOURCE_VIEW = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
+DEFAULT_RUN_ROOT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "forced_early_signature_calibration"
 DEFAULT_MODEL = Path(os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", "/home/tangxuebin/models/Wan2.2-TI2V-5B"))
 DEFAULT_GPUS = "3,4,5,6,7"
 FUSED_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
@@ -147,6 +147,17 @@ def _extract_nouns(prompts: Sequence[str], extractor_name: str) -> list[tuple[st
     return [_canonical_nouns(extractor.extract(prompt)) for prompt in prompts]
 
 
+def _noun_prefilter(source: Iterable[str], target: Iterable[str]) -> bool:
+    source_nouns = set(source)
+    target_nouns = set(target)
+    if not source_nouns or not target_nouns:
+        return False
+    return source_nouns == target_nouns or (
+        len(source_nouns - target_nouns) == 1
+        and len(target_nouns - source_nouns) == 1
+    )
+
+
 def load_source_rows(view: Path, *, require_fused_signature: bool = True) -> list[SourceRow]:
     manifest = read_json(view / "view_manifest.json")
     selected = int(manifest.get("selected_requests", -1))
@@ -198,9 +209,13 @@ def select_nearest_pairs(
     sources: Sequence[SourceRow],
     target_vectors: Sequence[Sequence[float]],
     source_vectors: Sequence[Sequence[float]],
+    target_nouns: Sequence[Sequence[str]] | None = None,
+    noun_filter_first: bool = False,
 ) -> list[ForcedPair]:
     if len(targets) != len(target_vectors) or len(sources) != len(source_vectors):
         raise ValueError("embedding count does not match prompt count")
+    if noun_filter_first and (target_nouns is None or len(target_nouns) != len(targets)):
+        raise ValueError("noun-filter-first pairing requires one noun set per target")
     if not sources:
         raise ValueError("source pool is empty")
     try:
@@ -220,11 +235,22 @@ def select_nearest_pairs(
     pairs: list[ForcedPair] = []
     for target_index, (target, target_vector) in enumerate(zip(targets, target_vectors)):
         if scores is not None:
-            candidates = [(source, float(scores[target_index, source_index])) for source_index, source in enumerate(sources) if source.uuid != target.uuid]
+            candidates = [
+                (source, float(scores[target_index, source_index]))
+                for source_index, source in enumerate(sources)
+                if source.uuid != target.uuid
+                and (not noun_filter_first or _noun_prefilter(source.source_nouns, target_nouns[target_index]))
+            ]
         else:
-            candidates = [(source, _cosine(target_vector, vector)) for source, vector in zip(sources, source_vectors) if source.uuid != target.uuid]
+            candidates = [
+                (source, _cosine(target_vector, vector))
+                for source, vector in zip(sources, source_vectors)
+                if source.uuid != target.uuid
+                and (not noun_filter_first or _noun_prefilter(source.source_nouns, target_nouns[target_index]))
+            ]
         if not candidates:
-            raise ValueError(f"no non-self source candidate for target {target.uuid}")
+            qualifier = " noun-compatible" if noun_filter_first else ""
+            raise ValueError(f"no{qualifier} non-self source candidate for target {target.uuid}")
         source, score = max(candidates, key=lambda item: item[1])
         pairs.append(ForcedPair(
             pair_id=f"clip_forced_{target.request_index + 1:04d}",
@@ -236,7 +262,11 @@ def select_nearest_pairs(
             source_prompt=source.prompt,
             source_nouns=source.source_nouns,
             clip_similarity=float(score),
-            pair_source="clip_nearest_excluding_self",
+            pair_source=(
+                "noun_filter_then_clip_nearest_excluding_self"
+                if noun_filter_first
+                else "clip_nearest_excluding_self"
+            ),
             source_run_dir=source.source_run_dir,
             source_cache_dir=source.source_cache_dir,
             source_signature_path=source.source_signature_path,
@@ -308,11 +338,18 @@ def pair_command(args: argparse.Namespace) -> int:
     embedder = TransformersClipEmbedder(args.clip_model_id, args.clip_device)
     target_vectors = embedder.encode([row.prompt for row in targets])
     source_vectors = embedder.encode([row.prompt for row in sources])
-    pairs = select_nearest_pairs(targets, sources, target_vectors, source_vectors)
-    target_nouns = _extract_nouns([pair.target_prompt for pair in pairs], args.noun_extractor)
+    target_nouns = _extract_nouns([row.prompt for row in targets], args.noun_extractor)
     if any(not nouns for nouns in target_nouns):
-        empty = [pair.target_uuid for pair, nouns in zip(pairs, target_nouns) if not nouns]
+        empty = [row.uuid for row, nouns in zip(targets, target_nouns) if not nouns]
         raise ValueError(f"noun extraction produced no nouns for target UUIDs: {empty[:5]}")
+    pairs = select_nearest_pairs(
+        targets,
+        sources,
+        target_vectors,
+        source_vectors,
+        target_nouns=target_nouns,
+        noun_filter_first=args.noun_filter_first,
+    )
     pairs = [ForcedPair(**{**pair.__dict__, "target_nouns": nouns}) for pair, nouns in zip(pairs, target_nouns)]
     source_link_root = run_root / "sources"
     source_link_root.mkdir(parents=True, exist_ok=True)
@@ -345,7 +382,19 @@ def pair_command(args: argparse.Namespace) -> int:
         "source_view": str(view),
         "source_view_manifest_sha256": sha256_file(view / "view_manifest.json"),
         "pair_count": len(pairs),
-        "pair_source": "CLIP nearest source excluding identical target UUID",
+        "pair_source": (
+            "noun filter then CLIP nearest source excluding identical target UUID"
+            if args.noun_filter_first
+            else "CLIP nearest source excluding identical target UUID"
+        ),
+        "noun_filter": "same_noun_set_or_single_noun_substitution" if args.noun_filter_first else None,
+        "retrieval": {
+            "method": "Carnator",
+            "version": "v2" if args.noun_filter_first else "forced-calibration",
+            "selection_order": ["noun_prefilter", "early_signature", "clip_top_1"]
+            if args.noun_filter_first
+            else ["clip_nearest_forced_pair"],
+        },
         "clip": {"model_id": args.clip_model_id, "device": args.clip_device},
         "generation": {"steps": 50, "mask_probe_step": 5, "reuse_start_step": 10, "signature": "fused-self-cross"},
         "quality_thresholds": {"q_min": None, "clip_t_min": None, "coverage_min": args.coverage_min, "confidence": args.confidence},
@@ -628,7 +677,11 @@ def _write_scan_report(run_root: Path, records: list[dict[str, Any]], sweep: lis
     quality_root.mkdir(parents=True, exist_ok=True)
     suffix = "" if getattr(args, "coverage_denominator", "all") == "all" else "_comparable"
     with (quality_root / f"forced_threshold_sweep{suffix}.csv.tmp").open("w", newline="", encoding="utf-8") as handle:
-        fields = ["max_context_color_distance", "max_log_area_ratio", "max_shape_distance", "max_changed_color_distance", "n", "k", "coverage", "success_rate", "one_sided_cp_lower", "quality_floor_pass"]
+        fields = [
+            "max_context_color_distance", "max_log_area_ratio", "max_shape_distance",
+            "max_changed_color_distance", "n", "k", "coverage", "success_rate",
+            "one_sided_cp_lower", "min_clip_t", "min_vbench_q", "quality_floor_pass",
+        ]
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for row in sweep:
@@ -704,6 +757,8 @@ def scan_forced_pairs(args: argparse.Namespace) -> int:
                 "n": n, "k": success, "coverage": coverage,
                 "success_rate": success / n if n else 0.0,
                 "one_sided_cp_lower": lower,
+                "min_clip_t": min(float(row["clip_t"]) for row in accepted) if accepted else None,
+                "min_vbench_q": min(float(row["vbench_q_i"]) for row in accepted) if accepted else None,
                 "quality_floor_pass": coverage >= args.coverage_min and lower >= args.selection_min_lower_bound,
                 "accepted_pair_ids": [row["pair_id"] for row in accepted],
             })
@@ -716,6 +771,16 @@ def scan_forced_pairs(args: argparse.Namespace) -> int:
         "coverage_min": args.coverage_min, "confidence": args.confidence,
         "selection_min_lower_bound": args.selection_min_lower_bound,
         "max_threshold_values": args.max_threshold_values, "sweep_count": len(sweep),
+    })
+    qualified = [
+        row for row in sweep
+        if row["coverage"] >= args.coverage_min and row["one_sided_cp_lower"] >= args.selection_min_lower_bound
+    ]
+    write_json(run_root / "quality" / f"forced_scan_qualified{suffix}.json", {
+        "coverage_min": args.coverage_min,
+        "selection_min_lower_bound": args.selection_min_lower_bound,
+        "qualified_count": len(qualified),
+        "hyperparameters": qualified,
     })
     print(json.dumps({"status": "completed", "pair_count": len(pairs), "comparable_pairs": len(records), "sweep_count": len(sweep)}))
     return 0
@@ -743,6 +808,12 @@ def build_parser() -> argparse.ArgumentParser:
     pair.add_argument("--clip-model-id", default="openai/clip-vit-large-patch14")
     pair.add_argument("--clip-device", default="cuda:3")
     pair.add_argument("--noun-extractor", choices=("spacy", "lexical", "none"), default="spacy")
+    pair.add_argument(
+        "--noun-filter-first",
+        action="store_true",
+        default=True,
+        help="restrict sources to Carnator noun-compatible entries before CLIP ranking",
+    )
     pair.add_argument("--coverage-min", type=float, default=0.90)
     pair.add_argument("--confidence", type=float, default=0.95)
 

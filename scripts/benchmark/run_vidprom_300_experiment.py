@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run one VidProM 300-request baseline against the immutable 923-entry view.
+"""Run one VidProM 300-request baseline against the immutable source view.
 
 The script is intentionally one-method/one-GPU.  It can therefore be started
 five times in parallel without sharing model state or writing to the canonical
@@ -26,7 +26,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from adapters import make_adapter
-from core import Request, Runner
+from core import CacheMatch, Request, Runner
 from core.cache import CacheEntry
 from core.registry import ensure_supported, make_method
 from core.retrieval import VectorRecord
@@ -35,17 +35,22 @@ METHODS = ("nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5
 GPU_BY_METHOD = {"nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 GPU_COUNT = 8
 EARLY_SIGNATURE_THRESHOLDS = {
-    # Frozen from the forced-pair calibration: 84/93 comparable pairs pass
-    # the gate, with a one-sided 95% CP quality lower bound of 0.8943.
-    "max_context_color_distance": 2.2635538336347514,
-    "max_log_area_ratio": 2.7357336654774373,
-    "max_shape_distance": 0.924812030075188,
-    "max_changed_color_distance": 2.540308037689532,
+    # Representative noun-match calibration tuple: 270/300 pairs pass;
+    # 1,092 qualified tuples remain in forced_scan_qualified.json.
+    "max_context_color_distance": 2.5460641772840114,
+    "max_log_area_ratio": 1.6755377126043391,
+    "max_shape_distance": 1.0,
+    "max_changed_color_distance": 2.2003341853972085,
 }
 FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
-DEFAULT_VIEW = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000" / "cached_requests_923"
-DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input/cluster_02_2170_random300_input.csv")
-DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input" / "results"
+DEFAULT_VIEW = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
+DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv")
+DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "results"
+DENSE_C0_VERSION = "wan22-dense-c0-v1"
+WARMUP_SOURCE_PROMPT = "a dog is sleeping on a grassland, focus on the dog"
+WARMUP_TARGET_PROMPT = "a cat is sleeping on a grassland, focus on the cat"
+SMOKE_FORCED_REQUEST_INDICES = (0, 1)
+SMOKE_FORCED_HIT_SOURCE_UUID = "4f8357f4-3305-51d5-95d3-30fd8067ec44"
 
 
 def sha256_file(path: Path) -> str:
@@ -85,13 +90,18 @@ def resolved_config(device: str, dry_run: bool) -> dict[str, Any]:
     return config
 
 
-def read_rows(path: Path, limit: int, *, arrival_start: int = 0, arrival_stop: int | None = None) -> list[dict[str, Any]]:
+def read_rows(path: Path, limit: int, *, arrival_start: int = 0, arrival_stop: int | None = None,
+              request_indices: list[int] | None = None) -> list[dict[str, Any]]:
     with path.expanduser().open(newline="", encoding="utf-8-sig") as stream:
         rows = list(csv.DictReader(stream))
     required = {"uuid", "prompt"}
     if not rows or required - set(rows[0]):
         raise ValueError(f"input CSV must contain {sorted(required)}: {path}")
     selected = rows[:limit]
+    indexed = list(enumerate(selected))
+    if request_indices is not None:
+        indexed = [(index, selected[index]) for index in request_indices]
+    selected = [row for _, row in indexed]
     stop = len(selected) if arrival_stop is None else arrival_stop
     if not 0 <= arrival_start < stop <= len(selected):
         raise ValueError(f"arrival range must satisfy 0 <= start < stop <= {len(selected)}")
@@ -105,10 +115,143 @@ def read_rows(path: Path, limit: int, *, arrival_start: int = 0, arrival_stop: i
         if not uuid or Path(uuid).name != uuid or uuid in seen or not prompt:
             raise ValueError(f"invalid or duplicate request row at arrival {arrival_index}: {uuid!r}")
         seen.add(uuid)
-        result.append({"arrival_index": arrival_index, "request_index": arrival_index, "uuid": uuid, "prompt": prompt})
+        original_index = request_indices[arrival_index] if request_indices is not None else arrival_index
+        result.append({"arrival_index": arrival_index, "request_index": original_index, "uuid": uuid, "prompt": prompt})
     if not result:
         raise ValueError("input CSV is empty")
     return result
+
+
+def forced_smoke_decision(args: argparse.Namespace, request_index: int) -> str | None:
+    """Return the explicitly requested cross-request outcome for the two-row smoke."""
+    if not args.smoke_force_outcomes:
+        return None
+    if request_index == SMOKE_FORCED_REQUEST_INDICES[0]:
+        return "miss"
+    if request_index == SMOKE_FORCED_REQUEST_INDICES[1]:
+        return "hit"
+    raise ValueError(f"forced smoke has no decision for request_index={request_index}")
+
+
+def forced_smoke_config(args: argparse.Namespace) -> dict[str, Any]:
+    return {
+        "enabled": bool(args.smoke_force_outcomes),
+        "request_0": "miss" if args.smoke_force_outcomes else None,
+        "request_1": "hit" if args.smoke_force_outcomes else None,
+        "hit_source_uuid": SMOKE_FORCED_HIT_SOURCE_UUID if args.smoke_force_outcomes else None,
+        "tea_cache": "not_applicable_target_only",
+    }
+
+
+def validate_forced_smoke(args: argparse.Namespace, rows: list[dict[str, Any]], view_rows: list[dict[str, Any]]) -> None:
+    if not args.smoke_force_outcomes:
+        return
+    request_indices = tuple(row["request_index"] for row in rows)
+    if request_indices != SMOKE_FORCED_REQUEST_INDICES:
+        raise ValueError(
+            "--smoke-force-outcomes requires exactly --request-indices 0,1 "
+            "with both arrivals in this worker"
+        )
+    if SMOKE_FORCED_HIT_SOURCE_UUID not in {row["uuid"] for row in view_rows}:
+        raise ValueError(
+            "--smoke-force-outcomes requires its fixed hit source UUID in the supplied cache view: "
+            f"{SMOKE_FORCED_HIT_SOURCE_UUID}"
+        )
+
+
+def cache_match_audit(match: CacheMatch) -> dict[str, Any]:
+    return {
+        "hit": match.hit,
+        "source_uuid": match.source_uuid,
+        "source_request_index": match.source_request_index,
+        "kind": match.kind,
+        "score": match.score,
+    }
+
+
+def force_cache_match(
+    observed: CacheMatch,
+    *,
+    outcome: str,
+    request_index: int,
+    method_name: str,
+    source_by_uuid: dict[str, dict[str, Any]],
+    config: dict[str, Any],
+) -> CacheMatch:
+    """Override one smoke decision while retaining the real lookup as audit metadata."""
+    if outcome not in {"hit", "miss"}:
+        raise ValueError(f"unsupported forced outcome: {outcome}")
+    metadata: dict[str, Any] = {
+        "retriever": "forced_smoke",
+        "forced_smoke": {
+            "outcome": outcome,
+            "request_index": request_index,
+            "observed_match": cache_match_audit(observed),
+        },
+    }
+    if outcome == "miss":
+        return CacheMatch(kind="forced_smoke_miss", metadata=metadata)
+
+    source = source_by_uuid.get(SMOKE_FORCED_HIT_SOURCE_UUID)
+    if source is None:
+        raise ValueError(f"forced smoke source is unavailable: {SMOKE_FORCED_HIT_SOURCE_UUID}")
+    metadata["forced_smoke"]["source_uuid"] = SMOKE_FORCED_HIT_SOURCE_UUID
+    if method_name == "nirvana_vid":
+        metadata["reuse_step"] = int(config.get("retrieval", {}).get("nirvana_vid", {}).get("reuse_step", 5))
+    elif method_name == "chorus":
+        stages = config.get("chorus", {}).get("stages", {})
+        metadata["stage_boundaries"] = {"k1": int(stages.get("k1", 5)), "k2": int(stages.get("k2", 30))}
+    return CacheMatch(
+        True,
+        SMOKE_FORCED_HIT_SOURCE_UUID,
+        int(source.get("request_index", 0)),
+        "forced_smoke_hit",
+        metadata=metadata,
+    )
+
+
+def forced_carnator_probe_match(observed: CacheMatch, *, request_index: int, outcome: str) -> CacheMatch:
+    """Keep the target-side probe in the smoke before overriding its final decision."""
+    return CacheMatch(
+        kind="probe_required",
+        metadata={
+            "retriever": "forced_smoke",
+            "probe_required": True,
+            "forced_smoke": {
+                "outcome": outcome,
+                "request_index": request_index,
+                "observed_match": cache_match_audit(observed),
+            },
+        },
+    )
+
+
+def install_forced_generic_decisions(
+    method: Any,
+    args: argparse.Namespace,
+    *,
+    source_by_uuid: dict[str, dict[str, Any]],
+    config: dict[str, Any],
+) -> None:
+    """Apply the smoke override after the normal lookup has completed."""
+    if not args.smoke_force_outcomes or not method.capabilities.cross_request_cache:
+        return
+    find_cache = method.find_cache
+
+    def forced_find_cache(request: Request) -> CacheMatch:
+        observed = find_cache(request)
+        outcome = forced_smoke_decision(args, request.request_index)
+        assert outcome is not None
+        return force_cache_match(
+            observed,
+            outcome=outcome,
+            request_index=request.request_index,
+            method_name=method.name,
+            source_by_uuid=source_by_uuid,
+            config=config,
+        )
+
+    method.find_cache = forced_find_cache
 
 
 def load_view(view: Path) -> list[dict[str, Any]]:
@@ -117,11 +260,12 @@ def load_view(view: Path) -> list[dict[str, Any]]:
     if not manifest.is_file() or not index.is_file():
         raise FileNotFoundError(f"cache view is incomplete: {view}")
     payload = json.loads(manifest.read_text(encoding="utf-8"))
-    if int(payload.get("selected_requests", -1)) != 923:
-        raise ValueError(f"expected 923 source entries, got {payload.get('selected_requests')}")
+    selected = int(payload.get("selected_requests", -1))
+    if selected <= 0:
+        raise ValueError(f"source view has invalid selected_requests={selected}")
     rows = [json.loads(line) for line in index.read_text(encoding="utf-8").splitlines() if line]
-    if len(rows) != 923 or len({row.get("uuid") for row in rows}) != 923:
-        raise ValueError("cache view index must contain 923 unique UUIDs")
+    if len(rows) != selected or len({row.get("uuid") for row in rows}) != selected:
+        raise ValueError(f"cache view index must contain {selected} unique UUIDs")
     for row in rows:
         entry = view / "entries" / str(row["uuid"])
         if not entry.is_dir() or not (entry / "manifest.json").is_file() or not (entry / "source.mp4").is_file():
@@ -155,6 +299,15 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
     if args.gpu not in range(3, 8):
         raise ValueError("--gpu must be one of 3,4,5,6,7")
     view_rows = load_view(args.cache_view.expanduser().resolve())
+    if args.smoke_force_outcomes:
+        rows = read_rows(
+            args.input,
+            args.limit,
+            arrival_start=args.arrival_start,
+            arrival_stop=args.arrival_stop,
+            request_indices=args.request_indices,
+        )
+        validate_forced_smoke(args, rows, view_rows)
     if args.method == "carnator_boundary_b5":
         validate_carnator_signature_view(args.cache_view.expanduser().resolve(), view_rows)
     config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
@@ -175,16 +328,14 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
         "input_sha256": sha256_file(args.input.expanduser().resolve()),
         "view_manifest_sha256": sha256_file((args.cache_view / "view_manifest.json").resolve()),
         "config_fingerprint": hashlib.sha256(json.dumps(config, sort_keys=True, default=str).encode()).hexdigest(),
+        "forced_smoke": forced_smoke_config(args),
     }
 
 
 def source_path(view: Path, row: dict[str, Any], method: str) -> Path:
     root = view / "entries" / str(row["uuid"])
     source = root / "carnator" / "cache" / "source_dense"
-    if method == "nirvana_vid":
-        path = source / "latents_step_009.pt"
-    else:
-        path = source
+    path = source / "latents_step_004.pt" if method == "nirvana_vid" else source
     if not path.exists():
         raise FileNotFoundError(f"source payload is missing: {path}")
     return path
@@ -219,7 +370,7 @@ def preload_view(runner: Runner, view: Path, rows: list[dict[str, Any]], method_
             if not video_alias.exists():
                 video_alias.symlink_to(source_video)
             path = alias
-        entries[uuid] = CacheEntry(uuid, int(row.get("request_index", 0)), prompt, str(path), 10, 1, time.time(), metadata={"source_view": True})
+        entries[uuid] = CacheEntry(uuid, int(row.get("request_index", 0)), prompt, str(path), 5, 1, time.time(), metadata={"source_view": True})
         prompts.append(prompt)
         records_meta.append({"uuid": uuid, "term": prompt})
     vectors = retriever.embedder.encode(prompts)
@@ -230,6 +381,57 @@ def preload_view(runner: Runner, view: Path, rows: list[dict[str, Any]], method_
     runner.cache._save_retrieval()
     retriever.bind_vector_store(runner.cache.vector_store)
     retriever.sync_vector_store(runner.cache._records)
+
+
+def write_warmup_record(output: Path, *, paths: list[str], status: str = "completed") -> None:
+    (output / "warmup.json").write_text(json.dumps({
+        "status": status,
+        "source_prompt": WARMUP_SOURCE_PROMPT,
+        "target_prompt": WARMUP_TARGET_PROMPT,
+        "seed": 20260218,
+        "paths": paths,
+        "timed": False,
+        "shared_cache_written": False,
+    }, indent=2) + "\n", encoding="utf-8")
+
+
+def synchronize_cuda() -> None:
+    import torch
+
+    torch.cuda.synchronize()
+
+
+def warmup_generic(adapter: Any, method_name: str, output: Path, view: Path) -> None:
+    """Exercise each generic path without adding a benchmark request."""
+    root = output / "warmup-work"
+    root.mkdir(parents=True, exist_ok=True)
+    source = Request(-1, "warmup-dog", WARMUP_SOURCE_PROMPT, 20260218)
+    target = Request(-2, "warmup-cat", WARMUP_TARGET_PROMPT, 20260218, cache_prompt=WARMUP_SOURCE_PROMPT)
+    if method_name == "teacache":
+        adapter.generate(target, capture=False, method="teacache")
+        paths = ["target_only"]
+    elif method_name == "nirvana_vid":
+        source_result = adapter.generate(source, capture=True, method="nirvana_vid")
+        adapter.generate(target, cached_latent=source_result.latent[5], capture=False, method="nirvana_vid")
+        paths = ["source_capture", "latent_reuse"]
+    elif method_name == "chorus":
+        adapter.generate(source, capture=True, method="chorus")
+        # Load the external models and their kernels outside the timed
+        # requests. Detection itself runs on the real source video, where a
+        # synthetic warm-up clip can otherwise produce a detector miss.
+        from methods.chorus.grounded_sam import GroundedSam2Segmenter
+        chorus_cfg = adapter.config.get("chorus", {})
+        sam_config = {
+            **chorus_cfg.get("grounded_sam2", {}),
+            "device": str(adapter.config.get("device", "cuda")),
+        }
+        GroundedSam2Segmenter(sam_config)._load()
+        paths = ["source_capture", "chorus_sam_model_loaded"]
+    else:
+        raise ValueError(f"unsupported generic warm-up method: {method_name}")
+    synchronize_cuda()
+    shutil.rmtree(root)
+    write_warmup_record(output, paths=paths)
 
 
 def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
@@ -251,8 +453,22 @@ def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path
         # End-to-end latency is the complete request wall-clock.  Chorus's
         # external models are retained as a separate breakdown below.
         exclude_preprocess_latency=False,
+        exclude_cache_prepare_latency=True,
+        skip_generation_on_miss=True,
     )
-    preload_view(runner, view, view_rows_for_preload(view), method_name)
+    source_rows = view_rows_for_preload(view)
+    if not args.dry_run:
+        preload_view(runner, view, source_rows, method_name)
+    install_forced_generic_decisions(
+        method,
+        args,
+        source_by_uuid={row["uuid"]: row for row in source_rows},
+        config=config,
+    )
+    if args.dry_run:
+        write_warmup_record(output, paths=[], status="skipped_dry_run")
+    else:
+        warmup_generic(adapter, method_name, output, view)
     results: list[dict[str, Any]] = []
     for row in rows:
         request = Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
@@ -264,18 +480,51 @@ def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path
             + float(payload.get("extra", {}).get("chorus_sam_s", 0.0))
             if method_name == "chorus" else 0.0
         )
+        hit = bool(payload.get("cache_match", {}).get("hit"))
+        if payload.get("status") == "cache_miss":
+            payload.update({
+                "arrival_index": row["arrival_index"],
+                "video_path": None,
+                "quality_input_path": None,
+                "output_path": None,
+                "denoising_s": None,
+                "external_s": 0.0,
+                "hit_e2e_s": None,
+                "hit_denoising_s": None,
+                "hit": False,
+                "source_uuid": None,
+                "latency_s": 0.0,
+                "executed_steps": 0,
+                "target_cache_persisted": False,
+                "extra": {**payload.get("extra", {}), "denoising_timing": None},
+            })
+            append_result_and_record(output, payload, row, method_name)
+            results.append(payload)
+            continue
+        raw_dit_forward_s = payload.get("extra", {}).get("dit_forward_s")
+        if raw_dit_forward_s is None and not args.dry_run:
+            raise RuntimeError(f"{method_name} did not report CUDA-synchronized DiT forward time")
+        denoising_s = float(raw_dit_forward_s or 0.0)
         payload.update({
             "arrival_index": row["arrival_index"],
             "video_path": payload.get("output_path"),
-            # TeaCache is target-only; protocol reports no cross-request
-            # retrieval even though the common timer has measurable overhead.
-            "retrieval_s": 0.0 if method_name == "teacache" else timing.get("cache_lookup_s", 0.0),
-            # Chorus generation_s includes its external LLM/SAM calls; keep
-            # those calls in External and report only native denoising here.
-            "denoising_s": max(0.0, timing.get("generation_s", payload.get("latency_s", 0.0)) - external_s),
+            # External is an E2E component for Chorus and remains a separate
+            # breakdown; Denoising itself is DiT forward time only.
+            "denoising_s": denoising_s,
             "external_s": external_s,
-            "hit": bool(payload.get("cache_match", {}).get("hit")),
+            "hit": hit,
+            "hit_e2e_s": payload.get("latency_s") if hit else None,
+            "hit_denoising_s": denoising_s if hit else None,
             "target_cache_persisted": False,
+            "extra": {
+                **payload.get("extra", {}),
+                "denoising_timing": {
+                    "definition": "cuda_synchronized_dit_forward",
+                    "target_dit_forward_s": denoising_s,
+                    "probe_dit_forward_s": 0.0,
+                    "total_dit_forward_s": denoising_s,
+                },
+            },
         })
         append_result_and_record(output, payload, row, method_name)
         results.append(payload)
@@ -310,6 +559,10 @@ def build_request_record(
         "similarity": similarity,
         "retrieval_kind": cache_match.get("kind") or metadata.get("retriever"),
         "external_s": float(payload.get("external_s", 0.0)),
+        "latency_s": payload.get("latency_s"),
+        "denoising_s": payload.get("denoising_s"),
+        "hit_e2e_s": payload.get("hit_e2e_s"),
+        "hit_denoising_s": payload.get("hit_denoising_s"),
     }
     if method_name == "carnator_boundary_b5":
         record["retrieval"] = {
@@ -383,7 +636,7 @@ def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_nam
     carnator_records: list[VectorRecord] = []
     for row, vector in zip(source_rows, carnator_vectors, strict=True):
         entry = CacheEntry(
-            row["uuid"], int(row.get("request_index", 0)), row["prompt"], "", 10, 1, 0.0
+            row["uuid"], int(row.get("request_index", 0)), row["prompt"], "", 5, 1, 0.0
         )
         nouns = carnator.noun_extractor.for_entry(entry)
         cache_dir = view / "entries" / row["uuid"] / "carnator" / "cache" / "source_dense"
@@ -404,7 +657,130 @@ def write_fake_dense_manifest(path: Path) -> None:
                                 "timing": {"end_to_end_seconds": 1.0}}) + "\n", encoding="utf-8")
 
 
-def make_native_target_collector(args: argparse.Namespace, config: dict[str, Any], artifact_root: Path, probe_seed: int):
+class NativeWanWorker:
+    """One resident native Wan runtime for one benchmark worker/GPU."""
+
+    def __init__(self, args: argparse.Namespace, config: dict[str, Any]) -> None:
+        from carnator.adapters import wan_ti2v_5b as native
+
+        self.native = native
+        self.args = native.build_parser().parse_args([
+            "--no-env-setup",
+            "--model-dir", str(config["model_path"]),
+            "--device", f"cuda:{args.gpu}",
+            "--steps", "50",
+            "--mask-probe-step", "5",
+            "--reuse-start-step", "10",
+            "--mask-layers", "15",
+            "--disable-progress",
+        ])
+        native.ensure_import_paths(self.args)
+        native.validate_experiment_config(self.args)
+        self.runtime = native.load_runtime(self.args)
+        self._closed = False
+
+    def run_carnator(self, argv: list[str]) -> dict[str, Any]:
+        native_args = self.native.build_parser().parse_args(argv)
+        native_args.clean = True
+        return self.native.run_experiment(native_args, runtime=self.runtime)
+
+    def run_chorus2(self, argv: list[str]) -> dict[str, Any]:
+        from chorus2 import wan_ti2v_5b as chorus2
+
+        chorus2_args = chorus2.build_parser().parse_args(argv)
+        chorus2_args.clean = True
+        chorus2_args.outer_attn_backend = "dense" if chorus2_args.target_dense_only else "sparge-sage2"
+        return chorus2.run_experiment(chorus2_args, runtime=self.runtime)
+
+    def close(self) -> None:
+        if self._closed:
+            return
+        self.runtime.profiler.close()
+        if self.args.offload_model:
+            self.runtime.pipe.model.cpu()
+        self.runtime.torch.cuda.empty_cache()
+        self._closed = True
+
+
+def native_dense_argv(
+    args: argparse.Namespace,
+    config: dict[str, Any],
+    artifact_root: Path,
+    results_root: Path,
+    prompt: str,
+    seed: int,
+    *,
+    resume_latent: Path | None = None,
+) -> list[str]:
+    argv = [
+        "--no-env-setup", "--model-dir", str(config["model_path"]), "--device", f"cuda:{args.gpu}",
+        "--artifact-root", str(artifact_root), "--results-root", str(results_root),
+        "--run-id", "run", "--target-prompt", prompt, "--seed", str(seed),
+        "--target-dense-only", "--outer-attn-backend", "dense", "--ffn-backend", "fp",
+        "--skip-w8a8-dense-diagnostic",
+    ]
+    if resume_latent is not None:
+        argv.extend(("--target-resume-latent", str(resume_latent), "--target-resume-step", "5"))
+    return argv
+
+
+def warmup_native(
+    args: argparse.Namespace,
+    config: dict[str, Any],
+    view: Path,
+    output: Path,
+    worker: NativeWanWorker,
+) -> None:
+    """Warm the resident runtime without producing a scored request."""
+    root = output / "warmup-work"
+    root.mkdir(parents=True, exist_ok=True)
+    worker.run_carnator(native_dense_argv(
+        args, config, root / "dense-artifacts", root / "dense-results", WARMUP_TARGET_PROMPT, 20260218,
+    ))
+    source = view_rows_for_preload(view)[0]
+    entry = view / "entries" / source["uuid"]
+    if args.method == "chorus2":
+        worker.run_chorus2([
+            "--model-dir", str(config["model_path"]), "--device", f"cuda:{args.gpu}",
+            "--artifact-root", str(root / "reuse-artifacts"), "--results-root", str(root / "reuse-results"),
+            "--run-id", "run", "--source-prompt", source["prompt"], "--target-prompt", WARMUP_TARGET_PROMPT,
+            "--seed", "20260218",
+            "--source-mask-cache", str(entry / "carnator" / "cache" / "source_dense" / "outer_block_masks"),
+        ])
+        paths = ["dense_c0", "chorus2_reuse"]
+    else:
+        collector = make_native_target_collector(args, config, root / "probe", 20260218, runtime=worker.runtime)
+        try:
+            collector.process(
+                Request(-2, "warmup-cat", WARMUP_TARGET_PROMPT, 20260218), ["cat"],
+                evaluate_probe=lambda _: CacheMatch(kind="no_reuse"),
+            )
+        finally:
+            collector.close()
+        manifest = root / "target_dense_manifest.json"
+        write_fake_dense_manifest(manifest)
+        worker.run_carnator([
+            "--no-env-setup", "--model-dir", str(config["model_path"]), "--device", f"cuda:{args.gpu}",
+            "--artifact-root", str(root / "reuse-artifacts"), "--results-root", str(root / "reuse-results"),
+            "--run-id", "run", "--source-prompt", source["prompt"], "--target-prompt", WARMUP_TARGET_PROMPT,
+            "--seed", "20260218", "--source-run-dir", str(entry / "carnator"),
+            "--target-dense-manifest", str(manifest), "--outer-attn-backend", "sparge-sage2",
+            "--ffn-backend", "w8a8", "--skip-w8a8-dense-diagnostic",
+        ])
+        paths = ["dense_c0", "probe_b5", "carnator_reuse"]
+    synchronize_cuda()
+    shutil.rmtree(root)
+    write_warmup_record(output, paths=paths)
+
+
+def make_native_target_collector(
+    args: argparse.Namespace,
+    config: dict[str, Any],
+    artifact_root: Path,
+    probe_seed: int,
+    *,
+    runtime: Any | None = None,
+):
     from carnator.online_collector import NativeOnlineCollector
     from carnator.adapters import wan_ti2v_5b as native
 
@@ -423,6 +799,7 @@ def make_native_target_collector(args: argparse.Namespace, config: dict[str, Any
         artifact_root,
         probe_seed=probe_seed,
         noun_extractor="spacy/en_core_web_sm:NOUN",
+        runtime=runtime,
     )
 
 
@@ -458,6 +835,20 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
     config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
     matcher = None if args.dry_run else prompt_matcher(view, config, False, args.method)
     output.mkdir(parents=True, exist_ok=True)
+    resident_collector = None
+    native_worker: NativeWanWorker | None = None
+
+    def worker() -> NativeWanWorker:
+        nonlocal native_worker
+        if native_worker is None:
+            native_worker = NativeWanWorker(args, config)
+        return native_worker
+
+    if args.dry_run:
+        write_warmup_record(output, paths=[], status="skipped_dry_run")
+    else:
+        warmup_native(args, config, view, output, worker())
+
     for row in rows:
         arrival = row["arrival_index"]
         target = Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
@@ -467,19 +858,40 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
             video.write_bytes(b"CHAI-DRY-RUN:vidprom\n" + row["prompt"].encode())
             payload = {"arrival_index": arrival, "request_index": target.request_index, "uuid": target.uuid, "prompt": target.prompt,
                        "model": "synthetic", "method": args.method, "seed": target.seed, "cache_match": {"hit": False},
-                       "hit": False, "executed_steps": 50, "latency_s": 0.0, "retrieval_s": 0.0, "denoising_s": 0.0,
+                       "hit": False, "executed_steps": 50, "latency_s": 0.0, "denoising_s": 0.0,
+                       "hit_e2e_s": None, "hit_denoising_s": None,
                        "status": "ok", "target_cache_persisted": False, "output_path": str(video),
                        "video_path": str(video), "quality_input_path": str(video)}
         else:
             retriever, records, source_by_uuid, carnator_matcher = matcher
             request_started = time.perf_counter()
-            retrieval_started = time.perf_counter()
-            match = retriever.search(target, records)
+            forced_outcome = forced_smoke_decision(args, target.request_index)
+            observed_match = retriever.search(target, records)
+            match = (
+                force_cache_match(
+                    observed_match,
+                    outcome=forced_outcome,
+                    request_index=target.request_index,
+                    method_name=args.method,
+                    source_by_uuid=source_by_uuid,
+                    config=config,
+                )
+                if forced_outcome is not None
+                else observed_match
+            )
             carnator_match = None
             if carnator_matcher is not None:
                 carnator_retriever, carnator_records = carnator_matcher
-                carnator_match = carnator_retriever.search(target, carnator_records)
-            retrieval_s = time.perf_counter() - retrieval_started
+                observed_carnator_match = carnator_retriever.search(target, carnator_records)
+                carnator_match = (
+                    forced_carnator_probe_match(
+                        observed_carnator_match,
+                        request_index=target.request_index,
+                        outcome=forced_outcome,
+                    )
+                    if forced_outcome is not None
+                    else observed_carnator_match
+                )
             req_root = output / "native" / f"request-{arrival:04d}"
             req_root.mkdir(parents=True, exist_ok=True)
             probe_result = None
@@ -487,102 +899,44 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
             if carnator_matcher is not None and carnator_match is not None and carnator_match.kind == "probe_required":
                 target_nouns = carnator_retriever.noun_extractor.for_request(target)
                 probe_root = req_root / "target_probe"
-                collector = make_native_target_collector(args, config, probe_root, args.seed)
+                if resident_collector is None:
+                    resident_collector = make_native_target_collector(
+                        args, config, probe_root, args.seed, runtime=worker().runtime
+                    )
+                else:
+                    resident_collector.artifact_root = probe_root.resolve()
                 try:
-                    try:
-                        probe_result = collector.process(
-                            target,
-                            target_nouns,
-                            evaluate_probe=lambda signature: carnator_retriever.search(
-                                target, carnator_records, target_signature=signature
-                            ),
+                    def evaluate_probe(signature: dict[str, Any]) -> CacheMatch:
+                        observed_probe_match = carnator_retriever.search(
+                            target, carnator_records, target_signature=signature
                         )
-                    except ValueError as exc:
-                        if str(exc) != "fused Mbase is empty at every time token":
-                            raise
-                        probe_failure = "fused_mbase_empty_at_all_time_tokens"
-                        shutil.rmtree(probe_root, ignore_errors=True)
-                finally:
-                    collector.close()
+                        if forced_outcome is None:
+                            return observed_probe_match
+                        return force_cache_match(
+                            observed_probe_match,
+                            outcome=forced_outcome,
+                            request_index=target.request_index,
+                            method_name=args.method,
+                            source_by_uuid=source_by_uuid,
+                            config=config,
+                        )
+
+                    probe_result = resident_collector.process(
+                        target,
+                        target_nouns,
+                        evaluate_probe=evaluate_probe,
+                    )
+                except ValueError as exc:
+                    if str(exc) != "fused Mbase is empty at every time token":
+                        raise
+                    probe_failure = "fused_mbase_empty_at_all_time_tokens"
+                    shutil.rmtree(probe_root, ignore_errors=True)
                 if probe_result is not None:
                     carnator_match = probe_result.match or carnator_match
-                    retrieval_s += probe_result.signature_gate_s
-            carnator_dense_miss = (
-                args.method == "carnator_boundary_b5"
-                and (carnator_match is None or not carnator_match.hit or carnator_match.kind == "probe_required")
-            )
-            dense_miss = (not match.hit) or carnator_dense_miss
-            execution_match = (
-                carnator_match
-                if carnator_match is not None and carnator_match.hit
-                else match
-            )
-            if dense_miss:
-                dense_seed = (
-                    args.seed
-                    if probe_result is not None and probe_result.source_signature is not None
-                    else target.seed
-                )
-                command = [
-                    sys.executable, "-m", "carnator.adapters.wan_ti2v_5b", "--no-env-setup",
-                    "--model-dir", config["model_path"], "--device", f"cuda:{args.gpu}",
-                    "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"),
-                    "--run-id", "run", "--target-prompt", target.prompt, "--seed", str(dense_seed),
-                    "--target-dense-only", "--outer-attn-backend", "sparge-sage2", "--ffn-backend", "w8a8",
-                    "--skip-w8a8-dense-diagnostic",
-                ]
-                if probe_result is not None and probe_result.source_signature is not None:
-                    cache = probe_result.source_signature.get("cache")
-                    if isinstance(cache, dict) and cache.get("latent_path"):
-                        command.extend(("--target-resume-latent", str(cache["latent_path"]), "--target-resume-step", "10"))
-                summary_path = req_root / "results" / "run" / "summary.json"
-            else:
-                if execution_match.source_uuid is None:
-                    raise RuntimeError("reuse execution has no selected source UUID")
-                source = source_by_uuid[execution_match.source_uuid]
-                entry = view / "entries" / execution_match.source_uuid
-                if args.method == "chorus2":
-                    command = [sys.executable, "-m", "chorus2.wan_ti2v_5b", "--model-dir", config["model_path"], "--device", f"cuda:{args.gpu}",
-                               "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"), "--run-id", "run",
-                               "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
-                               "--source-latent-cache", str(entry / "carnator" / "cache" / "source_dense"),
-                               "--source-mask-cache", str(entry / "carnator" / "cache" / "source_dense" / "outer_block_masks")]
-                    summary_path = req_root / "results" / "run" / "summary.json"
-                else:
-                    fake_manifest = req_root / "target_dense_manifest.json"
-                    write_fake_dense_manifest(fake_manifest)
-                    command = [sys.executable, "-m", "carnator.adapters.wan_ti2v_5b", "--no-env-setup", "--model-dir", config["model_path"],
-                               "--device", f"cuda:{args.gpu}", "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"),
-                               "--run-id", "run", "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
-                               "--source-run-dir", str(entry / "carnator"), "--target-dense-manifest", str(fake_manifest),
-                               "--outer-attn-backend", "sparge-sage2", "--ffn-backend", "w8a8", "--skip-w8a8-dense-diagnostic"]
-                    summary_path = req_root / "results" / "run" / "summary.json"
-            reusable_summary = False
-            if summary_path.is_file():
-                try:
-                    existing = json.loads(summary_path.read_text(encoding="utf-8"))
-                    reusable_summary = existing.get("status") == "completed"
-                except (OSError, json.JSONDecodeError):
-                    reusable_summary = False
-            if not reusable_summary:
-                try:
-                    subprocess.run(command, cwd=ROOT, check=True)
-                except subprocess.CalledProcessError:
-                    # Older native Carnator builds can finish the target and
-                    # write summary.json before failing while compacting an
-                    # optional C0 manifest. Accept only that completed target.
-                    if not summary_path.is_file():
-                        raise
-            summary = json.loads(summary_path.read_text(encoding="utf-8"))
-            target_run = summary["runs"].get("target_dense" if dense_miss else "target", summary["runs"].get("target_latent_reuse", {}))
-            native_video = Path(target_run["output"])
-            video = output / "videos" / f"{arrival:04d}_{target.uuid}.mp4"
-            video.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(native_video, video)
-            compact_summary = compact_native_run(req_root, summary_path)
-            retrieval_metadata = carnator_match.metadata if carnator_match is not None else match.metadata
+            execution_match = carnator_match if carnator_match is not None else match
+            hit = bool(execution_match.hit)
+            retrieval_metadata = dict(execution_match.metadata or {})
             if carnator_match is not None:
-                retrieval_metadata = dict(retrieval_metadata)
                 retrieval_metadata["execution_candidate"] = {
                     "source_uuid": execution_match.source_uuid,
                     "score": execution_match.score,
@@ -597,29 +951,101 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                     }
                 if probe_failure is not None:
                     retrieval_metadata["target_probe_failure"] = probe_failure
-            if not match.hit:
-                retrieval_metadata = dict(retrieval_metadata)
-                retrieval_metadata["execution_reason"] = "no_stage_1_candidate"
+            if not hit:
+                retrieval_metadata["execution_reason"] = "cache_miss"
+                payload = {"arrival_index": arrival, "request_index": target.request_index, "uuid": target.uuid,
+                           "prompt": target.prompt, "model": "Wan2.2", "method": args.method, "seed": target.seed,
+                           "cache_match": {"hit": False, "source_uuid": None, "score": None, "kind": execution_match.kind, "metadata": retrieval_metadata},
+                           "hit": False, "source_uuid": None, "executed_steps": 0, "latency_s": 0.0,
+                           "denoising_s": None, "hit_e2e_s": None, "hit_denoising_s": None,
+                           "external_s": 0.0, "status": "cache_miss", "target_cache_persisted": False,
+                           "output_path": None, "video_path": None, "quality_input_path": None,
+                           "extra": {"retrieval": retrieval_metadata, "denoising_timing": None}}
+                append_result_and_record(output, payload, row, args.method)
+                continue
+            if execution_match.source_uuid is None:
+                raise RuntimeError("reuse execution has no selected source UUID")
+            source = source_by_uuid[execution_match.source_uuid]
+            entry = view / "entries" / execution_match.source_uuid
+            if args.method == "chorus2":
+                command = [sys.executable, "-m", "chorus2.wan_ti2v_5b", "--model-dir", config["model_path"], "--device", f"cuda:{args.gpu}",
+                           "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"), "--run-id", "run",
+                           "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
+                           "--source-mask-cache", str(entry / "carnator" / "cache" / "source_dense" / "outer_block_masks")]
+            else:
+                fake_manifest = req_root / "target_dense_manifest.json"
+                write_fake_dense_manifest(fake_manifest)
+                command = [sys.executable, "-m", "carnator.adapters.wan_ti2v_5b", "--no-env-setup", "--model-dir", config["model_path"],
+                           "--device", f"cuda:{args.gpu}", "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"),
+                           "--run-id", "run", "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
+                           "--source-run-dir", str(entry / "carnator"), "--target-dense-manifest", str(fake_manifest),
+                           "--outer-attn-backend", "sparge-sage2", "--ffn-backend", "w8a8", "--skip-w8a8-dense-diagnostic"]
+            summary_path = req_root / "results" / "run" / "summary.json"
+            reusable_summary = False
+            if summary_path.is_file():
+                try:
+                    existing = json.loads(summary_path.read_text(encoding="utf-8"))
+                    existing_target = existing.get("runs", {}).get("target", existing.get("runs", {}).get("target_latent_reuse", {}))
+                    reusable_summary = (
+                        existing.get("status") == "completed"
+                        and isinstance(existing_target, dict)
+                        and existing_target.get("dit_forward_seconds") is not None
+                    )
+                except (OSError, json.JSONDecodeError):
+                    reusable_summary = False
+            if not reusable_summary:
+                if args.method == "carnator_boundary_b5":
+                    worker().run_carnator(command[3:])
+                else:
+                    worker().run_chorus2(command[3:])
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            target_run = summary["runs"].get("target", summary["runs"].get("target_latent_reuse", {}))
+            native_video = Path(target_run["output"])
+            video = output / "videos" / f"{arrival:04d}_{target.uuid}.mp4"
+            video.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(native_video, video)
+            compact_summary = compact_native_run(req_root, summary_path)
             probe_denoising_s = 0.0
             if probe_result is not None:
-                # A gate hit stops after step 5; a gate miss continues the
-                # same target prefix through step 10 before dense resumes.
-                probe_denoising_s = (
-                    probe_result.early_probe_s
-                    if probe_result.match is not None and probe_result.match.hit
-                    else probe_result.source_cache_s
-                )
+                probe_denoising_s = float(getattr(probe_result, "dit_forward_s", 0.0))
+            cache_prepare = target_run.get("cache_prepare") or {}
+            prepare_s = float(cache_prepare.get("elapsed_seconds", 0.0)) if isinstance(cache_prepare, dict) else 0.0
+            latency_s = max(0.0, time.perf_counter() - request_started - prepare_s)
+            target_dit_forward_s = target_run.get("dit_forward_seconds")
+            if target_dit_forward_s is None:
+                raise RuntimeError("native target summary did not report CUDA-synchronized DiT forward time")
+            target_dit_forward_s = float(target_dit_forward_s)
+            denoising_s = target_dit_forward_s + probe_denoising_s
+            probe_steps = int(getattr(probe_result, "completed_steps", 0)) if probe_result is not None else 0
+            target_steps = int(target_run.get("completed_steps") or 40)
             payload = {"arrival_index": arrival, "request_index": target.request_index, "uuid": target.uuid, "prompt": target.prompt,
                        "model": "Wan2.2", "method": args.method, "seed": target.seed,
-                       "cache_match": {"hit": not dense_miss, "source_uuid": None if dense_miss else execution_match.source_uuid, "score": None if dense_miss else execution_match.score, "metadata": retrieval_metadata},
-                       "hit": not dense_miss, "source_uuid": None if dense_miss else execution_match.source_uuid, "executed_steps": 50 if dense_miss else 40, "latency_s": time.perf_counter() - request_started,
-                       "retrieval_s": retrieval_s, "external_s": 0.0,
-                       "denoising_s": (target_run.get("denoising_seconds") or 0.0) + probe_denoising_s,
+                       "cache_match": {"hit": True, "source_uuid": execution_match.source_uuid, "score": execution_match.score, "kind": execution_match.kind, "metadata": retrieval_metadata},
+                       "hit": True, "source_uuid": execution_match.source_uuid, "executed_steps": target_steps + probe_steps, "latency_s": latency_s,
+                       "denoising_s": denoising_s,
+                       "hit_e2e_s": latency_s,
+                       "hit_denoising_s": denoising_s,
                        "status": "ok",
                        "target_cache_persisted": False,
                        "output_path": str(video), "video_path": str(video), "quality_input_path": str(video),
-                       "extra": {"native_summary": str(compact_summary), "retrieval": retrieval_metadata}}
+                       "extra": {
+                           "native_summary": str(compact_summary),
+                           "retrieval": retrieval_metadata,
+                           "cache_prepare": cache_prepare,
+                           "denoising_timing": {
+                               "definition": "cuda_synchronized_dit_forward",
+                               "target_dit_forward_s": target_dit_forward_s,
+                               "probe_dit_forward_s": probe_denoising_s,
+                               "total_dit_forward_s": denoising_s,
+                               "target_steps": target_steps,
+                               "probe_steps": probe_steps,
+                           },
+                       }}
         append_result_and_record(output, payload, row, args.method)
+    if resident_collector is not None:
+        resident_collector.close()
+    if native_worker is not None:
+        native_worker.close()
     return [json.loads(line) for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines() if line]
 
 
@@ -634,10 +1060,20 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=1)
     parser.add_argument("--arrival-start", type=int, default=0, help="Inclusive global CSV arrival index for this worker.")
     parser.add_argument("--arrival-stop", type=int, help="Exclusive global CSV arrival index for this worker.")
+    parser.add_argument("--request-indices", help="Comma-separated source row indices for a focused smoke run.")
+    parser.add_argument(
+        "--smoke-force-outcomes",
+        action="store_true",
+        help=(
+            "Only for the two-row --request-indices 0,1 smoke: force request 0 to miss and request 1 to hit "
+            "the fixed cache-view source. TeaCache remains target-only."
+        ),
+    )
     parser.add_argument("--seed", type=int, default=20260218)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--overwrite", action="store_true", help="Replace this method's output directory before running.")
     parser.add_argument("--allow-gpu-remap", action="store_true", help="Permit a temporary GPU other than the plan's 3..7 assignment.")
     args = parser.parse_args()
     if args.gpu < 0 or args.gpu >= GPU_COUNT:
@@ -652,19 +1088,28 @@ def main() -> int:
     args.run_dir = args.run_dir.expanduser().resolve() if args.run_dir else None
     if args.limit < 1 or args.limit > 300:
         raise ValueError("--limit must be in [1, 300]")
-    args.arrival_stop = args.limit if args.arrival_stop is None else args.arrival_stop
+    args.request_indices = ([int(item) for item in args.request_indices.split(",") if item.strip()]
+                            if args.request_indices else None)
+    if args.request_indices and any(index < 0 or index >= args.limit for index in args.request_indices):
+        raise ValueError("--request-indices must refer to rows below --limit")
+    selected_count = len(args.request_indices) if args.request_indices else args.limit
+    args.arrival_stop = selected_count if args.arrival_stop is None else args.arrival_stop
     if not 0 <= args.arrival_start < args.arrival_stop <= args.limit:
         raise ValueError(f"arrival range must satisfy 0 <= --arrival-start < --arrival-stop <= --limit ({args.limit})")
     if args.check_only:
         print(json.dumps(check_only(args), indent=2, ensure_ascii=False))
         return 0
-    rows = read_rows(args.input, args.limit, arrival_start=args.arrival_start, arrival_stop=args.arrival_stop)
+    rows = read_rows(args.input, args.limit, arrival_start=args.arrival_start, arrival_stop=args.arrival_stop,
+                     request_indices=args.request_indices)
     view_rows = load_view(args.cache_view)
+    validate_forced_smoke(args, rows, view_rows)
     if args.method == "carnator_boundary_b5":
         validate_carnator_signature_view(args.cache_view, view_rows)
     output = args.run_dir or args.output_root / args.method
-    if output.exists() and not args.resume:
-        raise FileExistsError(f"refusing to overwrite existing run: {output}; use --resume")
+    if output.exists() and args.overwrite and not args.resume:
+        shutil.rmtree(output)
+    elif output.exists() and not args.resume:
+        raise FileExistsError(f"refusing to overwrite existing run: {output}; use --overwrite or --resume")
     output.mkdir(parents=True, exist_ok=True)
     try:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -673,10 +1118,18 @@ def main() -> int:
     resolved = resolved_config(f"cuda:{args.gpu}", args.dry_run)
     (output / "run_config.json").write_text(json.dumps({"method": args.method, "gpu": args.gpu, "seed": args.seed, "limit": args.limit,
                                                           "arrival_start": args.arrival_start, "arrival_stop": args.arrival_stop,
+                                                          "request_indices": args.request_indices,
+                                                          "forced_smoke": forced_smoke_config(args),
                                                           "input": str(args.input), "cache_view": str(args.cache_view),
                                                           "input_sha256": sha256_file(args.input),
                                                           "view_manifest_sha256": sha256_file(args.cache_view / "view_manifest.json"),
                                                           "persist_target_cache": False,
+                                                          "warmup": {"enabled": not args.dry_run, "timed": False,
+                                                                     "source_prompt": WARMUP_SOURCE_PROMPT,
+                                                                     "target_prompt": WARMUP_TARGET_PROMPT},
+                                                          "native_worker_policy": "one_resident_worker_per_gpu" if args.method in {"chorus2", "carnator_boundary_b5"} else None,
+                                                          "dense_c0": {"version": DENSE_C0_VERSION, "steps": 50},
+                                                          "denoising_timing": "cuda_synchronized_dit_forward; Carnator adds B5 probe",
                                                           "native_artifact_policy": "top_level_video_and_records_only",
                                                           "target_probe_enabled": args.method == "carnator_boundary_b5",
                                                           "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
@@ -691,10 +1144,12 @@ def main() -> int:
     # Keep the generic quality.py contract alongside the experiment-specific
     # requests.jsonl name used by the VidProM aggregation scripts.
     shutil.copyfile(output / "requests.jsonl", output / "results.jsonl")
-    ok = sum(1 for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines() if json.loads(line).get("status") == "ok")
-    print(json.dumps({"status": "completed", "method": args.method, "gpu": args.gpu, "requests": len(rows), "ok": ok,
+    completed = [json.loads(line).get("status") for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines()]
+    ok = sum(status == "ok" for status in completed)
+    misses = sum(status == "cache_miss" for status in completed)
+    print(json.dumps({"status": "completed", "method": args.method, "gpu": args.gpu, "requests": len(rows), "ok": ok, "cache_miss": misses,
                       "results": str(output / "requests.jsonl")}, ensure_ascii=False))
-    return 0 if ok == len(rows) else 2
+    return 0 if ok + misses == len(rows) else 2
 
 
 if __name__ == "__main__":

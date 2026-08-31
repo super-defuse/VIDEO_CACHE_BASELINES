@@ -14,10 +14,11 @@ Carnator 在线 gate 的唯一说明。它只测 cache recall、gate 和 source-
 | NIRVANA-VID | 完整 prompt 的 CLIP embedding，ChromaDB Top-1 cosine，阈值 `0.65` | 固定使用第 10 步 latent，走 restart 路径 |
 | CHAI | 清洗 `aesthetic score` 后缀，仅提取 spaCy `NOUN` token，LongCLIP 编码，归一化向量的 FAISS 内积 Top-1；搜索阈值 `0.90`，写入去重阈值 `0.95` | 通过 Cache Attention 复用实体相关的缓存信息 |
 | Chorus | 与 NIRVANA-VID 共用完整 prompt 的 CLIP/ChromaDB 检索和阈值 | 使用匹配 trajectory 和 source video，按分数计算 `K1/K2` |
-| Carnator | 与 NIRVANA-VID/Chorus 共享完整 prompt CLIP/ChromaDB 排名与 `0.65` 下限；Top-20 后按与 CHAI 相同的 spaCy `NOUN` token 过滤，最多 Top-5 做对象级 Early Signature | step-5 decoded-tail-frame 的 Lab/CIEDE2000、面积和形状 gate；要求 artifact 校验 |
+| Carnator v1 | 完整 prompt CLIP/ChromaDB 排名与 `0.65` 下限；Top-20 后按 spaCy `NOUN` 过滤，最多 Top-5 做对象级 Early Signature | step-5 decoded-tail-frame 的 Lab/CIEDE2000、面积和形状 gate；要求 artifact 校验 |
+| Carnator v2 | 先在全部缓存中筛选 noun set 相同或单 noun substitution 的请求，再比较全部 Early Signature；剩余候选按 CLIP 取 Top-1 | 同 v1；任一前置阶段没有候选即 dense |
 
-NIRVANA-VID 和 Chorus 的 Top-1 应逐请求一致；Carnator 复用同一完整排序，但消费
-Top-20。CHAI 保持实体级检索和写入去重。固定第 10 步和阈值 `0.65` 仅用于受控对比。
+NIRVANA-VID 和 Chorus 的 Top-1 应逐请求一致；Carnator v1 消费同一完整排序的
+Top-20，v2 则把 CLIP 放在 signature gate 之后。CHAI 保持实体级检索和写入去重。固定第 10 步和阈值 `0.65` 仅用于受控对比。
 Chorus 调度是工程近似，当前 VBench 结果不能与论文 VidProM 结果直接比较。
 
 ## 回放基准
@@ -52,12 +53,12 @@ contrast 融合生成，禁止将 cross-attention mask 单独作为 Mbase。决�
 命中后使用 source 的 step-10 latent 和融合 Mbase/sparse-attention artifact 执行 joint reuse；
 未通过任一 gate 时继续 target 的 dense generation。
 
-1. 新 request 用完整 prompt 做 CLIP recall，保留最多 20 个且分数达到下限的历史 cache。
-2. 比较 `NOUN` token set。只保留 noun set 相同、或恰好一个 noun substitution 的候选，最多 5 条，保持 CLIP 排名。
-3. 没有候选时，不运行 Early Probe，直接进行 dense generation。
-4. 有候选时，target 只运行到 completed step 5，采集一次 target Early Signature。
-5. 顺序读取候选已持久化的 Early Signature，逐个比较；第一个通过的 cache 被选中，其余候选不再比较。
-6. 命中时从 source 的 step-10 artifact 执行 joint reuse。全部拒绝时，target 继续 dense generation；完整 target 会在生成后成为未来可召回的 source cache。
+v1 的顺序是 CLIP Top-20、noun filter、最多 Top-5 的 Early Signature；v2 的顺序是：
+
+1. 在全部缓存条目中比较 `NOUN` token set，仅保留相同集合或恰好一个 noun substitution 的候选。
+2. 没有名词候选时，不运行 Early Probe，直接 dense；否则 target 运行至 completed step 5 并比较所有候选 Early Signature。
+3. signature 阶段没有 artifact-ready 候选时继续 dense；否则只在通过 signature 的候选中按 CLIP 文本相似度取 Top-1。
+4. 命中时从 source 的 step-10 artifact 执行 joint reuse。
 
 候选 signature 只在其原始 request 成为 source cache 时采集。已命中并复用的 target 没有独立
 step-10 source artifact，不作为新的 cache entry。无 noun 的 request fail-closed，不采集对象

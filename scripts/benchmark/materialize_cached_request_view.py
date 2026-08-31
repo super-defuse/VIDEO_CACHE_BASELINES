@@ -19,8 +19,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CACHE_ROOT = ROOT / "artifacts" / "shared_cross_request_cache" / "vidprom_cluster_02_2170_first1000"
-DEFAULT_SELECTION = Path("/home/tangxuebin/datasets/1000cache_300input/cluster_02_2170_first1000_cached.csv")
-DEFAULT_OUTPUT = DEFAULT_CACHE_ROOT / "cached_requests_923"
+DEFAULT_SELECTION = Path("/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv")
+DEFAULT_OUTPUT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
 
 
 def sha256_file(path: Path) -> str:

@@ -34,6 +34,8 @@ class OnlineCollectionResult:
     source_cache_s: float
     completed_steps: int
     step10_cache_assumed: bool
+    probe_latent_path: str | None = None
+    dit_forward_s: float = 0.0
 
 
 ProbeEvaluator = Callable[[dict[str, Any]], CacheMatch]
@@ -237,6 +239,7 @@ class NativeOnlineCollector:
         probe_seed: int,
         noun_extractor: str,
         assume_step10_cache: bool = False,
+        runtime: Any | None = None,
     ) -> None:
         from carnator.adapters import wan_ti2v_5b as native
 
@@ -255,9 +258,12 @@ class NativeOnlineCollector:
         self.mask_policy = native.fused_mbase_policy(args)
         native.ensure_import_paths(args)
         native.validate_experiment_config(args)
-        self.runtime = native.load_runtime(args)
+        self._owns_runtime = runtime is None
+        self.runtime = runtime or native.load_runtime(args)
 
     def close(self) -> None:
+        if not self._owns_runtime:
+            return
         self.runtime.profiler.close()
         if self.args.offload_model:
             self.runtime.pipe.model.cpu()
@@ -356,6 +362,7 @@ class NativeOnlineCollector:
         completed_steps = 0
         source_cached = False
         probe_started = time.perf_counter()
+        dit_forward_s = 0.0
         step5_latent: torch.Tensor | None = None
         mbase_by_noun: dict[str, torch.Tensor] | None = None
         decoded_tail_frame: torch.Tensor | None = None
@@ -365,11 +372,19 @@ class NativeOnlineCollector:
                 probe.enabled = (step_index + 1) == args.mask_probe_step
                 probe.current_step_index = step_index
                 timestep_input = native.timestep_for(self.runtime, latent, timestep, seq_len)
+                torch.cuda.synchronize()
+                dit_started = time.perf_counter()
                 noise_pred_cond = model([latent], t=timestep_input, context=context, seq_len=seq_len)[0]
+                torch.cuda.synchronize()
+                dit_forward_s += time.perf_counter() - dit_started
                 if args.guidance_scale == 1.0:
                     noise_pred = noise_pred_cond
                 else:
+                    torch.cuda.synchronize()
+                    dit_started = time.perf_counter()
                     noise_pred_uncond = model([latent], t=timestep_input, context=context_null, seq_len=seq_len)[0]
+                    torch.cuda.synchronize()
+                    dit_forward_s += time.perf_counter() - dit_started
                     noise_pred = noise_pred_uncond + args.guidance_scale * (noise_pred_cond - noise_pred_uncond)
                 latent = scheduler.step(
                     noise_pred.unsqueeze(0), timestep, latent.unsqueeze(0), return_dict=False, generator=generator
@@ -399,13 +414,20 @@ class NativeOnlineCollector:
                         masks=mbase_by_noun,
                         decoded_tail_frame=decoded_tail_frame,
                     )
+                    # The target continuation consumes this exact step-5
+                    # latent.  Persist it once so a gate miss can resume the
+                    # same schedule without recomputing the prefix.
+                    probe_latent_path = source_dir / "step5.pt"
+                    native.save_latent(probe_latent_path, step5_latent)
                     if evaluate_probe is not None:
                         early_probe_s = prefix_to_step5_s
                         gate_started = time.perf_counter()
                         match = evaluate_probe(signature)
                         signature_gate_s = time.perf_counter() - gate_started
-                        if match.hit:
-                            break
+                        # Both outcomes leave the collector at step 5.  The
+                        # caller either resumes the source at step 10 (hit)
+                        # or continues dense from this target latent (miss).
+                        break
 
                     if self.assume_step10_cache:
                         source_signature = self._write_signature(
@@ -460,7 +482,14 @@ class NativeOnlineCollector:
         if match is not None and match.hit:
             shutil.rmtree(source_dir)
             return OnlineCollectionResult(
-                match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps, False
+                match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps, False,
+                str(probe_latent_path) if 'probe_latent_path' in locals() else None,
+                dit_forward_s,
+            )
+        if evaluate_probe is not None and match is not None:
+            return OnlineCollectionResult(
+                match, None, True, False, early_probe_s, signature_gate_s, 0.0,
+                completed_steps, False, str(probe_latent_path), dit_forward_s,
             )
         if source_signature is None:
             raise RuntimeError("online source cache did not reach completed step 10")
@@ -475,6 +504,7 @@ class NativeOnlineCollector:
             source_cache_s,
             completed_steps,
             self.assume_step10_cache,
+            dit_forward_s=dit_forward_s,
         )
 
 

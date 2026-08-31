@@ -1,30 +1,30 @@
 # VidProM 300-request 结果表
 
-实验 seed 固定为 shared cache 使用的 `20260218`。填写规则：时间单位为秒，端到端时延从请求进入 runner 开始计时并包含检索、外部模型、推理和视频落盘；去噪时延只计 native sampling loop。缓存保存/写盘不作为去噪时延，且本实验不保存新请求 cache。当前阶段先记录时延、
-检索、命中率和质量，speedup 暂填 `TBD`；待同一批 300 条请求的 Dense C0 control 完成后，
+实验 seed 固定为 shared cache 使用的 `20260218`。时间单位为秒；端到端时延从请求进入 runner 开始，包含检索、缓存读取和推理直到视频解码完成，忽略视频/缓存写盘和结果哈希。去噪时延只计 DiT Blocks forward。检索仅保留决策元数据，不单列耗时。当前阶段先记录时延、
+命中率和质量，speedup 暂填 `TBD`；待同一批 300 条请求的 Dense C0 control 完成后，
 再用 `Dense C0 平均时间 / 基线平均时间` 计算。共享 cache preparation 时间不作为分母。
 hit rate 只统计跨请求检索命中。TeaCache 没有跨请求检索，相关列填 `N/A`。质量指标在全部
 视频生成结束后统一评估。
 
 ## 汇总表
 
-| 基线 | GPU | 检索配置 / 版本 | 请求数 | 命中数 | hit rate | 端到端时延 (s/request) | 检索时延 (ms/request) | 去噪时延 (s/request) | External (s/request) | 端到端加速比 | 去噪加速比 | CLIP-T | VBench-Q | 产物 / 日志 |
-| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Dense C0 control | reserved | none | 300 | N/A | N/A | TBD | N/A | TBD | 0 | 1.00x | 1.00x | TBD | TBD | `results/dense-c0/` |
-| NIRVANA-VID | 3 | CLIP/Chroma Top-1, threshold 0.65, restart step 10 | 300 | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | `results/nirvana_vid/` |
-| TeaCache | 4 | target-only TeaCache, relative L1 threshold 0.08 | 300 | N/A | N/A | TBD | N/A | TBD | 0 | TBD | TBD | TBD | TBD | `results/teacache/` |
-| Chorus | 5 | CLIP/Chroma Top-1, threshold 0.65, K1/K2 10/30, TGAA | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus/` |
-| Chorus2 | 6 | shared NIRVANA/Chorus CLIP/Chroma Top-1, threshold 0.65; SpargeAttn | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus2/` |
-| Carnator Boundary B5 | 3, 4, 5, 7 | CLIP/Chroma candidates + step-5 self/cross-fusion Early Signature (`0.8569418522546745`, `0.7643009491051245`, `0.3015873015873016`, `1.0714081281330827`); Boundary B5 | 300 | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | `results/carnator_boundary_b5/` |
+| 基线 | GPU | 检索配置 / 版本 | 请求数 | 命中数 | hit rate | 端到端时延 (s/request) | 命中端到端时延 (s/hit) | 去噪时延 (s/request) | 命中去噪时延 (s/hit) | External (s/request) | 端到端加速比 | 去噪加速比 | CLIP-T | VBench-Q | 产物 / 日志 |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Dense C0 control | reserved | none | 300 | N/A | N/A | TBD | N/A | TBD | N/A | 0 | 1.00x | 1.00x | TBD | TBD | `results/dense-c0/` |
+| NIRVANA-VID | 3 | CLIP/Chroma Top-1, threshold 0.65, restart step 10 | 300 | TBD | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | `results/nirvana_vid/` |
+| TeaCache | 4 | target-only TeaCache, relative L1 threshold 0.08 | 300 | N/A | N/A | TBD | N/A | TBD | N/A | 0 | TBD | TBD | TBD | TBD | `results/teacache/` |
+| Chorus | 5 | CLIP/Chroma Top-1, threshold 0.65, K1/K2 10/30, TGAA | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus/` |
+| Chorus2 | 6 | shared NIRVANA/Chorus CLIP/Chroma Top-1, threshold 0.65; SpargeAttn | 300 | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | `results/chorus2/` |
+| Carnator Boundary B5 | 3, 4, 5, 7 | v2 noun filter + step-5 self/cross-fusion Early Signature + CLIP top-1 (`2.5460641772840114`, `1.6755377126043391`, `1.0`, `2.2003341853972085`); Boundary B5 | 300 | TBD | TBD | TBD | TBD | TBD | 0 | TBD | TBD | TBD | TBD | TBD | `results/carnator_boundary_b5/` |
 
 ### 字段定义
 
 | 字段 | 定义 |
 | --- | --- |
 | External | Chorus 的 LLM prompt diff + Grounded-SAM2 分割耗时；其他基线固定为 `0`。该时间是端到端时延中的独立 breakdown，不重复加到去噪时延 |
-| 检索时延 | 从检索开始到返回命中/未命中决策；Carnator 含候选 gate/Early Signature 时间，并拆分记录在 JSONL |
-| 去噪时延 | native sampling loop 的 wall-clock；CUDA 前后同步并剔除缓存保存/写盘，不能使用 shared cache preparation 时间 |
-| 端到端/去噪加速比 | 暂填 `TBD`；Dense C0 control 完成后为其平均时延 / 基线平均时延，端到端包含检索和 External，去噪只含 sampling loop |
+| 去噪时延 | 仅 DiT Blocks forward；CUDA 前后同步并剔除缓存保存/写盘，不能使用 shared cache preparation 时间 |
+| 命中端到端/去噪时延 | 仅对 `hit=true` 请求取均值；未命中请求填 `null`，避免 dense fallback 混入命中耗时 |
+| 端到端/去噪加速比 | 暂填 `TBD`；Dense C0 control 完成后为其平均时延 / 基线平均时延，端到端包含检索和 External，去噪只含 DiT Blocks |
 | hit rate | `命中请求数 / 300`；按方法独立检索状态计算。TeaCache 为 N/A |
 | CLIP-T | 保留视频按 prompt 的 CLIP text/image cosine，报告 300 条平均值（同时保留逐请求值） |
 | VBench-Q | 六维 VBench 聚合分数，按现有 `quality_runner.py` 协议；报告平均值与逐请求值 |

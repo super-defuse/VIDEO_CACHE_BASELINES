@@ -28,6 +28,7 @@ from carnator.outer_sparse import (
 )
 
 ALL_BLOCKS = tuple(range(30))
+SPARSE_START_STEP = 10
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -43,7 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source-mask-cache",
         type=Path,
-        help="Existing complete source block-mask cache. It must cover every remaining Chorus2 target step, branch, and layer.",
+        help="Existing source block-mask cache for target steps after the sparse start step.",
     )
     parser.add_argument(
         "--source-latent-cache",
@@ -55,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Shared 50-step target C0 Dense manifest or summary; used as the universal end-to-end speedup denominator.",
     )
-    parser.add_argument("--target-dense-only", action="store_true", help="Run the 40-step source-latent-restart Dense control.")
+    parser.add_argument("--target-dense-only", action="store_true", help="Run the full 50-step Dense target control.")
 
     parser.add_argument("--source-prompt", default=native.SOURCE_PROMPT)
     parser.add_argument("--target-prompt", default=native.TARGET_PROMPT)
@@ -79,8 +80,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--reuse-start-step",
         type=int,
-        default=10,
-        help="Reuse the source post-scheduler latent after this many steps; target computes only the remaining steps.",
+        default=0,
+        help="Compatibility field; Chorus2 no longer restarts from a source latent and must remain zero.",
     )
     parser.add_argument("--outer-mask-q-block", type=int, default=64)
     parser.add_argument("--outer-mask-k-block", type=int, default=128)
@@ -112,8 +113,12 @@ def run_paths(args: argparse.Namespace) -> dict[str, Path]:
 
 
 def validate(args: argparse.Namespace) -> None:
-    if not 1 <= args.reuse_start_step < args.steps:
-        raise ValueError("--reuse-start-step must be in [1, steps)")
+    if args.reuse_start_step != 0:
+        raise ValueError("Chorus2 no longer supports source-latent restart; --reuse-start-step must be 0")
+    if not 0 <= SPARSE_START_STEP < args.steps:
+        raise ValueError("Chorus2 sparse start step must be in [0, steps)")
+    if args.source_latent_cache is not None:
+        raise ValueError("Chorus2 no longer accepts --source-latent-cache")
     if args.layer_refresh_size <= 0:
         raise ValueError("--layer-refresh-size must be positive")
     if not args.target_dense_only:
@@ -127,10 +132,13 @@ def compact_run(manifest: dict[str, Any]) -> dict[str, Any]:
         "output": manifest.get("output"),
         "manifest_path": manifest.get("manifest_path"),
         "denoising_seconds": manifest.get("timing", {}).get("loop_denoise_seconds"),
+        "dit_forward_seconds": manifest.get("timing", {}).get("dit_forward_seconds"),
         "end_to_end_seconds": manifest.get("timing", {}).get("end_to_end_seconds"),
+        "completed_steps": manifest.get("completed_steps"),
         "outer_sparse": manifest.get("outer_sparse"),
         "resume": manifest.get("resume"),
         "masked_injection": manifest.get("masked_injection"),
+        "cache_prepare": manifest.get("cache_prepare"),
         "peak_gpu_memory_gib": manifest.get("peak_gpu_memory_gib"),
         "hardware": manifest.get("hardware"),
     }
@@ -190,22 +198,22 @@ def build_summary(
                 ),
             },
             "source_latent_cache": {
-                "mode": "external" if args.source_latent_cache is not None else "generated",
-                "path": str(args.source_latent_cache) if args.source_latent_cache is not None else str(paths["source_cache"]),
+                "mode": "not_used",
+                "path": None,
             },
             "sparse_attention": {
                 "backend": "dense" if args.target_dense_only else "sparge-sage2",
                 "layers": list(ALL_BLOCKS),
-                "start_step": args.reuse_start_step + 1,
+                "start_step": SPARSE_START_STEP + 1,
                 "q_block_size": args.outer_mask_q_block,
                 "k_block_size": args.outer_mask_k_block,
                 "top_p": args.outer_mask_top_p,
                 "min_top_k": args.outer_mask_min_top_k,
                 "layer_refresh_size": args.layer_refresh_size,
             },
-            "latent_reuse": True,
-            "reuse_start_step": args.reuse_start_step,
-            "target_denoising_steps": args.steps - args.reuse_start_step,
+            "latent_reuse": False,
+            "reuse_start_step": 0,
+            "target_denoising_steps": args.steps,
             "speedup_reference": speedup_reference,
         },
         "paths": {key: str(value) for key, value in paths.items() if key not in {"summary", "report"}},
@@ -227,10 +235,10 @@ def write_report(paths: dict[str, Path], summary: dict[str, Any]) -> None:
         "# Chorus2",
         "",
         f"- Status: `{summary['status']}`",
-        f"- Source latent restart: completed step `{config['reuse_start_step']}`; target denoises `{config['target_denoising_steps']}` steps",
+        f"- Source latent restart: `disabled`; target denoises `{config['target_denoising_steps']}` steps",
         f"- Attention backend: `{config['sparse_attention']['backend']}` from target step `{config['sparse_attention']['start_step']}`",
         f"- Layer refresh: every `{config['sparse_attention']['layer_refresh_size']}` blocks",
-        "- Latent reuse: `true`",
+        "- Latent reuse: `false`",
         f"- Target denoising: `{target.get('denoising_seconds')}` seconds",
         f"- Target end-to-end: `{target.get('end_to_end_seconds')}` seconds",
         f"- Universal C0 speedup: `{summary['speedups'].get('end_to_end_vs_reference')}`",
@@ -248,9 +256,9 @@ def write_summary(paths: dict[str, Path], summary: dict[str, Any]) -> None:
 
 def verify_target_coverage(args: argparse.Namespace, target: dict[str, Any]) -> None:
     outer = target.get("outer_sparse", {})
-    expected_runs = len(ALL_BLOCKS) * (args.steps - args.reuse_start_step) * cfg_branches(args.guidance_scale)
+    expected_runs = len(ALL_BLOCKS) * (args.steps - SPARSE_START_STEP) * cfg_branches(args.guidance_scale)
     expected_refresh_events = math.ceil(len(ALL_BLOCKS) / args.layer_refresh_size) * (
-        args.steps - args.reuse_start_step
+        args.steps - SPARSE_START_STEP
     ) * cfg_branches(args.guidance_scale)
     if (
         outer.get("backend") != "sparge-sage2"
@@ -262,15 +270,17 @@ def verify_target_coverage(args: argparse.Namespace, target: dict[str, Any]) -> 
     ):
         raise RuntimeError(f"Chorus2 did not cover every configured sparse attention call: {outer}")
     resume = target.get("resume", {})
-    if resume.get("resume_start_step") != args.reuse_start_step or resume.get("resume_latent_path") is None:
-        raise RuntimeError("Chorus2 target did not restart from the configured source latent")
+    if resume.get("resume_start_step") != 0 or resume.get("resume_latent_path") is not None:
+        raise RuntimeError("Chorus2 target unexpectedly used a source-latent restart")
+    if target.get("completed_steps") != args.steps:
+        raise RuntimeError(f"Chorus2 target completed {target.get('completed_steps')} steps, expected {args.steps}")
 
 
 def verify_source_mask_coverage(args: argparse.Namespace, cache: SourceBlockMaskCache) -> None:
     branches = ("cond",) if cfg_branches(args.guidance_scale) == 1 else ("cond", "uncond")
     missing = [
         (step, branch, layer)
-        for step in range(args.reuse_start_step + 1, args.steps + 1)
+        for step in range(SPARSE_START_STEP + 1, args.steps + 1)
         for branch in branches
         for layer in ALL_BLOCKS
         if (step, branch, layer) not in cache.entries
@@ -283,42 +293,7 @@ def verify_source_mask_coverage(args: argparse.Namespace, cache: SourceBlockMask
         )
 
 
-def source_resume_latent(args: argparse.Namespace, cache_dir: Path) -> Path:
-    manifest_path = cache_dir / "manifest.json"
-    if not manifest_path.is_file():
-        raise ValueError(f"source latent cache is missing manifest.json: {cache_dir}")
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        raise ValueError(f"source latent cache manifest is invalid JSON: {manifest_path}") from exc
-    expected = {
-        "prompt": args.source_prompt,
-        "height": args.height,
-        "width": args.width,
-        "frames": args.frames,
-        "fps": args.fps,
-        "steps": args.steps,
-        "scheduler": args.scheduler,
-        "solver_order": args.solver_order if args.scheduler == "unipc" else None,
-        "flow_shift": args.flow_shift,
-        "guidance_scale": args.guidance_scale,
-    }
-    mismatched = {
-        field: {"source": manifest.get(field), "target": value}
-        for field, value in expected.items()
-        if manifest.get(field) != value
-    }
-    if mismatched:
-        raise ValueError(f"source latent cache does not match Chorus2 configuration: {mismatched}")
-    latent_path = cache_dir / f"latents_step_{args.reuse_start_step - 1:03d}.pt"
-    if not latent_path.is_file():
-        raise ValueError(
-            f"source latent cache does not contain the post-step-{args.reuse_start_step} latent: {latent_path}"
-        )
-    return latent_path
-
-
-def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
+def run_experiment(args: argparse.Namespace, *, runtime: native.NativeRuntime | None = None) -> dict[str, Any]:
     paths = run_paths(args)
     validate(args)
     speedup_reference = (
@@ -336,29 +311,17 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 shutil.rmtree(path)
     paths["artifact_run"].mkdir(parents=True, exist_ok=True)
     paths["result_run"].mkdir(parents=True, exist_ok=True)
-    if args.source_mask_cache is not None and args.source_latent_cache is None:
-        raise ValueError("--source-mask-cache requires --source-latent-cache so Chorus2 can skip the first steps")
-    if args.source_latent_cache is not None:
-        resume_latent_path = source_resume_latent(args, args.source_latent_cache)
-    else:
-        resume_latent_path = paths["source_cache"] / f"latents_step_{args.reuse_start_step - 1:03d}.pt"
+    resume_latent_path = None
 
-    runtime = native.load_runtime(args)
+    owns_runtime = runtime is None
+    runtime = runtime or native.load_runtime(args)
     try:
         branch_count = cfg_branches(args.guidance_scale)
         execution_dtype = native.outer_sparse_execution_dtype(args)
         source = None
-        if args.source_latent_cache is None:
+        if args.source_mask_cache is None:
             if args.target_dense_only:
-                source = native.run_native_t2v_stage(
-                    runtime,
-                    args,
-                    label="source",
-                    prompt=args.source_prompt,
-                    out_video=paths["source_video"],
-                    cache_dir=paths["source_cache"],
-                    save_trajectory=True,
-                )
+                source = None
             else:
                 source_cache = SourceBlockMaskCache(
                     paths["mask_cache"],
@@ -369,7 +332,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 )
                 source_state = OuterSparseState(
                     cfg_branch_count=branch_count,
-                    start_completed_step=args.reuse_start_step + 1,
+                    start_completed_step=SPARSE_START_STEP + 1,
                 )
                 with OuterSparseCaptureHooks(
                     runtime.pipe.model,
@@ -398,12 +361,12 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 prompt=args.target_prompt,
                 out_video=paths["target_video"].with_name("target_dense.mp4"),
                 cache_dir=paths["target_cache"],
-                resume_latent_path=resume_latent_path,
-                resume_start_step=args.reuse_start_step,
+                resume_latent_path=None,
+                resume_start_step=0,
             )
             resume = target.get("resume", {})
-            if resume.get("resume_start_step") != args.reuse_start_step or resume.get("resume_latent_path") is None:
-                raise RuntimeError("Chorus2 Dense control did not restart from the configured source latent")
+            if resume.get("resume_start_step") != 0 or resume.get("resume_latent_path") is not None:
+                raise RuntimeError("Chorus2 Dense control unexpectedly used a source-latent restart")
         else:
             mask_cache_path = args.source_mask_cache if args.source_mask_cache is not None else paths["mask_cache"]
             target_cache = SourceBlockMaskCache(mask_cache_path, native.outer_mask_config(args))
@@ -411,7 +374,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
             verify_source_mask_coverage(args, target_cache)
             target_state = OuterSparseState(
                 cfg_branch_count=branch_count,
-                start_completed_step=args.reuse_start_step + 1,
+                start_completed_step=SPARSE_START_STEP + 1,
             )
             executor = OuterSparseExecutor(
                 target_cache,
@@ -419,6 +382,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 execution_dtype=execution_dtype,
                 layer_refresh_size=args.layer_refresh_size,
             )
+            cache_prepare = target_cache.prepare(device=runtime.device)
             with ExitStack() as stack:
                 stack.enter_context(
                     OuterSparseAttentionHooks(
@@ -436,10 +400,11 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                     prompt=args.target_prompt,
                     out_video=paths["target_video"],
                     cache_dir=paths["target_cache"],
-                    resume_latent_path=resume_latent_path,
-                    resume_start_step=args.reuse_start_step,
+                    resume_latent_path=None,
+                    resume_start_step=0,
                     outer_sparse_state=target_state,
                 )
+            target["cache_prepare"] = cache_prepare
             verify_target_coverage(args, target)
         summary = build_summary(
             args,
@@ -452,7 +417,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
         write_summary(paths, summary)
         return summary
     finally:
-        runtime.profiler.close()
+        if owns_runtime:
+            runtime.profiler.close()
 
 
 def main(argv: list[str] | None = None) -> int:

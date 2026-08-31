@@ -9,7 +9,7 @@ import torch
 from carnator.adapters.wan_ti2v_5b import find_token_indices
 from carnator.early_signature import compare_early_signatures, write_early_signature
 from carnator.online_flow import resolve_online_request
-from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever
+from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever, CarnatorRetrieverV2
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
 from scripts.benchmark import cross_request_retrieval
@@ -280,6 +280,63 @@ def test_carnator_uses_top_twenty_and_limits_stage_two_to_five(tmp_path):
     assert all(candidate["reason"] == "cache_not_ready" for candidate in result.metadata["stage_2"])
 
 
+def test_carnator_v2_filters_all_noun_candidates_before_clip_top_one(tmp_path):
+    class FixedEmbedder:
+        @property
+        def signature(self) -> str:
+            return "fixed-clip"
+
+        def encode(self, texts: list[str]) -> list[list[float]]:
+            return [[1.0, 0.0] for _ in texts]
+
+    source_signature = _sidecar(tmp_path, "source", "train", ["train"])
+    target_signature = _sidecar(tmp_path, "target", "train", ["train"])
+    retriever = CarnatorRetrieverV2(
+        FixedEmbedder(),
+        CarnatorNounExtractor(),
+        candidate_top_k=1,
+        stage2_candidate_top_k=1,
+        retrieval_only=True,
+        max_context_color_distance=0.01,
+        max_log_area_ratio=0.01,
+        max_shape_distance=0.01,
+        max_changed_color_distance=0.01,
+    )
+    records = [
+        VectorRecord("lower", "train", [0.4, 0.0], _record("lower", 0, "train", ["train"], source_signature).metadata, 0),
+        VectorRecord("higher", "train", [0.9, 0.0], _record("higher", 1, "train", ["train"], source_signature).metadata, 1),
+        VectorRecord("other", "dog and cat", [1.0, 0.0], _record("other", 2, "dog and cat", ["dog", "cat"], source_signature).metadata, 2),
+    ]
+
+    result = retriever.search(Request(3, "target", "train", 3), records, target_signature=target_signature)
+
+    assert result.hit
+    assert result.source_uuid == "higher"
+    assert result.metadata["selection_order"] == ["noun_prefilter", "early_signature", "clip_top_1"]
+    assert [candidate["uuid"] for candidate in result.metadata["stage_2_candidates"]] == ["lower", "higher"]
+    assert [candidate["uuid"] for candidate in result.metadata["clip_ranking"]] == ["higher", "lower"]
+
+
+def test_carnator_v2_falls_back_before_probe_without_noun_candidates(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "dog and cat", ["dog", "cat"])
+    retriever = CarnatorRetrieverV2(
+        LexicalTestEmbedder(),
+        CarnatorNounExtractor(),
+        retrieval_only=True,
+        max_context_color_distance=0.01,
+    )
+
+    result = retriever.search(
+        Request(1, "target", "train", 2),
+        [_record("source", 0, "dog and cat", ["dog", "cat"], source_signature)],
+    )
+
+    assert not result.hit
+    assert result.kind == "no_reuse"
+    assert result.metadata["reason"] == "no_noun_compatible_candidate"
+    assert result.metadata["probe_required"] is False
+
+
 def test_carnator_runtime_extractor_preserves_chai_noun_tokens():
     class ChaiLikeExtractor:
         @property
@@ -351,14 +408,14 @@ def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     with (output_dir / "reports" / "request_matches.csv").open(newline="", encoding="utf-8") as handle:
         selected = list(csv.DictReader(handle))
     assert selected[0]["carnator_hit"] == "False"
-    assert selected[1]["carnator_source_uuid"] == ""
+    assert selected[1]["carnator_source_uuid"] == selected[0]["uuid"]
     assert selected[1]["nirvana_vid_source_uuid"] == selected[0]["uuid"]
     benchmark = json.loads((output_dir / "benchmark.json").read_text(encoding="utf-8"))
     assert benchmark["schema_version"] == "cross-request-retrieval/v3-progressive-online"
     assert benchmark["carnator"]["sidecar_mode"] == "arrival_order_miss_only"
     assert benchmark["methods"]["carnator"]["stage_2"] == "progressive_early_signature"
     assert benchmark["methods"]["carnator"]["early_probe_requests"] == 1
-    assert benchmark["methods"]["carnator"]["source_cache_entries"] == 2
+    assert benchmark["methods"]["carnator"]["source_cache_entries"] == 1
     carnator_rows = [
         json.loads(line)
         for line in (output_dir / "results" / "carnator.jsonl").read_text(encoding="utf-8").splitlines()
@@ -366,8 +423,8 @@ def test_cross_request_benchmark_writes_all_four_reports(tmp_path):
     assert carnator_rows[0]["probe_collected"] is False
     assert carnator_rows[0]["source_cached"] is True
     assert carnator_rows[1]["probe_collected"] is True
-    assert carnator_rows[1]["source_cached"] is True
-    assert len([path for path in (output_dir / "carnator_sources").iterdir() if path.is_dir()]) == 2
+    assert carnator_rows[1]["source_cached"] is False
+    assert len([path for path in (output_dir / "carnator_sources").iterdir() if path.is_dir()]) == 1
     assert (output_dir / "reports" / "hit_rate_over_time.csv").is_file()
     assert (output_dir / "reports" / "retrieval_summary.csv").is_file()
     assert (output_dir / "reports" / "cache_growth.csv").is_file()
@@ -404,9 +461,9 @@ def test_cross_request_benchmark_can_assume_step10_cache(tmp_path):
     ]
     assert all(row["completed_steps"] == 5 for row in carnator_rows)
     assert carnator_rows[0]["step10_cache_assumed"] is True
-    assert carnator_rows[1]["step10_cache_assumed"] is True
+    assert carnator_rows[1]["step10_cache_assumed"] is False
     source_dirs = [path for path in (output_dir / "carnator_sources").iterdir() if path.is_dir()]
-    assert len(source_dirs) == 2
+    assert len(source_dirs) == 1
     assert all(not (source_dir / "step10.pt").exists() for source_dir in source_dirs)
     signatures = [json.loads((source_dir / "online_color_signature.json").read_text(encoding="utf-8")) for source_dir in source_dirs]
     assert all(signature["cache"]["assumption"] == "step10_cache_exists" for signature in signatures)

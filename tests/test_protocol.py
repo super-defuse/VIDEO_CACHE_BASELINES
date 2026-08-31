@@ -11,7 +11,42 @@ sys.path.insert(0, str(ROOT))
 
 from adapters import make_adapter
 from core import Request, Runner
+from core.protocol import ModelAdapter
 from core.registry import make_method
+from core.types import Generation
+
+
+class _PreprocessBreakdownAdapter(ModelAdapter):
+    model_name = "timing-test"
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.capture_values: list[bool] = []
+
+    def generate(self, request, *, fast=False, cached_latent=None, capture=False, method="baseline"):
+        del request, fast, cached_latent, method
+        self.capture_values.append(capture)
+        return Generation(b"video", extra={"excluded_latency_s": 60.0})
+
+    def save_video(self, video, path):
+        path.write_bytes(video)
+
+
+class _DirectVideoAdapter(ModelAdapter):
+    model_name = "direct-video-test"
+
+    def __init__(self, config, video_path: Path):
+        super().__init__(config)
+        self.video_path = video_path
+
+    def generate(self, request, *, fast=False, cached_latent=None, capture=False, method="baseline"):
+        del request, fast, cached_latent, capture, method
+        self.video_path.parent.mkdir(parents=True, exist_ok=True)
+        self.video_path.write_bytes(b"native-video")
+        return Generation(video=None, video_path=self.video_path, executed_steps=50)
+
+    def save_video(self, video, path):
+        raise AssertionError(f"Runner should not re-encode executor output: {video!r} -> {path}")
 
 
 def run(tmp_path: Path, method_name: str):
@@ -124,6 +159,65 @@ def test_chorus_scheduler_history_reset_preserves_global_step():
     assert scheduler.last_sample is None
     assert scheduler.this_order == 1
     assert scheduler._step_index == 40
+
+
+def test_runner_accepts_an_executor_written_video_without_reencoding(tmp_path):
+    config = {"dry_run": True, "cache_root": "cache", "max_cache_bytes": 1024}
+    output = tmp_path / "direct"
+    request = Request(7, "native", "a red car", 4)
+    video = output / "videos" / "0007_native.mp4"
+    adapter = _DirectVideoAdapter(config, video)
+    runner = Runner(adapter, make_method("teacache", config), model=adapter.model_name,
+                    output_dir=output, cache_root=tmp_path / "cache")
+
+    result = runner.process(request)
+
+    assert result.status == "ok"
+    assert result.output_path == str(video)
+    assert video.read_bytes() == b"native-video"
+
+
+def test_wan22_native_dense_c0_reuses_the_delegate_pipeline(monkeypatch, tmp_path):
+    from adapters.wan22 import Wan22Adapter
+    from carnator.adapters import wan_ti2v_5b as native
+
+    class Profiler:
+        def attach(self, model):
+            self.model = model
+
+    pipeline = type("Pipeline", (), {
+        "model": object(), "config": object(), "device": "cuda:3", "param_dtype": "torch.float16",
+    })()
+    delegate = type("Delegate", (), {"pipeline": pipeline, "torch": object(), "_load": lambda self: None})()
+    adapter = Wan22Adapter({
+        "model_path": tmp_path / "model", "device": "cuda:3", "height": 704, "width": 1280,
+        "frames": 121, "fps": 24, "baseline_steps": 50, "solver": "unipc", "shift": 5.0,
+        "guidance_scale": 5.0,
+    })
+    adapter.enable_native_dense_c0(tmp_path / "videos")
+    adapter._delegate = delegate
+    monkeypatch.setattr(native, "CudaModuleProfiler", Profiler)
+    monkeypatch.setattr(native, "bootstrap_wan", lambda: {"shared": True})
+
+    def stage(runtime, args, *, out_video, cache_dir, **kwargs):
+        assert runtime.pipe is pipeline
+        assert runtime.wan == {"shared": True}
+        assert args.steps == 50
+        assert kwargs["label"] == "dense_c0"
+        cache_dir.mkdir(parents=True)
+        out_video.parent.mkdir(parents=True, exist_ok=True)
+        out_video.write_bytes(b"native-c0")
+        return {"completed_steps": 50, "timing": {"dit_forward_seconds": 12.5}}
+
+    monkeypatch.setattr(native, "run_native_t2v_stage", stage)
+    result = adapter._generate_native_dense_c0(Request(1, "dense", "a red car", 4))
+
+    assert result is not None
+    assert result.video_path == tmp_path / "videos" / "0001_dense.mp4"
+    assert result.extra["dit_forward_s"] == 12.5
+    assert result.extra["dense_c0"]["executor"] == "native.run_native_t2v_stage"
+    assert not (tmp_path / "videos" / ".dense-c0" / "dense").exists()
+    assert not (tmp_path / "videos" / ".dense-c0").exists()
 
 
 def test_native_srd_keeps_native_head_dense():
@@ -274,6 +368,35 @@ def test_baseline_does_not_populate_cache(tmp_path):
     assert result.status == "ok"
     assert not result.cache_match.hit
     assert runner.cache.bytes_used == 0
+
+
+def test_runner_keeps_preprocess_breakdown_in_default_end_to_end_timing(tmp_path):
+    config = {"dry_run": True, "cache_root": "cache"}
+    adapter = _PreprocessBreakdownAdapter(config)
+    runner = Runner(adapter, make_method("baseline", config), model=adapter.model_name,
+                    output_dir=tmp_path / "output", cache_root=tmp_path / "cache",
+                    persist_target_cache=False)
+
+    result = runner.process(Request(0, "request", "a prompt", 1))
+    timing = result.extra["timing"]
+
+    assert result.latency_s > 0.0
+    assert timing["preprocess_breakdown_s"] == 60.0
+    assert timing["excluded_preprocess_s"] == 0.0
+    assert adapter.capture_values == [False]
+
+
+def test_runner_can_explicitly_exclude_preprocess_breakdown_for_legacy_uses(tmp_path):
+    config = {"dry_run": True, "cache_root": "cache"}
+    adapter = _PreprocessBreakdownAdapter(config)
+    runner = Runner(adapter, make_method("baseline", config), model=adapter.model_name,
+                    output_dir=tmp_path / "output", cache_root=tmp_path / "cache",
+                    exclude_preprocess_latency=True)
+
+    result = runner.process(Request(0, "request", "a prompt", 1))
+
+    assert result.extra["timing"]["excluded_preprocess_s"] == 60.0
+    assert result.latency_s == 0.0
 
 
 def test_result_is_jsonl_compatible(tmp_path):

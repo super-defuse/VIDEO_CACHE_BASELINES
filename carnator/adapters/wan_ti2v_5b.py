@@ -1689,6 +1689,7 @@ def run_native_t2v_stage(
     torch.cuda.empty_cache()
     torch.cuda.reset_peak_memory_stats()
     denoise_start = time.perf_counter()
+    dit_forward_seconds = 0.0
     injection_seconds = 0.0
     injection_calls = 0
     injection_mask_source_step: int | None = None
@@ -1711,13 +1712,21 @@ def run_native_t2v_stage(
             timestep_input = timestep_for(runtime, latent, timestep, seq_len)
             if sparse_state is not None:
                 sparse_state.begin_model_forward()
+            torch.cuda.synchronize()
+            dit_started = time.perf_counter()
             noise_pred_cond = model([latent], t=timestep_input, context=context, seq_len=seq_len)[0]
+            torch.cuda.synchronize()
+            dit_forward_seconds += time.perf_counter() - dit_started
             if args.guidance_scale == 1.0:
                 noise_pred = noise_pred_cond
             else:
                 if sparse_state is not None:
                     sparse_state.begin_model_forward()
+                torch.cuda.synchronize()
+                dit_started = time.perf_counter()
                 noise_pred_uncond = model([latent], t=timestep_input, context=context_null, seq_len=seq_len)[0]
+                torch.cuda.synchronize()
+                dit_forward_seconds += time.perf_counter() - dit_started
                 if (step_index + 1) == capture_cfg_residual_step:
                     if capture_cfg_residual_path is None:
                         raise ValueError("capture_cfg_residual_path is required for CFG residual capture")
@@ -1861,6 +1870,7 @@ def run_native_t2v_stage(
         "ffn": ffn_state.summary() if ffn_state is not None else {"enabled": False, "backend": "fp"},
         "timing": {
             "loop_denoise_seconds": denoising_seconds,
+            "dit_forward_seconds": dit_forward_seconds,
             "finalize_output_seconds": finalize_seconds,
             "cache_write_seconds": cache_write_seconds,
             "end_to_end_seconds": time.perf_counter() - stage_started,
@@ -2057,7 +2067,9 @@ def compact_run(manifest: dict[str, Any]) -> dict[str, Any]:
         "output": manifest.get("output"),
         "manifest_path": manifest.get("manifest_path"),
         "denoising_seconds": manifest.get("timing", {}).get("loop_denoise_seconds"),
+        "dit_forward_seconds": manifest.get("timing", {}).get("dit_forward_seconds"),
         "end_to_end_seconds": manifest.get("timing", {}).get("end_to_end_seconds"),
+        "completed_steps": manifest.get("completed_steps"),
         "self_attn_seconds": profile_seconds(profile, "self_attn"),
         "cross_attn_seconds": profile_seconds(profile, "cross_attn"),
         "ffn_seconds": profile_seconds(profile, "ffn"),
@@ -2069,6 +2081,7 @@ def compact_run(manifest: dict[str, Any]) -> dict[str, Any]:
         "sparse_blocks": manifest.get("sparse_blocks"),
         "outer_sparse": manifest.get("outer_sparse"),
         "ffn": manifest.get("ffn"),
+        "cache_prepare": manifest.get("cache_prepare"),
     }
 
 
@@ -2331,6 +2344,7 @@ def write_report(
             f"- Avg Msee context ratio: `{fmt_percent(density.get('avg_msee_context_ratio'))}`",
             f"- Middle attention-mask: `{middle_mask.get('enabled')}`; masked Medit query ratio `{fmt_percent(middle_mask.get('avg_query_ratio'))}`; masked Msee context ratio `{fmt_percent(middle_mask.get('avg_context_ratio'))}`",
             f"- Latent injection: `{reuse.get('masked_injection')}`",
+            f"- Source mask prepare: `{reuse.get('cache_prepare')}`",
             *([f"- {reuse_note}"] if reuse_note else []),
             f"- attention mask variant: `{masks.get('mask_variant')}`",
             f"- attention mask dir: `{masks.get('mask_dir')}`",
@@ -2403,7 +2417,7 @@ def verify_middle_attention_mask_coverage(args: argparse.Namespace, cache: Any) 
         )
 
 
-def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
+def run_experiment(args: argparse.Namespace, *, runtime: NativeRuntime | None = None) -> dict[str, Any]:
     from carnator.masks import load_mask_bundle
     from carnator.outer_sparse import (
         OuterSparseAttentionHooks,
@@ -2430,7 +2444,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
     if args.mask_probe_step < 1 or args.mask_probe_step > args.steps:
         raise ValueError("--mask-probe-step must be in [1, steps]")
 
-    runtime = load_runtime(args)
+    owns_runtime = runtime is None
+    runtime = runtime or load_runtime(args)
     try:
         if args.target_dense_only:
             if args.target_resume_latent is not None and args.target_resume_step <= 0:
@@ -2658,6 +2673,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 sparge_smooth_k=args.sparge_smooth_k,
                 sparge_pv_threshold=args.sparge_pv_threshold,
             )
+        cache_prepare = source_block_mask_cache.prepare(device=runtime.device) if source_block_mask_cache is not None else None
         with ExitStack() as stack:
             ffn_state = None
             if args.ffn_backend == "w8a8":
@@ -2692,6 +2708,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 outer_sparse_state=outer_state,
                 ffn_state=ffn_state,
             )
+        target_reuse["cache_prepare"] = cache_prepare
 
         if Path(source["output"]).exists():
             extract_first_frame(Path(source["output"]), paths["source_first_frame"])
@@ -2702,7 +2719,8 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
         write_summary_and_reports(paths, summary)
         return summary
     finally:
-        runtime.profiler.close()
+        if owns_runtime:
+            runtime.profiler.close()
 
 
 def main(argv: list[str] | None = None) -> int:

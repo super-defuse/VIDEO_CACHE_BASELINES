@@ -16,13 +16,12 @@ import math
 import multiprocessing as mp
 import os
 import queue
+import secrets
 import shutil
 import sys
 import threading
-import time
 import traceback
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -53,10 +52,7 @@ class PromptRow:
     request_index: int
     uuid: str
     prompt: str
-
-
-def utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    nouns: tuple[str, ...] = ()
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -82,6 +78,42 @@ def append_jsonl(path: Path, payload: Any) -> None:
         stream.write(json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n")
 
 
+def _is_timing_key(key: str) -> bool:
+    return key in {"at", "created_at", "completed_at", "finished_at", "started_at", "timing"} or key.endswith("_seconds")
+
+
+def without_timing_metadata(payload: Any) -> Any:
+    """Remove non-reproducible elapsed-time and timestamp fields from cache metadata."""
+
+    if isinstance(payload, dict):
+        return {
+            key: without_timing_metadata(value)
+            for key, value in payload.items()
+            if not _is_timing_key(str(key))
+        }
+    if isinstance(payload, list):
+        return [without_timing_metadata(value) for value in payload]
+    return payload
+
+
+def strip_timing_from_json(path: Path) -> bool:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    cleaned = without_timing_metadata(payload)
+    if cleaned != payload:
+        write_json(path, cleaned)
+        return True
+    return False
+
+
+def strip_timing_from_entry(entry_root: Path) -> int:
+    """Sanitize every JSON sidecar in one published cache entry in place."""
+
+    return sum(strip_timing_from_json(path) for path in entry_root.rglob("*.json"))
+
+
 def read_prompt_rows(path: Path, limit: int) -> list[PromptRow]:
     if limit < 1:
         raise ValueError("--limit must be positive")
@@ -102,7 +134,21 @@ def read_prompt_rows(path: Path, limit: int) -> list[PromptRow]:
             if uuid in seen:
                 raise ValueError(f"input CSV has duplicate UUID in selected rows: {uuid}")
             seen.add(uuid)
-            rows.append(PromptRow(request_index=request_index, uuid=uuid, prompt=prompt))
+            raw_nouns = row.get("noun_list")
+            nouns: tuple[str, ...] = ()
+            if raw_nouns is not None and str(raw_nouns).strip():
+                try:
+                    parsed = json.loads(str(raw_nouns))
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"CSV row {request_index + 2} has invalid noun_list JSON") from exc
+                if not isinstance(parsed, list) or not all(isinstance(noun, str) and noun.strip() for noun in parsed):
+                    raise ValueError(f"CSV row {request_index + 2} has an invalid noun_list")
+                normalized: dict[str, str] = {}
+                for noun in parsed:
+                    value = " ".join(noun.strip().split())
+                    normalized.setdefault(value.lower(), value)
+                nouns = tuple(normalized.values())
+            rows.append(PromptRow(request_index=request_index, uuid=uuid, prompt=prompt, nouns=nouns))
     if not rows:
         raise ValueError("input CSV has no selected rows")
     return rows
@@ -238,7 +284,6 @@ class _AsyncMaskWriter:
     def __init__(self, max_pending: int) -> None:
         self._tasks: queue.Queue[_MaskWriteTask | None] = queue.Queue(maxsize=max_pending)
         self._error: BaseException | None = None
-        self.write_seconds = 0.0
         self.bytes_written = 0
         self._thread = threading.Thread(target=self._run, name="shared-mask-writer", daemon=True)
         self._thread.start()
@@ -272,10 +317,8 @@ class _AsyncMaskWriter:
                 task = self._tasks.get()
                 if task is None:
                     return
-                started = time.perf_counter()
                 task.path.parent.mkdir(parents=True, exist_ok=True)
                 task.path.write_bytes(task.payload)
-                self.write_seconds += time.perf_counter() - started
                 self.bytes_written += len(task.payload)
                 task.record["sha256"] = sha256_bytes(task.payload)
         except BaseException as exc:  # Propagate writer failures to the model worker.
@@ -306,7 +349,6 @@ class SharedAttentionCapture:
         )
         self.cfg_branch_count = int(cfg_branch_count)
         self.records: list[dict[str, Any]] = []
-        self.capture_seconds = 0.0
         self.writer = _AsyncMaskWriter(max_pending_writes)
         self.closed = False
 
@@ -315,7 +357,6 @@ class SharedAttentionCapture:
 
         if completed_step < 11 or completed_step > 50:
             raise ValueError(f"unexpected captured destination step: {completed_step}")
-        started = time.perf_counter()
         mass = block_attention_mass(q, k, self.config.q_block_size, self.config.k_block_size)
         mask, coverage = block_mass_to_mask(mass, self.config.top_p, self.config.min_top_k)
         if q.is_cuda:
@@ -347,7 +388,6 @@ class SharedAttentionCapture:
         }
         self.records.append(record)
         self.writer.submit(_MaskWriteTask(self.root / relative, payload, record))
-        self.capture_seconds += time.perf_counter() - started
 
     def close(self) -> dict[str, Any]:
         if not self.closed:
@@ -370,8 +410,6 @@ class SharedAttentionCapture:
                 "flashinfer": "unpack canonical mask then build packed-BSR or VariableBlock plan",
                 "spargeattn": "unpack canonical mask then add batch dimension for mask_id",
             },
-            "capture_seconds": self.capture_seconds,
-            "write_seconds": self.writer.write_seconds,
             "bytes_written": self.writer.bytes_written,
         }
 
@@ -379,8 +417,6 @@ class SharedAttentionCapture:
         return {
             "format": ATTENTION_FORMAT,
             "entries": len(self.records),
-            "capture_seconds": self.capture_seconds,
-            "write_seconds": self.writer.write_seconds,
             "cfg_branches": self.cfg_branch_count,
         }
 
@@ -441,6 +477,22 @@ def entry_is_complete(entry_root: Path, *, expected_uuid: str, expected_config_f
     return True
 
 
+def entry_is_published(entry_root: Path, *, expected_uuid: str, expected_config_fingerprint: str) -> bool:
+    """Check a previously validated entry without re-reading its large artifacts."""
+
+    try:
+        manifest = json.loads((entry_root / "manifest.json").read_text(encoding="utf-8"))
+        status = json.loads((entry_root / "status.json").read_text(encoding="utf-8"))
+        return (
+            manifest.get("format") == SCHEMA_VERSION
+            and manifest.get("uuid") == expected_uuid
+            and manifest.get("config_fingerprint") == expected_config_fingerprint
+            and status.get("status") == "completed"
+        )
+    except (OSError, TypeError, ValueError, json.JSONDecodeError):
+        return False
+
+
 def entry_bytes(entry_root: Path) -> int:
     return sum(path.stat().st_size for path in entry_root.rglob("*") if path.is_file())
 
@@ -455,6 +507,7 @@ class NativeSharedCacheWorker:
         self.cache_config = dict(worker_config["cache_config"])
         self.fingerprint = str(worker_config["config_fingerprint"])
         self.max_pending_writes = int(worker_config["max_pending_writes"])
+        self._noun_extractor: Any | None = None
         args = native.build_parser().parse_args([])
         args.no_env_setup = True
         args.model_dir = Path(self.cache_config["model_dir"])
@@ -499,18 +552,99 @@ class NativeSharedCacheWorker:
         self.runtime.pipe.model.cpu()
         self.runtime.torch.cuda.empty_cache()
 
+    def _signature_nouns(self, row: PromptRow) -> tuple[str, ...]:
+        if row.nouns:
+            return row.nouns
+        if self._noun_extractor is None:
+            from core.retrieval import SpacyEntityExtractor
+
+            self._noun_extractor = SpacyEntityExtractor("en_core_web_sm")
+        return tuple(self._noun_extractor.extract(row.prompt))
+
+    @staticmethod
+    def _signature_complete(cache_dir: Path) -> bool:
+        required = ("online_color_signature.json", "mbase.safetensors", "step5_tail_frame.png")
+        if not all((cache_dir / name).is_file() and (cache_dir / name).stat().st_size > 0 for name in required):
+            return False
+        try:
+            payload = json.loads((cache_dir / "online_color_signature.json").read_text(encoding="utf-8"))
+            return payload.get("feature_profile") == "carnator-step5-tail-lab-ciede2000"
+        except (OSError, json.JSONDecodeError):
+            return False
+
+    def _ensure_early_signature(self, row: PromptRow, entry_root: Path) -> bool:
+        import torch
+
+        from scripts.benchmark.run_carnator_early_signature_calibration import capture_early_signature
+
+        cache_dir = entry_root / "carnator" / "cache" / "source_dense"
+        if self._signature_complete(cache_dir):
+            return False
+        nouns = self._signature_nouns(row)
+        if not nouns:
+            raise RuntimeError(f"cannot create an Early Signature for nounless cache source: {row.uuid}")
+        attention_input = self.native.load_latent(cache_dir / "latents_step_003.pt", self.runtime.device, torch.float32)
+        step5_latent = self.native.load_latent(cache_dir / "latents_step_004.pt", self.runtime.device, torch.float32)
+        token_grid = self.native.token_grid_for(step5_latent, self.runtime.pipe.patch_size)
+        latent = cache_dir / "latents_step_009.pt"
+        sparse = cache_dir / "fusion_masks" / "masks.pt"
+        if not latent.is_file() or not sparse.is_file():
+            raise FileNotFoundError(f"cache source artifacts are incomplete: {cache_dir}")
+        capture_early_signature(
+            self.runtime,
+            self.args,
+            prompt=row.prompt,
+            nouns=nouns,
+            attention_input=attention_input,
+            step5_latent=step5_latent,
+            directory=cache_dir,
+            cache={
+                "anchor_step": 10,
+                "model": "Wan2.2-TI2V-5B",
+                "latent_token_grid": list(token_grid),
+                "latent_path": str(latent.resolve()),
+                "latent_sha256": sha256_file(latent),
+                "sparse_attention_path": str(sparse.resolve()),
+                "sparse_attention_sha256": sha256_file(sparse),
+                "source_uuid": row.uuid,
+            },
+        )
+        del attention_input, step5_latent
+        torch.cuda.empty_cache()
+        return True
+
+    def _refresh_existing_entry(self, row: PromptRow, entry_root: Path) -> bool:
+        strip_timing_from_entry(entry_root)
+        manifest_path = entry_root / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["request_index"] = row.request_index
+        manifest["prompt"] = row.prompt
+        manifest.setdefault("source", {})["prompt"] = row.prompt
+        carnator = manifest["artifacts"]["carnator"]
+        for record in (carnator["source_manifest"], carnator["raw_block_mask_metadata"]):
+            path = entry_root / str(record["path"])
+            record["sha256"] = sha256_file(path)
+            record["bytes"] = path.stat().st_size
+        write_json(manifest_path, without_timing_metadata(manifest))
+        strip_timing_from_json(entry_root / "status.json")
+        return self._ensure_early_signature(row, entry_root)
+
     def prepare(self, row: PromptRow) -> dict[str, Any]:
         import torch
 
         from carnator.outer_sparse import OuterSparseCaptureHooks, OuterSparseState, cfg_branches
 
         final_dir = self.root / "entries" / row.uuid
-        if entry_is_complete(final_dir, expected_uuid=row.uuid, expected_config_fingerprint=self.fingerprint):
-            return {"status": "skipped", "uuid": row.uuid, "request_index": row.request_index}
-        staging = self.root / "entries" / ".staging" / f"{row.uuid}.{os.getpid()}.{time.time_ns()}"
+        if entry_is_published(final_dir, expected_uuid=row.uuid, expected_config_fingerprint=self.fingerprint):
+            signature_created = self._refresh_existing_entry(row, final_dir)
+            return {
+                "status": "signature_completed" if signature_created else "skipped",
+                "uuid": row.uuid,
+                "request_index": row.request_index,
+            }
+        staging = self.root / "entries" / ".staging" / f"{row.uuid}.{os.getpid()}.{secrets.token_hex(8)}"
         staging.mkdir(parents=True, exist_ok=False)
         capture: SharedAttentionCapture | None = None
-        started = time.perf_counter()
         try:
             self.args.source_prompt = row.prompt
             self.args.source_positive = ""
@@ -584,7 +718,7 @@ class NativeSharedCacheWorker:
             native_manifest["output"] = str(final_dir / "source.mp4")
             for record in native_manifest.get("trajectory", []):
                 record["path"] = str(final_carnator_root / Path(str(record["path"])).name)
-            write_json(native_manifest_path, native_manifest)
+            write_json(native_manifest_path, without_timing_metadata(native_manifest))
 
             source_video_path = staging / "source.mp4"
             trajectory_records: list[dict[str, Any]] = []
@@ -601,18 +735,11 @@ class NativeSharedCacheWorker:
                 _relative_artifact(carnator_root / "fusion_masks" / filename, staging)
                 for filename in ("masks.json", "masks.pt")
             ]
-            raw_capture_seconds = float(attention["capture_seconds"])
-            source_end_to_end = float(stage["timing"]["end_to_end_seconds"])
-            source_end_to_end_without_sync_cache = max(
-                0.0,
-                source_end_to_end - float(stage["timing"].get("cache_write_seconds", 0.0)) - raw_capture_seconds,
-            )
             manifest = {
                 "format": SCHEMA_VERSION,
                 "uuid": row.uuid,
                 "request_index": row.request_index,
                 "prompt": row.prompt,
-                "created_at": utc_now(),
                 "config": self.cache_config,
                 "config_fingerprint": self.fingerprint,
                 "source": {
@@ -658,30 +785,20 @@ class NativeSharedCacheWorker:
                         "middle_mask_policy": "target_only_intersect_raw_mask_with_Medit_Msee",
                     },
                 },
-                "timing": {
-                    "latency_policy": "target end-to-end latency excludes all source cache preparation",
-                    "source_dense_end_to_end_seconds_excluding_sync_cache": source_end_to_end_without_sync_cache,
-                    "cache_preparation": {
-                        "end_to_end_seconds": time.perf_counter() - started,
-                        "source_dense_raw_end_to_end_seconds": source_end_to_end,
-                        "trajectory_write_seconds": stage["timing"].get("cache_write_seconds", 0.0),
-                        "raw_mask_capture_seconds": raw_capture_seconds,
-                        "raw_mask_async_write_seconds": attention["write_seconds"],
-                    },
-                },
             }
             write_json(staging / "manifest.json", manifest)
-            write_json(staging / "status.json", {"status": "completed", "completed_at": utc_now()})
+            write_json(staging / "status.json", {"status": "completed"})
             if not entry_is_complete(staging, expected_uuid=row.uuid, expected_config_fingerprint=self.fingerprint):
                 raise RuntimeError("staged shared cache entry failed checksum validation")
             final_dir.parent.mkdir(parents=True, exist_ok=True)
             staging.rename(final_dir)
+            signature_created = self._ensure_early_signature(row, final_dir)
             return {
                 "status": "completed",
                 "uuid": row.uuid,
                 "request_index": row.request_index,
                 "bytes": entry_bytes(final_dir),
-                "cache_preparation_seconds": manifest["timing"]["cache_preparation"]["end_to_end_seconds"],
+                "early_signature_created": signature_created,
             }
         except BaseException:
             if capture is not None and not capture.closed:
@@ -699,7 +816,7 @@ def worker_main(tasks: Any, results: Any, worker_config: dict[str, Any]) -> None
     worker: NativeSharedCacheWorker | None = None
     try:
         worker = NativeSharedCacheWorker(worker_config)
-        append_jsonl(log_path, {"event": "worker_ready", "gpu": gpu, "at": utc_now()})
+        append_jsonl(log_path, {"event": "worker_ready", "gpu": gpu})
         while True:
             payload = tasks.get()
             if payload is None:
@@ -716,7 +833,6 @@ def worker_main(tasks: Any, results: Any, worker_config: dict[str, Any]) -> None
                     "traceback": traceback.format_exc(),
                 }
             result["gpu"] = gpu
-            result["at"] = utc_now()
             append_jsonl(log_path, result)
             results.put(result)
             if result["status"] == "failed":
@@ -737,7 +853,7 @@ def build_index(root: Path, rows: list[PromptRow], fingerprint: str) -> int:
     with temporary.open("w", encoding="utf-8") as stream:
         for row in rows:
             entry = root / "entries" / row.uuid
-            if not entry_is_complete(entry, expected_uuid=row.uuid, expected_config_fingerprint=fingerprint):
+            if not entry_is_published(entry, expected_uuid=row.uuid, expected_config_fingerprint=fingerprint):
                 continue
             manifest = json.loads((entry / "manifest.json").read_text(encoding="utf-8"))
             stream.write(json.dumps({
@@ -932,7 +1048,6 @@ def main(argv: list[str] | None = None) -> int:
         "config": config,
         "config_fingerprint": fingerprint,
         "model_tree_fingerprint": model_tree_fingerprint(args.model_dir.resolve()),
-        "created_at": utc_now(),
     }
     if args.dry_run:
         write_run_manifest(root, {**run_manifest, "status": "dry_run"})
@@ -942,7 +1057,6 @@ def main(argv: list[str] | None = None) -> int:
         estimate = estimate_space(args, selected_count, shutil.disk_usage(root).free)
         estimate["input_sha256"] = input_sha
         estimate["config_fingerprint"] = fingerprint
-        estimate["created_at"] = utc_now()
         write_json(root / "space_estimate.json", estimate)
         write_run_manifest(root, {**run_manifest, "status": "estimated", "space_estimate": str(root / "space_estimate.json")})
         print(json.dumps({"status": "estimated", **estimate}, ensure_ascii=False))
@@ -952,10 +1066,11 @@ def main(argv: list[str] | None = None) -> int:
     elif len(rows) > 1:
         if not args.confirm_full_run:
             raise RuntimeError("refusing full run without --confirm-full-run; run --estimate-only first")
-        load_space_estimate(root, fingerprint, input_sha)
-    todo = [
+        if not args.resume:
+            load_space_estimate(root, fingerprint, input_sha)
+    todo = rows if args.resume else [
         row for row in rows
-        if not args.resume or not entry_is_complete(root / "entries" / row.uuid, expected_uuid=row.uuid, expected_config_fingerprint=fingerprint)
+        if not entry_is_complete(root / "entries" / row.uuid, expected_uuid=row.uuid, expected_config_fingerprint=fingerprint)
     ]
     worker_config = {
         "output": str(root),
@@ -975,13 +1090,11 @@ def main(argv: list[str] | None = None) -> int:
             "entry_bytes": size,
             "estimated_total_bytes": size * selected_count,
             "required_free_bytes": math.ceil(size * selected_count * 1.2),
-            "created_at": utc_now(),
         })
     status = "failed" if failures else ("pilot_completed" if args.pilot else "completed")
     write_run_manifest(root, {
         **run_manifest,
         "status": status,
-        "finished_at": utc_now(),
         "indexed_entries": indexed,
         "results": results,
     })

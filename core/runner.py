@@ -16,11 +16,15 @@ class Runner:
     def __init__(self, adapter: ModelAdapter, method: BaselineMethod, *, model: str,
                  output_dir: Path, cache_root: Path,
                  persist_target_cache: bool = True,
-                 exclude_preprocess_latency: bool = True) -> None:
+                 exclude_preprocess_latency: bool = False,
+                 exclude_cache_prepare_latency: bool = False,
+                 skip_generation_on_miss: bool = False) -> None:
         self.adapter, self.method, self.model = adapter, method, model
         self.output_dir = output_dir
         self.persist_target_cache = persist_target_cache
         self.exclude_preprocess_latency = exclude_preprocess_latency
+        self.exclude_cache_prepare_latency = exclude_cache_prepare_latency
+        self.skip_generation_on_miss = skip_generation_on_miss
         self.video_dir = output_dir / "videos"
         self.video_dir.mkdir(parents=True, exist_ok=True)
         # A method's latent representation is model-specific. Keep both axes
@@ -46,9 +50,7 @@ class Runner:
         match = CacheMatch()
         timing: dict[str, float] = {}
         try:
-            lookup_start = time.perf_counter()
             match = self.method.find_cache(request) if self.method.capabilities.cross_request_cache else CacheMatch()
-            timing["cache_lookup_s"] = time.perf_counter() - lookup_start
             cached = None
             cache_load_start = time.perf_counter()
             loaded = self.cache.load(match)
@@ -57,16 +59,37 @@ class Runner:
                 path, entry = loaded
                 cached = self.method.select_cached_latent(self.adapter.load_latent(path), match)
             timing["cache_load_s"] = time.perf_counter() - cache_load_start
+            if self.skip_generation_on_miss and self.method.capabilities.cross_request_cache and not match.hit:
+                timing["generation_s"] = 0.0
+                timing["reported_latency_s"] = None
+                return RequestResult(
+                    request.request_index, request.uuid, request.prompt, self.model, self.method.name,
+                    request.seed, match, 0, 0.0, "cache_miss", error=None,
+                    extra={"timing": timing, "miss_reason": match.metadata.get("reason")},
+                )
             generation_start = time.perf_counter()
             self.method.begin_request(match, entry)
             try:
-                generation = self.method.generate(request, cached_latent=cached, capture=not match.hit)
+                generation = self.method.generate(
+                    request,
+                    cached_latent=cached,
+                    # A fixed source-view experiment does not retain target
+                    # artifacts, so a miss must not pay trajectory capture.
+                    capture=self.persist_target_cache and not match.hit,
+                )
             finally:
                 self.method.end_request()
             timing["generation_s"] = time.perf_counter() - generation_start
             output_path = self.video_dir / f"{request.request_index:04d}_{request.uuid}.mp4"
             save_start = time.perf_counter()
-            self.adapter.save_video(generation.video, output_path)
+            if generation.video_path is not None:
+                output_path = Path(generation.video_path)
+                if output_path.resolve() != (self.video_dir / f"{request.request_index:04d}_{request.uuid}.mp4").resolve():
+                    raise RuntimeError(f"adapter returned an unexpected video path: {output_path}")
+                if not output_path.is_file():
+                    raise FileNotFoundError(f"adapter video is missing: {output_path}")
+            else:
+                self.adapter.save_video(generation.video, output_path)
             timing["save_video_s"] = time.perf_counter() - save_start
             cache_save_start = time.perf_counter()
             if (self.persist_target_cache and not match.hit and generation.latent is not None
@@ -78,11 +101,17 @@ class Runner:
             output_hash = _hash(output_path)
             timing["hash_s"] = time.perf_counter() - hash_start
             elapsed = time.perf_counter() - start
-            excluded = float(generation.extra.get("excluded_latency_s", 0.0))
+            preprocess_breakdown = float(generation.extra.get("excluded_latency_s", 0.0))
+            cache_prepare = timing["cache_load_s"] if self.exclude_cache_prepare_latency and match.hit else 0.0
+            excluded = (preprocess_breakdown if self.exclude_preprocess_latency else 0.0) + cache_prepare
+            timing["preprocess_breakdown_s"] = preprocess_breakdown
+            timing["excluded_cache_prepare_s"] = cache_prepare
             timing["excluded_preprocess_s"] = excluded
-            timing["reported_latency_s"] = (
-                max(0.0, elapsed - excluded) if self.exclude_preprocess_latency else elapsed
-            )
+            # Request latency ends after decoded video is available.  Video
+            # encoding/file writes, target-cache writes and result hashing are
+            # bookkeeping outside the reported end-to-end interval.
+            write_overhead = timing["save_video_s"] + timing["cache_save_s"] + timing["hash_s"]
+            timing["reported_latency_s"] = max(0.0, elapsed - write_overhead - excluded)
             extra = dict(generation.extra)
             extra["timing"] = timing
             return RequestResult(request.request_index, request.uuid, request.prompt, self.model, self.method.name,

@@ -475,6 +475,7 @@ class SourceBlockMaskCache:
         self.write_seconds = 0.0
         self.configuration_error: str | None = None
         self._bitpacked = False
+        self._prepared_masks: dict[tuple[int, str, int], torch.Tensor] = {}
         self.capture_block_mass = bool(capture_block_mass)
         if create:
             if source_run_id is None or cfg_branch_count is None:
@@ -565,6 +566,39 @@ class SourceBlockMaskCache:
         self.entries[key] = entry
         self._write_metadata()
 
+    def _decode(self, entry: dict[str, Any]) -> tuple[torch.Tensor, int, float]:
+        started = time.perf_counter()
+        path = self.root / entry["path"]
+        file_bytes = 0
+        if self._bitpacked:
+            try:
+                payload = path.read_bytes()
+            except FileNotFoundError as exc:
+                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
+            file_bytes = len(payload)
+            expected_digest = entry.get("sha256")
+            if expected_digest and hashlib.sha256(payload).hexdigest() != expected_digest:
+                raise BlockMaskCacheError(f"source block-mask checksum mismatch: {path}")
+            shape = tuple(int(value) for value in entry.get("mask_shape", ()))
+            expected_elements = math.prod(shape) if len(shape) == 3 else 0
+            if expected_elements < 1 or int(entry.get("packed_elements", 0)) != expected_elements:
+                raise BlockMaskCacheError(f"invalid bit-packed source block-mask metadata: {path}")
+            if len(payload) != math.ceil(expected_elements / 8):
+                raise BlockMaskCacheError(f"bit-packed source block-mask byte size mismatch: {path}")
+            encoded = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
+            shifts = torch.arange(8, dtype=torch.uint8)
+            mask = ((encoded.unsqueeze(1) >> shifts) & 1).reshape(-1)[:expected_elements]
+            mask = mask.to(torch.bool).reshape(shape).contiguous()
+        else:
+            try:
+                file_bytes = path.stat().st_size
+                mask = torch.load(path, map_location="cpu", weights_only=True)
+            except FileNotFoundError as exc:
+                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
+        if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool:
+            raise BlockMaskCacheError(f"source block mask is not a boolean tensor: {path}")
+        return mask, file_bytes, time.perf_counter() - started
+
     def get(self, step: int, branch: str, layer: int, q: torch.Tensor) -> tuple[torch.Tensor, dict[str, Any], float]:
         if self.configuration_error is not None:
             raise BlockMaskCacheError(self.configuration_error)
@@ -580,56 +614,46 @@ class SourceBlockMaskCache:
                 f"mask metadata mismatch for step={step}, branch={branch}, layer={layer}: "
                 f"cached shape/dtype={entry['shape']}/{entry['dtype']}, target={expected_shape}/{q.dtype}"
             )
-        started = time.perf_counter()
-        path = self.root / entry["path"]
-        if self._bitpacked:
-            try:
-                payload = path.read_bytes()
-            except FileNotFoundError as exc:
-                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
-            expected_digest = entry.get("sha256")
-            if expected_digest and hashlib.sha256(payload).hexdigest() != expected_digest:
-                raise BlockMaskCacheError(f"source block-mask checksum mismatch: {path}")
-            shape = tuple(int(value) for value in entry.get("mask_shape", ()))
-            expected_elements = math.prod(shape) if len(shape) == 3 else 0
-            if expected_elements < 1 or int(entry.get("packed_elements", 0)) != expected_elements:
-                raise BlockMaskCacheError(f"invalid bit-packed source block-mask metadata: {path}")
-            if len(payload) != math.ceil(expected_elements / 8):
-                raise BlockMaskCacheError(f"bit-packed source block-mask byte size mismatch: {path}")
-            encoded = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
-            shifts = torch.arange(8, dtype=torch.uint8)
-            mask = ((encoded.unsqueeze(1) >> shifts) & 1).reshape(-1)[:expected_elements]
-            mask = mask.to(torch.bool).reshape(shape).contiguous()
+        mask = self._prepared_masks.get(key)
+        if mask is None:
+            mask, _, elapsed = self._decode(entry)
+            self._prepared_masks[key] = mask
         else:
-            mask = torch.load(path, map_location="cpu", weights_only=True)
-        elapsed = time.perf_counter() - started
-        if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool:
-            raise BlockMaskCacheError("source block mask is not a boolean tensor")
+            elapsed = 0.0
         return mask.to(device=q.device, non_blocking=True), entry, elapsed
 
-    def prewarm(self, *, chunk_size: int = 8 * 1024 * 1024) -> dict[str, Any]:
-        """Read every mask file sequentially into the OS page cache."""
-
+    def prepare(self, *, device: torch.device | str | None = None) -> dict[str, Any]:
+        """Decode all source masks once, optionally placing them on the target device."""
         if self.configuration_error is not None:
             raise BlockMaskCacheError(self.configuration_error)
-        if chunk_size <= 0:
-            raise ValueError("prewarm chunk_size must be positive")
+        target_device = torch.device(device) if device is not None else None
         started = time.perf_counter()
-        buffer = bytearray(chunk_size)
         file_bytes = 0
+        decoded_entries = 0
         for key in sorted(self.entries, key=lambda value: (value[0], value[1], value[2])):
-            path = self.root / self.entries[key]["path"]
-            try:
-                with path.open("rb", buffering=0) as stream:
-                    while read_bytes := stream.readinto(buffer):
-                        file_bytes += read_bytes
-            except FileNotFoundError as exc:
-                raise BlockMaskCacheError(f"missing source block-mask file: {path}") from exc
+            if key in self._prepared_masks:
+                continue
+            mask, read_bytes, _ = self._decode(self.entries[key])
+            if target_device is not None:
+                mask = mask.to(device=target_device, non_blocking=True)
+            self._prepared_masks[key] = mask
+            file_bytes += read_bytes
+            decoded_entries += 1
+        if target_device is not None and target_device.type == "cuda":
+            torch.cuda.synchronize(target_device)
         return {
             "entries": len(self.entries),
+            "decoded_entries": decoded_entries,
             "file_bytes": file_bytes,
+            "device": str(target_device) if target_device is not None else "cpu",
             "elapsed_seconds": time.perf_counter() - started,
         }
+
+    def prewarm(self, *, chunk_size: int = 8 * 1024 * 1024) -> dict[str, Any]:
+        """Compatibility alias for eager mask decoding."""
+        if chunk_size <= 0:
+            raise ValueError("prewarm chunk_size must be positive")
+        return self.prepare()
 
     def summary(self) -> dict[str, Any]:
         entries = list(self.entries.values())

@@ -1,0 +1,6 @@
+baseline,arrival_count,window_start,window_end,window_hits,window_hit_rate,cumulative_hits,cumulative_hit_rate
+NIRVANA-VID,2,1,2,1,0.5,1,0.5
+TeaCache,2,N/A,N/A,N/A,N/A,N/A,N/A
+Chorus,2,1,2,1,0.5,1,0.5
+Chorus2,2,1,2,1,0.5,1,0.5
+Carnator Boundary B5,2,1,2,1,0.5,1,0.5

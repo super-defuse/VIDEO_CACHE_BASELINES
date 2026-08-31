@@ -248,15 +248,16 @@ def main() -> int:
         output_hash = hash_file(output)
         hash_seconds = time.perf_counter() - hash_started
         elapsed = time.perf_counter() - started
-        excluded = float(generation.extra.get("excluded_latency_s", 0.0))
+        preprocess_breakdown = float(generation.extra.get("excluded_latency_s", 0.0))
         timing = {
             "cache_lookup_s": lookup_seconds,
             "cache_load_s": load_seconds,
             "generation_s": generation_seconds,
             "save_video_s": save_seconds,
             "hash_s": hash_seconds,
-            "excluded_preprocess_s": excluded,
-            "reported_latency_s": max(0.0, elapsed - excluded),
+            "preprocess_breakdown_s": preprocess_breakdown,
+            "excluded_preprocess_s": 0.0,
+            "reported_latency_s": elapsed,
         }
         reference = Path(str(shared_manifest.get("source", {}).get("cache_dir", ""))).parent / "target_dense" / "manifest.json"
         dense_seconds = None

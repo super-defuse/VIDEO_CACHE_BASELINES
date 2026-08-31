@@ -188,8 +188,12 @@ FlashAttention CUDA 调用、Runner 落盘，以及 Baseline、TeaCache、NIRVAN
 ### VidProM 300-request experiment
 
 正式实验的唯一入口是 [`scripts/benchmark/run_vidprom_300_experiment.py`](scripts/benchmark/run_vidprom_300_experiment.py)。
-它按 CSV 到达顺序在 GPU 3--7 分别运行五个基线，使用 923-entry source view；Carnator
+它按 CSV 到达顺序在 GPU 3--7 分别运行五个基线，使用 1000-entry source view；Carnator
 仅在有候选时在线执行 step-5 Early Signature probe，所有新请求不写入 cache。
+
+该实验及 `artifacts/vidprom_1000cache_300input_noun_match/` 的结果固定基于
+`datasets/1000cache_300input_noun_match/`，Carnator 使用 v2（noun -> Early
+Signature -> CLIP top-1）。共享缓存与实验结果必须使用同一数据集边界。
 
 ```bash
 # 每个基线先执行一次 --check-only，再在独立终端运行 --limit 300
@@ -198,7 +202,7 @@ conda run -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=. python scripts/benchmark/ru
 
 # 生成质量和汇总结果（全部基线完成后）
 conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality_runner.py \
-  --results artifacts/vidprom_1000cache_300input/results/<method>/results.jsonl
+  --results artifacts/vidprom_1000cache_300input_noun_match/results/<method>/results.jsonl
 PYTHONPATH=. python scripts/benchmark/aggregate_vidprom_300_results.py
 ```
 

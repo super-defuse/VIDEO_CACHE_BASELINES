@@ -28,6 +28,17 @@ def test_read_prompt_rows_rejects_duplicate_uuid(tmp_path):
         prepare.read_prompt_rows(source, 2)
 
 
+def test_read_prompt_rows_uses_csv_nouns_and_deduplicates_them(tmp_path):
+    source = tmp_path / "requests.csv"
+    source.write_text(
+        'uuid,prompt,noun_list\nfirst,one,"[""cat"", ""Cat"", ""dog""]"\n', encoding="utf-8"
+    )
+
+    rows = prepare.read_prompt_rows(source, 1)
+
+    assert rows[0].nouns == ("cat", "dog")
+
+
 def test_canonical_bitpacked_mask_round_trip_and_backend_views():
     mask = torch.rand((3, 5, 7)) > 0.4
 

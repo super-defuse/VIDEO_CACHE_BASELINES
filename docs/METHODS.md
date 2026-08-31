@@ -11,7 +11,7 @@ latent 和 FFN hook。
 | `teacache` | adapter 内跳步 | `adapters/teacache.py` |
 | `nirvana_vid` | 跨请求扩散 latent、跳步、source trajectory | `adapters/{wan22,cogvideox15}.py` |
 | `carnator` | Wan C0/B0--B5 矩阵、稀疏 attention、量化、source trajectory；默认将 10--20 的原始 block mask 与 `Medit`/`Msee` 相交；可一次导出所有共享缓存 | `carnator/` + `scripts/run/carnator_matrix.py` |
-| `chorus2` | Wan 专用：从共享 source 的第 10 步 latent 恢复，只计算后 40 步；全部 30 个 block 使用普通 SpargeAttn mask，每 8 层 refresh | `chorus2/` + `scripts/run/chorus2_wan.py` |
+| `chorus2` | Wan 专用：target 完整运行 50 步；第 11--50 步全部 30 个 block 使用普通 SpargeAttn mask，每 8 层 refresh，不做 source latent restart | `chorus2/` + `scripts/run/chorus2_wan.py` |
 | `chorus` | Wan2.2 50-step source trajectory；`K1=10/K2=40` 三阶段 per-step cache、Stage-2 SRD/TGAA/latent fusion、Stage-3 dense no-reuse、LLM prompt diff、Grounded-SAM-2 v1.0 mask；CogVideoX1.5 为 N/A | `methods/chorus` + `adapters/wan22.py` |
 | `chorus_no_tgaa` | Wan2.2 Chorus 消融；保留同一 source trajectory、SRD、latent fusion、Stage-3 dense/no-reuse 和 mask，仅关闭 Stage-2 TGAA；CogVideoX1.5 为 N/A | `methods/chorus_no_tgaa` + `adapters/wan22.py` |
 | `chorus_mbase_only` | 独立失败案例消融；保留 Chorus 的 TGAA、Msee 上下文和 Stage-3 dense/no-reuse，仅将 Stage-2 SRD 与 latent fusion 的更新区域从 Medit 收窄为 Mbase；CogVideoX1.5 为 N/A | `methods/chorus_mbase_only` + `adapters/wan22.py` |

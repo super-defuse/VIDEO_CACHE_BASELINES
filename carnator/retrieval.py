@@ -27,7 +27,9 @@ from core.retrieval import (
 from core.types import CacheMatch, Request
 
 
-CARNATOR_RETRIEVER_ID = "carnator_two_stage"
+CARNATOR_V1_RETRIEVER_ID = "carnator_two_stage"
+CARNATOR_V2_RETRIEVER_ID = "carnator_noun_early_clip"
+CARNATOR_RETRIEVER_ID = CARNATOR_V1_RETRIEVER_ID
 
 
 def _noun_set(values: Iterable[str]) -> set[str]:
@@ -57,7 +59,7 @@ class CarnatorNounExtractor:
 
 
 class CarnatorRetriever(RetrievalStrategy):
-    """Top-20 prompt recall followed by an object-level Early Signature gate.
+    """Carnator v1: CLIP top-k, noun filter, then an Early Signature gate.
 
     The production runner remains fail-closed until it supplies a native
     object-level sidecar and artifact contract. ``retrieval_only`` is for
@@ -67,6 +69,7 @@ class CarnatorRetriever(RetrievalStrategy):
 
     kind = CARNATOR_RETRIEVER_ID
     eviction_policy = "lru"
+    retrieval_version = "v1"
 
     def __init__(
         self,
@@ -204,6 +207,8 @@ class CarnatorRetriever(RetrievalStrategy):
         }
         metadata: dict[str, Any] = {
             "retriever": self.kind,
+            "retrieval_version": self.retrieval_version,
+            "selection_order": ["clip_top_k", "noun_prefilter", "early_signature"],
             "embedding": self.embedder.signature,
             "candidate_top_k": self.candidate_top_k,
             "candidate_min_similarity": self.candidate_min_similarity,
@@ -336,6 +341,148 @@ class CarnatorRetriever(RetrievalStrategy):
         }
 
 
+class CarnatorRetrieverV2(CarnatorRetriever):
+    """Carnator v2: noun filter, Early Signature gate, then CLIP top-1."""
+
+    kind = CARNATOR_V2_RETRIEVER_ID
+    retrieval_version = "v2"
+
+    def _rank_by_clip(
+        self, request: Request, records: list[VectorRecord]
+    ) -> list[tuple[float, VectorRecord]]:
+        query = self.embedder.encode([request.prompt])[0]
+        ranked = [
+            (sum(left * right for left, right in zip(query, record.vector, strict=True)), index, record)
+            for index, record in enumerate(records)
+        ]
+        ranked.sort(key=lambda item: (-item[0], item[1]))
+        return [(score, record) for score, _, record in ranked]
+
+    def search(
+        self,
+        request: Request,
+        records: Iterable[VectorRecord],
+        *,
+        target_signature: dict[str, Any] | None = None,
+    ) -> CacheMatch:
+        thresholds = {
+            "max_context_color_distance": self.max_context_color_distance,
+            "max_log_area_ratio": self.max_log_area_ratio,
+            "max_shape_distance": self.max_shape_distance,
+            "max_changed_color_distance": self.max_changed_color_distance,
+        }
+        metadata: dict[str, Any] = {
+            "retriever": self.kind,
+            "retrieval_version": self.retrieval_version,
+            "selection_order": ["noun_prefilter", "early_signature", "clip_top_1"],
+            "embedding": self.embedder.signature,
+            "stage_2_profile": "early_signature",
+            "stage_2_reference_profile": EARLY_SIGNATURE_PROFILE_ID,
+            "stage_2_operational": self.max_context_color_distance is not None,
+            "stage_2_thresholds": thresholds,
+            "cache_ready": False,
+            "step_2_probe_run": False,
+            "probe_required": False,
+            "noun_prefilter": [],
+            "stage_2_candidates": [],
+            "stage_2": [],
+            "clip_ranking": [],
+        }
+        target_nouns = self.noun_extractor.for_request(request)
+        if not target_nouns:
+            metadata["reason"] = "nounless_prompt"
+            return CacheMatch(metadata=metadata, kind="no_reuse")
+
+        record_list = list(records)
+        noun_candidates: list[tuple[VectorRecord, str]] = []
+        for record in record_list:
+            source_nouns = (record.metadata or {}).get("trf_nouns", []) if isinstance(record.metadata, dict) else []
+            try:
+                allowed, reason = self._prefilter(source_nouns, target_nouns)
+                display_nouns = sorted(_noun_set(source_nouns))
+            except (TypeError, ValueError):
+                allowed, reason, display_nouns = False, "invalid_noun_metadata", []
+            if allowed:
+                noun_candidates.append((record, reason))
+                metadata["noun_prefilter"].append({
+                    "uuid": record.uuid,
+                    "source_nouns": display_nouns,
+                    "target_nouns": list(target_nouns),
+                    "reason": reason,
+                })
+        metadata["noun_prefilter_total_records"] = len(record_list)
+        metadata["stage_2_candidates"] = [
+            {"uuid": record.uuid, "prefilter_reason": reason} for record, reason in noun_candidates
+        ]
+        if not noun_candidates:
+            metadata["reason"] = "no_noun_compatible_candidate"
+            return CacheMatch(metadata=metadata, kind="no_reuse")
+        if not self._is_sidecar(target_signature):
+            metadata["reason"] = "target_signature_required"
+            metadata["probe_required"] = True
+            return CacheMatch(metadata=metadata, kind="probe_required")
+
+        metadata["step_2_probe_run"] = True
+        assert target_signature is not None
+        early_candidates: list[VectorRecord] = []
+        for record, _ in noun_candidates:
+            candidate_result: dict[str, Any] = {"uuid": record.uuid}
+            source_metadata = record.metadata if isinstance(record.metadata, dict) else {}
+            source_signature = source_metadata.get("signature")
+            if not self._is_sidecar(source_signature):
+                candidate_result["reason"] = "invalid_signature:ValueError"
+                metadata["stage_2"].append(candidate_result)
+                continue
+            source_nouns = _noun_set(source_metadata.get("trf_nouns", []))
+            target_only = sorted(set(target_nouns) - source_nouns)
+            source_only = sorted(source_nouns - set(target_nouns))
+            try:
+                comparison = compare_early_signatures(
+                    target_signature,
+                    source_signature,
+                    query_changed_noun=target_only[0] if len(target_only) == len(source_only) == 1 else None,
+                    candidate_changed_noun=source_only[0] if len(target_only) == len(source_only) == 1 else None,
+                    max_context_color_distance=self.max_context_color_distance,
+                    max_log_area_ratio=self.max_log_area_ratio,
+                    max_shape_distance=self.max_shape_distance,
+                    max_changed_color_distance=self.max_changed_color_distance,
+                    check_cache_artifacts=not self.retrieval_only,
+                )
+            except (KeyError, OSError, ValueError) as exc:
+                candidate_result["reason"] = f"signature_error:{type(exc).__name__}"
+                metadata["stage_2"].append(candidate_result)
+                continue
+            candidate_result["early_signature"] = comparison
+            ready = bool(source_metadata.get("cache_ready")) and bool(comparison["cache_ready"])
+            candidate_result["cache_ready"] = ready
+            if not comparison["signature_compatible"]:
+                candidate_result["reason"] = "signature_incompatible"
+            elif not ready:
+                candidate_result["reason"] = "cache_not_ready"
+            else:
+                candidate_result["reason"] = "accepted"
+                early_candidates.append(record)
+            metadata["stage_2"].append(candidate_result)
+        if not early_candidates:
+            metadata["reason"] = "no_compatible_cache"
+            return CacheMatch(metadata=metadata, kind="no_reuse")
+
+        clip_ranking = self._rank_by_clip(request, early_candidates)
+        metadata["clip_ranking"] = [
+            {"uuid": record.uuid, "rank": rank, "score": score}
+            for rank, (score, record) in enumerate(clip_ranking, start=1)
+        ]
+        score, selected = clip_ranking[0]
+        selected_result = next(item for item in metadata["stage_2"] if item["uuid"] == selected.uuid)
+        metadata.update({
+            "source_uuid": selected.uuid,
+            "cache_ready": True,
+            "reuse_mode": "joint_latent_sparse_attention",
+            "selected_metrics": selected_result["early_signature"]["distances"],
+        })
+        return CacheMatch(True, selected.uuid, None, self.kind, score, metadata)
+
+
 def make_carnator_retriever(
     config: dict[str, Any], *, dry_run: bool, retrieval_only: bool = False
 ) -> CarnatorRetriever:
@@ -344,7 +491,11 @@ def make_carnator_retriever(
         if dry_run
         else SpacyEntityExtractor(str(config.get("spacy_model", "en_core_web_sm")))
     )
-    return CarnatorRetriever(
+    version = str(config.get("retrieval_version", "v2"))
+    if version not in {"v1", "v2"}:
+        raise ValueError("Carnator retrieval_version must be 'v1' or 'v2'")
+    retriever_class = CarnatorRetriever if version == "v1" else CarnatorRetrieverV2
+    return retriever_class(
         _make_embedder(config, dry_run=dry_run),
         CarnatorNounExtractor(extractor),
         candidate_top_k=int(config.get("candidate_top_k", 20)),
@@ -361,7 +512,10 @@ def make_carnator_retriever(
 
 __all__ = [
     "CARNATOR_RETRIEVER_ID",
+    "CARNATOR_V1_RETRIEVER_ID",
+    "CARNATOR_V2_RETRIEVER_ID",
     "CarnatorNounExtractor",
     "CarnatorRetriever",
+    "CarnatorRetrieverV2",
     "make_carnator_retriever",
 ]

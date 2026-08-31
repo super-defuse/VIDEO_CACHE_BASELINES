@@ -1,0 +1,15 @@
+{
+  "comparable_pairs": 300,
+  "confidence": 0.95,
+  "coverage_denominator": "all",
+  "coverage_min": 0.9,
+  "incomparable_pairs": 0,
+  "max_threshold_values": 12,
+  "pair_count": 300,
+  "quality_floors": {
+    "clip_t_min": 0.0,
+    "q_min": 0.0
+  },
+  "selection_min_lower_bound": 0.8,
+  "sweep_count": 20736
+}

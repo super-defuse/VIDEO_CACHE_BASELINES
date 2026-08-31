@@ -13,3 +13,12 @@ dependencies.
 Third-party model and evaluator sources are separately listed in
 `external/lock.json` and are intentionally kept out of these implementation
 directories.
+
+## VidProM dataset boundary
+
+`artifacts/vidprom_1000cache_300input_noun_match/` is the active 300-request
+result set based on `datasets/1000cache_300input_noun_match/`; its Carnator
+retrieval is v2: noun filter, Early Signature, then CLIP top-1. The live
+`artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000/`
+cache uses the same dataset boundary. The cache and result artifacts are not
+interchangeable with other datasets.

@@ -1,0 +1,16 @@
+{
+  "clip_weights": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/clip_model/ViT-B-32.pt",
+  "created_at": "2026-08-30T09:28:22.917439Z",
+  "dimensions": [
+    "subject_consistency",
+    "background_consistency",
+    "motion_smoothness",
+    "aesthetic_quality",
+    "imaging_quality",
+    "dynamic_degree"
+  ],
+  "pair_count": 300,
+  "protocol": "per-video six-dimension VBench-Q; CLIP-T is an eight-frame mean cosine similarity",
+  "sample_frames": 8,
+  "vbench_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache"
+}

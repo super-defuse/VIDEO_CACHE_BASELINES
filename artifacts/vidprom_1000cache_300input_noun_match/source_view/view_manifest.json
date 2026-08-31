@@ -1,0 +1,13 @@
+{
+  "entry_storage": "relative symlinks; source cache files are not copied",
+  "excluded_entries": 0,
+  "excluded_requests_csv": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/source_view/excluded_requests.csv",
+  "format": "shared-cross-request-cache-view/v1",
+  "selected_requests": 1000,
+  "selection_csv": "/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv",
+  "selection_sha256": "435655933521243544cf80e1810667a78c86522ab0173a511bce7f84fce6986c",
+  "source_cache_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000",
+  "source_index": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/shared_cross_request_cache/vidprom_cluster_02_2170_first1000/index.jsonl",
+  "source_index_entries": 1000,
+  "uuid_order": "selection CSV order"
+}

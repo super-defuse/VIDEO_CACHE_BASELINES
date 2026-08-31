@@ -4,9 +4,9 @@ set -euo pipefail
 root=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$root"
 
-results_root="artifacts/vidprom_1000cache_300input/results"
+results_root="artifacts/vidprom_1000cache_300input_noun_match/results"
 carnator_root="$results_root/carnator_boundary_b5"
-logs_root="artifacts/vidprom_1000cache_300input/logs"
+logs_root="artifacts/vidprom_1000cache_300input_noun_match/logs"
 mkdir -p "$logs_root"
 
 failed_marker="$logs_root/carnator_fused_restart.failed"

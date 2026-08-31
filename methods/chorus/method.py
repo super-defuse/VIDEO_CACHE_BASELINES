@@ -29,9 +29,7 @@ class Chorus(BaselineMethod):
         # A cache miss produces a dense source trajectory. A semantic hit is a
         # target request even though it has no manually supplied cache_prompt.
         is_source = cached_latent is None
-        if is_source:
-            capture = True
-        else:
+        if not is_source:
             entry = self._active_cache_entry
             if entry is None:
                 raise RuntimeError("Chorus target is missing its matched cache entry")

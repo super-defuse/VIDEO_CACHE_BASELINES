@@ -10,17 +10,18 @@ from chorus2 import wan_ti2v_5b as chorus2
 from carnator.outer_sparse import OuterSparseExecutor
 
 
-def test_chorus2_restarts_from_step_ten_and_uses_spargeattn_on_every_block():
+def test_chorus2_runs_full_steps_and_starts_sparse_masks_after_step_ten():
     args = chorus2.build_parser().parse_args([])
 
-    assert args.reuse_start_step == 10
+    assert args.reuse_start_step == 0
+    assert chorus2.SPARSE_START_STEP == 10
     assert args.layer_refresh_size == 8
     assert args.outer_sparse_dtype == "fp16"
     assert list(chorus2.ALL_BLOCKS) == list(range(30))
     assert not hasattr(args, "latent_injection_mode")
 
 
-def test_chorus2_dry_run_records_source_latent_reuse(tmp_path):
+def test_chorus2_dry_run_records_full_target_without_latent_restart(tmp_path):
     args = chorus2.build_parser().parse_args([
         "--dry-run",
         "--artifact-root", str(tmp_path / "artifacts"),
@@ -33,17 +34,34 @@ def test_chorus2_dry_run_records_source_latent_reuse(tmp_path):
     written = json.loads((tmp_path / "results" / "smoke" / "summary.json").read_text())
 
     assert summary["status"] == "dry_run"
-    assert written["config"]["latent_reuse"] is True
-    assert written["config"]["reuse_start_step"] == 10
-    assert written["config"]["target_denoising_steps"] == 40
+    assert written["config"]["latent_reuse"] is False
+    assert written["config"]["reuse_start_step"] == 0
+    assert written["config"]["target_denoising_steps"] == 50
     assert written["config"]["sparse_attention"]["backend"] == "sparge-sage2"
     assert written["config"]["sparse_attention"]["start_step"] == 11
     assert written["config"]["sparse_attention"]["layer_refresh_size"] == 8
     assert written["config"]["sparse_attention"]["layers"] == list(range(30))
 
 
+def test_native_compact_runs_preserve_pure_dit_time_and_steps():
+    manifest = {
+        "output": "target.mp4",
+        "completed_steps": 50,
+        "timing": {
+            "loop_denoise_seconds": 20.0,
+            "dit_forward_seconds": 15.0,
+            "end_to_end_seconds": 30.0,
+        },
+    }
+    from carnator.adapters.wan_ti2v_5b import compact_run as compact_carnator_run
+
+    for compact in (chorus2.compact_run(manifest), compact_carnator_run(manifest)):
+        assert compact["dit_forward_seconds"] == 15.0
+    assert compact["completed_steps"] == 50
+
+
 def test_chorus2_rejects_an_invalid_reuse_start_step():
-    args = chorus2.build_parser().parse_args(["--reuse-start-step", "0"])
+    args = chorus2.build_parser().parse_args(["--reuse-start-step", "10"])
 
     with pytest.raises(ValueError, match="reuse-start-step"):
         chorus2.validate(args)
@@ -57,7 +75,7 @@ def test_chorus2_rejects_an_incompatible_spargeattn_block_layout():
 
 
 def test_chorus2_requires_complete_external_mask_coverage():
-    args = chorus2.build_parser().parse_args(["--steps", "11", "--reuse-start-step", "10", "--guidance-scale", "1"])
+    args = chorus2.build_parser().parse_args(["--steps", "11", "--guidance-scale", "1"])
     complete = SimpleNamespace(entries={(11, "cond", layer): {} for layer in range(30)})
 
     chorus2.verify_source_mask_coverage(args, complete)
@@ -67,25 +85,11 @@ def test_chorus2_requires_complete_external_mask_coverage():
         chorus2.verify_source_mask_coverage(args, incomplete)
 
 
-def test_chorus2_uses_the_post_step_ten_source_latent(tmp_path):
-    args = chorus2.build_parser().parse_args([])
-    manifest = {
-        "prompt": args.source_prompt,
-        "height": args.height,
-        "width": args.width,
-        "frames": args.frames,
-        "fps": args.fps,
-        "steps": args.steps,
-        "scheduler": args.scheduler,
-        "solver_order": args.solver_order,
-        "flow_shift": args.flow_shift,
-        "guidance_scale": args.guidance_scale,
-    }
-    (tmp_path / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
-    expected = tmp_path / "latents_step_009.pt"
-    expected.touch()
+def test_chorus2_rejects_a_source_latent_cache():
+    args = chorus2.build_parser().parse_args(["--source-latent-cache", "source"])
 
-    assert chorus2.source_resume_latent(args, tmp_path) == expected
+    with pytest.raises(ValueError, match="source-latent-cache"):
+        chorus2.validate(args)
 
 
 def test_chorus2_uses_only_a_full_target_c0_as_speedup_reference(tmp_path):

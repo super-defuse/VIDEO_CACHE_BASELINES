@@ -16,7 +16,9 @@
 
 ## 长期保留
 
-- `shared_cross_request_cache/`、`early_signature_color_v1_calibration_cluster_02_2170/`：当前跨请求缓存和校准实验，不能按常规验收缓存清理。
+- `shared_cross_request_cache/`：当前缓存基于 `datasets/1000cache_300input_noun_match/` 的 1000 条预置请求，包含 Early Signature。
+- `vidprom_1000cache_300input_noun_match/`：当前 300-request 实验的配对、生成、质量评估和汇总结果，Carnator 使用 v2 的 noun -> Early Signature -> CLIP 检索顺序。
+- `early_signature_color_v1_calibration_cluster_02_2170/`：当前校准实验，不能按常规验收缓存清理。
 - `cross_request_retrieval/`：检索产物。
 - `vbench-cache/`：质量评测模型缓存。
 - `cache/synthetic/`：测试夹具，不用于验收结果。

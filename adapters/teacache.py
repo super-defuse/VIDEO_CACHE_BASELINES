@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import Any, Callable
 
 
@@ -20,6 +21,7 @@ class TeaCacheController:
         self._previous_outputs: dict[int, Any] = {}
         self._consecutive_skips = 0
         self._decisions: dict[int, bool] = {}
+        self.forward_seconds = 0.0
 
     @staticmethod
     def _input(args: tuple[Any, ...], kwargs: dict[str, Any]) -> Any | None:
@@ -40,6 +42,15 @@ class TeaCacheController:
         scale = previous.float().abs().mean().clamp_min(1e-6)
         return bool((change / scale).item() > self.threshold)
 
+    @staticmethod
+    def _synchronize_cuda(value: Any | None) -> None:
+        """Bracket a real CUDA DiT call so its time is comparable to other methods."""
+        if value is None or not bool(getattr(value, "is_cuda", False)):
+            return
+        import torch
+
+        torch.cuda.synchronize(value.device)
+
     def patch(self, module: Any, *, branches: int) -> Callable[[], None]:
         original = module.forward
         calls = 0
@@ -48,8 +59,8 @@ class TeaCacheController:
             nonlocal calls
             step, branch = divmod(calls, branches)
             calls += 1
+            value = self._input(args, kwargs)
             if branch == 0:
-                value = self._input(args, kwargs)
                 execute = self._should_execute(step, value, branches)
                 self._decisions[step] = execute
                 if execute:
@@ -62,7 +73,11 @@ class TeaCacheController:
             execute = self._decisions[step]
             if not execute:
                 return self._previous_outputs[branch]
+            self._synchronize_cuda(value)
+            started = time.perf_counter()
             output = original(*args, **kwargs)
+            self._synchronize_cuda(value)
+            self.forward_seconds += time.perf_counter() - started
             self._previous_outputs[branch] = output
             return output
 

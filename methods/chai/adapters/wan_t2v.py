@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import sys
 from pathlib import Path
 from typing import Any
@@ -45,11 +46,20 @@ class WanT2VAdapter(T2VAdapter):
         from wan.configs import WAN_CONFIGS
 
         self.torch = torch
+        native_dense_c0 = bool(self.config.get("native_dense_c0", False))
+        pipeline_config = WAN_CONFIGS["ti2v-5B"]
+        if native_dense_c0:
+            # The shared native C0 executor uses FP16; keep its resident
+            # generic caller on the identical DiT dtype.
+            pipeline_config = copy.deepcopy(pipeline_config)
+            pipeline_config.param_dtype = torch.float16
         self.pipeline = wan.WanTI2V(
-            config=WAN_CONFIGS["ti2v-5B"],
+            config=pipeline_config,
             checkpoint_dir=self.config["model_path"],
             device_id=int(str(self.config["device"]).split(":")[-1]),
-            init_on_cpu=False,
+            # The shared native Dense C0 executor moves this model to CUDA on
+            # first use. Other generic callers retain the previous behavior.
+            init_on_cpu=native_dense_c0,
             convert_model_dtype=True,
         )
 
