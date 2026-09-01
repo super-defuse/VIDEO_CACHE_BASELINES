@@ -4,7 +4,7 @@ import json
 import math
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Mapping, Optional
 
 import torch
 import torch.nn.functional as F
@@ -697,6 +697,43 @@ def build_canonical_fusion_mask(
         "mask_spatial_medit_radius": config.spatial_medit_radius,
         "mask_spatial_msee_radius": config.spatial_msee_radius,
         "token_shape": list(fusion_score.shape),
+    }
+
+
+def build_per_noun_mbase_bundle(
+    mbase: torch.Tensor,
+    *,
+    source_completed_step: int,
+    spatial_medit_radius: int,
+    spatial_msee_radius: int,
+    selection: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Build a request-private canonical bundle from one source noun Mbase."""
+
+    if not isinstance(mbase, torch.Tensor) or mbase.dtype != torch.bool or mbase.ndim != 3:
+        raise ValueError("per-noun Mbase must be a bool [T,H,W] tensor")
+    mbase, tail_support = ensure_tail_mbase_support(mbase.detach().cpu().contiguous())
+    medit = dilate_spatial(mbase, spatial_medit_radius)
+    msee = dilate_spatial(medit, spatial_msee_radius)
+    return {
+        "attention_mask_mode": "per-noun-early-signature",
+        "mask_variant": "source_per_noun_mbase",
+        "source_completed_step": int(source_completed_step),
+        "Mbase": mbase,
+        "Medit": medit,
+        "Msee": msee,
+        "raw_coverage": mbase,
+        "token_shape": list(mbase.shape),
+        "mask_spatial_medit_radius": int(spatial_medit_radius),
+        "mask_spatial_msee_radius": int(spatial_msee_radius),
+        "temporal_postprocess": {"tail_support_fallback": tail_support},
+        "selection": dict(selection),
+        "token_area": _mask_area(mbase, medit, msee),
+        "variation": {
+            "mbase": variation_metrics(mbase),
+            "medit": variation_metrics(medit),
+            "msee": variation_metrics(msee),
+        },
     }
 
 

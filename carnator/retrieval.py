@@ -12,7 +12,11 @@ import math
 from pathlib import Path
 from typing import Any, Iterable
 
-from carnator.early_signature import EARLY_SIGNATURE_PROFILE_ID, compare_early_signatures
+from carnator.early_signature import (
+    EARLY_SIGNATURE_PROFILE_ID,
+    compare_early_signatures,
+    select_per_noun_inference_mbase,
+)
 from core.retrieval import (
     EntityExtractor,
     LexicalTestEntityExtractor,
@@ -318,6 +322,15 @@ class CarnatorRetriever(RetrievalStrategy):
                 candidate_result["reason"] = "cache_not_ready"
                 metadata["stage_2"].append(candidate_result)
                 continue
+            try:
+                mask_selection, _mask = select_per_noun_inference_mbase(
+                    source_signature, target_nouns=target_nouns
+                )
+            except Exception as exc:
+                candidate_result["reason"] = f"inference_mask_unavailable:{type(exc).__name__}"
+                metadata["stage_2"].append(candidate_result)
+                continue
+            candidate_result["inference_mask_selection"] = mask_selection
             candidate_result["reason"] = "accepted"
             metadata["stage_2"].append(candidate_result)
             metadata.update({
@@ -325,6 +338,7 @@ class CarnatorRetriever(RetrievalStrategy):
                 "cache_ready": True,
                 "reuse_mode": "joint_latent_sparse_attention",
                 "selected_metrics": comparison["distances"],
+                "inference_mask_selection": mask_selection,
             })
             return CacheMatch(True, record.uuid, None, self.kind, score, metadata)
 
@@ -460,8 +474,16 @@ class CarnatorRetrieverV2(CarnatorRetriever):
             elif not ready:
                 candidate_result["reason"] = "cache_not_ready"
             else:
-                candidate_result["reason"] = "accepted"
-                early_candidates.append(record)
+                try:
+                    mask_selection, _mask = select_per_noun_inference_mbase(
+                        source_signature, target_nouns=target_nouns
+                    )
+                except Exception as exc:
+                    candidate_result["reason"] = f"inference_mask_unavailable:{type(exc).__name__}"
+                else:
+                    candidate_result["inference_mask_selection"] = mask_selection
+                    candidate_result["reason"] = "accepted"
+                    early_candidates.append(record)
             metadata["stage_2"].append(candidate_result)
         if not early_candidates:
             metadata["reason"] = "no_compatible_cache"
@@ -479,6 +501,7 @@ class CarnatorRetrieverV2(CarnatorRetriever):
             "cache_ready": True,
             "reuse_mode": "joint_latent_sparse_attention",
             "selected_metrics": selected_result["early_signature"]["distances"],
+            "inference_mask_selection": selected_result["inference_mask_selection"],
         })
         return CacheMatch(True, selected.uuid, None, self.kind, score, metadata)
 

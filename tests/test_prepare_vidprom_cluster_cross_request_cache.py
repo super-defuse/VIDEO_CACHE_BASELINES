@@ -169,6 +169,8 @@ def test_native_source_capture_configuration_reserves_carnator_region_layers():
         native.parse_int_ranges(native_args.outer_sparse_layers)
     )
     native.validate_experiment_config(native_args)
+    assert config["carnator_per_noun_inference_mask_contract"] == "carnator-source-per-noun-mbase/v1"
+    assert prepare.SCHEMA_VERSION.endswith("/v4")
 
 
 def test_dry_run_writes_frozen_run_manifest_without_creating_entries(tmp_path):

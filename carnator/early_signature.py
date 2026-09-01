@@ -25,6 +25,7 @@ from skimage.color import deltaE_ciede2000, rgb2lab
 
 EARLY_SIGNATURE_SCHEMA = "carnator-online-color-signature"
 EARLY_SIGNATURE_PROFILE_ID = "carnator-step5-tail-lab-ciede2000"
+PER_NOUN_INFERENCE_MASK_CONTRACT = "carnator-source-per-noun-mbase/v1"
 COLOR_EXTRACTION_POLICY = "srgb-d65-2deg-per-pixel-lab-mean"
 COLOR_SHAPE_POLICY = "shape_norm"
 _COMPATIBILITY_FIELDS = (
@@ -225,6 +226,7 @@ def write_early_signature(
         },
         "color_extraction_policy": COLOR_EXTRACTION_POLICY,
         "shape_normalization_policy": COLOR_SHAPE_POLICY,
+        "inference_mask_contract": PER_NOUN_INFERENCE_MASK_CONTRACT,
         "mbase": {"path": mask_path.name, "sha256": _sha256(mask_path)},
         "objects": objects,
         "cache": dict(cache) if cache is not None else None,
@@ -308,6 +310,118 @@ def _load_signature(
                 raise ColorSignatureError("Mbase or colour derived metadata mismatch")
         objects[noun] = (item, mask[-1].detach().cpu().contiguous())
     return payload, masks, objects
+
+
+def load_per_noun_mbase(signature: Mapping[str, Any]) -> dict[str, torch.Tensor]:
+    """Load the source-side Mbase tensors authorized for per-noun reuse."""
+
+    payload, masks, objects = _load_signature(signature)
+    if payload.get("inference_mask_contract") != PER_NOUN_INFERENCE_MASK_CONTRACT:
+        raise ColorSignatureError("signature lacks the per-noun inference-mask contract")
+    result: dict[str, torch.Tensor] = {}
+    for noun, (record, _tail_mask) in objects.items():
+        key = record.get("tensor_key")
+        mask = masks.get(key) if isinstance(key, str) else None
+        if mask is None:
+            raise ColorSignatureError(f"Mbase tensor is missing for {noun!r}")
+        result[noun] = mask.detach().cpu().bool().contiguous()
+    return result
+
+
+def per_noun_mbase_is_valid(
+    signature: Mapping[str, Any], *, expected_nouns: Sequence[str] | None = None
+) -> bool:
+    """Return whether a sidecar can safely supply every expected source noun."""
+
+    try:
+        masks = load_per_noun_mbase(signature)
+        if expected_nouns is not None:
+            expected = {_canonical_noun(noun) for noun in expected_nouns}
+            if set(masks) != expected:
+                return False
+        return bool(masks)
+    except (OSError, RuntimeError, ColorSignatureError, ValueError, KeyError, TypeError):
+        return False
+
+
+def select_per_noun_inference_mbase(
+    signature: Mapping[str, Any], *, target_nouns: Sequence[str]
+) -> tuple[dict[str, Any], torch.Tensor]:
+    """Choose the source mask for a compatible Carnator cache hit.
+
+    A one-noun substitution regenerates the source-only object region. When
+    noun sets are equal, the smallest valid source mask is the deterministic,
+    conservative fallback.
+    """
+
+    masks = load_per_noun_mbase(signature)
+    source_names = set(masks)
+    target_names = {_canonical_noun(noun) for noun in target_nouns}
+    source_only = sorted(source_names - target_names)
+    target_only = sorted(target_names - source_names)
+    if len(source_only) == len(target_only) == 1:
+        selected = source_only[0]
+        reason = "single_noun_substitution_source_only"
+    elif not source_only and not target_only:
+        selected = min(masks, key=lambda noun: (int(masks[noun].sum().item()), noun))
+        reason = "same_noun_set_smallest_area"
+    else:
+        raise ColorSignatureError(
+            "per-noun inference requires equal noun sets or exactly one noun substitution"
+        )
+    mask = masks[selected]
+    area_tokens = int(mask.sum().item())
+    if area_tokens <= 0:
+        raise ColorSignatureError(f"selected Mbase is empty for {selected!r}")
+    return {
+        "contract": PER_NOUN_INFERENCE_MASK_CONTRACT,
+        "selected_source_noun": selected,
+        "selection_reason": reason,
+        "source_nouns": sorted(source_names),
+        "target_nouns": sorted(target_names),
+        "source_only_nouns": source_only,
+        "target_only_nouns": target_only,
+        "selected_mask_area_tokens": area_tokens,
+        "selected_mask_area_fraction": float(mask.float().mean().item()),
+    }, mask
+
+
+def materialize_per_noun_inference_mask_bundle(
+    signature: Mapping[str, Any],
+    *,
+    target_nouns: Sequence[str],
+    source_fusion_mask_dir: Path,
+    output_dir: Path,
+) -> dict[str, Any]:
+    """Write the selected source noun mask into a request-private bundle."""
+
+    from carnator.masks import (
+        build_per_noun_mbase_bundle,
+        load_mask_bundle,
+        save_mask_bundle,
+    )
+
+    selection, mbase = select_per_noun_inference_mbase(signature, target_nouns=target_nouns)
+    template = load_mask_bundle(source_fusion_mask_dir, None)
+    try:
+        source_completed_step = int(template["source_completed_step"])
+        medit_radius = int(template["mask_spatial_medit_radius"])
+        msee_radius = int(template["mask_spatial_msee_radius"])
+        token_shape = [int(item) for item in template["token_shape"]]
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ColorSignatureError("source fusion-mask metadata is incomplete") from exc
+    if list(mbase.shape) != token_shape:
+        raise ColorSignatureError("selected Mbase does not match source fusion-mask token shape")
+    bundle = build_per_noun_mbase_bundle(
+        mbase,
+        source_completed_step=source_completed_step,
+        spatial_medit_radius=medit_radius,
+        spatial_msee_radius=msee_radius,
+        selection=selection,
+    )
+    output_dir = output_dir.expanduser().resolve()
+    save_mask_bundle(output_dir, bundle, save_cpu=True)
+    return {**selection, "mask_bundle_dir": str(output_dir)}
 
 
 def _normalized_extent(mask: np.ndarray) -> tuple[float, float, float, float, float, float, float]:
@@ -526,8 +640,13 @@ __all__ = [
     "COLOR_EXTRACTION_POLICY",
     "COLOR_SHAPE_POLICY",
     "EARLY_SIGNATURE_PROFILE_ID",
+    "PER_NOUN_INFERENCE_MASK_CONTRACT",
     "ColorSignatureError",
     "EARLY_SIGNATURE_SCHEMA",
     "compare_early_signatures",
+    "load_per_noun_mbase",
+    "materialize_per_noun_inference_mask_bundle",
+    "per_noun_mbase_is_valid",
+    "select_per_noun_inference_mbase",
     "write_early_signature",
 ]

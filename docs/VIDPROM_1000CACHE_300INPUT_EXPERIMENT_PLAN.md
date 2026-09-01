@@ -2,7 +2,7 @@
 
 本文描述当前 `1000cache_300input_noun_match` 实验，结果位于
 `artifacts/vidprom_1000cache_300input_noun_match/`，Carnator 使用 v2（noun ->
-Early Signature -> CLIP top-1）。
+Early Signature -> CLIP top-1），并以 source per-noun Mbase 进行复用。
 
 本轮实验固定使用 Wan2.2-TI2V-5B、50-step、`1280x704`、121 帧和同一 seed/config。
 输入缓存源是 `datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv` 中的 1000 条请求；新请求是 `cluster_02_2170_random300_input.csv`，按 CSV 顺序到达。GPU0--2 保留不用，五个基线各占一张 GPU：
@@ -13,10 +13,12 @@ Early Signature -> CLIP top-1）。
 | 4 | TeaCache | 仅目标请求的 intra-request step skipping，不读取共享跨请求 cache；hit rate 记为 N/A |
 | 5 | Chorus | 完整 prompt CLIP/Chroma Top-1，阈值 `0.65`，使用 source trajectory、K1/K2=`5/30` 与 TGAA，target 执行后 45 步 |
 | 6 | Chorus2 | 暂无独立检索器；与 NIRVANA-VID/Chorus 共用完整 prompt CLIP/Chroma Top-1（同一排序与阈值），target 完整执行 50 步；第 11--50 步使用 source raw block mask 的普通 SpargeAttn，取消 source latent restart |
-| 7 | Carnator Boundary B5 | CLIP/Chroma 候选排序后执行 Carnator noun/step-5 Early Signature gate；target 端固定 Boundary B5（SpargeAttn + W8A8） |
+| 7 | Carnator Boundary B5 | noun prefilter、step-5 Early Signature gate、CLIP top-1；命中后选择 source-only noun mask，或同 noun 集合中的最小 Mbase，再执行固定 Boundary B5（SpargeAttn + W8A8） |
 
 五个基线各自使用一张 GPU，按全局 `arrival_index=0..299` 顺序处理；如为并行执行拆分 arrival shard，必须保留原始索引并在聚合前合并 JSONL，不改变请求协议。每条 Carnator Early Signature 的 Mbase 固定为
-step-5 cross-attention seed 与 self-attention contrast 的融合结果，不能使用仅 cross-attention mask；尾部空切片仅复制最近非空融合切片，不降低阈值；整个时间轴为空或 probe 未通过时 fail-closed，记录 miss，不执行 dense generation。
+step-5 cross-attention seed 与 self-attention contrast 的融合结果，不能使用仅 cross-attention mask；source
+为每个 noun 保存独立 Mbase。尾部空切片仅复制最近非空融合切片，不降低阈值；整个时间轴为空、probe
+未通过或 source 无有效 per-noun mask 时 fail-closed，记录 miss，不执行 dense generation。
 
 实验固定使用与 shared cache `run_manifest.config.seed` 相同的 `seed=20260218`。Carnator
 Early Signature 四个 gate 阈值（依次为 context color、log area、shape、changed color）固定为
@@ -42,7 +44,8 @@ artifacts/vidprom_1000cache_300input_noun_match/source_view/
 
 实验 runner 只把该 view 的 `index.jsonl` 建成可检索的 source metadata，并把命中的 UUID
 解析到 `entries/<uuid>`；绝不把新请求生成结果写回 shared cache。300 条新请求的产物、逐请求
-JSONL 和视频统一写到各自的 run directory。TeaCache 使用独立的 target-only run directory。
+JSONL 和视频统一写到各自的 run directory。TeaCache 使用独立的 target-only run directory；Carnator
+命中的 `selected_source_mask/` 也仅在该请求目录中创建。
 
 每个方法从同一份 1000-entry source pool 开始、各自维护检索状态；300 条请求的到达顺序不能
 shuffle。为便于复现实验，runner 应保存 resolved config、GPU、git revision、输入 hash、cache
@@ -62,14 +65,14 @@ view manifest hash 和完整命中决策。
 
 1. **Worker warm-up（一次/worker）**：加载模型、编译 kernel、建立 CUDA allocator 和必要的 baseline runtime。使用固定 dog/cat prompt，不写入 shared cache，不进入任何请求时间。
 2. **请求到达与检索**：请求到达即启动 wall-clock，记录 `arrival_index`、UUID 和 prompt，执行该基线的自然检索并保存候选、阈值、命中对象和 miss 原因。检索时间属于端到端时间；正式实验不覆盖自然命中结果，forced smoke 仅作为独立协议检查。
-3. **请求准备（命中后）**：根据 `source_uuid` 准备 source latent、trajectory、attention mask 和 sparse runtime。mask 按 step 预解码并放入 RAM/pinned memory/GPU；该区间在 wall-clock 中单独标记，并从报告的端到端时间中排除，但可在 audit metadata 中记录。
+3. **请求准备（命中后）**：根据 `source_uuid` 准备 source latent、trajectory、attention mask 和 sparse runtime。Carnator 依据 source/target noun 集合选择 source-only Mbase；集合相同时按完整 token 面积选最小者，并生成请求私有 bundle。mask 按 step 预解码并放入 RAM/pinned memory/GPU；该区间在 wall-clock 中单独标记，并从报告的端到端时间中排除，但可在 audit metadata 中记录。
 4. **被测生成**：沿用同一请求计时，命中请求执行对应的 reuse 路径；未命中不启动 Dense C0，只写一行 miss 记录并继续下一个请求。
 5. **结果与清理**：保留生成视频和 JSONL；视频写盘、cache 写盘和结果 hash 仍不计入既有端到端指标。所有请求结束后再统一运行 CLIP-T/VBench-Q。
 
 ### 3.1 命中与未命中
 
 - NIRVANA-VID、Chorus、Chorus2：完整 prompt CLIP/Chroma Top-1，阈值 `0.65`；只有检索命中才准备 source cache 并执行 reuse。
-- Carnator Boundary B5：CLIP/Chroma 候选后执行 noun prefilter 和 step-5 Early Signature gate；probe fail 或 gate fail 都是 miss，不回退 dense。
+- Carnator Boundary B5：noun prefilter、step-5 Early Signature gate 后以 CLIP 选择 top-1；probe/gate fail、per-noun mask 缺失或选择不唯一都是 miss，不回退 dense。
 - TeaCache：无跨请求 cache 命中，hit rate 保持 N/A；每条请求只执行 target-only TeaCache。
 - miss 仍写入 `requests.jsonl` 和 `request_records.jsonl`，至少包含 `hit=false`、`source_uuid=null`、`executed_steps=0`、`status=cache_miss`、完整 `cache_match` 和 miss reason；不生成视频，不计入命中耗时均值。
 
@@ -81,7 +84,7 @@ view manifest hash 和完整命中决策。
 | TeaCache | target-only intra-request step skipping，50-step scheduler | 不适用 | target 实际执行的 DiT steps |
 | Chorus | source trajectory + TGAA，K1/K2=`5/30`，target 45 步 | 只记录 miss | target 实际 45 步 DiT |
 | Chorus2 | target 完整 50-step；第 11--50 步使用 source raw block mask + SpargeAttn，不做 latent restart | 只记录 miss | target 实际 50 步 DiT |
-| Carnator Boundary B5 | step-5 probe -> gate 通过 -> source step-10 latent + Boundary B5 reuse，target 40 步 | probe/gate fail 只记录 miss | probe 前 5 步 DiT + target 40 步 DiT |
+| Carnator Boundary B5 | step-5 probe -> gate 通过 -> CLIP top-1 -> 选择 source-only Mbase；同集合选最小面积 Mbase -> 请求私有 mask bundle -> source step-10 latent + Boundary B5 reuse，target 40 步 | probe/gate/mask fail 只记录 miss | probe 前 5 步 DiT + target 40 步 DiT |
 
 ## 4. 时间指标定义
 
@@ -100,7 +103,7 @@ view manifest hash 和完整命中决策。
 每个基线完成后生成：
 
 - `results/<method>/requests.jsonl`：逐请求命中、去噪/端到端/External 时间、命中请求专用的 `hit_e2e_s`/`hit_denoising_s`、输出路径、错误和原始 `cache_match` 元数据；
-- `results/<method>/request_records.jsonl`：每条新请求的检索决策元数据，包含 `hit`、命中对象、相似度；Carnator 额外保存 Stage-1 top-k、noun prefilter、Stage-2 候选和 Early Signature gate/probe 状态；
+- `results/<method>/request_records.jsonl`：每条新请求的检索决策元数据，包含 `hit`、命中对象、相似度；Carnator 额外保存 noun prefilter、Stage-2 候选、Early Signature gate/probe 状态，以及选中 source noun、选择原因、面积和私有 mask bundle 路径；
 - `results/summary.csv`：大表的一行/基线汇总，包含全请求及命中请求耗时均值；
 - `results/VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md`：汇总表（由聚合脚本生成）；
 - `results/hit_rate_over_arrivals.csv`：每 50 条请求一组（1--50、51--100、…、251--300），
@@ -114,8 +117,9 @@ VBench-Q 及每请求分数，最后合并到大表。
 实验脚本默认不持久化新请求的 target cache；native 方法只保留顶层视频、summary/report 和 JSONL
 记录，删除每请求的中间 artifact。Carnator 对有候选的目标请求在线执行 step-5 Early Signature
 probe：cross-attention 仅提供 noun seed，Mbase 必须融合 self-attention contrast；只有 probe 实际
-完成且通过 Stage-2 gate 后才允许 reuse。命中推理只读取候选 source 的 fusion Mbase，不生成 target
-执行 mask；probe 不通过时记录 miss、probe 时间、比较结果和执行原因，不生成 dense 视频。
+完成且通过 Stage-2 gate 后才允许 reuse。命中推理不生成 target 执行 mask；命中后仅从候选 source 的
+per-noun Early Signature 读取 Mbase，生成私有 bundle，绝不把
+共享 generic `fusion_masks` 作为 noun mask 或改写它。probe 不通过时记录 miss、probe 时间、比较结果和执行原因，不生成 dense 视频。
 
 ## 6. 推荐脚本拆分
 

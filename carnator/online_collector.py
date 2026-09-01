@@ -239,6 +239,7 @@ class NativeOnlineCollector:
         probe_seed: int,
         noun_extractor: str,
         assume_step10_cache: bool = False,
+        retain_artifacts: bool = False,
         runtime: Any | None = None,
     ) -> None:
         from carnator.adapters import wan_ti2v_5b as native
@@ -255,6 +256,7 @@ class NativeOnlineCollector:
         self.probe_seed = int(probe_seed)
         self.noun_extractor = noun_extractor
         self.assume_step10_cache = bool(assume_step10_cache)
+        self.retain_artifacts = bool(retain_artifacts)
         self.mask_policy = native.fused_mbase_policy(args)
         native.ensure_import_paths(args)
         native.validate_experiment_config(args)
@@ -479,7 +481,7 @@ class NativeOnlineCollector:
                     break
 
         torch.cuda.synchronize()
-        if match is not None and match.hit:
+        if match is not None and match.hit and not self.retain_artifacts:
             shutil.rmtree(source_dir)
             return OnlineCollectionResult(
                 match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps, False,

@@ -33,7 +33,7 @@ if str(ROOT) not in sys.path:
 
 DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv")
 DEFAULT_SOURCE_VIEW = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
-DEFAULT_RUN_ROOT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "forced_early_signature_calibration"
+DEFAULT_RUN_ROOT = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "forced_early_signature_calibration_v2"
 DEFAULT_MODEL = Path(os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", "/home/tangxuebin/models/Wan2.2-TI2V-5B"))
 DEFAULT_GPUS = "3,4,5,6,7"
 FUSED_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
@@ -182,10 +182,14 @@ def load_source_rows(view: Path, *, require_fused_signature: bool = True) -> lis
         if not all(path.is_file() for path in required):
             raise FileNotFoundError(f"source cache is incomplete for {uuid}: {cache_dir}")
         if require_fused_signature:
+            from carnator.early_signature import per_noun_mbase_is_valid
+
             payload = read_json(signature)
             policy = str(payload.get("compatibility", {}).get("mask_policy", ""))
-            if not policy.startswith(FUSED_POLICY_PREFIX):
-                raise ValueError(f"source signature is not fused self/cross Mbase: {signature}")
+            if not policy.startswith(FUSED_POLICY_PREFIX) or not per_noun_mbase_is_valid(
+                {"signature_path": str(signature)}
+            ):
+                raise ValueError(f"source signature lacks a valid per-noun fused Mbase: {signature}")
         nouns = _canonical_nouns(item.get("noun", "") for item in read_json(signature).get("objects", []))
         result.append(SourceRow(uuid, prompt, source_run_dir, cache_dir, signature, nouns))
     if len({row.uuid for row in result}) != len(result):
@@ -376,7 +380,7 @@ def pair_command(args: argparse.Namespace) -> int:
     pairs_path = run_root / "pairs.csv"
     write_pairs(pairs_path, pairs)
     write_json(run_root / "experiment_manifest.json", {
-        "schema_version": "vidprom-forced-early-signature-calibration/v1",
+        "schema_version": "vidprom-forced-early-signature-calibration/v2",
         "input": str(input_path),
         "input_sha256": sha256_file(input_path),
         "source_view": str(view),
@@ -396,7 +400,12 @@ def pair_command(args: argparse.Namespace) -> int:
             else ["clip_nearest_forced_pair"],
         },
         "clip": {"model_id": args.clip_model_id, "device": args.clip_device},
-        "generation": {"steps": 50, "mask_probe_step": 5, "reuse_start_step": 10, "signature": "fused-self-cross"},
+        "generation": {
+            "steps": 50,
+            "mask_probe_step": 5,
+            "reuse_start_step": 10,
+            "signature": "fused-self-cross-per-noun-inference-mask",
+        },
         "quality_thresholds": {"q_min": None, "clip_t_min": None, "coverage_min": args.coverage_min, "confidence": args.confidence},
         "pairs_csv": {"path": str(pairs_path), "sha256": sha256_file(pairs_path)},
     })
@@ -416,7 +425,7 @@ def native_args_for_pair(args: argparse.Namespace, pair: ForcedPair, gpu: int):
     value.run_id = pair.pair_id
     value.source_prompt = pair.source_prompt
     value.target_prompt = pair.target_prompt
-    value.source_positive = pair.source_nouns[0] if pair.source_nouns else "object"
+    value.source_positive = ""
     value.seed = args.seed
     value.steps = 50
     value.mask_probe_step = 5
@@ -451,6 +460,7 @@ def run_one_target(
     from contextlib import ExitStack
 
     from carnator.adapters import wan_ti2v_5b as native
+    from carnator.early_signature import materialize_per_noun_inference_mask_bundle
     from carnator.masks import load_mask_bundle
     from scripts.benchmark.run_carnator_early_signature_calibration import run_target_probe
 
@@ -472,7 +482,16 @@ def run_one_target(
         signature_path = target_cache / "online_color_signature.json"
         if not signature_path.is_file():
             run_target_probe(runtime, native_args, pair, target_cache)
-        _source, source_trajectory, source_mask_dir, _outer = native.source_assets_from_run(native_args, pair.source_run_dir)
+        _source, source_trajectory, shared_source_mask_dir, _outer = native.source_assets_from_run(
+            native_args, pair.source_run_dir
+        )
+        mask_selection = materialize_per_noun_inference_mask_bundle(
+            {"signature_path": str(pair.source_signature_path)},
+            target_nouns=pair.target_nouns,
+            source_fusion_mask_dir=shared_source_mask_dir,
+            output_dir=target_cache / "selected_source_mask",
+        )
+        source_mask_dir = Path(mask_selection["mask_bundle_dir"])
         mask_bundle = load_mask_bundle(source_mask_dir, None)
         sparse_state = native.NativeSparseState(
             model_module=runtime.wan["model_module"],
@@ -495,6 +514,7 @@ def run_one_target(
             "clip_similarity": pair.clip_similarity,
             "target_video": str(target_video), "target_cache": str(target_cache),
             "target_signature": str(signature_path), "source_run_dir": str(pair.source_run_dir),
+            "source_mask_bundle": str(source_mask_dir), "inference_mask_selection": mask_selection,
             "reuse_manifest": reuse.get("manifest_path"),
             "wall_clock_seconds": time.perf_counter() - started,
         }

@@ -31,7 +31,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-SCHEMA_VERSION = "shared-cross-request-cache/v3"
+SCHEMA_VERSION = "shared-cross-request-cache/v4"
 ATTENTION_FORMAT = "carnator-source-block-mask-bitpacked-v1"
 ALL_WAN_LAYERS = tuple(range(30))
 NATIVE_OUTER_SPARSE_LAYERS = "0-9,21-29"
@@ -178,6 +178,8 @@ def parse_layer_ranges(value: str) -> list[int]:
 
 
 def cache_config(args: argparse.Namespace) -> dict[str, Any]:
+    from carnator.early_signature import PER_NOUN_INFERENCE_MASK_CONTRACT
+
     return {
         "model_dir": str(args.model_dir.resolve()),
         "height": int(args.height),
@@ -199,6 +201,7 @@ def cache_config(args: argparse.Namespace) -> dict[str, Any]:
         "attention_dtype": args.attention_dtype,
         "reuse_start_step": 10,
         "chorus2_raw_middle_layers": sorted(CHORUS2_RAW_MIDDLE_LAYERS),
+        "carnator_per_noun_inference_mask_contract": PER_NOUN_INFERENCE_MASK_CONTRACT,
     }
 
 
@@ -562,15 +565,15 @@ class NativeSharedCacheWorker:
         return tuple(self._noun_extractor.extract(row.prompt))
 
     @staticmethod
-    def _signature_complete(cache_dir: Path) -> bool:
+    def _signature_complete(cache_dir: Path, nouns: tuple[str, ...]) -> bool:
+        from carnator.early_signature import per_noun_mbase_is_valid
+
         required = ("online_color_signature.json", "mbase.safetensors", "step5_tail_frame.png")
         if not all((cache_dir / name).is_file() and (cache_dir / name).stat().st_size > 0 for name in required):
             return False
-        try:
-            payload = json.loads((cache_dir / "online_color_signature.json").read_text(encoding="utf-8"))
-            return payload.get("feature_profile") == "carnator-step5-tail-lab-ciede2000"
-        except (OSError, json.JSONDecodeError):
-            return False
+        return per_noun_mbase_is_valid(
+            {"signature_path": str(cache_dir / "online_color_signature.json")}, expected_nouns=nouns
+        )
 
     def _ensure_early_signature(self, row: PromptRow, entry_root: Path) -> bool:
         import torch
@@ -578,11 +581,11 @@ class NativeSharedCacheWorker:
         from scripts.benchmark.run_carnator_early_signature_calibration import capture_early_signature
 
         cache_dir = entry_root / "carnator" / "cache" / "source_dense"
-        if self._signature_complete(cache_dir):
-            return False
         nouns = self._signature_nouns(row)
         if not nouns:
             raise RuntimeError(f"cannot create an Early Signature for nounless cache source: {row.uuid}")
+        if self._signature_complete(cache_dir, nouns):
+            return False
         attention_input = self.native.load_latent(cache_dir / "latents_step_003.pt", self.runtime.device, torch.float32)
         step5_latent = self.native.load_latent(cache_dir / "latents_step_004.pt", self.runtime.device, torch.float32)
         token_grid = self.native.token_grid_for(step5_latent, self.runtime.pipe.patch_size)

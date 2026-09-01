@@ -9,10 +9,18 @@ import torch
 from carnator.early_signature import (
     EARLY_SIGNATURE_PROFILE_ID,
     compare_early_signatures,
+    materialize_per_noun_inference_mask_bundle,
+    per_noun_mbase_is_valid,
+    select_per_noun_inference_mbase,
     write_early_signature,
 )
-from carnator.masks import build_cross_attention_seed_scores, ensure_tail_mbase_support
-from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever
+from carnator.masks import (
+    build_cross_attention_seed_scores,
+    ensure_tail_mbase_support,
+    load_mask_bundle,
+    save_mask_bundle,
+)
+from carnator.retrieval import CarnatorNounExtractor, CarnatorRetriever, CarnatorRetrieverV2
 from core.retrieval import LexicalTestEmbedder, VectorRecord
 from core.types import Request
 from scripts.benchmark import cross_request_retrieval
@@ -62,6 +70,37 @@ def _sidecar(tmp_path, name: str, prompt: str, noun: str, colour: tuple[float, f
     )
 
 
+def _multi_sidecar(tmp_path, name: str, prompt: str, masks: dict[str, torch.Tensor]):
+    directory = tmp_path / name
+    directory.mkdir()
+    step10 = directory / "step10.pt"
+    sparse = directory / "sparse.json"
+    step10.write_bytes(b"step10")
+    sparse.write_bytes(b"sparse")
+    return write_early_signature(
+        directory,
+        step5_latent=torch.ones((2, 3, 4, 5), dtype=torch.float32),
+        decoded_tail_frame=torch.ones((3, 8, 10), dtype=torch.float32),
+        metadata=_metadata(prompt),
+        mbase_by_noun=masks,
+        cache={
+            "anchor_step": 10,
+            "model": "test-wan",
+            "latent_token_grid": [3, 4, 5],
+            "latent_path": str(step10),
+            "latent_sha256": hashlib.sha256(step10.read_bytes()).hexdigest(),
+            "sparse_attention_path": str(sparse),
+            "sparse_attention_sha256": hashlib.sha256(sparse.read_bytes()).hexdigest(),
+        },
+    )
+
+
+def _mask(*, rows: int, columns: int) -> torch.Tensor:
+    value = torch.zeros((3, 4, 5), dtype=torch.bool)
+    value[:, :rows, :columns] = True
+    return value
+
+
 def test_cross_attention_seed_scores_do_not_construct_a_mask():
     records = [
         {"step_index": 4, "layer_index": 0, "noun_score": torch.tensor([[[0.0, 1.0]]])},
@@ -105,6 +144,85 @@ def test_early_signature_persists_step5_tail_frame_and_accepts_matching_colour(t
     assert result["distances"]["context_color_ciede2000"] == 0.0
     assert (tmp_path / "source" / "step5_tail_frame.png").is_file()
     assert (tmp_path / "source" / "online_color_signature.json").is_file()
+
+
+def test_per_noun_inference_selects_source_only_mask_for_substitution(tmp_path):
+    source = _multi_sidecar(
+        tmp_path,
+        "source",
+        "a cat and dog",
+        {"cat": _mask(rows=1, columns=1), "dog": _mask(rows=2, columns=2)},
+    )
+
+    selection, mask = select_per_noun_inference_mbase(source, target_nouns=("dog", "beagle"))
+
+    assert selection["selected_source_noun"] == "cat"
+    assert selection["selection_reason"] == "single_noun_substitution_source_only"
+    assert selection["source_only_nouns"] == ["cat"]
+    assert selection["target_only_nouns"] == ["beagle"]
+    assert torch.equal(mask, _mask(rows=1, columns=1))
+
+
+def test_per_noun_inference_uses_smallest_mask_for_equal_noun_sets(tmp_path):
+    source = _multi_sidecar(
+        tmp_path,
+        "source",
+        "a cat and dog",
+        {"dog": _mask(rows=2, columns=2), "cat": _mask(rows=1, columns=1)},
+    )
+
+    selection, mask = select_per_noun_inference_mbase(source, target_nouns=("dog", "cat"))
+
+    assert selection["selected_source_noun"] == "cat"
+    assert selection["selection_reason"] == "same_noun_set_smallest_area"
+    assert selection["selected_mask_area_tokens"] == 3
+    assert torch.equal(mask, _mask(rows=1, columns=1))
+
+
+def test_per_noun_inference_materializes_private_bundle_without_mutating_source(tmp_path):
+    source = _multi_sidecar(
+        tmp_path,
+        "source",
+        "a cat and dog",
+        {"cat": _mask(rows=1, columns=1), "dog": _mask(rows=2, columns=2)},
+    )
+    shared = tmp_path / "shared-fusion"
+    save_mask_bundle(
+        shared,
+        {
+            "source_completed_step": 5,
+            "mask_spatial_medit_radius": 1,
+            "mask_spatial_msee_radius": 1,
+            "token_shape": [3, 4, 5],
+            "Mbase": _mask(rows=3, columns=3),
+            "Medit": _mask(rows=3, columns=3),
+            "Msee": _mask(rows=3, columns=3),
+        },
+    )
+    source_bytes = (shared / "masks.pt").read_bytes()
+
+    selection = materialize_per_noun_inference_mask_bundle(
+        source,
+        target_nouns=("dog", "beagle"),
+        source_fusion_mask_dir=shared,
+        output_dir=tmp_path / "private",
+    )
+    private = load_mask_bundle(Path(selection["mask_bundle_dir"]))
+
+    assert selection["selected_source_noun"] == "cat"
+    assert private["mask_variant"] == "source_per_noun_mbase"
+    assert torch.equal(private["Mbase"], _mask(rows=1, columns=1))
+    assert (shared / "masks.pt").read_bytes() == source_bytes
+
+
+def test_per_noun_inference_rejects_sidecar_without_its_contract(tmp_path):
+    source = _sidecar(tmp_path, "source", "a red train", "train", (1.0, -1.0, -1.0))
+    path = Path(source["signature_path"])
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload.pop("inference_mask_contract")
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    assert not per_noun_mbase_is_valid(source)
 
 
 def test_early_signature_rejects_different_same_noun_colour(tmp_path):
@@ -214,6 +332,43 @@ def test_early_signature_routes_ciede2000_gate_through_carnator_retriever(tmp_pa
     assert result.metadata["stage_2_reference_profile"] == EARLY_SIGNATURE_PROFILE_ID
     assert result.metadata["stage_2_profile"] == "early_signature"
     assert result.metadata["stage_2"][0]["early_signature"]["reusable"] is True
+    assert result.metadata["inference_mask_selection"]["selected_source_noun"] == "train"
+
+
+def test_v2_retriever_propagates_selected_per_noun_mask(tmp_path):
+    source_signature = _sidecar(tmp_path, "source", "a red train", "train", (1.0, -1.0, -1.0))
+    target_signature = _sidecar(tmp_path, "target", "a red train", "train", (1.0, -1.0, -1.0))
+    embedder = LexicalTestEmbedder()
+    retriever = CarnatorRetrieverV2(
+        embedder,
+        CarnatorNounExtractor(),
+        candidate_min_similarity=-1.0,
+        retrieval_only=True,
+        max_context_color_distance=0.01,
+    )
+    source = VectorRecord(
+        "source",
+        "train",
+        embedder.encode(["train"])[0],
+        {
+            "source_request_index": 0,
+            "trf_nouns": ["train"],
+            "cache_ready": True,
+            "signature": source_signature,
+        },
+        0,
+    )
+
+    result = retriever.search(
+        Request(1, "target", "train", 2), [source], target_signature=target_signature
+    )
+
+    assert result.hit
+    assert result.metadata["selection_order"] == ["noun_prefilter", "early_signature", "clip_top_1"]
+    assert result.metadata["inference_mask_selection"]["selected_source_noun"] == "train"
+    assert result.metadata["stage_2"][0]["inference_mask_selection"]["selection_reason"] == (
+        "same_noun_set_smallest_area"
+    )
 
 
 def test_dry_run_benchmark_writes_early_signature_tail_frame_sidecars(tmp_path):

@@ -162,6 +162,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--w8a8-verify-tokens", type=int, default=0)
     parser.add_argument("--source-run-dir", type=Path, help="Reuse source dense trajectories, masks and block-mask cache from this artifact run.")
+    parser.add_argument(
+        "--source-mask-dir",
+        type=Path,
+        help="Use this request-private canonical Mbase bundle instead of the source run's shared fusion masks.",
+    )
     parser.add_argument("--source-only", action="store_true", help="Prepare only the shared source dense trajectory and masks.")
     parser.add_argument(
         "--prepare-shared-dense-cache",
@@ -296,6 +301,8 @@ def validate_experiment_config(args: argparse.Namespace) -> None:
         raise ValueError("CFG residual capture requires guidance_scale != 1")
     if args.source_only and args.source_run_dir:
         raise ValueError("--source-only cannot be combined with --source-run-dir")
+    if args.source_mask_dir and not args.source_run_dir:
+        raise ValueError("--source-mask-dir requires --source-run-dir")
     if args.source_only and args.target_dense_manifest:
         raise ValueError("--source-only cannot be combined with --target-dense-manifest")
     if args.target_dense_only and (args.source_only or args.source_run_dir or args.target_dense_manifest):
@@ -2471,6 +2478,10 @@ def run_experiment(args: argparse.Namespace, *, runtime: NativeRuntime | None = 
         source_block_mask_cache = None
         if args.source_run_dir:
             source, source_trajectory, source_mask_dir, source_outer_mask_dir = source_assets_from_run(args, args.source_run_dir)
+            if args.source_mask_dir:
+                source_mask_dir = args.source_mask_dir.expanduser().resolve()
+                if not (source_mask_dir / "masks.pt").is_file() or not (source_mask_dir / "masks.json").is_file():
+                    raise FileNotFoundError(f"source mask override is incomplete: {source_mask_dir}")
             paths["mask_dir"] = source_mask_dir
             paths["outer_mask_dir"] = source_outer_mask_dir
             source_initial_latent = Path(source["cache_dir"]) / "latents_initial.pt"
@@ -2731,6 +2742,8 @@ def main(argv: list[str] | None = None) -> int:
     args.results_root = args.results_root.expanduser()
     if args.source_run_dir:
         args.source_run_dir = args.source_run_dir.expanduser()
+    if args.source_mask_dir:
+        args.source_mask_dir = args.source_mask_dir.expanduser()
     if args.target_dense_manifest:
         args.target_dense_manifest = args.target_dense_manifest.expanduser()
     if args.capture_cfg_residual_path:

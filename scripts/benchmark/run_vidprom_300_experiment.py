@@ -210,6 +210,33 @@ def force_cache_match(
     )
 
 
+def attach_forced_carnator_mask_selection(
+    match: CacheMatch, *, records: list[VectorRecord], target_nouns: tuple[str, ...]
+) -> CacheMatch:
+    """Attach selection for the smoke's fixed source rather than its natural hit."""
+
+    if not match.hit or match.source_uuid is None:
+        return match
+    source = next((record for record in records if record.uuid == match.source_uuid), None)
+    if source is None or not isinstance(source.metadata, dict):
+        raise ValueError(f"forced Carnator source is unavailable: {match.source_uuid}")
+    from carnator.early_signature import select_per_noun_inference_mbase
+
+    selection, _mask = select_per_noun_inference_mbase(
+        source.metadata.get("signature", {}), target_nouns=target_nouns
+    )
+    metadata = dict(match.metadata or {})
+    metadata["inference_mask_selection"] = selection
+    return CacheMatch(
+        match.hit,
+        match.source_uuid,
+        match.source_request_index,
+        match.kind,
+        match.score,
+        metadata,
+    )
+
+
 def forced_carnator_probe_match(observed: CacheMatch, *, request_index: int, outcome: str) -> CacheMatch:
     """Keep the target-side probe in the smoke before overriding its final decision."""
     return CacheMatch(
@@ -282,21 +309,29 @@ def has_fused_mbase_signature(signature_path: Path) -> bool:
     return isinstance(policy, str) and policy.startswith(FUSED_MBASE_POLICY_PREFIX)
 
 
+def has_per_noun_inference_signature(signature_path: Path) -> bool:
+    from carnator.early_signature import per_noun_mbase_is_valid
+
+    return has_fused_mbase_signature(signature_path) and per_noun_mbase_is_valid(
+        {"signature_path": str(signature_path)}
+    )
+
+
 def validate_carnator_signature_view(view: Path, rows: list[dict[str, Any]]) -> None:
     invalid: list[str] = []
     for row in rows:
         cache_dir = view / "entries" / str(row["uuid"]) / "carnator" / "cache" / "source_dense"
         signature = cache_dir / "online_color_signature.json"
-        if not has_fused_mbase_signature(signature) or not (cache_dir / "fusion_masks" / "masks.pt").is_file():
+        if not has_per_noun_inference_signature(signature) or not (cache_dir / "fusion_masks" / "masks.pt").is_file():
             invalid.append(str(row["uuid"]))
             if len(invalid) == 5:
                 break
     if invalid:
-        raise ValueError(f"Carnator requires fused self/cross Mbase signatures; invalid source UUIDs: {invalid}")
+        raise ValueError(f"Carnator requires v4 per-noun Early Signature artifacts; invalid source UUIDs: {invalid}")
 
 
 def check_only(args: argparse.Namespace) -> dict[str, Any]:
-    if args.gpu not in range(3, 8):
+    if args.gpu not in range(3, 8) and not args.allow_gpu_remap:
         raise ValueError("--gpu must be one of 3,4,5,6,7")
     view_rows = load_view(args.cache_view.expanduser().resolve())
     if args.smoke_force_outcomes:
@@ -467,7 +502,7 @@ def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path
     )
     if args.dry_run:
         write_warmup_record(output, paths=[], status="skipped_dry_run")
-    else:
+    elif not args.resume:
         warmup_generic(adapter, method_name, output, view)
     results: list[dict[str, Any]] = []
     for row in rows:
@@ -481,6 +516,28 @@ def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path
             if method_name == "chorus" else 0.0
         )
         hit = bool(payload.get("cache_match", {}).get("hit"))
+        if payload.get("status") == "error":
+            # ``Runner.process`` contains adapter failures within a result.
+            # Preserve that result as a terminal audit event and let the
+            # remaining independent requests run.  The error result has no
+            # reliable DiT or external breakdown, so those fields are null.
+            payload.update({
+                "arrival_index": row["arrival_index"],
+                "video_path": None,
+                "quality_input_path": None,
+                "output_path": None,
+                "denoising_s": None,
+                "external_s": None,
+                "hit_e2e_s": None,
+                "hit_denoising_s": None,
+                "hit": hit,
+                "source_uuid": payload.get("cache_match", {}).get("source_uuid"),
+                "target_cache_persisted": False,
+                "extra": {**payload.get("extra", {}), "denoising_timing": None},
+            })
+            append_result_and_record(output, payload, row, method_name)
+            results.append(payload)
+            continue
         if payload.get("status") == "cache_miss":
             payload.update({
                 "arrival_index": row["arrival_index"],
@@ -554,11 +611,16 @@ def build_request_record(
         "uuid": row["uuid"],
         "prompt": row["prompt"],
         "method": method_name,
+        "status": payload.get("status"),
+        "error": payload.get("error"),
         "hit": bool(cache_match.get("hit", payload.get("hit", False))),
         "hit_object": cache_match.get("source_uuid", payload.get("source_uuid")),
         "similarity": similarity,
         "retrieval_kind": cache_match.get("kind") or metadata.get("retriever"),
-        "external_s": float(payload.get("external_s", 0.0)),
+        "external_s": (
+            float(payload["external_s"])
+            if payload.get("external_s") is not None else None
+        ),
         "latency_s": payload.get("latency_s"),
         "denoising_s": payload.get("denoising_s"),
         "hit_e2e_s": payload.get("hit_e2e_s"),
@@ -583,6 +645,7 @@ def build_request_record(
                 "probe_required": metadata.get("probe_required", False),
                 "probe_run": metadata.get("step_2_probe_run", False),
                 "target_probe": metadata.get("target_probe"),
+                "inference_mask_selection": metadata.get("inference_mask_selection"),
             },
             "reason": metadata.get("reason"),
         }
@@ -602,6 +665,68 @@ def append_result_and_record(
         stream.write(json.dumps(payload, ensure_ascii=False) + "\n")
     with (output / "request_records.jsonl").open("a", encoding="utf-8") as stream:
         stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def pending_rows_for_resume(
+    output: Path,
+    rows: list[dict[str, Any]],
+    *,
+    resume: bool,
+) -> tuple[list[dict[str, Any]], int]:
+    """Return only rows with a complete, matching terminal record on resume.
+
+    A result is considered durable only after both JSONL audit files contain a
+    matching terminal entry.  ``error`` is terminal so a resume cannot silently
+    re-run a request that has already been audited as failed.
+    """
+    if not resume:
+        return rows, 0
+
+    results_path = output / "requests.jsonl"
+    records_path = output / "request_records.jsonl"
+    if not results_path.exists() and not records_path.exists():
+        return rows, 0
+    if not results_path.exists() or not records_path.exists():
+        raise RuntimeError("cannot resume: requests.jsonl and request_records.jsonl must either both exist or both be absent")
+
+    expected = {int(row["arrival_index"]): row for row in rows}
+
+    def load_completed(path: Path, *, record: bool) -> set[int]:
+        completed: set[int] = set()
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except OSError as exc:
+            raise RuntimeError(f"cannot resume: failed to read {path}") from exc
+        for line_number, line in enumerate(lines, start=1):
+            if not line.strip():
+                continue
+            try:
+                payload = json.loads(line)
+                arrival = int(payload["arrival_index"])
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+                raise RuntimeError(f"cannot resume: invalid JSONL record at {path}:{line_number}") from exc
+            row = expected.get(arrival)
+            if row is None:
+                raise RuntimeError(f"cannot resume: {path}:{line_number} is outside the requested input slice")
+            for field in ("request_index", "uuid", "prompt"):
+                if payload.get(field) != row[field]:
+                    raise RuntimeError(
+                        f"cannot resume: {path}:{line_number} does not match input {field} for arrival {arrival}"
+                    )
+            if record or payload.get("status") in {"ok", "cache_miss", "error"}:
+                if arrival in completed:
+                    raise RuntimeError(f"cannot resume: duplicate completed arrival {arrival} in {path}")
+                completed.add(arrival)
+        return completed
+
+    completed_results = load_completed(results_path, record=False)
+    completed_records = load_completed(records_path, record=True)
+    if completed_results != completed_records:
+        raise RuntimeError(
+            "cannot resume: requests.jsonl and request_records.jsonl disagree on completed arrivals "
+            f"({sorted(completed_results)} != {sorted(completed_records)})"
+        )
+    return [row for row in rows if int(row["arrival_index"]) not in completed_results], len(completed_results)
 
 
 def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_name: str):
@@ -635,17 +760,20 @@ def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_nam
     carnator_vectors = carnator.embedder.encode(prompts)
     carnator_records: list[VectorRecord] = []
     for row, vector in zip(source_rows, carnator_vectors, strict=True):
-        entry = CacheEntry(
-            row["uuid"], int(row.get("request_index", 0)), row["prompt"], "", 5, 1, 0.0
-        )
-        nouns = carnator.noun_extractor.for_entry(entry)
         cache_dir = view / "entries" / row["uuid"] / "carnator" / "cache" / "source_dense"
         signature_path = cache_dir / "online_color_signature.json"
+        valid_signature = has_per_noun_inference_signature(signature_path)
+        if valid_signature:
+            from carnator.early_signature import load_per_noun_mbase
+
+            nouns = tuple(sorted(load_per_noun_mbase({"signature_path": str(signature_path)})))
+        else:
+            nouns = ()
         metadata = {
             "source_request_index": int(row.get("request_index", 0)),
             "trf_nouns": list(nouns),
-            "cache_ready": has_fused_mbase_signature(signature_path) and (cache_dir / "fusion_masks" / "masks.pt").is_file(),
-            "signature": {"signature_path": str(signature_path)} if has_fused_mbase_signature(signature_path) else None,
+            "cache_ready": valid_signature and (cache_dir / "fusion_masks" / "masks.pt").is_file(),
+            "signature": {"signature_path": str(signature_path)} if valid_signature else None,
         }
         carnator_records.append(VectorRecord(row["uuid"], row["prompt"], vector, metadata, int(row.get("request_index", 0))))
     return retriever, records, source_by_uuid, (carnator, carnator_records)
@@ -799,6 +927,7 @@ def make_native_target_collector(
         artifact_root,
         probe_seed=probe_seed,
         noun_extractor="spacy/en_core_web_sm:NOUN",
+        retain_artifacts=args.retain_native_artifacts,
         runtime=runtime,
     )
 
@@ -846,7 +975,7 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
 
     if args.dry_run:
         write_warmup_record(output, paths=[], status="skipped_dry_run")
-    else:
+    elif not args.resume:
         warmup_native(args, config, view, output, worker())
 
     for row in rows:
@@ -880,8 +1009,10 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                 else observed_match
             )
             carnator_match = None
+            target_nouns: tuple[str, ...] = ()
             if carnator_matcher is not None:
                 carnator_retriever, carnator_records = carnator_matcher
+                target_nouns = carnator_retriever.noun_extractor.for_request(target)
                 observed_carnator_match = carnator_retriever.search(target, carnator_records)
                 carnator_match = (
                     forced_carnator_probe_match(
@@ -897,7 +1028,6 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
             probe_result = None
             probe_failure = None
             if carnator_matcher is not None and carnator_match is not None and carnator_match.kind == "probe_required":
-                target_nouns = carnator_retriever.noun_extractor.for_request(target)
                 probe_root = req_root / "target_probe"
                 if resident_collector is None:
                     resident_collector = make_native_target_collector(
@@ -912,13 +1042,18 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                         )
                         if forced_outcome is None:
                             return observed_probe_match
-                        return force_cache_match(
+                        forced_match = force_cache_match(
                             observed_probe_match,
                             outcome=forced_outcome,
                             request_index=target.request_index,
                             method_name=args.method,
                             source_by_uuid=source_by_uuid,
                             config=config,
+                        )
+                        return attach_forced_carnator_mask_selection(
+                            forced_match,
+                            records=carnator_records,
+                            target_nouns=target_nouns,
                         )
 
                     probe_result = resident_collector.process(
@@ -973,12 +1108,31 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                            "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
                            "--source-mask-cache", str(entry / "carnator" / "cache" / "source_dense" / "outer_block_masks")]
             else:
+                from carnator.early_signature import materialize_per_noun_inference_mask_bundle
+
+                selection = retrieval_metadata.get("inference_mask_selection")
+                if not isinstance(selection, dict):
+                    raise RuntimeError("Carnator cache hit has no per-noun inference-mask selection")
+                source_cache = entry / "carnator" / "cache" / "source_dense"
+                selected_mask = materialize_per_noun_inference_mask_bundle(
+                    {"signature_path": str(source_cache / "online_color_signature.json")},
+                    target_nouns=target_nouns,
+                    source_fusion_mask_dir=source_cache / "fusion_masks",
+                    output_dir=req_root / "selected_source_mask",
+                )
+                if (
+                    selected_mask["selected_source_noun"] != selection.get("selected_source_noun")
+                    or selected_mask["selection_reason"] != selection.get("selection_reason")
+                ):
+                    raise RuntimeError("Carnator inference-mask selection changed after retrieval")
+                retrieval_metadata["inference_mask_selection"] = selected_mask
                 fake_manifest = req_root / "target_dense_manifest.json"
                 write_fake_dense_manifest(fake_manifest)
                 command = [sys.executable, "-m", "carnator.adapters.wan_ti2v_5b", "--no-env-setup", "--model-dir", config["model_path"],
                            "--device", f"cuda:{args.gpu}", "--artifact-root", str(req_root / "artifacts"), "--results-root", str(req_root / "results"),
                            "--run-id", "run", "--source-prompt", source["prompt"], "--target-prompt", target.prompt, "--seed", str(target.seed),
                            "--source-run-dir", str(entry / "carnator"), "--target-dense-manifest", str(fake_manifest),
+                           "--source-mask-dir", selected_mask["mask_bundle_dir"],
                            "--outer-attn-backend", "sparge-sage2", "--ffn-backend", "w8a8", "--skip-w8a8-dense-diagnostic"]
             summary_path = req_root / "results" / "run" / "summary.json"
             reusable_summary = False
@@ -1004,7 +1158,10 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
             video = output / "videos" / f"{arrival:04d}_{target.uuid}.mp4"
             video.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(native_video, video)
-            compact_summary = compact_native_run(req_root, summary_path)
+            compact_summary = (
+                summary_path if args.retain_native_artifacts
+                else compact_native_run(req_root, summary_path)
+            )
             probe_denoising_s = 0.0
             if probe_result is not None:
                 probe_denoising_s = float(getattr(probe_result, "dit_forward_s", 0.0))
@@ -1074,6 +1231,11 @@ def main() -> int:
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--overwrite", action="store_true", help="Replace this method's output directory before running.")
+    parser.add_argument(
+        "--retain-native-artifacts",
+        action="store_true",
+        help="Keep native request and target-probe artifacts for a focused diagnostic run.",
+    )
     parser.add_argument("--allow-gpu-remap", action="store_true", help="Permit a temporary GPU other than the plan's 3..7 assignment.")
     args = parser.parse_args()
     if args.gpu < 0 or args.gpu >= GPU_COUNT:
@@ -1124,32 +1286,47 @@ def main() -> int:
                                                           "input_sha256": sha256_file(args.input),
                                                           "view_manifest_sha256": sha256_file(args.cache_view / "view_manifest.json"),
                                                           "persist_target_cache": False,
+                                                          "request_error_policy": {
+                                                              "mode": "record_and_continue",
+                                                              "terminal_statuses": ["ok", "cache_miss", "error"],
+                                                              "quality_statuses": ["ok"],
+                                                          },
                                                           "warmup": {"enabled": not args.dry_run, "timed": False,
                                                                      "source_prompt": WARMUP_SOURCE_PROMPT,
                                                                      "target_prompt": WARMUP_TARGET_PROMPT},
                                                           "native_worker_policy": "one_resident_worker_per_gpu" if args.method in {"chorus2", "carnator_boundary_b5"} else None,
                                                           "dense_c0": {"version": DENSE_C0_VERSION, "steps": 50},
                                                           "denoising_timing": "cuda_synchronized_dit_forward; Carnator adds B5 probe",
-                                                          "native_artifact_policy": "top_level_video_and_records_only",
+                                                          "native_artifact_policy": (
+                                                              "retain_for_diagnostic" if args.retain_native_artifacts
+                                                              else "top_level_video_and_records_only"
+                                                          ),
                                                           "target_probe_enabled": args.method == "carnator_boundary_b5",
                                                           "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
                                                           "target_probe_seed": args.seed if args.method == "carnator_boundary_b5" else None,
                                                           "git_revision": revision,
                                                           "config_fingerprint": hashlib.sha256(json.dumps(resolved, sort_keys=True, default=str).encode()).hexdigest(),
                                                           "resolved_config": resolved}, indent=2) + "\n", encoding="utf-8")
-    if args.method in {"nirvana_vid", "teacache", "chorus"}:
-        generic_run(args, rows, args.cache_view, output)
-    else:
-        native_run(args, rows, args.cache_view, output)
+    pending_rows, resumed_count = pending_rows_for_resume(output, rows, resume=args.resume)
+    if pending_rows:
+        if args.method in {"nirvana_vid", "teacache", "chorus"}:
+            generic_run(args, pending_rows, args.cache_view, output)
+        else:
+            native_run(args, pending_rows, args.cache_view, output)
     # Keep the generic quality.py contract alongside the experiment-specific
     # requests.jsonl name used by the VidProM aggregation scripts.
     shutil.copyfile(output / "requests.jsonl", output / "results.jsonl")
     completed = [json.loads(line).get("status") for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines()]
+    terminal = sum(status in {"ok", "cache_miss", "error"} for status in completed)
+    if terminal != len(rows):
+        raise RuntimeError(f"expected {len(rows)} terminal requests, found {terminal}")
     ok = sum(status == "ok" for status in completed)
     misses = sum(status == "cache_miss" for status in completed)
-    print(json.dumps({"status": "completed", "method": args.method, "gpu": args.gpu, "requests": len(rows), "ok": ok, "cache_miss": misses,
-                      "results": str(output / "requests.jsonl")}, ensure_ascii=False))
-    return 0 if ok + misses == len(rows) else 2
+    errors = sum(status == "error" for status in completed)
+    print(json.dumps({"status": "completed_with_errors" if errors else "completed", "method": args.method, "gpu": args.gpu,
+                      "requests": len(rows), "ok": ok, "cache_miss": misses, "errors": errors,
+                      "resumed": resumed_count, "results": str(output / "requests.jsonl")}, ensure_ascii=False))
+    return 2 if errors else 0
 
 
 if __name__ == "__main__":

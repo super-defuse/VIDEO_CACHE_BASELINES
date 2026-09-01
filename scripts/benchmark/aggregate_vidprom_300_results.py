@@ -33,7 +33,12 @@ def rows_for(path: Path) -> list[dict[str, Any]]:
 
 def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path) -> dict[str, Any]:
     ok = [row for row in rows if row.get("status") == "ok"]
-    hit_rows = [row for row in rows if bool(row.get("hit", row.get("cache_match", {}).get("hit")))]
+    completed = [row for row in rows if row.get("status") in {"ok", "cache_miss"}]
+    errors = [row for row in rows if row.get("status") == "error"]
+    hit_rows = [
+        row for row in completed
+        if bool(row.get("hit", row.get("cache_match", {}).get("hit")))
+    ]
     hits = len(hit_rows)
     denoise = [float(row.get("denoising_s", 0.0)) for row in ok if row.get("denoising_s") is not None]
     latency = [float(row.get("latency_s", 0.0)) for row in ok]
@@ -57,8 +62,9 @@ def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path)
             pass
     return {
         "baseline": DISPLAY[method], "method": method, "gpu": gpu,
-        "requests": len(rows), "successful": len(ok), "hits": "N/A" if method == "teacache" else hits,
-        "hit_rate": "N/A" if method == "teacache" else (hits / len(rows) if rows else 0.0),
+        "requests": len(rows), "completed": len(completed), "errors": len(errors), "successful": len(ok),
+        "hits": "N/A" if method == "teacache" else hits,
+        "hit_rate": "N/A" if method == "teacache" else (hits / len(completed) if completed else None),
         "e2e_s_per_request": mean(latency) if latency else None,
         "hit_timed_requests": len(hit_latency),
         "hit_e2e_s_per_hit": mean(hit_latency) if hit_latency else None,
@@ -116,11 +122,11 @@ def write_plot(root: Path, all_rows: dict[str, list[dict[str, Any]]]) -> None:
 
 def write_results_table(root: Path, summaries: list[dict[str, Any]]) -> None:
     request_count = max((int(item.get("requests", 0)) for item in summaries), default=0)
-    lines = [f"# VidProM results ({request_count} request{'s' if request_count != 1 else ''})", "", "Denoising is CUDA-synchronized DiT forward time; Carnator also includes its B5 probe. Source cache preparation is outside E2E and denoising. External is Chorus-only LLM + Grounded-SAM2 time and remains in E2E. Warm-up is unscored. Misses are recorded without generation; timing means use generated requests only.", "", "| Baseline | GPU | Requests | Hits | Hit rate | E2E s/request | Hit E2E s/hit | Denoising s/request | Hit denoising s/hit | External s/request | CLIP-T | VBench-Q |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
+    lines = [f"# VidProM results ({request_count} request{'s' if request_count != 1 else ''})", "", "Denoising is CUDA-synchronized DiT forward time; Carnator also includes its B5 probe. Source cache preparation is outside E2E and denoising. External is Chorus-only LLM + Grounded-SAM2 time and remains in E2E. Warm-up is unscored. Misses are recorded without generation; timing and quality use generated requests only. Errors are terminal audit records, excluded from hit-rate denominators and quality scoring.", "", "| Baseline | GPU | Requests | Completed | Errors | Hits | Hit rate | E2E s/request | Hit E2E s/hit | Denoising s/request | Hit denoising s/hit | External s/request | CLIP-T | VBench-Q |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
     for item in summaries:
         def fmt(value: Any) -> str:
             return "N/A" if value in (None, "N/A") else f"{value:.6f}" if isinstance(value, float) else str(value)
-        lines.append("| {baseline} | {gpu} | {requests} | {hits} | {hit_rate} | {e2e_s_per_request} | {hit_e2e_s_per_hit} | {denoising_s_per_request} | {hit_denoising_s_per_hit} | {external_s_per_request} | {clip_t} | {vbench_q} |".format(**{key: fmt(value) for key, value in item.items()}))
+        lines.append("| {baseline} | {gpu} | {requests} | {completed} | {errors} | {hits} | {hit_rate} | {e2e_s_per_request} | {hit_e2e_s_per_hit} | {denoising_s_per_request} | {hit_denoising_s_per_hit} | {external_s_per_request} | {clip_t} | {vbench_q} |".format(**{key: fmt(value) for key, value in item.items()}))
     (root / "VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

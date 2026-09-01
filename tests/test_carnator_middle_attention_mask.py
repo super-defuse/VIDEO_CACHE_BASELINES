@@ -48,6 +48,22 @@ def test_middle_attention_mask_is_enabled_by_default_and_captures_all_layers():
     assert native.block_mask_capture_layers(legacy) == list(range(10)) + list(range(21, 30))
 
 
+def test_source_mask_override_requires_a_reused_source_run(tmp_path):
+    args = native.build_parser().parse_args(["--source-mask-dir", str(tmp_path / "private")])
+
+    try:
+        native.validate_experiment_config(args)
+    except ValueError as exc:
+        assert "requires --source-run-dir" in str(exc)
+    else:
+        raise AssertionError("expected source-mask override validation")
+
+    reused = native.build_parser().parse_args([
+        "--source-run-dir", str(tmp_path / "source"), "--source-mask-dir", str(tmp_path / "private"),
+    ])
+    native.validate_experiment_config(reused)
+
+
 def test_source_mask_prewarm_reports_cache_contents(tmp_path):
     config = BlockMaskConfig(q_block_size=2, k_block_size=2, top_p=0.9, min_top_k=0.0)
     cache = SourceBlockMaskCache(tmp_path / "masks", config, source_run_id="source", cfg_branch_count=1, create=True)
