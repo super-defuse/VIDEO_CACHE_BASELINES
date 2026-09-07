@@ -310,10 +310,11 @@ def validate_experiment_config(args: argparse.Namespace) -> None:
     if args.capture_outer_block_masks and args.source_run_dir:
         raise ValueError("--capture-outer-block-masks cannot be combined with --source-run-dir")
     if args.prepare_shared_dense_cache and (
-        args.source_only or args.target_dense_only or args.source_run_dir or args.target_dense_manifest
+        args.target_dense_only or args.source_run_dir or args.target_dense_manifest
     ):
         raise ValueError(
-            "--prepare-shared-dense-cache requires a fresh source Dense run and a fresh target C0 Dense run"
+            "--prepare-shared-dense-cache requires a fresh source Dense run; "
+            "use either a fresh target C0 Dense run or --source-only"
         )
 def task_mode(args: argparse.Namespace) -> str:
     return "T2V"
@@ -772,6 +773,7 @@ class NativeMultiNounSelfAttentionContrastProbe(AbstractContextManager):
         seed_indices_by_noun: dict[str, tuple[Any, Any]],
         token_grid: tuple[int, int, int],
         chunk_size: int = 512,
+        trace_nonfinite: bool = False,
     ) -> None:
         if not seed_indices_by_noun:
             raise ValueError("multi-noun self-attention probe needs at least one noun")
@@ -782,35 +784,158 @@ class NativeMultiNounSelfAttentionContrastProbe(AbstractContextManager):
         self.token_grid = token_grid
         self.token_count = int(math.prod(token_grid))
         self.chunk_size = int(chunk_size)
+        self.trace_nonfinite = bool(trace_nonfinite)
         self.records_by_noun: dict[str, dict[str, Any]] = {}
+        self.probe_diagnostics: dict[str, Any] = {}
         self.handle = None
+        self.trace_handles: list[Any] = []
 
     def __enter__(self):
         self.handle = self.model.blocks[self.layer].self_attn.register_forward_pre_hook(self._hook)
+        if not self.trace_nonfinite:
+            return self
+        self.trace_handles.append(
+            self.model.register_forward_pre_hook(
+                self._model_context_trace_hook,
+                with_kwargs=True,
+            )
+        )
+        text_embedding = getattr(self.model, "text_embedding", None)
+        if text_embedding is not None:
+            self.trace_handles.append(
+                text_embedding.register_forward_pre_hook(
+                    self._make_trace_hook("text_embedding_input", True, input_index=0)
+                )
+            )
+            self.trace_handles.append(
+                text_embedding.register_forward_hook(
+                    self._make_trace_hook("text_embedding_output", False)
+                )
+            )
+        for block_index, block in enumerate(self.model.blocks[: self.layer + 1]):
+            block_label = f"block_{block_index}"
+            self.trace_handles.append(block.register_forward_pre_hook(self._make_trace_hook(f"{block_label}_input", True)))
+            for module_name in ("self_attn", "cross_attn", "ffn"):
+                module = getattr(block, module_name, None)
+                if module is not None:
+                    if module_name == "cross_attn":
+                        self.trace_handles.append(
+                            module.register_forward_pre_hook(
+                                self._make_trace_hook(f"{block_label}_cross_attn_input", True, input_index=0)
+                            )
+                        )
+                        self.trace_handles.append(
+                            module.register_forward_pre_hook(
+                                self._make_trace_hook(f"{block_label}_cross_attn_context", True, input_index=1)
+                            )
+                        )
+                        for child_name in ("q", "k", "v", "norm_q", "norm_k"):
+                            child = getattr(module, child_name, None)
+                            if child is not None:
+                                self.trace_handles.append(
+                                    child.register_forward_hook(
+                                        self._make_trace_hook(f"{block_label}_cross_attn_{child_name}_output", False)
+                                    )
+                                )
+                    self.trace_handles.append(
+                        module.register_forward_hook(self._make_trace_hook(f"{block_label}_{module_name}_output", False))
+                    )
+            self.trace_handles.append(block.register_forward_hook(self._make_trace_hook(f"{block_label}_output", False)))
         return self
+
+    def _model_context_trace_hook(self, _module, inputs, kwargs):
+        if "first_nonfinite" in self.probe_diagnostics:
+            return
+        value = kwargs.get("context")
+        if value is None and len(inputs) > 2:
+            value = inputs[2]
+        if isinstance(value, (tuple, list)):
+            value = value[0] if value else None
+        self._record_first_nonfinite("model_context_input", value)
 
     def __exit__(self, exc_type, exc, tb):
         if self.handle is not None:
             self.handle.remove()
         self.handle = None
+        for handle in self.trace_handles:
+            handle.remove()
+        self.trace_handles.clear()
         return False
+
+    def _make_trace_hook(self, label: str, input_hook: bool, *, input_index: int = 0):
+        def hook(_module, inputs, output=None):
+            if "first_nonfinite" in self.probe_diagnostics:
+                return
+            if input_hook and input_index >= len(inputs):
+                return
+            value = inputs[input_index] if input_hook else output
+            if isinstance(value, (tuple, list)):
+                value = value[0] if value else None
+            self._record_first_nonfinite(label, value)
+
+        return hook
+
+    def _record_first_nonfinite(self, label: str, value) -> None:
+        if not hasattr(value, "is_floating_point") or not value.is_floating_point():
+            return
+        import torch
+
+        finite = torch.isfinite(value)
+        if bool(finite.all()):
+            return
+        self.probe_diagnostics["first_nonfinite"] = {
+            "location": label,
+            "shape": list(value.shape),
+            "dtype": str(value.dtype),
+            "nan_count": int(torch.isnan(value).sum().item()),
+            "inf_count": int(torch.isinf(value).sum().item()),
+            "finite_fraction": float(finite.float().mean().item()),
+        }
 
     def _hook(self, attn, inputs):
         if self.records_by_noun:
             return
         import torch
 
+        def tensor_stats(value: torch.Tensor) -> dict[str, Any]:
+            detached = value.detach()
+            finite = torch.isfinite(detached)
+            finite_values = detached.masked_select(finite)
+            return {
+                "shape": list(detached.shape),
+                "dtype": str(detached.dtype),
+                "min": float(finite_values.min().item()) if finite_values.numel() else None,
+                "max": float(finite_values.max().item()) if finite_values.numel() else None,
+                "mean": float(finite_values.float().mean().item()) if finite_values.numel() else None,
+                "nan_count": int(torch.isnan(detached).sum().item()),
+                "inf_count": int(torch.isinf(detached).sum().item()),
+                "finite_fraction": float(finite.float().mean().item()),
+            }
+
         hidden_states, _seq_lens, grid_sizes, freqs = inputs
+        self.probe_diagnostics["hidden_states"] = tensor_stats(hidden_states)
         batch, sequence, heads, head_dim = (
             hidden_states.shape[0],
             hidden_states.shape[1],
             attn.num_heads,
             attn.head_dim,
         )
-        query = attn.norm_q(attn.q(hidden_states)).view(batch, sequence, heads, head_dim)
-        key = attn.norm_k(attn.k(hidden_states)).view(batch, sequence, heads, head_dim)
+        query_projected = attn.q(hidden_states)
+        key_projected = attn.k(hidden_states)
+        self.probe_diagnostics["query_projected"] = tensor_stats(query_projected)
+        self.probe_diagnostics["key_projected"] = tensor_stats(key_projected)
+        query_normalized = attn.norm_q(query_projected)
+        key_normalized = attn.norm_k(key_projected)
+        self.probe_diagnostics["query_normalized"] = tensor_stats(query_normalized)
+        self.probe_diagnostics["key_normalized"] = tensor_stats(key_normalized)
+        query = query_normalized.view(batch, sequence, heads, head_dim)
+        key = key_normalized.view(batch, sequence, heads, head_dim)
+        self.probe_diagnostics["query_before_rope"] = tensor_stats(query)
+        self.probe_diagnostics["key_before_rope"] = tensor_stats(key)
         query = self.model_module.rope_apply(query, grid_sizes, freqs)[:, : self.token_count]
         key = self.model_module.rope_apply(key, grid_sizes, freqs)[:, : self.token_count]
+        self.probe_diagnostics["query_after_rope"] = tensor_stats(query)
+        self.probe_diagnostics["key_after_rope"] = tensor_stats(key)
         scale = head_dim**-0.5
         time, height, width = self.token_grid
 
@@ -824,11 +949,21 @@ class NativeMultiNounSelfAttentionContrastProbe(AbstractContextManager):
                 query_chunk = query[:, start:stop]
                 noun_logits = torch.einsum("bqhd,bkhd->bhqk", query_chunk, noun_key).mul(scale)
                 background_logits = torch.einsum("bqhd,bkhd->bhqk", query_chunk, background_key).mul(scale)
+                if start == 0:
+                    self.probe_diagnostics.setdefault("logits", {})[noun] = {
+                        "noun": tensor_stats(noun_logits),
+                        "background": tensor_stats(background_logits),
+                    }
                 noun_max_parts.append(noun_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu())
                 background_max_parts.append(background_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu())
                 del noun_logits, background_logits
             noun_max = torch.cat(noun_max_parts).reshape(time, height, width)
             background_max = torch.cat(background_max_parts).reshape(time, height, width)
+            self.probe_diagnostics.setdefault("aggregates", {})[noun] = {
+                "noun_max": tensor_stats(noun_max),
+                "background_max": tensor_stats(background_max),
+                "contrast": tensor_stats(noun_max - background_max),
+            }
             self.records_by_noun[noun] = {
                 "self_noun_max": noun_max,
                 "self_bg_max": background_max,
@@ -845,6 +980,7 @@ def build_fused_mbase_by_noun(
     noun_token_indices: dict[str, list[int]],
     cross_records_by_noun: dict[str, list[dict[str, Any]]],
     self_attention_input,
+    diagnostics_path: Path | None = None,
 ) -> dict[str, Any]:
     """Build each Early Signature Mbase from the native self/cross fusion path.
 
@@ -860,11 +996,41 @@ def build_fused_mbase_by_noun(
         build_cross_attention_seed_scores,
         build_canonical_fusion_mask,
         build_canonical_self_contrast_mask,
+        build_fusion_score,
         seed_indices_from_cross_score,
     )
 
     if set(noun_token_indices) != set(cross_records_by_noun):
         raise ValueError("cross-attention records do not match Early Signature nouns")
+    diagnostics: dict[str, Any] = {
+        "prompt": prompt,
+        "completed_step": int(args.mask_probe_step),
+        "token_grid": list(token_grid),
+        "nouns": {},
+        "failure": None,
+    }
+
+    def tensor_stats(value: torch.Tensor) -> dict[str, Any]:
+        value = value.detach().float().cpu()
+        finite = value[torch.isfinite(value)]
+        return {
+            "shape": list(value.shape),
+            "min": float(finite.min().item()) if finite.numel() else None,
+            "max": float(finite.max().item()) if finite.numel() else None,
+            "mean": float(finite.mean().item()) if finite.numel() else None,
+            "nonzero": int(torch.count_nonzero(value).item()),
+            "nonzero_fraction": float(torch.count_nonzero(value).item() / value.numel()),
+            "nan_count": int(torch.isnan(value).sum().item()),
+            "inf_count": int(torch.isinf(value).sum().item()),
+            "finite_fraction": float(finite.numel() / value.numel()),
+        }
+
+    def write_diagnostics() -> None:
+        if diagnostics_path is None:
+            return
+        diagnostics_path.parent.mkdir(parents=True, exist_ok=True)
+        diagnostics_path.write_text(json.dumps(diagnostics, indent=2) + "\n", encoding="utf-8")
+
     cross_scores: dict[str, torch.Tensor] = {}
     seed_indices: dict[str, tuple[Any, Any]] = {}
     for noun, records in cross_records_by_noun.items():
@@ -880,13 +1046,46 @@ def build_fused_mbase_by_noun(
             top_p=args.mask_top_p,
             background_p=args.mask_background_p,
         )
+        diagnostics["nouns"].setdefault(noun, {})["cross_seed"] = {
+            "score": tensor_stats(cross_scores[noun]),
+            "positive_seed_count": int(seed_indices[noun][0].numel()),
+            "background_seed_count": int(seed_indices[noun][1].numel()),
+        }
 
     scheduler = build_scheduler(runtime, args)
     step_index = int(args.mask_probe_step) - 1
     timestep = scheduler.timesteps[step_index]
     seq_len = seq_len_for(runtime, self_attention_input)
     timestep_input = timestep_for(runtime, self_attention_input, timestep, seq_len)
+    # Keep the normal BF16 path fast.  A small subset of prompts can make the
+    # T5 re-encode non-finite under the surrounding DiT autocast; retry only
+    # those prompts with autocast disabled, matching the source-stage encode.
+    def _finite_context(value: Any) -> bool:
+        if isinstance(value, (tuple, list)):
+            return all(_finite_context(item) for item in value)
+        return not hasattr(value, "is_floating_point") or bool(torch.isfinite(value).all())
+
     context, _ = encode_prompts(runtime, args, prompt)
+    context_fallback = not _finite_context(context)
+    if context_fallback:
+        with torch.amp.autocast("cuda", enabled=False):
+            context, _ = encode_prompts(runtime, args, prompt)
+        if not _finite_context(context):
+            diagnostics["failure"] = {
+                "type": "ValueError",
+                "message": "probe-time T5 context remains non-finite after autocast fallback",
+            }
+            diagnostics["t5_encode"] = {"fallback_used": True, "context_finite": False}
+            write_diagnostics()
+            raise ValueError("probe-time T5 context remains non-finite after autocast fallback")
+    diagnostics["t5_encode"] = {
+        "initial_autocast": "bf16",
+        "fallback_used": context_fallback,
+        "context_finite": _finite_context(context),
+    }
+    # Expose the accounting/diagnostic flag without changing the long-standing
+    # return type (a noun -> Mbase mapping) used by all callers.
+    build_fused_mbase_by_noun.last_diagnostics = diagnostics
     model = runtime.pipe.model
     if args.offload_model or runtime.pipe.init_on_cpu:
         model.to(runtime.device)
@@ -902,6 +1101,7 @@ def build_fused_mbase_by_noun(
             args.mask_self_layer,
             seed_indices,
             token_grid,
+            trace_nonfinite=bool(getattr(args, "retain_native_artifacts", False)),
         ) as self_probe,
     ):
         _ = model([self_attention_input], t=timestep_input, context=context, seq_len=seq_len)[0]
@@ -909,6 +1109,7 @@ def build_fused_mbase_by_noun(
 
     if set(self_probe.records_by_noun) != set(cross_scores):
         raise RuntimeError("Early Signature self-attention probe produced incomplete records")
+    diagnostics["self_probe"] = self_probe.probe_diagnostics
     fusion_config = FusionMaskConfig(
         completed_step=args.mask_probe_step,
         eps=args.mask_fusion_eps,
@@ -916,15 +1117,38 @@ def build_fused_mbase_by_noun(
         spatial_medit_radius=args.mask_spatial_medit_radius,
         spatial_msee_radius=args.mask_spatial_msee_radius,
     )
-    return {
-        noun: build_canonical_fusion_mask(
-            self_probe.records_by_noun[noun]["self_contrast_max"],
-            cross_scores[noun],
-            fusion_config,
-            original_mbase=None,
-        )["Mbase"].detach().cpu().bool().contiguous()
-        for noun in sorted(cross_scores)
-    }
+    result: dict[str, Any] = {}
+    for noun in sorted(cross_scores):
+        self_score = self_probe.records_by_noun[noun]["self_contrast_max"]
+        diagnostics["nouns"].setdefault(noun, {})["self_contrast"] = tensor_stats(self_score)
+        try:
+            fusion_score = build_fusion_score(
+                self_score,
+                cross_scores[noun],
+                fusion_config.eps,
+                fusion_config.gamma,
+            )
+            diagnostics["nouns"][noun]["fusion_score_input"] = tensor_stats(fusion_score)
+            bundle = build_canonical_fusion_mask(
+                self_score,
+                cross_scores[noun],
+                fusion_config,
+                original_mbase=None,
+            )
+        except Exception as exc:
+            diagnostics["nouns"][noun]["failure"] = {
+                "type": type(exc).__name__,
+                "message": str(exc),
+            }
+            diagnostics["failure"] = {"noun": noun, "type": type(exc).__name__, "message": str(exc)}
+            write_diagnostics()
+            raise
+        diagnostics["nouns"][noun]["fusion_score"] = tensor_stats(bundle["score"])
+        diagnostics["nouns"][noun]["postprocess"] = bundle["temporal_postprocess"]
+        diagnostics["nouns"][noun]["token_area"] = bundle["token_area"]
+        result[noun] = bundle["Mbase"].detach().cpu().bool().contiguous()
+    write_diagnostics()
+    return result
 
 
 class SparseTokenIndexCache:

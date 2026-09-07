@@ -1,0 +1,34 @@
+{
+  "assumptions": {
+    "attention_heads": 24,
+    "cached_mask_steps": 40,
+    "carnator_mask_bundle_bytes": 17825792,
+    "cfg_branches": 2,
+    "chorus2_reuses_carnator_raw_masks": true,
+    "k_blocks": 214,
+    "latent_file_bytes": 20952680,
+    "metadata_bytes_per_entry": 6291456,
+    "q_blocks": 427,
+    "source_video_bytes": 24788802,
+    "token_count": 27280,
+    "trajectory_latents": 51
+  },
+  "available_bytes": 2115518386176,
+  "config_fingerprint": "d8cb418cb4f919b23892d2999be9ac3fe19d3046720d51672d7985338c29cbdc",
+  "estimated_total_bytes": 1775414330000,
+  "fits_with_20_percent_headroom": false,
+  "fits_without_headroom": true,
+  "format": "shared-cross-request-cache/v4",
+  "input_sha256": "435655933521243544cf80e1810667a78c86522ab0173a511bce7f84fce6986c",
+  "method": "analytical_no_gpu",
+  "per_entry": {
+    "carnator_fusion_and_seed_bundles": 17825792,
+    "carnator_raw_block_masks": 657921600,
+    "carnator_trajectory": 1068586680,
+    "metadata": 6291456,
+    "source_video": 24788802,
+    "total": 1775414330
+  },
+  "required_free_bytes_with_20_percent_headroom": 2130497196000,
+  "selected_requests": 1000
+}

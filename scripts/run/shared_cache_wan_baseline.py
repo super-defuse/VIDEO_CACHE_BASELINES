@@ -42,6 +42,8 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--target-prompt", default=TARGET_PROMPT)
     value.add_argument("--seed", type=int, default=20260218)
     value.add_argument("--device", default="cuda:0")
+    value.add_argument("--chorus-k1", type=int)
+    value.add_argument("--chorus-k2", type=int)
     value.add_argument("--chorus-gamma-k", type=float)
     value.add_argument("--chorus-gamma-o", type=float)
     return value
@@ -54,7 +56,12 @@ def load_yaml(path: Path) -> dict[str, Any]:
 
 
 def resolved_config(
-    device: str, chorus_gamma_k: float | None = None, chorus_gamma_o: float | None = None
+    device: str,
+    chorus_gamma_k: float | None = None,
+    chorus_gamma_o: float | None = None,
+    *,
+    chorus_k1: int | None = None,
+    chorus_k2: int | None = None,
 ) -> dict[str, Any]:
     model = load_yaml(ROOT / "configs" / "models" / "wan22.yaml")
     methods = load_yaml(ROOT / "configs" / "methods" / "default.yaml")
@@ -67,6 +74,11 @@ def resolved_config(
     checkpoint = chai.get("longclip_checkpoint")
     if checkpoint and not Path(checkpoint).is_absolute():
         chai["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
+    if chorus_k1 is not None:
+        config["chorus"] = {
+            **config.get("chorus", {}),
+            "stages": {**config.get("chorus", {}).get("stages", {}), "k1": chorus_k1, "k2": chorus_k2},
+        }
     if chorus_gamma_k is not None:
         config["chorus"] = {
             **config.get("chorus", {}),
@@ -130,6 +142,11 @@ def cache_input(
         raise ValueError(f"shared cache manifest has no {method} consumer")
     if method == "nirvana_vid" and consumer.get("latent"):
         restart = int(consumer.get("reuse_start_step", 10))
+        # The canonical native Wan cache defines the restart contract.  Keep
+        # the adapter in sync instead of relying on the legacy model-config
+        # default (which may still be step 5 for older experiments).
+        adapter.config.setdefault("nirvana_vid", {})["reuse_start_step"] = restart
+        adapter.config["nirvana_vid"]["cache_steps"] = [restart]
         latent_path = Path(str(consumer["latent"])).expanduser()
         if not latent_path.is_file():
             raise FileNotFoundError(f"shared NIRVANA-VID latent is missing: {latent_path}")
@@ -200,10 +217,14 @@ def hardware(device: str) -> dict[str, Any]:
 def main() -> int:
     args = parser().parse_args()
     ensure_supported("wan22", args.method)
+    if (args.chorus_k1 is None) != (args.chorus_k2 is None):
+        raise ValueError("--chorus-k1 and --chorus-k2 must be provided together")
     if (args.chorus_gamma_k is None) != (args.chorus_gamma_o is None):
         raise ValueError("--chorus-gamma-k and --chorus-gamma-o must be provided together")
-    if args.method != "chorus" and args.chorus_gamma_k is not None:
-        raise ValueError("Chorus gamma overrides are only valid with --method chorus")
+    if args.method != "chorus" and (args.chorus_k1 is not None or args.chorus_gamma_k is not None):
+        raise ValueError("Chorus overrides are only valid with --method chorus")
+    if args.chorus_k1 is not None and not 0 < args.chorus_k1 < args.chorus_k2 < 50:
+        raise ValueError("Chorus boundaries must satisfy 0 < K1 < K2 < 50")
     artifact_run = child_path(args.artifact_root, args.run_id)
     result_run = child_path(args.results_root, args.run_id)
     if artifact_run.exists() or result_run.exists():
@@ -223,7 +244,14 @@ def main() -> int:
     result_run.mkdir(parents=True)
     request = build_target_request(args.source_prompt, args.target_prompt, args.seed)
     adapter = make_adapter(
-        "wan22", resolved_config(args.device, args.chorus_gamma_k, args.chorus_gamma_o)
+        "wan22",
+        resolved_config(
+            args.device,
+            args.chorus_gamma_k,
+            args.chorus_gamma_o,
+            chorus_k1=args.chorus_k1,
+            chorus_k2=args.chorus_k2,
+        ),
     )
     output = videos / "target.mp4"
     row: dict[str, Any]
@@ -256,7 +284,7 @@ def main() -> int:
             "save_video_s": save_seconds,
             "hash_s": hash_seconds,
             "preprocess_breakdown_s": preprocess_breakdown,
-            "excluded_preprocess_s": 0.0,
+            "excluded_preprocess_s": preprocess_breakdown,
             "reported_latency_s": elapsed,
         }
         reference = Path(str(shared_manifest.get("source", {}).get("cache_dir", ""))).parent / "target_dense" / "manifest.json"
@@ -317,6 +345,7 @@ def main() -> int:
     (artifact_run / "config.resolved.json").write_text(
         json.dumps({"method": args.method, "source_prompt": args.source_prompt, "target_prompt": args.target_prompt,
                     "seed": args.seed, "shared_cache_manifest": str(shared_manifest_path),
+                    "chorus_k1": args.chorus_k1, "chorus_k2": args.chorus_k2,
                     "chorus_gamma_k": args.chorus_gamma_k, "chorus_gamma_o": args.chorus_gamma_o}, indent=2) + "\n",
         encoding="utf-8",
     )

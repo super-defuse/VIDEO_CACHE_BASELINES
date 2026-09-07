@@ -1,0 +1,2 @@
+{"event": "worker_ready", "gpu": 0}
+{"bytes": 1745281669, "early_signature_created": true, "gpu": 0, "request_index": 0, "status": "completed", "uuid": "diagnostic-source-dog"}

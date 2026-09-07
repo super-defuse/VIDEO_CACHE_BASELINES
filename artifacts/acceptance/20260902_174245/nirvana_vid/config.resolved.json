@@ -1,0 +1,11 @@
+{
+  "method": "nirvana_vid",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/shared_dense/manifest.json",
+  "chorus_k1": null,
+  "chorus_k2": null,
+  "chorus_gamma_k": null,
+  "chorus_gamma_o": null
+}

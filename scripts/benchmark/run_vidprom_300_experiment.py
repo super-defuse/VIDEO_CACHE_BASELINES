@@ -42,6 +42,12 @@ EARLY_SIGNATURE_THRESHOLDS = {
     "max_shape_distance": 1.0,
     "max_changed_color_distance": 2.2003341853972085,
 }
+DISABLED_EARLY_SIGNATURE_THRESHOLDS = {
+    "max_context_color_distance": 1_000_000.0,
+    "max_log_area_ratio": 1_000_000.0,
+    "max_shape_distance": 1_000_000.0,
+    "max_changed_color_distance": 1_000_000.0,
+}
 FUSED_MBASE_POLICY_PREFIX = "native-self-cross-fusion-mbase|"
 DEFAULT_VIEW = ROOT / "artifacts" / "vidprom_1000cache_300input_noun_match" / "source_view"
 DEFAULT_INPUT = Path("/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv")
@@ -70,7 +76,12 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return payload
 
 
-def resolved_config(device: str, dry_run: bool) -> dict[str, Any]:
+def resolved_config(
+    device: str,
+    dry_run: bool,
+    *,
+    early_signature_thresholds: dict[str, float] | None = None,
+) -> dict[str, Any]:
     model = {"model": "synthetic", "dry_run": True, "seed": 20260218} if dry_run else load_yaml(ROOT / "configs" / "models" / "wan22.yaml")
     methods = {} if dry_run else load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = {**model, **methods, "dry_run": dry_run, "device": device, "cache_root": "cache"}
@@ -78,10 +89,11 @@ def resolved_config(device: str, dry_run: bool) -> dict[str, Any]:
         value = config.get(key)
         if value and not Path(value).is_absolute():
             config[key] = str((ROOT / value).resolve())
+    thresholds = dict(early_signature_thresholds or EARLY_SIGNATURE_THRESHOLDS)
     for section in ("nirvana_vid", "chai", "chorus", "carnator"):
         values = config.get("retrieval", {}).get(section, {})
         if section == "carnator":
-            values.update(EARLY_SIGNATURE_THRESHOLDS)
+            values.update(thresholds)
         checkpoint = values.get("longclip_checkpoint")
         if checkpoint and not Path(checkpoint).is_absolute():
             values["longclip_checkpoint"] = str((ROOT / checkpoint).resolve())
@@ -345,7 +357,11 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
         validate_forced_smoke(args, rows, view_rows)
     if args.method == "carnator_boundary_b5":
         validate_carnator_signature_view(args.cache_view.expanduser().resolve(), view_rows)
-    config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
+    config = resolved_config(
+        f"cuda:{args.gpu}",
+        args.dry_run,
+        early_signature_thresholds=args.early_signature_thresholds,
+    )
     if not args.dry_run:
         # Carnator's native TI2V runner is intentionally separate from the
         # generic adapter registry; Chorus2 has the same native split.
@@ -471,7 +487,11 @@ def warmup_generic(adapter: Any, method_name: str, output: Path, view: Path) -> 
 
 def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
     method_name = args.method
-    config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
+    config = resolved_config(
+        f"cuda:{args.gpu}",
+        args.dry_run,
+        early_signature_thresholds=args.early_signature_thresholds,
+    )
     adapter = make_adapter("synthetic" if args.dry_run else "wan22", config)
     method = make_method(method_name, config)
     method.config["persist_target_cache"] = False
@@ -729,7 +749,14 @@ def pending_rows_for_resume(
     return [row for row in rows if int(row["arrival_index"]) not in completed_results], len(completed_results)
 
 
-def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_name: str):
+def prompt_matcher(
+    view: Path,
+    config: dict[str, Any],
+    dry_run: bool,
+    method_name: str,
+    *,
+    early_signature_thresholds: dict[str, float] | None = None,
+):
     from core.retrieval import make_chorus_retriever
 
     # Native target workers only need the ranked candidate.  Keep the
@@ -749,7 +776,7 @@ def prompt_matcher(view: Path, config: dict[str, Any], dry_run: bool, method_nam
 
     carnator_retrieval = {
         **config.get("retrieval", {}).get("carnator", {}),
-        **EARLY_SIGNATURE_THRESHOLDS,
+        **(early_signature_thresholds or EARLY_SIGNATURE_THRESHOLDS),
         "vector_backend": "memory",
     }
     carnator = make_carnator_retriever(
@@ -961,8 +988,18 @@ def compact_native_run(req_root: Path, summary_path: Path) -> Path:
 
 
 def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
-    config = resolved_config(f"cuda:{args.gpu}", args.dry_run)
-    matcher = None if args.dry_run else prompt_matcher(view, config, False, args.method)
+    config = resolved_config(
+        f"cuda:{args.gpu}",
+        args.dry_run,
+        early_signature_thresholds=args.early_signature_thresholds,
+    )
+    matcher = None if args.dry_run else prompt_matcher(
+        view,
+        config,
+        False,
+        args.method,
+        early_signature_thresholds=args.early_signature_thresholds,
+    )
     output.mkdir(parents=True, exist_ok=True)
     resident_collector = None
     native_worker: NativeWanWorker | None = None
@@ -1065,7 +1102,8 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                     if str(exc) != "fused Mbase is empty at every time token":
                         raise
                     probe_failure = "fused_mbase_empty_at_all_time_tokens"
-                    shutil.rmtree(probe_root, ignore_errors=True)
+                    if not args.retain_native_artifacts:
+                        shutil.rmtree(probe_root, ignore_errors=True)
                 if probe_result is not None:
                     carnator_match = probe_result.match or carnator_match
             execution_match = carnator_match if carnator_match is not None else match
@@ -1080,6 +1118,8 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                 if probe_result is not None:
                     retrieval_metadata["target_probe"] = {
                         "early_probe_s": probe_result.early_probe_s,
+                        "early_probe_wall_s": probe_result.early_probe_wall_s,
+                        "precision_fallback": probe_result.probe_precision_fallback,
                         "signature_gate_s": probe_result.signature_gate_s,
                         "completed_steps": probe_result.completed_steps,
                         "probe_collected": probe_result.probe_collected,
@@ -1227,6 +1267,11 @@ def main() -> int:
         ),
     )
     parser.add_argument("--seed", type=int, default=20260218)
+    parser.add_argument(
+        "--early-signature-disabled",
+        action="store_true",
+        help="Use 1e6 for all four Early Signature gates, matching the disabled canonical run.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--resume", action="store_true")
@@ -1252,6 +1297,9 @@ def main() -> int:
         raise ValueError("--limit must be in [1, 300]")
     args.request_indices = ([int(item) for item in args.request_indices.split(",") if item.strip()]
                             if args.request_indices else None)
+    args.early_signature_thresholds = dict(
+        DISABLED_EARLY_SIGNATURE_THRESHOLDS if args.early_signature_disabled else EARLY_SIGNATURE_THRESHOLDS
+    )
     if args.request_indices and any(index < 0 or index >= args.limit for index in args.request_indices):
         raise ValueError("--request-indices must refer to rows below --limit")
     selected_count = len(args.request_indices) if args.request_indices else args.limit
@@ -1277,11 +1325,17 @@ def main() -> int:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     except (OSError, subprocess.CalledProcessError):
         revision = "unknown"
-    resolved = resolved_config(f"cuda:{args.gpu}", args.dry_run)
+    resolved = resolved_config(
+        f"cuda:{args.gpu}",
+        args.dry_run,
+        early_signature_thresholds=args.early_signature_thresholds,
+    )
     (output / "run_config.json").write_text(json.dumps({"method": args.method, "gpu": args.gpu, "seed": args.seed, "limit": args.limit,
                                                           "arrival_start": args.arrival_start, "arrival_stop": args.arrival_stop,
                                                           "request_indices": args.request_indices,
                                                           "forced_smoke": forced_smoke_config(args),
+                                                          "early_signature_disabled": args.early_signature_disabled,
+                                                          "early_signature_thresholds": args.early_signature_thresholds,
                                                           "input": str(args.input), "cache_view": str(args.cache_view),
                                                           "input_sha256": sha256_file(args.input),
                                                           "view_manifest_sha256": sha256_file(args.cache_view / "view_manifest.json"),

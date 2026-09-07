@@ -1,0 +1,51 @@
+{
+  "format": "wan22-shared-dense-cache-v2",
+  "created_at": "2026-09-02 09:52:30 UTC",
+  "source": {
+    "prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "cache_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+    "source_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/manifest.json",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/videos/source_dense.mp4",
+    "seed": 20260218,
+    "steps": 50,
+    "reuse_start_step": 10
+  },
+  "consumers": {
+    "carnator": {
+      "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+      "fusion_masks": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/fusion_masks",
+      "raw_block_masks": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/outer_block_masks"
+    },
+    "nirvana_vid": {
+      "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+      "completed_step": 10,
+      "reuse_start_step": 10
+    },
+    "chorus": {
+      "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+      "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/videos/source_dense.mp4"
+    },
+    "chorus2": {
+      "source_latent_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+      "source_mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/outer_block_masks",
+      "normal_sparse_raw_layers": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    }
+  },
+  "export": {
+    "canonical_source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+    "baseline_cache_copies": 0,
+    "chai_exported": false
+  }
+}

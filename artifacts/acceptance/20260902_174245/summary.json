@@ -1,0 +1,368 @@
+{
+  "status": "completed",
+  "rows": [
+    {
+      "request_index": 0,
+      "uuid": "pair-000-target-000",
+      "pair_id": "pair-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 293.8750528139062,
+      "denoising_seconds": 265.22910683997907,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/dense_baseline/videos/target.mp4",
+      "actual_gpu": 0,
+      "clip_t": 0.337158203125,
+      "vbench_q": 0.6330714069844214,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9824273323019346,
+        "background_consistency": 0.9857157389322917,
+        "motion_smoothness": 0.9904059586898009,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7013356685638428,
+        "imaging_quality": 0.7153700401369205,
+        "vbench_q": 0.6330714069844214
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 232.45852463506162,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/nirvana_vid/videos/target.mp4",
+      "output_hash": "c787e5e781ff8ab6728ad23dc54f9b238e76b4895c52248ae92a6d92de4e9330",
+      "cache_bytes": 14082696,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 207.86591876577586,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.000291160074993968,
+          "cache_load_s": 0.009904489852488041,
+          "generation_s": 229.35375702707097,
+          "save_video_s": 3.06281581800431,
+          "hash_s": 0.03174273599870503,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 232.45852463506162
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "pair-000",
+      "actual_gpu": 0,
+      "denoising_seconds": 229.35375702707097,
+      "clip_t": 0.355712890625,
+      "vbench_q": 0.6362940693916224,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9886869480212529,
+        "background_consistency": 0.9863993326822916,
+        "motion_smoothness": 0.9907244512324145,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6955384612083435,
+        "imaging_quality": 0.7339552527813872,
+        "vbench_q": 0.6362940693916224
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "teacache",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 22,
+      "latency_s": 138.16092337900773,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/teacache/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/teacache/videos/target.mp4",
+      "output_hash": "6d46af83e82e4de387d75539b27a65246c38ab3ef297c3f58b917394576e7805",
+      "cache_bytes": 17241381,
+      "extra": {
+        "executed_steps": 22,
+        "skipped_steps": 28,
+        "dit_forward_s": 114.12277651461773,
+        "timing": {
+          "cache_lookup_s": 0.00029162107966840267,
+          "cache_load_s": 1.6100937500596046e-05,
+          "generation_s": 135.56259147590026,
+          "save_video_s": 2.5850323629565537,
+          "hash_s": 0.0129868951626122,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 138.16092337900773
+        },
+        "shared_cache": {
+          "mode": "not_applicable",
+          "reason": "TeaCache is target-only"
+        }
+      },
+      "pair_id": "pair-000",
+      "actual_gpu": 0,
+      "denoising_seconds": 135.56259147590026,
+      "clip_t": 0.3330078125,
+      "vbench_q": 0.6219078426602153,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9782462025682132,
+        "background_consistency": 0.9715596516927083,
+        "motion_smoothness": 0.9931019167432598,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.5875881314277649,
+        "imaging_quality": 0.7671242724962472,
+        "vbench_q": 0.6219078426602153
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 259.3885555230081,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/chorus/videos/target.mp4",
+      "output_hash": "3b4b7736f6dd165869869f4e1d45b9d518eb42598bf5ca538669004509a47213",
+      "cache_bytes": 15617786,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 174.15262505831197,
+        "chorus_llm": {
+          "source_entities": [
+            "dog"
+          ],
+          "target_entities": [
+            "cat"
+          ],
+          "removed_tokens": [
+            "dog"
+          ],
+          "added_tokens": [
+            "cat"
+          ],
+          "edit_summary": "Replaced 'dog' with 'cat' as the main subject.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 25.403
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "dog",
+          "boxes": 1,
+          "box_confidence_max": 0.9554,
+          "pixel_edit_fraction": 0.1422,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1426,
+          "base_token_fraction": 0.1642,
+          "edit_fraction": 0.5412,
+          "see_fraction": 0.8487,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 60.66991489077918,
+        "chorus_llm_s": 25.40346393897198,
+        "chorus_sam_s": 35.2664509518072,
+        "excluded_latency_s": 60.66991489077918,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.5412,
+            "see_fraction": 0.8487,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00037062796764075756,
+          "cache_load_s": 0.0014034891501069069,
+          "generation_s": 256.430929643102,
+          "save_video_s": 2.9346147722098976,
+          "hash_s": 0.021227691788226366,
+          "preprocess_breakdown_s": 60.66991489077918,
+          "excluded_preprocess_s": 60.66991489077918,
+          "reported_latency_s": 259.3885555230081
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "pair-000",
+      "actual_gpu": 0,
+      "denoising_seconds": 195.7610147523228,
+      "clip_t": 0.35546875,
+      "vbench_q": 0.6112559992677009,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9846513616542022,
+        "background_consistency": 0.9822957356770833,
+        "motion_smoothness": 0.9907126115726042,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.5056621432304382,
+        "imaging_quality": 0.7618978768340813,
+        "vbench_q": 0.6112559992677009
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    },
+    {
+      "request_index": 0,
+      "uuid": "pair-000-target-000",
+      "pair_id": "pair-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 225.19480320019647,
+      "denoising_seconds": 196.1223408030346,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/chorus2/videos/target.mp4",
+      "actual_gpu": 0,
+      "clip_t": 0.33447265625,
+      "vbench_q": 0.6269709150927067,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9827655181288719,
+        "background_consistency": 0.9907633463541666,
+        "motion_smoothness": 0.9898969025425827,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6577820777893066,
+        "imaging_quality": 0.7112775074351917,
+        "vbench_q": 0.6269709150927067
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    },
+    {
+      "request_index": 0,
+      "uuid": "pair-000-target-000",
+      "pair_id": "pair-000",
+      "prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 152.84097735094838,
+      "denoising_seconds": 122.78039575996809,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 0,
+      "clip_t": 0.354736328125,
+      "vbench_q": 0.6326169480667867,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9849548364679018,
+        "background_consistency": 0.9782023111979167,
+        "motion_smoothness": 0.990649140522489,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.677399754524231,
+        "imaging_quality": 0.7425924316910673,
+        "vbench_q": 0.6326169480667867
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245"
+    }
+  ]
+}

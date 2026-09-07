@@ -172,6 +172,21 @@ def test_carnator_noun_prefilter_skips_early_signature_for_multiple_differences(
     assert result.metadata["reason"] == "no_noun_compatible_candidate"
 
 
+def test_carnator_noun_prefilter_is_case_insensitive():
+    source = VectorRecord(
+        "source",
+        "a horse",
+        LexicalTestEmbedder().encode(["a horse"])[0],
+        {"trf_nouns": ["HORSE"]},
+        0,
+    )
+
+    result = _retriever().search(Request(1, "target", "a horse", 2), [source])
+
+    assert result.kind == "probe_required"
+    assert result.metadata["noun_prefilter"][0]["source_nouns"] == ["horse"]
+
+
 def test_carnator_requires_a_target_sidecar_after_stage_one(tmp_path):
     source_signature = _sidecar(tmp_path, "source", "a train", ["train"])
     result = _retriever(retrieval_only=False).search(
@@ -337,7 +352,7 @@ def test_carnator_v2_falls_back_before_probe_without_noun_candidates(tmp_path):
     assert result.metadata["probe_required"] is False
 
 
-def test_carnator_runtime_extractor_preserves_chai_noun_tokens():
+def test_carnator_runtime_extractor_normalizes_chai_noun_tokens():
     class ChaiLikeExtractor:
         @property
         def signature(self) -> str:
@@ -349,7 +364,7 @@ def test_carnator_runtime_extractor_preserves_chai_noun_tokens():
 
     extractor = CarnatorNounExtractor(ChaiLikeExtractor())
     assert extractor.for_request(Request(0, "prompt", "A Corgi beside facades", 1)) == (
-        "Corgi", "Corgi", "façades",
+        "corgi", "façades",
     )
 
 

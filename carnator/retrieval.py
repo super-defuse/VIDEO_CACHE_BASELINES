@@ -39,7 +39,7 @@ CARNATOR_RETRIEVER_ID = CARNATOR_V1_RETRIEVER_ID
 def _noun_set(values: Iterable[str]) -> set[str]:
     if isinstance(values, str):
         values = (values,)
-    nouns = set(values)
+    nouns = {" ".join(str(noun).strip().lower().split()) for noun in values}
     if not all(isinstance(noun, str) and noun for noun in nouns):
         raise ValueError("noun metadata must contain non-empty strings")
     return nouns
@@ -59,7 +59,7 @@ class CarnatorNounExtractor:
 
     def _extract(self, uuid: str, prompt: str) -> tuple[str, ...]:
         del uuid
-        return tuple(self.extractor.extract(prompt))
+        return tuple(sorted(_noun_set(self.extractor.extract(prompt))))
 
 
 class CarnatorRetriever(RetrievalStrategy):

@@ -278,16 +278,11 @@ def render_fig1(args: argparse.Namespace) -> None:
         masks[request.role], masses[request.role] = mask, mass
         records[request.role] = {"request": asdict(request), "entry": entry, "frame": str(fig_dir / f"{request.role}_frame.png")}
     vmin, vmax = np.percentile(torch.cat([masses["source"].flatten(), masses["target"].flatten()]).numpy(), [1, 99])
-    for role, title in (("source", "Source: cat"), ("target", "Target: dog")):
+    for role in ("source", "target"):
         fig, axes = plt.subplots(1, 2, figsize=(9, 3.8), constrained_layout=True)
         axes[0].imshow(masses[role].mean(dim=0), cmap="viridis", vmin=vmin, vmax=vmax, aspect="auto")
-        axes[0].set_title("Mean block mass")
         active = masks[role].float().mean(dim=0).numpy() >= 0.5
         axes[1].imshow(active, cmap="Greys", vmin=0, vmax=1, aspect="auto", interpolation="nearest")
-        axes[1].set_title("Head-consensus sparse mask")
-        for axis in axes:
-            axis.set_xlabel("key block"); axis.set_ylabel("query block")
-        fig.suptitle(title)
         fig.savefig(fig_dir / f"{role}_block_mass_and_sparse_mask.png", dpi=180)
         plt.close(fig)
     source_mask, target_mask = masks["source"], masks["target"]
@@ -345,19 +340,30 @@ def render_fig2(args: argparse.Namespace) -> None:
         times = [round((TOKEN_GRID[0] - 1) * fraction) for fraction in (0.1, 0.5, 0.9)]
         fig, axes = plt.subplots(1, 3, figsize=(10, 3.2), constrained_layout=True)
         for axis, time_index in zip(axes, times):
-            image = affinity[time_index].numpy(); axis.imshow(image, cmap="coolwarm", vmin=-1, vmax=1, aspect="auto"); axis.set_title(f"t={time_index}"); axis.set_xlabel("token w"); axis.set_ylabel("token h")
-        display_pair = pair.replace("_", " ")
-        fig.suptitle(f"{display_pair}: delta-latent affinity (mean cosine={float(affinity.mean()):.3f})")
+            image = affinity[time_index].numpy(); axis.imshow(image, cmap="coolwarm", vmin=-1, vmax=1, aspect="auto")
         fig.savefig(fig_dir / f"pair_{pair}_latent_affinity.png", dpi=180); plt.close(fig)
         energy_source, energy_target = source_delta.norm(dim=0).mean(dim=(1, 2)), target_delta.norm(dim=0).mean(dim=(1, 2))
-        fig, axis = plt.subplots(figsize=(6.5, 2.8), constrained_layout=True); frames = np.arange(TOKEN_GRID[0]); axis.plot(frames, energy_source, label="source"); axis.plot(frames, energy_target, label="target"); axis.fill_between(frames, 0, (energy_source - energy_target).abs(), alpha=0.16, label="absolute difference"); axis.set(xlabel="frame index", ylabel="mean ||z5-z0||"); axis.legend(frameon=False, ncol=3, fontsize=8); axis.set_title(f"{display_pair}: latent energy"); fig.savefig(fig_dir / f"pair_{pair}_latent_energy.png", dpi=180); plt.close(fig)
+        fig, axis = plt.subplots(figsize=(6.5, 2.8), constrained_layout=True)
+        frames = np.arange(TOKEN_GRID[0])
+        display_pair = pair.replace("_", " ")
+        axis.plot(frames, energy_source, label="source")
+        axis.plot(frames, energy_target, label="target")
+        axis.fill_between(frames, 0, (energy_source - energy_target).abs(), alpha=0.16, label="absolute difference")
+        axis.set(xlabel="frame index", ylabel="mean ||z5-z0||")
+        axis.tick_params(axis="both", labelsize=12)
+        axis.legend(frameon=False, ncol=3, fontsize=12)
+        axis.set_title(f"{display_pair}: latent energy", fontsize=16, pad=10)
+        axis.xaxis.label.set_size(14)
+        axis.yaxis.label.set_size(14)
+        fig.savefig(fig_dir / f"pair_{pair}_latent_energy.png", dpi=180)
+        plt.close(fig)
         source_residual, target_residual = token_vectors(load_latent(source_paths["residual"])), token_vectors(load_latent(target_paths["residual"]))
         norm_source, norm_target = source_residual.norm(dim=-1), target_residual.norm(dim=-1)
         time_index = times[1]; difference = (norm_source[time_index] - norm_target[time_index]).abs()
         fig, axes = plt.subplots(1, 3, figsize=(10, 3.2), constrained_layout=True)
-        for axis, image, title, limits in ((axes[0], norm_source[time_index], "source norm", (0, residual_vmax)), (axes[1], norm_target[time_index], "target norm", (0, residual_vmax)), (axes[2], difference, "absolute difference", (0, residual_diff_vmax))):
-            axis.imshow(image.numpy(), cmap="magma", vmin=limits[0], vmax=max(limits[1], 1e-8), aspect="auto"); axis.set_title(title); axis.set_xlabel("token w"); axis.set_ylabel("token h")
-        fig.suptitle(f"{display_pair}: CFG residual at token time {time_index}"); fig.savefig(fig_dir / f"pair_{pair}_cfg_residual.png", dpi=180); plt.close(fig)
+        for axis, image, limits in ((axes[0], norm_source[time_index], (0, residual_vmax)), (axes[1], norm_target[time_index], (0, residual_vmax)), (axes[2], difference, (0, residual_diff_vmax))):
+            axis.imshow(image.numpy(), cmap="magma", vmin=limits[0], vmax=max(limits[1], 1e-8), aspect="auto")
+        fig.savefig(fig_dir / f"pair_{pair}_cfg_residual.png", dpi=180); plt.close(fig)
         summary_rows.append({"pair": pair, "source_prompt": source.prompt, "target_prompt": target.prompt, **pair_feature(source, target, args)})
     with (fig_dir / "pair_feature_summary.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(summary_rows[0])); writer.writeheader(); writer.writerows(summary_rows)

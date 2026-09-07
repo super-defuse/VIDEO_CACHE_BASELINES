@@ -1,0 +1,63 @@
+{
+  "method": "teacache",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "not_applicable",
+    "reason": "TeaCache is target-only"
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "model": "Wan2.2",
+    "method": "teacache",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": false,
+      "kind": "not_applicable"
+    },
+    "executed_steps": 22,
+    "latency_s": 138.16092337900773,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/teacache/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/teacache/videos/target.mp4",
+    "output_hash": "6d46af83e82e4de387d75539b27a65246c38ab3ef297c3f58b917394576e7805",
+    "cache_bytes": 17241381,
+    "extra": {
+      "executed_steps": 22,
+      "skipped_steps": 28,
+      "dit_forward_s": 114.12277651461773,
+      "timing": {
+        "cache_lookup_s": 0.00029162107966840267,
+        "cache_load_s": 1.6100937500596046e-05,
+        "generation_s": 135.56259147590026,
+        "save_video_s": 2.5850323629565537,
+        "hash_s": 0.0129868951626122,
+        "preprocess_breakdown_s": 0.0,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 138.16092337900773
+      },
+      "shared_cache": {
+        "mode": "not_applicable",
+        "reason": "TeaCache is target-only"
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "0",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

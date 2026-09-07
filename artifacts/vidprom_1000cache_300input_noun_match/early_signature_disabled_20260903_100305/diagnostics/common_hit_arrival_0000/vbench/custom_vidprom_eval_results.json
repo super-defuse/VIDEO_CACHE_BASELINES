@@ -1,0 +1,136 @@
+{
+    "subject_consistency": [
+        0.9279031446203589,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9418910483519236
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9377620133260886
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.8860681844254334
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9458913323779901
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9570246378580729,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9631754557291666,
+                "video_sim": 115.5810546875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9656514485677083,
+                "video_sim": 115.878173828125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.944390869140625,
+                "video_sim": 113.326904296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9548807779947917,
+                "video_sim": 114.585693359375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9858333196974339,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.985144774036706
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9830460353283911
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.990981058575182
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.9841614108494565
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5383391976356506,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.4372822642326355
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.6262807846069336
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.5558100342750549
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 0.5339837074279785
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6835536816494525,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 63.66335189441019
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 71.07959413134363
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 71.93527183847979
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4",
+                "video_results": 66.74325479554736
+            }
+        ]
+    ]
+}

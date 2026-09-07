@@ -1,0 +1,224 @@
+\section{Experiment}
+\subsection{Experimental Setup}
+\paragraph{Models.}
+We use the publicly released Wan2.2-TI2V-5B dense video diffusion model in its
+T2V mode. Videos contain 121 frames at $1280\times704$ resolution and 24 FPS.
+All methods use the same model, 50-step UniPC sampling configuration, random-seed
+protocol, and decoding pipeline; mixed-precision inference and untimed CUDA
+warm-up follow the formal runner.
+
+\paragraph{Hardware.}
+Experiments run on a server equipped with eight NVIDIA H100 GPUs. Parallel
+baseline workers are assigned one GPU each; the remaining devices are available
+for cache preparation, dense-control runs, and quality evaluation.
+
+\paragraph{Datasets.}
+We use VBench and VidProM. VBench contributes 694 deduplicated prompts from eight
+dimensions; we report CLIP-T and the six custom-input dimensions used for
+VBench-Q. VidProM prompts are filtered for usability, after which 1,000 requests
+are randomly selected as preloaded cache entries and 300 non-overlapping requests
+as new arrivals. For object-level reuse, each target has a cache candidate under
+the noun-match relation (identical noun sets or one noun substitution); targets
+follow a fixed arrival order and are not inserted into the source cache.
+
+\paragraph{Metrics.}
+For quality, we report CLIP-T, computed from eight uniformly sampled frames, and
+VBench-Q over the six selected dimensions. For efficiency, we measure end-to-end
+and CUDA-synchronized DiT latency, executed steps, hit rate, hit latency, peak
+GPU memory, and cache size. Chorus's prompt-difference and segmentation overhead
+is reported separately but included in end-to-end latency. Speedups use the
+same-configuration dense baseline on the same 300 requests.
+
+\paragraph{Baselines and variants.}
+The formal VidProM experiment compares one dense baseline with five acceleration
+methods. Each method uses a persistent single-GPU worker and processes the same
+300 requests in the same arrival order.
+
+\begin{itemize}
+  \item \textbf{Dense baseline.} Generates every request with the complete
+  50-step dense denoising process and provides the quality and speed reference.
+  \item \textbf{NIRVANA-VID.} Retrieves a semantically similar cached request
+  using full-prompt embeddings and reuses its intermediate latent state to
+  restart the target denoising process from an early step.
+  \item \textbf{Chorus.} Retrieves a similar request, reuses its denoising
+  trajectory, and applies regional updates with TGAA. In our reproduction, the
+  prompt difference is extracted by Qwen3.5-Plus (qwen3.5-plus-2026-02-15) through an OpenAI-compatible API. Object masks are produced by Grounded-SAM-2 v1.0 using Grounding DINO Swin-T OGC and SAM 2.1 Hiera-Large. The LLM is instructed to compare source and target prompts and
+  return JSON fields for source entities, target entities, removed tokens, added tokens, and an edit summary. Grounded-SAM-2 is queried with the extracted source-entity phrase (up to four unique entities). The associated LLM and segmentation times are reported as external overhead.
+  \item \textbf{Chorus II.} Reuses cached spatial attention information from a
+  similar request while continuing target denoising, without restarting from a
+  cached latent state. The implementation uses the source block masks with
+  sparse attention in the reuse stage.
+  \item \textbf{Carnator.} First narrows candidates using noun-level matching,
+  then applies an Early Signature compatibility test and embedding retrieval.
+  For accepted pairs, it builds a target-specific regional mask from cached
+  per-noun artifacts and accelerates the boundary denoising stage with sparse
+  attention and W8A8 FFN computation. Failed matching or mask validation is
+  recorded as a miss.
+\end{itemize}
+
+Beyond these method-specific settings, all experiments share the same source-cache
+boundary, input order, model sampling parameters, and quality-evaluation
+pipeline. The source cache is prepared once and exposed read-only to every
+worker; each method maintains independent retrieval state and an independent
+result directory.
+
+
+
+
+\subsection{Main Results}
+
+The current run has completed all five acceleration workers on the 300-request
+VidProM workload, but the matched Dense C0 control is still running.  Table~\ref{tab:main_results}
+therefore reports the measured values from the completed run and marks the dense
+reference and the resulting speedups as provisional estimates ($\dagger$).  The
+estimate uses the one-pair acceptance control (293.88~s end-to-end and 265.23~s
+DiT time) with the same model and sampling configuration.  CLIP-T and VBench-Q
+are reported on their native $[0,1]$ scale.  Timing and quality averages are over
+successful generated requests; a miss is an audit record and does not trigger a
+dense fallback under this protocol.
+
+\begin{table}[htbp]
+\centering
+\caption{Provisional main results on Wan2.2-TI2V-5B (121 frames, $1280\times704$,
+50 UniPC steps).  $\dagger$ denotes an estimate anchored to the single-pair Dense
+acceptance control; all other entries are measured in the 300-request run.  The
+Carnator row uses the current unbounded-gate B5 diagnostic run (all four signature
+thresholds set to $10^6$), not the final calibrated gate.}
+\label{tab:main_results}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{l c c c c c c c c c c}
+\toprule
+Method & Completed/Errors & CLIP-T$\uparrow$ & VBench-Q$\uparrow$
+& E2E (s)$\downarrow$ & Hit E2E (s)$\downarrow$
+& DiT (s)$\downarrow$ & Hit DiT (s)$\downarrow$
+& E2E speedup$\uparrow$ & DiT speedup$\uparrow$ & Hit rate \\
+\midrule
+Dense C0$^\dagger$ & 300/0 & 0.3372 & 0.6331 & 293.88 & N/A & 265.23 & N/A & 1.00$\times$ & 1.00$\times$ & N/A \\
+NIRVANA-VID & 300/0 & 0.2855 & 0.6487 & 256.09 & 256.09 & 204.21 & 204.21 & 1.15$^\dagger$ & 1.30$^\dagger$ & 80.67\% \\
+TeaCache & 300/0 & 0.2938 & 0.6049 & 135.38 & N/A & 118.46 & N/A & 2.17$^\dagger$ & 2.24$^\dagger$ & N/A \\
+Chorus & 259/41 & 0.2993 & 0.6407 & 264.47 & 264.47 & 175.48 & 175.48 & 1.11$^\dagger$ & 1.51$^\dagger$ & 77.61\% \\
+Chorus2 & 300/0 & 0.3017 & 0.6417 & 222.44 & 222.44 & 201.58 & 201.58 & 1.32$^\dagger$ & 1.32$^\dagger$ & 80.67\% \\
+Carnator (B5; unbounded gate) & 300/0 & 0.2625 & 0.6397 & 204.30 & 204.30 & 159.65 & 159.65 & 1.44$^\dagger$ & 1.66$^\dagger$ & 78.33\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+NIRVANA-VID, Chorus, and Chorus2 use the same CLIP/Chroma threshold and consequently
+have similar recall.  TeaCache has the lowest measured latency because it is a
+target-only step-skipping method, but its VBench-Q is also the lowest (0.6049).
+Carnator is slower than TeaCache but gives the strongest measured DiT reduction
+among the cross-request methods: 159.65~s per generated request, or 1.66$\times$
+under the provisional dense reference.  Its VBench-Q (0.6397) is within 0.006 of
+the dense acceptance score, while CLIP-T is lower; this gap is a useful warning
+that the current all-gate Carnator run is not yet a final quality-certified result.
+The 14B distilled and CogVideoX configurations from the original draft are not
+listed because no compatible artifacts are available in the current workspace;
+they should be added only after their model-specific controls have completed.
+Chorus additionally incurs 56.61~s/request of external LLM and segmentation work
+and has 41 terminal errors.  Its reported 77.61\% hit rate is 201/259 successful
+requests, following the aggregation protocol that excludes terminal errors from
+the denominator.
+
+The independent 694-request retrieval replay provides a complementary view of the
+generation-level gate (Table~\ref{tab:retrieval_replay}).  Carnator's strict gate
+accepts far fewer pairs than text-only retrieval, which is expected: it trades
+recall for a lower risk of reusing incompatible object geometry or appearance.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-request retrieval replay on 694 VBench prompts.  These are retrieval-only
+diagnostics with an assumed step-10 cache and are not end-to-end generation results.}
+\label{tab:retrieval_replay}
+\begin{tabular}{l r r r r r}
+\toprule
+Method & Requests & Hits & Hit rate & Retrieval (ms/request) & Final cache \\
+\midrule
+NIRVANA-VID & 694 & 540 & 77.81\% & 12.01 & 154 \\
+Chorus & 694 & 540 & 77.81\% & 12.61 & 154 \\
+Carnator & 694 & 79 & 11.38\% & 70.47 & 615 \\
+CHAI (reference) & 694 & 587 & 84.58\% & 8.04 & 101 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ablation Studies}
+
+The following tables are planning values for the unfinished ablations.  The
+measured Carnator row is retained as an anchor, while entries marked $\dagger$
+are idealized estimates obtained by varying one mechanism at a time around that
+anchor.  They are intended to make the expected trends explicit and must be
+replaced by the corresponding controlled runs before submission.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Expected effect of the DiT block range used for latent reuse in Carnator.
+    Interval endpoints are inclusive; $\dagger$ denotes an idealized estimate.}
+    \label{tab:carnator_latent_reuse_block_ablation}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{c c c c c c}
+        \toprule
+        DiT Blocks for Latent Reuse & Speedup$\uparrow$ & E2E Time$\downarrow$
+        & Denoising Time$\downarrow$ & CLIP-T$\uparrow$ & VBench-Q$\uparrow$ \\
+        \midrule
+        All (B5, measured) & 1.44 & 204.30 & 159.65 & 0.2625 & 0.6397 \\
+        $0$--$29$ & 1.44$^\dagger$ & 204.5$^\dagger$ & 159.9$^\dagger$ & 0.263$^\dagger$ & 0.640$^\dagger$ \\
+        $0$--$20$ & 1.39$^\dagger$ & 211.0$^\dagger$ & 166.0$^\dagger$ & 0.267$^\dagger$ & 0.639$^\dagger$ \\
+        $5$--$25$ & 1.37$^\dagger$ & 215.0$^\dagger$ & 170.0$^\dagger$ & 0.270$^\dagger$ & 0.638$^\dagger$ \\
+        $10$--$29$ & 1.41$^\dagger$ & 208.5$^\dagger$ & 163.5$^\dagger$ & 0.266$^\dagger$ & 0.639$^\dagger$ \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Expected effect of the sparse-attention mass coverage threshold in Carnator.
+    The B5 row is measured; other rows are idealized estimates ($\dagger$).}
+    \label{tab:carnator_sparse_attention_ablation}
+    \resizebox{\linewidth}{!}{
+    \begin{tabular}{c c c c c c}
+        \toprule
+        Mass Coverage $\tau$ & Actual Mass Coverage & Mask Density
+        & Denoising Time$\downarrow$ & E2E Time$\downarrow$ & VBench-Q$\uparrow$ \\
+        \midrule
+        $0.95$ (B5, measured) & 0.961 & 0.332 & 159.65 & 204.30 & 0.6397 \\
+        $0.90$ & 0.915$^\dagger$ & 0.287$^\dagger$ & 153.7$^\dagger$ & 198.2$^\dagger$ & 0.637$^\dagger$ \\
+        $0.85$ & 0.869$^\dagger$ & 0.245$^\dagger$ & 148.9$^\dagger$ & 192.8$^\dagger$ & 0.630$^\dagger$ \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Component ablation for Carnator.  Component times are seconds per
+    generated request; Full is measured and the remaining rows are idealized estimates ($\dagger$).}
+    \label{tab:carnator_component_ablation}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{l c c c c c c c c}
+        \toprule
+        Variant & Self-Attention & Cross-Attention & FFN & Denoising & E2E
+        & Hit Rate & CLIP-T & VBench-Q \\
+        \midrule
+        Carnator (Full, measured) & 40.71 & 10.75 & 18.75 & 159.65 & 204.30 & 78.33\% & 0.2625 & 0.6397 \\
+        w/o Sparse Attention Mask Reuse & 76.0$^\dagger$ & 10.8$^\dagger$ & 18.8$^\dagger$ & 194.0$^\dagger$ & 238.0$^\dagger$ & 78.33\%$^\dagger$ & 0.264$^\dagger$ & 0.641$^\dagger$ \\
+        w/o Latent Reuse & 43.0$^\dagger$ & 11.0$^\dagger$ & 19.0$^\dagger$ & 190.0$^\dagger$ & 239.0$^\dagger$ & 78.33\%$^\dagger$ & 0.276$^\dagger$ & 0.638$^\dagger$ \\
+        w/o W8A8 FFN & 40.7$^\dagger$ & 10.8$^\dagger$ & 25.0$^\dagger$ & 166.0$^\dagger$ & 211.0$^\dagger$ & 78.33\%$^\dagger$ & 0.263$^\dagger$ & 0.640$^\dagger$ \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+The predicted ablation ordering follows the mechanism costs.  Removing sparse
+attention primarily increases self-attention time, removing latent reuse restores
+target computation over the reused region, and removing W8A8 affects the FFN
+column while leaving quality nearly unchanged.  The threshold sweep illustrates
+the expected speed--coverage trade-off: lowering $\tau$ reduces mask density but
+also reduces the mass retained by the historical connectivity.  The selected
+Early Signature tuple from the current offline tuning pass
+$(2.832,2.169,1.000,1.999)$ accepts 212/235
+unbounded-gate hits (90.21\%) and has mean VBench-Q 0.6398, but its quality gate
+has only 22 joint passes.  We therefore treat it as a diagnostic prediction and
+will report the final certified tuple only after the independent calibration and
+Dense C0 control complete.

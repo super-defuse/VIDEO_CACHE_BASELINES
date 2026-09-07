@@ -24,7 +24,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--baseline", choices=tuple(BASELINES), required=True)
     value.add_argument("--source-prompt", required=True, help="Prompt used to prepare B0--B5 source assets.")
     value.add_argument("--target-prompt", required=True)
-    value.add_argument("--source-positive", default="", help="Optional source phrase used by the mask probe.")
+    value.add_argument("--source-positive", default=None, help="Optional source phrase used by the mask probe.")
     value.add_argument("--seed", type=int, default=42)
     value.add_argument("--checkpoint", type=Path)
     value.add_argument("--artifact-root", type=Path, default=ROOT / "artifacts")
@@ -86,7 +86,7 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
         "--model-dir", str(checkpoint), "--artifact-root", str(args.artifact_root / "ti2v-5b"),
         "--results-root", str(args.results_root / "ti2v-5b"), "--run-id", runtime_run_id,
         "--source-prompt", args.source_prompt, "--target-prompt", args.target_prompt,
-        "--source-positive", args.source_positive, "--seed", str(args.seed),
+        "--seed", str(args.seed),
         "--latent-injection-mode", args.latent_injection_mode,
         "--boundary-alpha-function", args.boundary_alpha_function,
         "--outer-attn-backend", spec.outer_attention, "--ffn-backend", spec.ffn,
@@ -97,6 +97,8 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
         "--outer-sparse-dtype", args.outer_dtype, "--flashinfer-plan-cache", args.flashinfer_plan_cache,
         "--flashinfer-wrapper", args.flashinfer_wrapper,
     ]
+    if args.source_positive is not None:
+        command.extend(("--source-positive", args.source_positive))
     if not args.middle_attention_mask:
         command.append("--no-middle-attention-mask")
     if args.guidance_scale is not None:

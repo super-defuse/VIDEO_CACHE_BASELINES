@@ -1,0 +1,1722 @@
+{
+    "subject_consistency": [
+        0.9185280518176464,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": 0.9177898968259494
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": 0.8992280602455139
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": 0.8583146249254544
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": 0.9169674299657344
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": 0.8996266317864259
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": 0.9071715431908767
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": 0.8953083040813605
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": 0.9345253616571426
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": 0.9853901664415995
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": 0.9900845612088839
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": 0.916251773138841
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": 0.9352609959741434
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": 0.9847743953267734
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": 0.9282585710287095
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": 0.9643651209771633
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": 0.8532449486354987
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": 0.9946080021560192
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": 0.9715959377586841
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": 0.8872403996686141
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": 0.881761193772157
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": 0.8254524769882361
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": 0.9717544433971246
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": 0.9019935148457686
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": 0.9627051688730717
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": 0.9152947798371315
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": 0.8111090771853924
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": 0.9273886625965436
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": 0.8720513620724281
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": 0.9321550520757834
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": 0.8666416602830093
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": 0.8634061885376771
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": 0.8842508815228939
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": 0.8748468972742558
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": 0.9129700240989526
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": 0.9911946800847848
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": 0.9344448640942573
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": 0.9710433808465798
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": 0.9725392130513986
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": 0.9270144701004028
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": 0.96602909664313
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": 0.9899110247691473
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": 0.8656084919969241
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": 0.9668267053862413
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": 0.8695754028856755
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": 0.9224581795434157
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": 0.9822927077611288
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": 0.8508989830811818
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": 0.9426152306298415
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": 0.8996418868501981
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": 0.9928641724089782
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": 0.8791703631480535
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": 0.9607940701146921
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": 0.8187449953208367
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": 0.9557098378737767
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": 0.925372247894605
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": 0.9038101017475129
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": 0.8257585920393467
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": 0.963663291434447
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": 0.7731877576559782
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": 0.9559811266760031
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": 0.9015061969558398
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": 0.9904945741097132
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": 0.9222117545704047
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": 0.9761193501452605
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": 0.8630525099734465
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9488495655548879,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": 0.950518798828125,
+                "video_sim": 114.062255859375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": 0.9369771321614583,
+                "video_sim": 112.437255859375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": 0.9221883138020833,
+                "video_sim": 110.66259765625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": 0.92955322265625,
+                "video_sim": 111.54638671875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": 0.9506083170572917,
+                "video_sim": 114.072998046875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": 0.9608784993489583,
+                "video_sim": 115.305419921875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": 0.95677490234375,
+                "video_sim": 114.81298828125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": 0.950469970703125,
+                "video_sim": 114.056396484375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": 0.9431640625,
+                "video_sim": 113.1796875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": 0.970489501953125,
+                "video_sim": 116.458740234375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": 0.9570821126302084,
+                "video_sim": 114.849853515625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": 0.940203857421875,
+                "video_sim": 112.824462890625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": 0.9902628580729167,
+                "video_sim": 118.83154296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": 0.928271484375,
+                "video_sim": 111.392578125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": 0.970013427734375,
+                "video_sim": 116.401611328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": 0.939447021484375,
+                "video_sim": 112.733642578125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": 0.9858988444010417,
+                "video_sim": 118.307861328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": 0.980926513671875,
+                "video_sim": 117.711181640625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": 0.932611083984375,
+                "video_sim": 111.913330078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": 0.9385030110677083,
+                "video_sim": 112.620361328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": 0.93658447265625,
+                "video_sim": 112.39013671875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": 0.9819925944010417,
+                "video_sim": 117.839111328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": 0.89156494140625,
+                "video_sim": 106.98779296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": 0.9700052897135417,
+                "video_sim": 116.400634765625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": 0.8985758463541667,
+                "video_sim": 107.8291015625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": 0.9190694173177083,
+                "video_sim": 110.288330078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": 0.9562540690104167,
+                "video_sim": 114.75048828125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": 0.91572265625,
+                "video_sim": 109.88671875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": 0.97376708984375,
+                "video_sim": 116.85205078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": 0.9223002115885417,
+                "video_sim": 110.676025390625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": 0.9167317708333333,
+                "video_sim": 110.0078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": 0.923992919921875,
+                "video_sim": 110.879150390625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": 0.910711669921875,
+                "video_sim": 109.285400390625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": 0.9550984700520834,
+                "video_sim": 114.61181640625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": 0.9877827962239584,
+                "video_sim": 118.533935546875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": 0.939788818359375,
+                "video_sim": 112.774658203125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": 0.9630452473958333,
+                "video_sim": 115.5654296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": 0.97279052734375,
+                "video_sim": 116.73486328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": 0.9423583984375,
+                "video_sim": 113.0830078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": 0.9780782063802084,
+                "video_sim": 117.369384765625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": 0.9813028971354166,
+                "video_sim": 117.75634765625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": 0.914593505859375,
+                "video_sim": 109.751220703125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": 0.9712626139322916,
+                "video_sim": 116.551513671875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": 0.9295186360677083,
+                "video_sim": 111.542236328125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": 0.9241373697916667,
+                "video_sim": 110.896484375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": 0.97532958984375,
+                "video_sim": 117.03955078125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": 0.9654642740885416,
+                "video_sim": 115.855712890625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": 0.9613566080729167,
+                "video_sim": 115.36279296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": 0.9647359212239583,
+                "video_sim": 115.768310546875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": 0.9801717122395833,
+                "video_sim": 117.62060546875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": 0.930999755859375,
+                "video_sim": 111.719970703125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": 0.9654317220052083,
+                "video_sim": 115.851806640625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": 0.93411865234375,
+                "video_sim": 112.09423828125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": 0.9657796223958334,
+                "video_sim": 115.8935546875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": 0.9186665852864583,
+                "video_sim": 110.239990234375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": 0.956585693359375,
+                "video_sim": 114.790283203125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": 0.9350992838541666,
+                "video_sim": 112.2119140625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": 0.9625244140625,
+                "video_sim": 115.5029296875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": 0.9321431477864583,
+                "video_sim": 111.857177734375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": 0.948406982421875,
+                "video_sim": 113.808837890625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": 0.9543924967447917,
+                "video_sim": 114.527099609375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": 0.9804646809895833,
+                "video_sim": 117.65576171875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": 0.9404459635416667,
+                "video_sim": 112.853515625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": 0.9758097330729166,
+                "video_sim": 117.09716796875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": 0.9154215494791667,
+                "video_sim": 109.8505859375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9809948214599539,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": 0.991095765912998
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": 0.9804467921643286
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": 0.9747630857972727
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": 0.9898741570644791
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": 0.9853658113137735
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": 0.9819007534511397
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": 0.9708884230681896
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": 0.9783733425612591
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": 0.9800431492322504
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": 0.989736388833765
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": 0.9877262853575972
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": 0.9902600687336369
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": 0.9948725530813651
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": 0.9792144950674794
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": 0.9818360494400964
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": 0.9772469377493146
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": 0.9807385176539445
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": 0.9863345039172747
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": 0.9639450480989429
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": 0.9730162383737033
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": 0.9676505463982271
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": 0.9858613579595743
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": 0.9839535089811257
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": 0.9703797874579124
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": 0.9798964021727693
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": 0.977151641477002
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": 0.9802253160240579
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": 0.9800742020194284
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": 0.9839215103363985
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": 0.9767474481284583
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": 0.9819692373383421
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": 0.9907411699330932
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": 0.970052860724664
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": 0.9831497354006905
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": 0.9797400747576098
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": 0.988344903128056
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": 0.9835998935771239
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": 0.9781884463652688
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": 0.9810357265642408
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": 0.9872338141390158
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": 0.9896528439505735
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": 0.9773837034512945
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": 0.98403556989646
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": 0.9768215704600772
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": 0.977695492111874
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": 0.990194232676992
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": 0.9892826935920557
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": 0.988173480506273
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": 0.980101115440751
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": 0.9783748654784672
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": 0.970717311509318
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": 0.9819690857961122
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": 0.973243634766979
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": 0.983005030172087
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": 0.9829461338937011
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": 0.9819987302656622
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": 0.9704303133732778
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": 0.976524558375769
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": 0.9705557102408119
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": 0.9763400387627037
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": 0.9925482927467073
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": 0.983860638641702
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": 0.980849511651054
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": 0.9829287424644731
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": 0.9774341449159564
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.569613818021921,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": 0.6045677661895752
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": 0.659874677658081
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": 0.4866660535335541
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": 0.5817467570304871
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": 0.5988558530807495
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": 0.6899279356002808
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": 0.5405147075653076
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": 0.4680778980255127
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": 0.44088196754455566
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": 0.5181938409805298
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": 0.5603201985359192
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": 0.395693838596344
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": 0.5274694561958313
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": 0.46698322892189026
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": 0.6521815061569214
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": 0.5662707686424255
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": 0.6903263926506042
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": 0.6146610975265503
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": 0.5376530289649963
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": 0.6106507778167725
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": 0.489956259727478
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": 0.6132239699363708
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": 0.5387237668037415
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": 0.6413640975952148
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": 0.6504067182540894
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": 0.4166059195995331
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": 0.6178776621818542
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": 0.49892568588256836
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": 0.6551216244697571
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": 0.4794795513153076
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": 0.566844642162323
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": 0.5883846879005432
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": 0.5426757335662842
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": 0.6054971218109131
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": 0.5264676809310913
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": 0.6986954808235168
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": 0.5978994369506836
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": 0.6838310360908508
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": 0.6628202199935913
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": 0.5144336819648743
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": 0.5922276973724365
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": 0.5072130560874939
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": 0.5733392238616943
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": 0.5002511739730835
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": 0.5165097713470459
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": 0.6029408574104309
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": 0.6215031743049622
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": 0.705374002456665
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": 0.5960857272148132
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": 0.5174859762191772
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": 0.5585897564888
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": 0.6556623578071594
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": 0.45252686738967896
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": 0.6854594349861145
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": 0.5892376899719238
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": 0.6828010082244873
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": 0.5495840907096863
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": 0.5195624828338623
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": 0.5571332573890686
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": 0.4792771637439728
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": 0.41866061091423035
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": 0.501698911190033
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": 0.6514829397201538
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": 0.704738199710846
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": 0.4848000109195709
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7023275193822515,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": 66.6087103284095
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": 76.31947976104485
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": 75.11756695203545
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": 76.81902968982034
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": 68.8292619689437
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": 70.76276328346945
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": 74.80328463719896
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": 76.85534712105743
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": 69.97034611977821
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": 71.57685322406863
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": 74.35003611667098
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": 69.88719640684522
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": 76.48459322590473
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": 76.20024480898518
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": 71.62287549736087
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": 72.15757379453045
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": 71.60375623466555
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": 65.63629254427823
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": 72.36535981863983
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": 75.44708390669389
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": 76.6033004886848
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": 67.6655016497147
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": 74.36386675874064
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": 69.0587731984036
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": 76.59718297532767
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": 69.18659563301023
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": 73.69158197828561
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": 58.90445469627696
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": 65.03042441754302
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": 65.10887511702609
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": 69.26293951617785
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": 67.6337758844549
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": 74.64855793093847
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": 54.81256298979452
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": 67.9171647000904
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": 59.44993884504334
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": 69.7167883628656
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": 68.88919578110877
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": 74.3522919899176
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": 73.13598134695006
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": 76.33938428390124
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": 61.95935771090925
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": 73.70802136886218
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": 63.60862255884596
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": 75.95906413685192
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": 74.95098473414902
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": 61.4976243578698
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": 61.95484441962124
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": 68.97942639185378
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": 69.58826528501905
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": 69.54722992447782
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": 71.16689735601756
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": 68.28923283726716
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": 55.993975426539905
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": 68.69990186454837
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": 72.09892689098011
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": 75.26285540367947
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": 75.09722648179236
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": 75.89299402158123
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": 72.75998189626647
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": 71.14853419154143
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": 65.94978707683973
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": 71.72958872140931
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": 69.48457765185144
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": 64.01416129120125
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.7230769230769231,
+        [
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4",
+                "video_results": false
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4",
+                "video_results": true
+            }
+        ]
+    ]
+}

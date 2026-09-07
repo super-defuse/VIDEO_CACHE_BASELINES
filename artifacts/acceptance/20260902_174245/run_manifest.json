@@ -1,0 +1,46 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-02T17:42:45.044484+08:00",
+  "root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245",
+  "pairs": [
+    {
+      "pair_id": "pair-000",
+      "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218
+    }
+  ],
+  "baselines": [
+    "dense_baseline",
+    "nirvana_vid",
+    "teacache",
+    "chorus",
+    "chorus2",
+    "carnator_boundary_b5"
+  ],
+  "source_gpu": 0,
+  "target_gpus": [
+    0
+  ],
+  "cuda_policy": "CUDA_VISIBLE_DEVICES restricted to physical GPUs 0,1,2",
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16",
+  "source_positive": "dog",
+  "carnator": {
+    "mode": "boundary-blend",
+    "baseline": "B5",
+    "alpha_function": "smoothstep"
+  },
+  "chorus": {
+    "k1": 10,
+    "k2": 30,
+    "gamma_k": 1.5,
+    "gamma_o": 1.5
+  },
+  "cache_manifests": {
+    "pair-000": {
+      "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/shared_dense/manifest.json",
+      "sha256": "e0217002edecd1c6cc615e35b594673b1e55aa381abc22728d9c597f71b3a58f"
+    }
+  }
+}

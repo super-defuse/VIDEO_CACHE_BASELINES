@@ -92,9 +92,14 @@ def write_hit_rates(root: Path, all_rows: dict[str, list[dict[str, Any]]]) -> No
                 start = max(0, end - 50)
                 window = rows[start:end]
                 cumulative = rows[:end]
-                window_hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in window)
-                cumulative_hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in cumulative)
-                writer.writerow({"baseline": DISPLAY[method], "arrival_count": end, "window_start": start + 1, "window_end": end, "window_hits": window_hits, "window_hit_rate": window_hits / len(window), "cumulative_hits": cumulative_hits, "cumulative_hit_rate": cumulative_hits / len(cumulative)})
+                # Errors are terminal audit records but are excluded from hit
+                # rate denominators. Keep arrival_count on the original
+                # request axis while calculating rates over completed rows.
+                completed_window = [row for row in window if row.get("status") in {"ok", "cache_miss"}]
+                completed_cumulative = [row for row in cumulative if row.get("status") in {"ok", "cache_miss"}]
+                window_hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in completed_window)
+                cumulative_hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in completed_cumulative)
+                writer.writerow({"baseline": DISPLAY[method], "arrival_count": end, "window_start": start + 1, "window_end": end, "window_hits": window_hits, "window_hit_rate": window_hits / len(completed_window) if completed_window else "N/A", "cumulative_hits": cumulative_hits, "cumulative_hit_rate": cumulative_hits / len(completed_cumulative) if completed_cumulative else "N/A"})
 
 
 def write_plot(root: Path, all_rows: dict[str, list[dict[str, Any]]]) -> None:
@@ -111,8 +116,9 @@ def write_plot(root: Path, all_rows: dict[str, list[dict[str, Any]]]) -> None:
         if rows and (not endpoints or endpoints[-1] != len(rows)):
             endpoints.append(len(rows))
         for end in endpoints:
-            hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in rows[:end])
-            xs.append(end); ys.append(hits / end)
+            completed = [row for row in rows[:end] if row.get("status") in {"ok", "cache_miss"}]
+            hits = sum(bool(row.get("hit", row.get("cache_match", {}).get("hit"))) for row in completed)
+            xs.append(end); ys.append(hits / len(completed) if completed else 0.0)
         if xs:
             axis.plot(xs, ys, marker="o", label=DISPLAY[method])
     axis.set(xlabel="Arrived requests", ylabel="Cumulative hit rate", ylim=(0, 1))

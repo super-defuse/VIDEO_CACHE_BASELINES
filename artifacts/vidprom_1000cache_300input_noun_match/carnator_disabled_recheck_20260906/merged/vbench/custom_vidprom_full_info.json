@@ -1,0 +1,912 @@
+[
+    {
+        "prompt_en": "rabbit jumping out of the bush",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0095_87530fc1-83e4-521d-83c4-97e5b6a785b7.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A wolf transforming into a lion",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0116_2bb84703-2480-5935-acc5-3077c85b4352.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A caterpillar crawls towards a Chinese dragon",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0154_4f941e2b-5761-54e9-b3ff-b6464fd2420a.mp4"
+        ]
+    },
+    {
+        "prompt_en": "2D cartoon, clever fox named Freddie. Freddie loved to read books,",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0247_2b1a5c15-3f05-5f28-9f29-21a9d0a569d5.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Werewolf vs Snake Man, a real scene from the movie.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0289_c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a giant bunny rabbit taking over new york city",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0028_8056ee09-39a3-5656-9bdd-2a5d283e625c.mp4"
+        ]
+    },
+    {
+        "prompt_en": "4. Sally the squirrel gracefully leaping from tree to tree.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0073_6c94d1da-f823-5b65-af67-e658553f7c4a.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a white horse from chess spinning itself",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0119_c42df466-443f-55be-b4af-01e5990f08ab.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Fox was amazed by this magical transformation of the butterfly",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0141_61dbfdac-1467-51c0-be16-176729dee3bc.mp4"
+        ]
+    },
+    {
+        "prompt_en": "video of a single tiger looking up at the sky",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0117_406ac96a-ba2a-5449-a197-5cd48c82288b.mp4"
+        ]
+    },
+    {
+        "prompt_en": "brave dog trying to protect his owner 3d please",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0080_fc217f46-bb36-5c22-bbdb-30e84dab8469.mp4"
+        ]
+    },
+    {
+        "prompt_en": "gray kitten morphing into vampire bat, fly away, 5 seconds",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0075_3325e221-aa5e-5df0-918d-e6c14749a14f.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a cat staying in a window and mesmerized by the colorful sky",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0050_18c6469f-8d36-5a25-ac0e-2d50cfbdd3af.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A MUSLIM WARRIOR ON A HORSE",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0023_00152d11-b5b7-532a-b037-a1d581e64f17.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute baby duck is jumping and singing",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0020_43ba9045-9be8-5e80-bcd3-a96f517e496c.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A rabbit running in the grass.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0060_8c5938b8-0c72-5a58-a797-30b7e3f507b9.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Master Oogway as a sea turtle",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0202_a006acdc-3f72-540d-addf-ce42419f8753.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a cute fluffy panda eating noodles",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0261_50ade1ae-181e-5c15-8ce3-2097e98193bf.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Leo the lion sharing a feast with other animals.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0166_7312f5ff-cb20-5ec9-985b-da9dc6e57d3c.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a tiny elephant dancing in the jungle",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0008_92587c7e-037c-5dff-8ced-a039c0c50800.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cheetah running through the desert.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0145_0a77642b-d4bc-56f7-a40f-212826de5702.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A lesser panda is standing up and talking like a person.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0184_6898f604-3234-5465-b0a3-f9dee23b2c0e.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a black Arabian horse galloping through the Sahara desert",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0236_de5fe59c-8354-555f-9c5b-56c92715ad44.mp4"
+        ]
+    },
+    {
+        "prompt_en": "cat cleaning its body with its tongue",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0266_606a6a5e-999c-5e65-aea3-2bca9434de8b.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Milo surprised and stuck in Leo&#39;s golden mane as the lion snores",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0257_92e79980-e64b-59e0-abe1-964ccb3a0537.mp4"
+        ]
+    },
+    {
+        "prompt_en": "smiling peaple, big mouse, photorealistic",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0046_4343736f-42e3-59c3-ac47-f0b3da1b6721.mp4"
+        ]
+    },
+    {
+        "prompt_en": "An alien horse running across a field.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0227_f9831292-eedd-5712-8222-2b8850ef6a9d.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a cat running on the grass, with an old man",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0049_538a8d81-a464-57ce-b670-d08e5d1b8bc6.mp4"
+        ]
+    },
+    {
+        "prompt_en": "hyperrealistic white bunnies kissing on the full moon",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0222_0833de95-85c0-58ac-97f4-5378b8d0a9b3.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Introduce Momo, the mischievous monkey, swinging playfully from vines and giggling.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0171_b5e3be41-c62c-512b-8937-be5695f767c3.mp4"
+        ]
+    },
+    {
+        "prompt_en": "alien T-Rex screaming loudly wide mouth open in dry desert",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0283_e1682c01-4314-57be-abfe-21847cf28283.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A pink penguin on the beach",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0281_f88efc24-c6f7-59f4-8e44-b8bf66c1f657.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a jackal is standing,a tiger attacks him from behind.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0218_4b03f6be-467c-5a8b-8545-2507d242fd64.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little bunny is jumping happily on the grass",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0188_d4d509e0-203b-54f3-a88f-20da126e49ad.mp4"
+        ]
+    },
+    {
+        "prompt_en": "cute tiny fox slowly blink eyes ratio 16:9",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0099_218ae330-861d-5866-864d-1fe6c1f4f5b2.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A husky lying in the snow",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0241_6b5687a9-8b24-57cb-a28d-d6e516389305.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a big elephant and a small elephant",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0056_ede7dbbd-39df-5a0c-a349-329aba5693e7.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a cute cat wagging its tail, 9:16 ratio",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0206_3cd30f02-e922-54be-8f10-39c952574005.mp4"
+        ]
+    },
+    {
+        "prompt_en": "4 cats on a boat",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0057_ff3ccf3c-c6c7-5a4c-83f1-d63658c45003.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a crow came across the half filled water pot",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0024_efce9ed6-f44e-5683-9e35-53221414b698.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a cat jumping off a roof, manga panel, manga style",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0157_50ed57da-7f9d-5282-be80-fc323858980f.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a monkey riding a yamaha r1",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0128_6427bc01-ace4-5401-92ea-6fb0a79c0cf2.mp4"
+        ]
+    },
+    {
+        "prompt_en": "cat fight dog in the kitchen",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0037_2c971575-aded-5f53-b158-aa39c20a1508.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a monkey coming out of the screen",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0163_16dbf8fd-5195-508f-9ab4-c8de5f7a9758.mp4"
+        ]
+    },
+    {
+        "prompt_en": "sketch of a robotic horse coming to life",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0225_15a01ce3-96e4-5b1b-a990-9c4f8ce41f92.mp4"
+        ]
+    },
+    {
+        "prompt_en": "micky mouse picking a fight with lion. photo realistic",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0172_b9a5ba9c-e80c-57de-bfcc-58e69a2c320c.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a picture of a dog eating a cupcake",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0111_04ffe6a5-3453-55db-9a40-cc8225082dac.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a little goat dancing in the snow",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0121_2557673f-ac66-54fd-9daa-69a373372ef6.mp4"
+        ]
+    },
+    {
+        "prompt_en": "cinematic, 9:16, handsome muscular blue god krishna fighting a fierce muscular bear, the bear is breathing and holding a tree.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0107_0eae76a5-5464-5912-ac1f-c9de4d3cc496.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Max was a lovable Golden Retriever with soft, golden fur and warm, expressive brown eyes.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0288_426fcb72-19b9-5108-afec-005813542462.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Peruvian peasants with their shepherd dogs",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0074_f3a5ba46-89ce-5985-8ae0-b54401f393c0.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A little duck in a beach",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0183_155d3768-ece4-5216-acce-84e987e97fae.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a fullbody clown morphing to a giraffe",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0085_0a036ba8-87eb-5d4f-8981-b57d78240388.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Black Cat with moustache eating food.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0115_b585779c-539f-51d5-b885-71b11c9be045.mp4"
+        ]
+    },
+    {
+        "prompt_en": "We see a man being chased by a giant koala",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0264_f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a.mp4"
+        ]
+    },
+    {
+        "prompt_en": "bad bunny being hit by a big man",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0251_5a0e4c66-f129-5e41-921c-9efcdaf83486.mp4"
+        ]
+    },
+    {
+        "prompt_en": "Bengal tiger defeating a jaguar",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0038_b9855971-11bd-581e-980c-c90f4052f2a0.mp4"
+        ]
+    },
+    {
+        "prompt_en": "one pig is sitting on the top of the Forbidden City",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0242_7a871031-0bb9-582e-9533-18ea70a62b3d.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A tiger coming out of a television.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0125_6adf0b1a-cbd8-588f-a6f7-268d04ce166a.mp4"
+        ]
+    },
+    {
+        "prompt_en": "when the mouse desperately requested the lion to set him free.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0002_ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a bunny jumps onto the bed",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0196_8fa68b80-2c1c-5082-8f37-2582c3664ba9.mp4"
+        ]
+    },
+    {
+        "prompt_en": "white furry cat, close up, looking at camera, snowing, closing eyes",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0275_b90844f5-fc05-5748-94ed-06128340f2ff.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a bunny jumping on a boat",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0238_f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf.mp4"
+        ]
+    },
+    {
+        "prompt_en": "\u201cThe cat is catching fish by the river.",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0274_ce66b714-ce3b-5858-af6f-ae1f9cbef8b7.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a monkey running in the desert",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "aesthetic_quality",
+            "imaging_quality",
+            "dynamic_degree"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_ab5c35b5e6a95b35/0201_f470e89e-6b1e-5b3a-b040-9afd61697a57.mp4"
+        ]
+    }
+]

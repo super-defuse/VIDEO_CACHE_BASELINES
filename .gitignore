@@ -80,20 +80,6 @@ artifacts/vidprom_1000cache_300input_noun_match/results/*/native/
 artifacts/vidprom_1000cache_300input_noun_match/results/*/vbench/
 artifacts/vidprom_1000cache_300input_noun_match/results/*/videos/
 artifacts/vidprom_1000cache_300input_noun_match/results/carnator_boundary_b5/shards/
-artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/sources/
-artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/targets/
-artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/logs/
-artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/*
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/clip_t.json
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/forced_scan_manifest.json
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/forced_scan_qualified.json
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/forced_scan_report.md
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/forced_scan_selected.json
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/forced_threshold_sweep.csv
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/input_manifest.jsonl
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/pair_results.jsonl
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/quality_summary.json
-!artifacts/vidprom_1000cache_300input_noun_match/forced_early_signature_calibration/quality/scoring_manifest.json
 artifacts/vidprom_1000cache_300input_noun_match/smoke_two_requests_20260830_final_pre_forced_smoke/
 artifacts/vidprom_1000cache_300input_noun_match/smoke_two_requests_20260830_final/*/cache/
 artifacts/vidprom_1000cache_300input_noun_match/smoke_two_requests_20260830_final/*/native/
@@ -124,3 +110,34 @@ external/*/.pytest_cache/
 external/*/build/
 external/*/dist/
 external/vbench/
+
+# The completed noun-match 300-request run is retained locally in full, but
+# GitHub receives its reproducible compact audit (inputs, results, summaries,
+# reports, logs, and threshold optimization) rather than multi-gigabyte media
+# and evaluator/runtime payloads.
+artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/*/cache/
+artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/*/native/
+artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/*/vbench/
+artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/*/videos/
+
+# Keep only the merged recheck audit, not evaluator input-link directories.
+artifacts/vidprom_1000cache_300input_noun_match/carnator_disabled_recheck_20260906/merged/vbench/input_videos_*/
+
+# This is a one-request mask-probe work directory. Its source trajectory,
+# generated videos, and native runtime output are reproducible diagnostics.
+artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_cache_grassland/entries/
+artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/run/*/native/
+artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/run/*/videos/
+artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_view_grassland/entries/
+
+# Acceptance reports, scores, configurations, and representative frames are
+# publishable. Runtime caches, evaluator input links, and generated videos are
+# retained locally and excluded from the Git repository.
+artifacts/acceptance/*/*/cache/
+artifacts/acceptance/*/*/videos/
+artifacts/acceptance/*/*/vbench/input_videos_*/
+artifacts/acceptance/*/shared_cache/source.mp4
+artifacts/acceptance/*/ti2v-5b/*/*/videos/
+
+# Diagnostic VBench input videos merely link to the retained 300-request run.
+artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/*/vbench/input_videos_*/

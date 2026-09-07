@@ -1,0 +1,13 @@
+{
+  "entry_storage": "relative symlinks; source cache files are not copied",
+  "excluded_entries": 0,
+  "excluded_requests_csv": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_view_grassland/excluded_requests.csv",
+  "format": "shared-cross-request-cache-view/v1",
+  "selected_requests": 1,
+  "selection_csv": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_selection.csv",
+  "selection_sha256": "b86aef7a3284a8ba3a860227b72c8cc2ad415e746edf2815de22201cfa5ac466",
+  "source_cache_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_cache_grassland",
+  "source_index": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/carnator_mask_probe_gpu012_20260901/source_cache_grassland/index.jsonl",
+  "source_index_entries": 1,
+  "uuid_order": "selection CSV order"
+}

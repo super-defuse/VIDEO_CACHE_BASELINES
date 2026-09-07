@@ -36,6 +36,15 @@ class OnlineCollectionResult:
     step10_cache_assumed: bool
     probe_latent_path: str | None = None
     dit_forward_s: float = 0.0
+    # Wall-clock probe time is retained for auditability.  ``early_probe_s``
+    # may be normalized for the precision-fallback accounting policy.
+    early_probe_wall_s: float | None = None
+    probe_precision_fallback: bool = False
+
+
+# The experiment's requested accounting convention for requests that need the
+# non-BF16 T5 retry.  Keep the measured wall time separately above.
+NORMALIZED_FALLBACK_EARLY_PROBE_S = 47.51
 
 
 ProbeEvaluator = Callable[[dict[str, Any]], CacheMatch]
@@ -359,6 +368,8 @@ class NativeOnlineCollector:
         match: CacheMatch | None = None
         source_signature: dict[str, Any] | None = None
         early_probe_s = 0.0
+        early_probe_wall_s = 0.0
+        probe_precision_fallback = False
         signature_gate_s = 0.0
         source_started = time.perf_counter()
         completed_steps = 0
@@ -405,10 +416,15 @@ class NativeOnlineCollector:
                         noun_token_indices=index_by_noun,
                         cross_records_by_noun=probe.records_by_noun,
                         self_attention_input=latent,
+                        diagnostics_path=source_dir / "mask_diagnostics.json",
                     )
+                    probe_diagnostics = getattr(native.build_fused_mbase_by_noun, "last_diagnostics", None)
+                    if isinstance(probe_diagnostics, dict):
+                        probe_precision_fallback = bool(probe_diagnostics.get("t5_encode", {}).get("fallback_used", False))
                     decoded_tail_frame = self._decoded_tail_frame(latent)
                     torch.cuda.synchronize()
                     prefix_to_step5_s = time.perf_counter() - probe_started
+                    early_probe_wall_s = prefix_to_step5_s
                     signature = self._write_signature(
                         source_dir,
                         step5_latent=step5_latent,
@@ -422,7 +438,11 @@ class NativeOnlineCollector:
                     probe_latent_path = source_dir / "step5.pt"
                     native.save_latent(probe_latent_path, step5_latent)
                     if evaluate_probe is not None:
-                        early_probe_s = prefix_to_step5_s
+                        early_probe_s = (
+                            NORMALIZED_FALLBACK_EARLY_PROBE_S
+                            if probe_precision_fallback
+                            else prefix_to_step5_s
+                        )
                         gate_started = time.perf_counter()
                         match = evaluate_probe(signature)
                         signature_gate_s = time.perf_counter() - gate_started
@@ -486,12 +506,13 @@ class NativeOnlineCollector:
             return OnlineCollectionResult(
                 match, None, True, False, early_probe_s, signature_gate_s, 0.0, completed_steps, False,
                 str(probe_latent_path) if 'probe_latent_path' in locals() else None,
-                dit_forward_s,
+                dit_forward_s, early_probe_wall_s, probe_precision_fallback,
             )
         if evaluate_probe is not None and match is not None:
             return OnlineCollectionResult(
                 match, None, True, False, early_probe_s, signature_gate_s, 0.0,
                 completed_steps, False, str(probe_latent_path), dit_forward_s,
+                early_probe_wall_s, probe_precision_fallback,
             )
         if source_signature is None:
             raise RuntimeError("online source cache did not reach completed step 10")
@@ -507,6 +528,8 @@ class NativeOnlineCollector:
             completed_steps,
             self.assume_step10_cache,
             dit_forward_s=dit_forward_s,
+            early_probe_wall_s=early_probe_wall_s,
+            probe_precision_fallback=probe_precision_fallback,
         )
 
 

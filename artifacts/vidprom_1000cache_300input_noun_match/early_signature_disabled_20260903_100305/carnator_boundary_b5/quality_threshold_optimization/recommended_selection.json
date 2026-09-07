@@ -1,0 +1,3608 @@
+{
+  "accepted_request_indices": [
+    1,
+    2,
+    5,
+    6,
+    8,
+    10,
+    13,
+    14,
+    15,
+    16,
+    18,
+    19,
+    22,
+    23,
+    24,
+    25,
+    26,
+    28,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    38,
+    40,
+    42,
+    43,
+    45,
+    47,
+    48,
+    51,
+    52,
+    57,
+    59,
+    61,
+    62,
+    64,
+    66,
+    68,
+    70,
+    73,
+    75,
+    76,
+    79,
+    80,
+    81,
+    83,
+    86,
+    87,
+    89,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    104,
+    105,
+    107,
+    108,
+    109,
+    110,
+    111,
+    113,
+    116,
+    117,
+    119,
+    120,
+    122,
+    125,
+    129,
+    130,
+    133,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    145,
+    146,
+    149,
+    150,
+    153,
+    154,
+    156,
+    159,
+    160,
+    163,
+    164,
+    167,
+    168,
+    169,
+    170,
+    171,
+    174,
+    176,
+    177,
+    182,
+    184,
+    187,
+    190,
+    191,
+    194,
+    196,
+    197,
+    198,
+    200,
+    203,
+    205,
+    206,
+    208,
+    213,
+    216,
+    217,
+    220,
+    221,
+    222,
+    223,
+    226,
+    227,
+    228,
+    230,
+    231,
+    232,
+    233,
+    234,
+    236,
+    237,
+    238,
+    239,
+    240,
+    242,
+    243,
+    245,
+    247,
+    248,
+    250,
+    251,
+    252,
+    253,
+    254,
+    255,
+    259,
+    260,
+    261,
+    263,
+    265,
+    266,
+    267,
+    268,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    276,
+    277,
+    278,
+    279,
+    280,
+    281,
+    282,
+    283,
+    284,
+    285,
+    286,
+    287,
+    289,
+    290,
+    291,
+    293,
+    294,
+    297,
+    299
+  ],
+  "accepted_requests": [
+    {
+      "clip_t": 0.2320556640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3039785675300888,
+        "context_color_ciede2000": 1.3145093393034368,
+        "log_area_ratio": 0.66700192510732,
+        "shape_one_minus_dice": 0.6
+      },
+      "prompt": "a man walking his giant beagle",
+      "request_index": 1,
+      "same_noun_set": false,
+      "uuid": "a47cfb29-f5e6-5506-b820-92aaf1ba9e81",
+      "vbench_q": 0.6585473234630168
+    },
+    {
+      "clip_t": 0.25537109375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7289661770547332,
+        "context_color_ciede2000": 0.40588836784109533,
+        "log_area_ratio": 0.5925599738637584,
+        "shape_one_minus_dice": 0.5483870967741935
+      },
+      "prompt": "when the mouse desperately requested the lion to set him free.",
+      "request_index": 2,
+      "same_noun_set": false,
+      "uuid": "ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8",
+      "vbench_q": 0.5836752071615721
+    },
+    {
+      "clip_t": 0.246826171875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.564727480764189,
+        "context_color_ciede2000": 1.5790251876462817,
+        "log_area_ratio": 0.26053110916503436,
+        "shape_one_minus_dice": 0.6910569105691057
+      },
+      "prompt": "black cat riding a dinosaur",
+      "request_index": 5,
+      "same_noun_set": false,
+      "uuid": "40c4d564-8ce1-57d7-8430-42dbe62aa66f",
+      "vbench_q": 0.6369939474791878
+    },
+    {
+      "clip_t": 0.2154541015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.337571485794138,
+        "context_color_ciede2000": 1.6405662983316982,
+        "log_area_ratio": 0.9267620489954262,
+        "shape_one_minus_dice": 0.5244755244755245
+      },
+      "prompt": "a cat astronaut floating in outer space",
+      "request_index": 6,
+      "same_noun_set": false,
+      "uuid": "e1f1b0a3-d088-5ecd-8c81-d902aa846660",
+      "vbench_q": 0.599786848281586
+    },
+    {
+      "clip_t": 0.254150390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8955540758038166,
+        "context_color_ciede2000": 0.16306393195836114,
+        "log_area_ratio": 0.5974021525173162,
+        "shape_one_minus_dice": 0.6744186046511628
+      },
+      "prompt": "a tiny elephant dancing in the jungle",
+      "request_index": 8,
+      "same_noun_set": false,
+      "uuid": "92587c7e-037c-5dff-8ced-a039c0c50800",
+      "vbench_q": 0.6631905664325571
+    },
+    {
+      "clip_t": 0.29248046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4533246624280305,
+        "context_color_ciede2000": 1.1731478738060843,
+        "log_area_ratio": 0.13268639764461268,
+        "shape_one_minus_dice": 0.6825396825396826
+      },
+      "prompt": "a human is trying to talk to an lion",
+      "request_index": 10,
+      "same_noun_set": false,
+      "uuid": "26fd61be-1d92-5e8d-92c6-2f4d83a0ebd5",
+      "vbench_q": 0.6496738847384809
+    },
+    {
+      "clip_t": 0.27880859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6992937780485167,
+        "context_color_ciede2000": 0.7118558752255971,
+        "log_area_ratio": 0.6108169001757471,
+        "shape_one_minus_dice": 0.6097560975609756
+      },
+      "prompt": "big eyes owl blinking family",
+      "request_index": 13,
+      "same_noun_set": false,
+      "uuid": "cf19d5e1-b414-5332-bcc9-0232eb6498f9",
+      "vbench_q": 0.6079631327095507
+    },
+    {
+      "clip_t": 0.25732421875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0699173203709222,
+        "context_color_ciede2000": 0.709264666087116,
+        "log_area_ratio": 1.4136933992979772,
+        "shape_one_minus_dice": 0.5757575757575757
+      },
+      "prompt": "The cat keeps blinking with glasses on",
+      "request_index": 14,
+      "same_noun_set": false,
+      "uuid": "9bf0e5a3-2a8d-50c0-b4a2-214228598858",
+      "vbench_q": 0.6648650279233419
+    },
+    {
+      "clip_t": 0.290771484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6660815590779934,
+        "context_color_ciede2000": 1.1628794169346215,
+        "log_area_ratio": 0.5062697943993841,
+        "shape_one_minus_dice": 0.5909090909090908
+      },
+      "prompt": "an elephant walking and swinging with his friend",
+      "request_index": 15,
+      "same_noun_set": false,
+      "uuid": "652e1d27-ad40-5726-b1e3-a218ce196e72",
+      "vbench_q": 0.619138042434977
+    },
+    {
+      "clip_t": 0.267578125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5812317931021872,
+        "context_color_ciede2000": 0.8861526918330159,
+        "log_area_ratio": 1.054250218249971,
+        "shape_one_minus_dice": 0.34959349593495936
+      },
+      "prompt": "A cute little lion and a wobbly penguin appear",
+      "request_index": 16,
+      "same_noun_set": false,
+      "uuid": "ed46710a-2ea6-5a63-87f9-7e67a9f41743",
+      "vbench_q": 0.6414775182895267
+    },
+    {
+      "clip_t": 0.260498046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.094128750104255,
+        "context_color_ciede2000": 0.5490954044817049,
+        "log_area_ratio": 0.4224626926153684,
+        "shape_one_minus_dice": 0.5658914728682171
+      },
+      "prompt": "dog barking on a cat sitting on roof",
+      "request_index": 18,
+      "same_noun_set": false,
+      "uuid": "d5a1b3c1-ec8c-51c0-a6ec-26a9bd0bc943",
+      "vbench_q": 0.6154694658528774
+    },
+    {
+      "clip_t": 0.270751953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8777761510364025,
+        "context_color_ciede2000": 0.5120230822183742,
+        "log_area_ratio": 0.6870681402986504,
+        "shape_one_minus_dice": 0.5371900826446281
+      },
+      "prompt": "walking cow in India front view",
+      "request_index": 19,
+      "same_noun_set": false,
+      "uuid": "e44983b2-ee62-5f8f-a608-392404e2862a",
+      "vbench_q": 0.5682892119535734
+    },
+    {
+      "clip_t": 0.26416015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5617804649570206,
+        "context_color_ciede2000": 0.8778788187243665,
+        "log_area_ratio": 0.8157494867045463,
+        "shape_one_minus_dice": 0.4645669291338582
+      },
+      "prompt": "A bear fiddling with the computer",
+      "request_index": 22,
+      "same_noun_set": false,
+      "uuid": "9cf71ad3-328d-5de8-82bc-876a498cc2f0",
+      "vbench_q": 0.6190862005971685
+    },
+    {
+      "clip_t": 0.26318359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.46862435039100814,
+        "context_color_ciede2000": 0.7917756961096197,
+        "log_area_ratio": 0.4828518438788781,
+        "shape_one_minus_dice": 0.635036496350365
+      },
+      "prompt": "A MUSLIM WARRIOR ON A HORSE",
+      "request_index": 23,
+      "same_noun_set": false,
+      "uuid": "00152d11-b5b7-532a-b037-a1d581e64f17",
+      "vbench_q": 0.5796589183565899
+    },
+    {
+      "clip_t": 0.3251953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.187365990567394,
+        "context_color_ciede2000": 1.3253588821582942,
+        "log_area_ratio": 0.7727502258207807,
+        "shape_one_minus_dice": 0.5483870967741935
+      },
+      "prompt": "a crow came across the half filled water pot",
+      "request_index": 24,
+      "same_noun_set": false,
+      "uuid": "efce9ed6-f44e-5683-9e35-53221414b698",
+      "vbench_q": 0.6750529229546374
+    },
+    {
+      "clip_t": 0.183837890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8492365706554891,
+        "context_color_ciede2000": 0.9864338030740344,
+        "log_area_ratio": 0.7995940519063945,
+        "shape_one_minus_dice": 0.6062992125984252
+      },
+      "prompt": "a frog jumping into a pond",
+      "request_index": 25,
+      "same_noun_set": false,
+      "uuid": "04111594-1cb5-550c-a4bc-db1967fd2ff1",
+      "vbench_q": 0.6115898856106025
+    },
+    {
+      "clip_t": 0.2744140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5145672193776141,
+        "context_color_ciede2000": 0.870239627577179,
+        "log_area_ratio": 1.7613388261644392,
+        "shape_one_minus_dice": 0.5070422535211268
+      },
+      "prompt": "dog running up a hill with a bone in its mouth",
+      "request_index": 26,
+      "same_noun_set": false,
+      "uuid": "683c6aa6-a0ae-5418-9c4c-841cefb3bc57",
+      "vbench_q": 0.6416673691898758
+    },
+    {
+      "clip_t": 0.279296875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.670507759797355,
+        "context_color_ciede2000": 1.1011778629283153,
+        "log_area_ratio": 0.1298115499929594,
+        "shape_one_minus_dice": 0.53125
+      },
+      "prompt": "a giant bunny rabbit taking over new york city",
+      "request_index": 28,
+      "same_noun_set": false,
+      "uuid": "8056ee09-39a3-5656-9bdd-2a5d283e625c",
+      "vbench_q": 0.6810687979662389
+    },
+    {
+      "clip_t": 0.2467041015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0023033413393811,
+        "context_color_ciede2000": 0.7034997469570927,
+        "log_area_ratio": 1.464459160421315,
+        "shape_one_minus_dice": 0.5038759689922481
+      },
+      "prompt": "Make a video in which only one fox is visible and it was sitting hungry",
+      "request_index": 30,
+      "same_noun_set": false,
+      "uuid": "d87b8f85-d5c2-57cc-aa58-5d5316a7b76b",
+      "vbench_q": 0.5990772794165802
+    },
+    {
+      "clip_t": 0.291015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.48555637422306147,
+        "context_color_ciede2000": 0.27304102185631157,
+        "log_area_ratio": 0.6778797231010694,
+        "shape_one_minus_dice": 0.6557377049180328
+      },
+      "prompt": "cow standing in beautiful field",
+      "request_index": 31,
+      "same_noun_set": false,
+      "uuid": "c8bde137-581f-56d5-9f1e-e081e98e8318",
+      "vbench_q": 0.5782917384104905
+    },
+    {
+      "clip_t": 0.239013671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4137037086344901,
+        "context_color_ciede2000": 1.338413800343944,
+        "log_area_ratio": 0.5467012403266396,
+        "shape_one_minus_dice": 0.5454545454545454
+      },
+      "prompt": "a cute rabbit talking to an elephant",
+      "request_index": 32,
+      "same_noun_set": false,
+      "uuid": "6dc1a1bf-1c66-5d66-a922-d92c5c1011be",
+      "vbench_q": 0.6660561126523608
+    },
+    {
+      "clip_t": 0.26806640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.7154566843473376,
+        "context_color_ciede2000": 0.6571989873252886,
+        "log_area_ratio": 1.4453278368343483,
+        "shape_one_minus_dice": 0.5338345864661654
+      },
+      "prompt": "pig rolling around in mud",
+      "request_index": 33,
+      "same_noun_set": false,
+      "uuid": "0e3ab221-e9a0-5cc4-af7b-93173d3daaa2",
+      "vbench_q": 0.596298688421198
+    },
+    {
+      "clip_t": 0.251220703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5495103031267219,
+        "context_color_ciede2000": 1.0957870192855597,
+        "log_area_ratio": 0.15500574534164727,
+        "shape_one_minus_dice": 0.55
+      },
+      "prompt": "rabbit jumping along the universe",
+      "request_index": 34,
+      "same_noun_set": false,
+      "uuid": "80cf5af1-74cc-54e5-a00b-5e90f32dadfd",
+      "vbench_q": 0.6654493018311016
+    },
+    {
+      "clip_t": 0.3115234375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5830913123870946,
+        "context_color_ciede2000": 2.4958654311559894,
+        "log_area_ratio": 0.06333591413580342,
+        "shape_one_minus_dice": 0.4645669291338582
+      },
+      "prompt": "dog West Highland white terrier speaking",
+      "request_index": 35,
+      "same_noun_set": false,
+      "uuid": "45e1332e-082d-5fd8-9699-9ba1bd601b65",
+      "vbench_q": 0.681979366175045
+    },
+    {
+      "clip_t": 0.2418212890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4704666882690771,
+        "context_color_ciede2000": 1.4536402755299158,
+        "log_area_ratio": 0.9679920737502797,
+        "shape_one_minus_dice": 0.5428571428571429
+      },
+      "prompt": "a white tiger sitting under a black rock",
+      "request_index": 36,
+      "same_noun_set": false,
+      "uuid": "e386c298-cea4-5ae4-bab7-b19149f11dc5",
+      "vbench_q": 0.6590211090618137
+    },
+    {
+      "clip_t": 0.30712890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.257057574698047,
+        "context_color_ciede2000": 0.9440947216262973,
+        "log_area_ratio": 0.7032995421123824,
+        "shape_one_minus_dice": 0.4782608695652174
+      },
+      "prompt": "Bengal tiger defeating a jaguar",
+      "request_index": 38,
+      "same_noun_set": false,
+      "uuid": "b9855971-11bd-581e-980c-c90f4052f2a0",
+      "vbench_q": 0.6425196660213408
+    },
+    {
+      "clip_t": 0.302001953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5558864672031238,
+        "context_color_ciede2000": 0.2687769877304681,
+        "log_area_ratio": 0.06090875654233419,
+        "shape_one_minus_dice": 0.12698412698412698
+      },
+      "prompt": "A wolf running and jumping in the snow",
+      "request_index": 40,
+      "same_noun_set": false,
+      "uuid": "4a587643-f49f-5abe-bed7-77f3cd2c385d",
+      "vbench_q": 0.6657804453256012
+    },
+    {
+      "clip_t": 0.2890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.645555946068526,
+        "context_color_ciede2000": 0.6816775177934264,
+        "log_area_ratio": 0.12921179846862468,
+        "shape_one_minus_dice": 0.5630252100840336
+      },
+      "prompt": "a lion roaring in cave",
+      "request_index": 42,
+      "same_noun_set": false,
+      "uuid": "2570578d-0fc9-5a6f-80c0-6b0082b5d702",
+      "vbench_q": 0.6743220099743115
+    },
+    {
+      "clip_t": 0.37890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7197349623912975,
+        "context_color_ciede2000": 1.058812088499427,
+        "log_area_ratio": 1.9977016598672181,
+        "shape_one_minus_dice": 0.3700787401574803
+      },
+      "prompt": "a cat in the moon eats a motorcycle",
+      "request_index": 43,
+      "same_noun_set": false,
+      "uuid": "aecc7eb6-127d-537a-93ff-720afc5bd7b9",
+      "vbench_q": 0.644400120132604
+    },
+    {
+      "clip_t": 0.2880859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9429161579602285,
+        "context_color_ciede2000": 0.5555473131014512,
+        "log_area_ratio": 0.16370403291105687,
+        "shape_one_minus_dice": 0.296875
+      },
+      "prompt": "a cake with a mouse",
+      "request_index": 45,
+      "same_noun_set": false,
+      "uuid": "3dd64596-85f6-5215-9094-23e125900897",
+      "vbench_q": 0.6348262860638536
+    },
+    {
+      "clip_t": 0.26513671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6613807907351463,
+        "context_color_ciede2000": 0.5791029773808037,
+        "log_area_ratio": 1.0897074721435123,
+        "shape_one_minus_dice": 0.625
+      },
+      "prompt": "Charro riding a horse runs down the mountain",
+      "request_index": 47,
+      "same_noun_set": false,
+      "uuid": "d1969f67-a4ba-544f-8fc7-14c65ab3a61d",
+      "vbench_q": 0.5738730701409048
+    },
+    {
+      "clip_t": 0.244140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6457647564683178,
+        "context_color_ciede2000": 1.0400330366007584,
+        "log_area_ratio": 1.2587331744753374,
+        "shape_one_minus_dice": 0.696969696969697
+      },
+      "prompt": "cute golden retriever puppy running -neg warping, morphing",
+      "request_index": 48,
+      "same_noun_set": false,
+      "uuid": "c48bd6fb-24fd-5677-9dc0-9859126e88da",
+      "vbench_q": 0.623532318620208
+    },
+    {
+      "clip_t": 0.255859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.065963734005841,
+        "context_color_ciede2000": 1.8504477586927084,
+        "log_area_ratio": 0.33193706874119144,
+        "shape_one_minus_dice": 0.6428571428571428
+      },
+      "prompt": "blue elephant with red hearts, cinematic",
+      "request_index": 51,
+      "same_noun_set": false,
+      "uuid": "0c3077c9-6200-53e5-b085-32cd38976e6b",
+      "vbench_q": 0.6061362783594939
+    },
+    {
+      "clip_t": 0.266357421875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.37550722764855216,
+        "context_color_ciede2000": 0.5091256712605089,
+        "log_area_ratio": 0.9951274823470451,
+        "shape_one_minus_dice": 0.6417910447761195
+      },
+      "prompt": "monkey eats ice cream and drinks beer",
+      "request_index": 52,
+      "same_noun_set": false,
+      "uuid": "ffeeb618-e8d2-5ba8-97d9-936e42769fa5",
+      "vbench_q": 0.6798079569289319
+    },
+    {
+      "clip_t": 0.2164306640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.4960351376989437,
+        "context_color_ciede2000": 0.4019309870374336,
+        "log_area_ratio": 1.5710037906589311,
+        "shape_one_minus_dice": 0.28682170542635654
+      },
+      "prompt": "4 cats on a boat",
+      "request_index": 57,
+      "same_noun_set": false,
+      "uuid": "ff3ccf3c-c6c7-5a4c-83f1-d63658c45003",
+      "vbench_q": 0.6816291158661918
+    },
+    {
+      "clip_t": 0.289794921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.7946384576088337,
+        "context_color_ciede2000": 0.3374275337849396,
+        "log_area_ratio": 1.4771480345896153,
+        "shape_one_minus_dice": 0.65625
+      },
+      "prompt": "Black Spitz walks down the street and barks",
+      "request_index": 59,
+      "same_noun_set": false,
+      "uuid": "f545a97f-a326-5dab-a714-64e297bb527e",
+      "vbench_q": 0.5734933620917743
+    },
+    {
+      "clip_t": 0.2401123046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5487128869689865,
+        "context_color_ciede2000": 1.0672939795771363,
+        "log_area_ratio": 0.18447444581028863,
+        "shape_one_minus_dice": 0.49606299212598426
+      },
+      "prompt": "alien winning a fight with a dragon",
+      "request_index": 61,
+      "same_noun_set": false,
+      "uuid": "83f54c5b-80d2-5d58-ab6c-a5b2535b3258",
+      "vbench_q": 0.6438905330587212
+    },
+    {
+      "clip_t": 0.298828125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4511225724858374,
+        "context_color_ciede2000": 0.47805842393797804,
+        "log_area_ratio": 0.4997298023215723,
+        "shape_one_minus_dice": 0.4769230769230769
+      },
+      "prompt": "A rabbit is eating grass",
+      "request_index": 62,
+      "same_noun_set": false,
+      "uuid": "e3fbf376-912a-5831-a500-7c48a258f101",
+      "vbench_q": 0.650566891665294
+    },
+    {
+      "clip_t": 0.285400390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.38655925257728696,
+        "context_color_ciede2000": 0.6824529974748763,
+        "log_area_ratio": 0.42193990108242424,
+        "shape_one_minus_dice": 0.5238095238095238
+      },
+      "prompt": "Several pandas are sitting on stones",
+      "request_index": 64,
+      "same_noun_set": false,
+      "uuid": "62c90e20-b297-5d25-87f6-38ea89b9ac61",
+      "vbench_q": 0.6085185011097674
+    },
+    {
+      "clip_t": 0.25390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0648466485293415,
+        "context_color_ciede2000": 1.185445067527096,
+        "log_area_ratio": 0.543615442316247,
+        "shape_one_minus_dice": 0.5789473684210527
+      },
+      "prompt": "baby play with baby shark pink",
+      "request_index": 66,
+      "same_noun_set": false,
+      "uuid": "024ba9df-2e5d-58f6-aefb-5f4dd2da81f4",
+      "vbench_q": 0.6623333801588112
+    },
+    {
+      "clip_t": 0.25830078125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5468133632636049,
+        "context_color_ciede2000": 0.6850339649723133,
+        "log_area_ratio": 0.3863126582232534,
+        "shape_one_minus_dice": 0.20610687022900764
+      },
+      "prompt": "cute cats in the bed",
+      "request_index": 68,
+      "same_noun_set": false,
+      "uuid": "de479c45-ddb5-5bcb-aaa3-40dbaf332b36",
+      "vbench_q": 0.6670525860170438
+    },
+    {
+      "clip_t": 0.2978515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4055869635125995,
+        "context_color_ciede2000": 1.6331361562614315,
+        "log_area_ratio": 1.6341305010372371,
+        "shape_one_minus_dice": 0.39655172413793105
+      },
+      "prompt": "A cute rabbit running on the lawn",
+      "request_index": 70,
+      "same_noun_set": false,
+      "uuid": "3074f94b-e428-536a-a113-b4875b57d62b",
+      "vbench_q": 0.6020125179270395
+    },
+    {
+      "clip_t": 0.260009765625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.4428536375955092,
+        "context_color_ciede2000": 1.3127782647232862,
+        "log_area_ratio": 0.09867152424751649,
+        "shape_one_minus_dice": 0.484375
+      },
+      "prompt": "4. Sally the squirrel gracefully leaping from tree to tree.",
+      "request_index": 73,
+      "same_noun_set": false,
+      "uuid": "6c94d1da-f823-5b65-af67-e658553f7c4a",
+      "vbench_q": 0.6568905676302981
+    },
+    {
+      "clip_t": 0.2293701171875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.42397034801489,
+        "context_color_ciede2000": 0.6783448741806413,
+        "log_area_ratio": 0.141860873533041,
+        "shape_one_minus_dice": 0.7121212121212122
+      },
+      "prompt": "gray kitten morphing into vampire bat, fly away, 5 seconds",
+      "request_index": 75,
+      "same_noun_set": false,
+      "uuid": "3325e221-aa5e-5df0-918d-e6c14749a14f",
+      "vbench_q": 0.5691849238363973
+    },
+    {
+      "clip_t": 0.27880859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5738789768588948,
+        "context_color_ciede2000": 2.0571057160158497,
+        "log_area_ratio": 1.2580400007650927,
+        "shape_one_minus_dice": 0.7058823529411764
+      },
+      "prompt": "dog chasing a cat on the road",
+      "request_index": 76,
+      "same_noun_set": false,
+      "uuid": "a8d7c016-8df4-5b46-8481-78343d96d615",
+      "vbench_q": 0.6799297242591191
+    },
+    {
+      "clip_t": 0.258544921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.88510464597196,
+        "context_color_ciede2000": 0.7952532392078009,
+        "log_area_ratio": 1.742969305058623,
+        "shape_one_minus_dice": 0.7007874015748031
+      },
+      "prompt": "3d lion walking on jungle",
+      "request_index": 79,
+      "same_noun_set": false,
+      "uuid": "b7ac9f06-338b-5024-ae65-b0f5c6aad6c8",
+      "vbench_q": 0.618070399579642
+    },
+    {
+      "clip_t": 0.2376708984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6597860493981903,
+        "context_color_ciede2000": 0.6110126812673946,
+        "log_area_ratio": 1.1870676489392957,
+        "shape_one_minus_dice": 0.6271186440677966
+      },
+      "prompt": "brave dog trying to protect his owner 3d please",
+      "request_index": 80,
+      "same_noun_set": false,
+      "uuid": "fc217f46-bb36-5c22-bbdb-30e84dab8469",
+      "vbench_q": 0.5984083983286085
+    },
+    {
+      "clip_t": 0.196044921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4709386443367292,
+        "context_color_ciede2000": 0.4371526902538624,
+        "log_area_ratio": 0.10245172776259938,
+        "shape_one_minus_dice": 0.5303030303030303
+      },
+      "prompt": "A border collie talking to an orange kitten",
+      "request_index": 81,
+      "same_noun_set": false,
+      "uuid": "998498e0-f548-5d75-b61f-5ac03019d270",
+      "vbench_q": 0.6759796776709418
+    },
+    {
+      "clip_t": 0.247802734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3039725588046613,
+        "context_color_ciede2000": 0.7746180305949221,
+        "log_area_ratio": 0.10028436769428965,
+        "shape_one_minus_dice": 0.5114503816793894
+      },
+      "prompt": "real cat chasing the mouse inside the house looking very natural",
+      "request_index": 83,
+      "same_noun_set": false,
+      "uuid": "a539d48d-30c2-5da8-871f-98af3fb2c3b8",
+      "vbench_q": 0.6862854115441831
+    },
+    {
+      "clip_t": 0.29052734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5415676966987502,
+        "context_color_ciede2000": 1.008731438718397,
+        "log_area_ratio": 0.6390800104125622,
+        "shape_one_minus_dice": 0.6592592592592592
+      },
+      "prompt": "Cows and sheep are visible in windblown grass",
+      "request_index": 86,
+      "same_noun_set": false,
+      "uuid": "612f951a-3980-55e6-b6cf-6e9618833aba",
+      "vbench_q": 0.6067732084531883
+    },
+    {
+      "clip_t": 0.298828125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7934612669584256,
+        "context_color_ciede2000": 0.7816804695223688,
+        "log_area_ratio": 0.10447908240858145,
+        "shape_one_minus_dice": 0.4358974358974359
+      },
+      "prompt": "panda walking fast in the golden bridge",
+      "request_index": 87,
+      "same_noun_set": false,
+      "uuid": "799a9160-f7b8-597a-afb0-c5b8eb30ae95",
+      "vbench_q": 0.555693859903821
+    },
+    {
+      "clip_t": 0.26318359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3212987829483094,
+        "context_color_ciede2000": 0.8502961446889472,
+        "log_area_ratio": 0.04948010182536217,
+        "shape_one_minus_dice": 0.42400000000000004
+      },
+      "prompt": "A horse dancing with a hat",
+      "request_index": 89,
+      "same_noun_set": false,
+      "uuid": "e7212341-4052-5e86-9280-398d24226001",
+      "vbench_q": 0.6726176088744177
+    },
+    {
+      "clip_t": 0.19970703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9747456499928971,
+        "context_color_ciede2000": 1.7350042362850342,
+        "log_area_ratio": 0.5457942616302781,
+        "shape_one_minus_dice": 0.6888888888888889
+      },
+      "prompt": "baby galago sitting in a human metacarpus",
+      "request_index": 92,
+      "same_noun_set": false,
+      "uuid": "7c51bd7f-50bf-5c74-8305-56ace67d7ce6",
+      "vbench_q": 0.6789328112701204
+    },
+    {
+      "clip_t": 0.373046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.0,
+        "context_color_ciede2000": 1.3389983931697587,
+        "log_area_ratio": 0.0,
+        "shape_one_minus_dice": 0.0
+      },
+      "prompt": "cinematic, a dog a cat in a boxing ring",
+      "request_index": 93,
+      "same_noun_set": true,
+      "uuid": "f10a6416-994b-53d7-b7a3-86b4d608a07e",
+      "vbench_q": 0.6663575394538086
+    },
+    {
+      "clip_t": 0.2376708984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.6682943651599798,
+        "context_color_ciede2000": 0.5443608888206617,
+        "log_area_ratio": 1.1318104085514922,
+        "shape_one_minus_dice": 0.5384615384615384
+      },
+      "prompt": "A corgi running on the grass",
+      "request_index": 94,
+      "same_noun_set": false,
+      "uuid": "f746c795-8b27-59d5-972a-7556c7514389",
+      "vbench_q": 0.6510907329694291
+    },
+    {
+      "clip_t": 0.242431640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0918169440584327,
+        "context_color_ciede2000": 2.530931438993825,
+        "log_area_ratio": 0.22194522995190094,
+        "shape_one_minus_dice": 0.6774193548387097
+      },
+      "prompt": "rabbit jumping out of the bush",
+      "request_index": 95,
+      "same_noun_set": false,
+      "uuid": "87530fc1-83e4-521d-83c4-97e5b6a785b7",
+      "vbench_q": 0.6669732892496973
+    },
+    {
+      "clip_t": 0.279052734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.9529186586558027,
+        "context_color_ciede2000": 1.721298741599507,
+        "log_area_ratio": 0.3529643681531072,
+        "shape_one_minus_dice": 0.5338345864661654
+      },
+      "prompt": "a dog waiting a cat on beach",
+      "request_index": 96,
+      "same_noun_set": false,
+      "uuid": "d106edcd-3736-5fc0-b4e4-152e1e29c25b",
+      "vbench_q": 0.681546242609923
+    },
+    {
+      "clip_t": 0.214599609375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.7342579408810266,
+        "context_color_ciede2000": 0.6144366553403192,
+        "log_area_ratio": 0.8261702877830881,
+        "shape_one_minus_dice": 0.6428571428571428
+      },
+      "prompt": "big red fox with gun",
+      "request_index": 97,
+      "same_noun_set": false,
+      "uuid": "5ad79ffc-1280-5873-963e-7744c6d71d35",
+      "vbench_q": 0.5994284244609881
+    },
+    {
+      "clip_t": 0.2271728515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.22968846185158953,
+        "context_color_ciede2000": 1.3115121575986866,
+        "log_area_ratio": 0.7271373481547667,
+        "shape_one_minus_dice": 0.6935483870967742
+      },
+      "prompt": "a horse running toward horizon",
+      "request_index": 98,
+      "same_noun_set": false,
+      "uuid": "bf897a0e-e4a5-55eb-9ef6-270cbfa3786f",
+      "vbench_q": 0.5764852049436349
+    },
+    {
+      "clip_t": 0.312255859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.2666372073867404,
+        "context_color_ciede2000": 0.6717103490561569,
+        "log_area_ratio": 0.6306268005058453,
+        "shape_one_minus_dice": 0.375
+      },
+      "prompt": "cute tiny fox slowly blink eyes ratio 16:9",
+      "request_index": 99,
+      "same_noun_set": false,
+      "uuid": "218ae330-861d-5866-864d-1fe6c1f4f5b2",
+      "vbench_q": 0.5989541380088457
+    },
+    {
+      "clip_t": 0.28125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9212065674032466,
+        "context_color_ciede2000": 0.741253045790083,
+        "log_area_ratio": 1.4211411504159084,
+        "shape_one_minus_dice": 0.6692913385826771
+      },
+      "prompt": "a panda is walking on a cliff",
+      "request_index": 100,
+      "same_noun_set": false,
+      "uuid": "c21aad14-73e4-5cd3-a584-759bf9e06c61",
+      "vbench_q": 0.6819480677652534
+    },
+    {
+      "clip_t": 0.209716796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7620636144024773,
+        "context_color_ciede2000": 0.972042800199841,
+        "log_area_ratio": 1.1495787668619484,
+        "shape_one_minus_dice": 0.6615384615384615
+      },
+      "prompt": "Lord ganesh dancing with mouse",
+      "request_index": 104,
+      "same_noun_set": false,
+      "uuid": "ea4f4bce-ad50-5fa4-b178-26497adadfed",
+      "vbench_q": 0.6782204524054882
+    },
+    {
+      "clip_t": 0.295166015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.0,
+        "context_color_ciede2000": 0.9939069531729321,
+        "log_area_ratio": 0.0,
+        "shape_one_minus_dice": 0.0
+      },
+      "prompt": "A dog running from a cat",
+      "request_index": 105,
+      "same_noun_set": true,
+      "uuid": "ef890bd6-89f6-514e-a58e-d474012a5241",
+      "vbench_q": 0.6766437873971527
+    },
+    {
+      "clip_t": 0.227783203125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9964590122487914,
+        "context_color_ciede2000": 2.0567731189297858,
+        "log_area_ratio": 1.04634390898524,
+        "shape_one_minus_dice": 0.5338345864661654
+      },
+      "prompt": "cinematic, 9:16, handsome muscular blue god krishna fighting a fierce muscular bear, the bear is breathing and holding a tree.",
+      "request_index": 107,
+      "same_noun_set": false,
+      "uuid": "0eae76a5-5464-5912-ac1f-c9de4d3cc496",
+      "vbench_q": 0.6633915944986167
+    },
+    {
+      "clip_t": 0.296630859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.0,
+        "context_color_ciede2000": 2.1257668873502036,
+        "log_area_ratio": 0.0,
+        "shape_one_minus_dice": 0.0
+      },
+      "prompt": "an orange cat chasing a little wool ball",
+      "request_index": 108,
+      "same_noun_set": true,
+      "uuid": "d8d537a8-1381-5403-baf5-ce467a8b5177",
+      "vbench_q": 0.6423245762756381
+    },
+    {
+      "clip_t": 0.336669921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0142755781327244,
+        "context_color_ciede2000": 0.4440092764640628,
+        "log_area_ratio": 0.9741745125919639,
+        "shape_one_minus_dice": 0.4426229508196722
+      },
+      "prompt": "Kitten running and hopping through grass meadow",
+      "request_index": 109,
+      "same_noun_set": false,
+      "uuid": "64afc981-f76c-5d8f-a931-cbfe7bb07611",
+      "vbench_q": 0.6599066996400567
+    },
+    {
+      "clip_t": 0.27294921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6546230444412964,
+        "context_color_ciede2000": 1.7896834400653323,
+        "log_area_ratio": 1.3455340405171612,
+        "shape_one_minus_dice": 0.4
+      },
+      "prompt": "the lion Fighting with the snake",
+      "request_index": 110,
+      "same_noun_set": false,
+      "uuid": "c291994b-59d6-500a-981f-1c15113bab7a",
+      "vbench_q": 0.6456711370111481
+    },
+    {
+      "clip_t": 0.2218017578125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6278946567805386,
+        "context_color_ciede2000": 2.3311594067131254,
+        "log_area_ratio": 0.8436515635656987,
+        "shape_one_minus_dice": 0.5658914728682171
+      },
+      "prompt": "a picture of a dog eating a cupcake",
+      "request_index": 111,
+      "same_noun_set": false,
+      "uuid": "04ffe6a5-3453-55db-9a40-cc8225082dac",
+      "vbench_q": 0.57993051080687
+    },
+    {
+      "clip_t": 0.279541015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9399207361701869,
+        "context_color_ciede2000": 2.300170784687692,
+        "log_area_ratio": 1.4519483595346379,
+        "shape_one_minus_dice": 0.5294117647058824
+      },
+      "prompt": "a baby hedgehog playing on the moon",
+      "request_index": 113,
+      "same_noun_set": false,
+      "uuid": "fb03347d-ee69-5439-8a43-6e976a2abcd4",
+      "vbench_q": 0.6061304897689734
+    },
+    {
+      "clip_t": 0.286376953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5022634351325337,
+        "context_color_ciede2000": 0.7781582743947257,
+        "log_area_ratio": 0.48432370740124014,
+        "shape_one_minus_dice": 0.16030534351145043
+      },
+      "prompt": "A wolf transforming into a lion",
+      "request_index": 116,
+      "same_noun_set": false,
+      "uuid": "2bb84703-2480-5935-acc5-3077c85b4352",
+      "vbench_q": 0.6779737330624551
+    },
+    {
+      "clip_t": 0.28125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2474011226245156,
+        "context_color_ciede2000": 1.5698312964133416,
+        "log_area_ratio": 0.17152729503299943,
+        "shape_one_minus_dice": 0.359375
+      },
+      "prompt": "video of a single tiger looking up at the sky",
+      "request_index": 117,
+      "same_noun_set": false,
+      "uuid": "406ac96a-ba2a-5449-a197-5cd48c82288b",
+      "vbench_q": 0.6044655701773748
+    },
+    {
+      "clip_t": 0.2464599609375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.34636649295391003,
+        "context_color_ciede2000": 1.0350159996054948,
+        "log_area_ratio": 0.8203420566059455,
+        "shape_one_minus_dice": 0.5630252100840336
+      },
+      "prompt": "a white horse from chess spinning itself",
+      "request_index": 119,
+      "same_noun_set": false,
+      "uuid": "c42df466-443f-55be-b4af-01e5990f08ab",
+      "vbench_q": 0.5858084692981884
+    },
+    {
+      "clip_t": 0.29150390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6321990415732112,
+        "context_color_ciede2000": 1.2183530656632948,
+        "log_area_ratio": 1.6755377126043391,
+        "shape_one_minus_dice": 0.46031746031746035
+      },
+      "prompt": "a muscular chimpanzee showing its biceps",
+      "request_index": 120,
+      "same_noun_set": false,
+      "uuid": "fb31a22e-f687-509a-8ebe-ed01c54fca91",
+      "vbench_q": 0.6629123265723209
+    },
+    {
+      "clip_t": 0.31494140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.1670245966137047,
+        "context_color_ciede2000": 0.9843898630146394,
+        "log_area_ratio": 0.3133245077357661,
+        "shape_one_minus_dice": 0.7076923076923076
+      },
+      "prompt": "cat eating lots of cake",
+      "request_index": 122,
+      "same_noun_set": false,
+      "uuid": "3fb62a80-f098-5a30-abdd-a1089d93f6f3",
+      "vbench_q": 0.6924153223984061
+    },
+    {
+      "clip_t": 0.256591796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3503793311581642,
+        "context_color_ciede2000": 0.31249182810533016,
+        "log_area_ratio": 0.3176037531505144,
+        "shape_one_minus_dice": 0.5909090909090908
+      },
+      "prompt": "A tiger coming out of a television.",
+      "request_index": 125,
+      "same_noun_set": false,
+      "uuid": "6adf0b1a-cbd8-588f-a6f7-268d04ce166a",
+      "vbench_q": 0.6350748491800139
+    },
+    {
+      "clip_t": 0.26025390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.7972353486317934,
+        "context_color_ciede2000": 1.618505814311714,
+        "log_area_ratio": 1.1380148602069056,
+        "shape_one_minus_dice": 0.635036496350365
+      },
+      "prompt": "a teddy bear in the ocean transforms into a panda",
+      "request_index": 129,
+      "same_noun_set": false,
+      "uuid": "51e95d23-3f45-5d64-8332-2c4caaea11fa",
+      "vbench_q": 0.6818967169201172
+    },
+    {
+      "clip_t": 0.2861328125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5881736079698026,
+        "context_color_ciede2000": 0.5558207469475855,
+        "log_area_ratio": 0.1761865136274053,
+        "shape_one_minus_dice": 0.14960629921259838
+      },
+      "prompt": "Adorable fox licking a kitten",
+      "request_index": 130,
+      "same_noun_set": false,
+      "uuid": "bbb395af-3b9f-50db-922a-5d2728cc3f59",
+      "vbench_q": 0.6693427378846836
+    },
+    {
+      "clip_t": 0.293212890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8824653101801722,
+        "context_color_ciede2000": 1.4067859395835334,
+        "log_area_ratio": 0.4541602746959149,
+        "shape_one_minus_dice": 0.6747967479674797
+      },
+      "prompt": "kitten caught a fish in his mouth",
+      "request_index": 133,
+      "same_noun_set": false,
+      "uuid": "0fa2ab16-861e-591c-b771-c15e56cf3ad4",
+      "vbench_q": 0.6259695032051869
+    },
+    {
+      "clip_t": 0.2890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.175039108207219,
+        "context_color_ciede2000": 1.8706354189263437,
+        "log_area_ratio": 0.3529643681531072,
+        "shape_one_minus_dice": 0.6496350364963503
+      },
+      "prompt": "a cat with a dog head",
+      "request_index": 135,
+      "same_noun_set": false,
+      "uuid": "fb8ef000-a8e6-54ef-8563-04bd8dd05519",
+      "vbench_q": 0.6821218674885368
+    },
+    {
+      "clip_t": 0.330078125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8509415614437326,
+        "context_color_ciede2000": 1.603812508477009,
+        "log_area_ratio": 0.027398948592125338,
+        "shape_one_minus_dice": 0.6060606060606061
+      },
+      "prompt": "a lion eating a banana",
+      "request_index": 136,
+      "same_noun_set": false,
+      "uuid": "917af515-d7e7-5828-9692-36cd0aef3aee",
+      "vbench_q": 0.6076556012752686
+    },
+    {
+      "clip_t": 0.306396484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3129892102543177,
+        "context_color_ciede2000": 0.4907554861380916,
+        "log_area_ratio": 1.4745633350464253,
+        "shape_one_minus_dice": 0.5079365079365079
+      },
+      "prompt": "squirrel eating acorn in the branch of a tree",
+      "request_index": 137,
+      "same_noun_set": false,
+      "uuid": "0578978f-36fa-500a-a95f-edd7e45f5840",
+      "vbench_q": 0.6673059619728884
+    },
+    {
+      "clip_t": 0.289306640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.590267827217945,
+        "context_color_ciede2000": 0.263313883649964,
+        "log_area_ratio": 0.4598474881613744,
+        "shape_one_minus_dice": 0.6231884057971014
+      },
+      "prompt": "The rabbit that sits and drinks beer.",
+      "request_index": 138,
+      "same_noun_set": false,
+      "uuid": "c520a7ff-7de9-58ec-886c-3c717cc59a0d",
+      "vbench_q": 0.6666573805141829
+    },
+    {
+      "clip_t": 0.29248046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.556832651352358,
+        "context_color_ciede2000": 1.7286056213213,
+        "log_area_ratio": 0.5279096104204583,
+        "shape_one_minus_dice": 0.4883720930232558
+      },
+      "prompt": "a cat sleeping on top of a impossible peak",
+      "request_index": 139,
+      "same_noun_set": false,
+      "uuid": "1c3ae647-eba1-5bb3-9c40-7a3bb1603a2e",
+      "vbench_q": 0.5964028805533832
+    },
+    {
+      "clip_t": 0.23876953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2632458744158312,
+        "context_color_ciede2000": 0.8780764767639155,
+        "log_area_ratio": 0.23732817311399104,
+        "shape_one_minus_dice": 0.7073170731707317
+      },
+      "prompt": "car transforming into a horse",
+      "request_index": 140,
+      "same_noun_set": false,
+      "uuid": "454cf45c-27f7-5e8d-8909-69558a9f5c3b",
+      "vbench_q": 0.6243283512258123
+    },
+    {
+      "clip_t": 0.313720703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8398054769729845,
+        "context_color_ciede2000": 1.1142697616360955,
+        "log_area_ratio": 1.4132986768101032,
+        "shape_one_minus_dice": 0.7
+      },
+      "prompt": "Fox was amazed by this magical transformation of the butterfly",
+      "request_index": 141,
+      "same_noun_set": false,
+      "uuid": "61dbfdac-1467-51c0-be16-176729dee3bc",
+      "vbench_q": 0.5798622560667737
+    },
+    {
+      "clip_t": 0.288818359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6683521981759633,
+        "context_color_ciede2000": 0.9573076309002316,
+        "log_area_ratio": 0.37833646704167057,
+        "shape_one_minus_dice": 0.6166666666666667
+      },
+      "prompt": "fantasy powerful gold dragon breathing fire on a medieval kingdom",
+      "request_index": 142,
+      "same_noun_set": false,
+      "uuid": "803cfeb6-757f-5aed-875d-1a7f6e6880f5",
+      "vbench_q": 0.6891807726812862
+    },
+    {
+      "clip_t": 0.28466796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7212389766179552,
+        "context_color_ciede2000": 1.7156124682633143,
+        "log_area_ratio": 2.7902882829068236,
+        "shape_one_minus_dice": 0.5121951219512195
+      },
+      "prompt": "A cheetah running through the desert.",
+      "request_index": 145,
+      "same_noun_set": false,
+      "uuid": "0a77642b-d4bc-56f7-a40f-212826de5702",
+      "vbench_q": 0.6346967333943396
+    },
+    {
+      "clip_t": 0.277099609375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.4949885641313071,
+        "context_color_ciede2000": 0.7724182270480161,
+        "log_area_ratio": 0.3113136910265098,
+        "shape_one_minus_dice": 0.6923076923076923
+      },
+      "prompt": "old black man eating a turtle",
+      "request_index": 146,
+      "same_noun_set": false,
+      "uuid": "25e92aa1-cad6-551b-886e-16b886413eb6",
+      "vbench_q": 0.6299966804579095
+    },
+    {
+      "clip_t": 0.283447265625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2988883862919034,
+        "context_color_ciede2000": 1.135396634169555,
+        "log_area_ratio": 0.8928897701526146,
+        "shape_one_minus_dice": 0.704225352112676
+      },
+      "prompt": "small boy amazed at the tiger",
+      "request_index": 149,
+      "same_noun_set": false,
+      "uuid": "05131730-68d4-5491-b007-e979ee8fc476",
+      "vbench_q": 0.6530952836161922
+    },
+    {
+      "clip_t": 0.236083984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.574943818614347,
+        "context_color_ciede2000": 0.7483983550456402,
+        "log_area_ratio": 0.23982603505408062,
+        "shape_one_minus_dice": 0.71875
+      },
+      "prompt": "Godzilla getting scared by a mouse",
+      "request_index": 150,
+      "same_noun_set": false,
+      "uuid": "11cf4c78-e9dc-5c4e-bcd2-87f355337854",
+      "vbench_q": 0.6584940162925503
+    },
+    {
+      "clip_t": 0.297607421875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.4418903445292259,
+        "context_color_ciede2000": 0.8988069477488009,
+        "log_area_ratio": 0.16813693499417337,
+        "shape_one_minus_dice": 0.532258064516129
+      },
+      "prompt": "white goat walking across a bridge towards the camera",
+      "request_index": 153,
+      "same_noun_set": false,
+      "uuid": "4827be7c-db81-5f3c-b703-51367c351fc0",
+      "vbench_q": 0.6293854543298179
+    },
+    {
+      "clip_t": 0.24853515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.15777227697312052,
+        "context_color_ciede2000": 1.2265129319263854,
+        "log_area_ratio": 0.4438259636398079,
+        "shape_one_minus_dice": 0.42657342657342656
+      },
+      "prompt": "A caterpillar crawls towards a Chinese dragon",
+      "request_index": 154,
+      "same_noun_set": false,
+      "uuid": "4f941e2b-5761-54e9-b3ff-b6464fd2420a",
+      "vbench_q": 0.6383584471185245
+    },
+    {
+      "clip_t": 0.251220703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8833898751460881,
+        "context_color_ciede2000": 0.6517831461884485,
+        "log_area_ratio": 0.20626178007567228,
+        "shape_one_minus_dice": 0.4961832061068703
+      },
+      "prompt": "red purple green dragon eating a woman",
+      "request_index": 156,
+      "same_noun_set": false,
+      "uuid": "dbb30703-8bdf-5549-a7b5-c4e5c95412f2",
+      "vbench_q": 0.6383329001120954
+    },
+    {
+      "clip_t": 0.239990234375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5299337261732946,
+        "context_color_ciede2000": 1.8856278448853123,
+        "log_area_ratio": 0.3688756957908932,
+        "shape_one_minus_dice": 0.6818181818181819
+      },
+      "prompt": "the rabbit eat the strawberry animate",
+      "request_index": 159,
+      "same_noun_set": false,
+      "uuid": "a33e0be9-15c7-5ffe-9606-cc6c90953a0c",
+      "vbench_q": 0.6643795478025314
+    },
+    {
+      "clip_t": 0.26318359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5957392783773222,
+        "context_color_ciede2000": 1.1077941129245887,
+        "log_area_ratio": 1.1146984349656945,
+        "shape_one_minus_dice": 0.5967741935483871
+      },
+      "prompt": "A cat moving the head",
+      "request_index": 160,
+      "same_noun_set": false,
+      "uuid": "b9450c96-a21b-57a8-bf17-e45db3ba3262",
+      "vbench_q": 0.6908002458875382
+    },
+    {
+      "clip_t": 0.27197265625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3459174122854538,
+        "context_color_ciede2000": 1.38747932308766,
+        "log_area_ratio": 1.594874562152257,
+        "shape_one_minus_dice": 0.6
+      },
+      "prompt": "a monkey coming out of the screen",
+      "request_index": 163,
+      "same_noun_set": false,
+      "uuid": "16dbf8fd-5195-508f-9ab4-c8de5f7a9758",
+      "vbench_q": 0.6279556711083114
+    },
+    {
+      "clip_t": 0.172119140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2679806828460092,
+        "context_color_ciede2000": 0.9659112631711788,
+        "log_area_ratio": 0.2964157444186913,
+        "shape_one_minus_dice": 0.7054263565891472
+      },
+      "prompt": "siberian cats wishes happy new year",
+      "request_index": 164,
+      "same_noun_set": false,
+      "uuid": "d560d8e7-1b61-53ed-8e4e-5dc469b4c712",
+      "vbench_q": 0.6639919079250588
+    },
+    {
+      "clip_t": 0.241455078125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5921319586443199,
+        "context_color_ciede2000": 2.2506751283399775,
+        "log_area_ratio": 1.0642741543489835,
+        "shape_one_minus_dice": 0.3700787401574803
+      },
+      "prompt": "pink fish wearing a hat",
+      "request_index": 167,
+      "same_noun_set": false,
+      "uuid": "218d6dd5-26c1-5b2b-ab98-beeb85ba7031",
+      "vbench_q": 0.682722542411149
+    },
+    {
+      "clip_t": 0.1610107421875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0339136913922542,
+        "context_color_ciede2000": 1.5532692927768004,
+        "log_area_ratio": 0.03278979148960543,
+        "shape_one_minus_dice": 0.4776119402985075
+      },
+      "prompt": "A dragon standing on a dwarven house",
+      "request_index": 168,
+      "same_noun_set": false,
+      "uuid": "bb799b08-e256-5a06-a6f1-48a1a254baeb",
+      "vbench_q": 0.6432694930368164
+    },
+    {
+      "clip_t": 0.2127685546875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7178950897190001,
+        "context_color_ciede2000": 1.4959926511390367,
+        "log_area_ratio": 0.28083269231125524,
+        "shape_one_minus_dice": 0.46031746031746035
+      },
+      "prompt": "a big rat eating a plate of cheese",
+      "request_index": 169,
+      "same_noun_set": false,
+      "uuid": "e1317698-bd2c-5bb0-b09c-7d3146fdf6a1",
+      "vbench_q": 0.6942308281626485
+    },
+    {
+      "clip_t": 0.302734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6181043451279411,
+        "context_color_ciede2000": 1.1811044750412016,
+        "log_area_ratio": 0.38738140282810446,
+        "shape_one_minus_dice": 0.4803149606299213
+      },
+      "prompt": "two red cats in moon",
+      "request_index": 170,
+      "same_noun_set": false,
+      "uuid": "7b765b63-39a4-5fc7-a363-2c2239f5edb8",
+      "vbench_q": 0.6230549317559757
+    },
+    {
+      "clip_t": 0.27001953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.6507528920490349,
+        "context_color_ciede2000": 1.3609449754345415,
+        "log_area_ratio": 0.7110580902993281,
+        "shape_one_minus_dice": 0.7024793388429752
+      },
+      "prompt": "Introduce Momo, the mischievous monkey, swinging playfully from vines and giggling.",
+      "request_index": 171,
+      "same_noun_set": false,
+      "uuid": "b5e3be41-c62c-512b-8937-be5695f767c3",
+      "vbench_q": 0.6251329440056759
+    },
+    {
+      "clip_t": 0.26708984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0321543883518662,
+        "context_color_ciede2000": 1.648073468889958,
+        "log_area_ratio": 0.25970820213003454,
+        "shape_one_minus_dice": 0.6260162601626016
+      },
+      "prompt": "show a goat chewing grass",
+      "request_index": 174,
+      "same_noun_set": false,
+      "uuid": "c83eaf4f-3988-5230-9402-9a89af746c49",
+      "vbench_q": 0.6201000114470545
+    },
+    {
+      "clip_t": 0.2222900390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5078697908463405,
+        "context_color_ciede2000": 0.7189332526865372,
+        "log_area_ratio": 0.03658941231727117,
+        "shape_one_minus_dice": 0.5151515151515151
+      },
+      "prompt": "a fox and a rabbit",
+      "request_index": 176,
+      "same_noun_set": false,
+      "uuid": "a08100f5-4c94-556a-8158-f9a6a843be12",
+      "vbench_q": 0.6694977473476493
+    },
+    {
+      "clip_t": 0.28369140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.6623504872831931,
+        "context_color_ciede2000": 0.3898257051374258,
+        "log_area_ratio": 1.5128570647784365,
+        "shape_one_minus_dice": 0.41538461538461535
+      },
+      "prompt": "A cyber cow eating red grass with a fork",
+      "request_index": 177,
+      "same_noun_set": false,
+      "uuid": "55c976c6-28b7-50fd-b0bb-39d196b3deb8",
+      "vbench_q": 0.600289899096848
+    },
+    {
+      "clip_t": 0.1583251953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5757301209446872,
+        "context_color_ciede2000": 1.3222897379642033,
+        "log_area_ratio": 1.4849249710405745,
+        "shape_one_minus_dice": 0.5333333333333333
+      },
+      "prompt": "a abstract looking monkey holding bitcoin",
+      "request_index": 182,
+      "same_noun_set": false,
+      "uuid": "a9f24964-15a4-5943-936a-45867c105142",
+      "vbench_q": 0.6066296904385781
+    },
+    {
+      "clip_t": 0.255615234375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6133208305098663,
+        "context_color_ciede2000": 0.8069394478043251,
+        "log_area_ratio": 0.7211210973817691,
+        "shape_one_minus_dice": 0.6115107913669064
+      },
+      "prompt": "A lesser panda is standing up and talking like a person.",
+      "request_index": 184,
+      "same_noun_set": false,
+      "uuid": "6898f604-3234-5465-b0a3-f9dee23b2c0e",
+      "vbench_q": 0.6825750238546677
+    },
+    {
+      "clip_t": 0.269775390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4008046357003405,
+        "context_color_ciede2000": 0.21720590762635894,
+        "log_area_ratio": 0.4122447589296663,
+        "shape_one_minus_dice": 0.6417910447761195
+      },
+      "prompt": "big tiger combine with big bird",
+      "request_index": 187,
+      "same_noun_set": false,
+      "uuid": "7394839d-38e8-54c4-9aeb-f2d99e57f4bc",
+      "vbench_q": 0.6565656367077513
+    },
+    {
+      "clip_t": 0.293701171875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4606976318101226,
+        "context_color_ciede2000": 0.6895869437943082,
+        "log_area_ratio": 1.202384187591953,
+        "shape_one_minus_dice": 0.6692913385826771
+      },
+      "prompt": "a cat with a dog running on the road",
+      "request_index": 190,
+      "same_noun_set": false,
+      "uuid": "e6554e93-e139-52ce-95fc-dccbf0da07cd",
+      "vbench_q": 0.68240048061791
+    },
+    {
+      "clip_t": 0.3056640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6969769479633643,
+        "context_color_ciede2000": 0.3207440823601181,
+        "log_area_ratio": 0.38659655922103003,
+        "shape_one_minus_dice": 0.44525547445255476
+      },
+      "prompt": "A bear was drinking by the lake",
+      "request_index": 191,
+      "same_noun_set": false,
+      "uuid": "8a9232d4-f2ac-5df5-880e-1d829c9ca23b",
+      "vbench_q": 0.6810510692778039
+    },
+    {
+      "clip_t": 0.2396240234375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.1054644549594321,
+        "context_color_ciede2000": 0.5116217040930298,
+        "log_area_ratio": 1.5757844006540087,
+        "shape_one_minus_dice": 0.39837398373983735
+      },
+      "prompt": "eagle flying with chich in paws",
+      "request_index": 194,
+      "same_noun_set": false,
+      "uuid": "16b589ec-1054-5396-ab2e-e02cd17d3236",
+      "vbench_q": 0.6397924951159305
+    },
+    {
+      "clip_t": 0.290771484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.1687762638286847,
+        "context_color_ciede2000": 0.9644866643116847,
+        "log_area_ratio": 0.8546916145869731,
+        "shape_one_minus_dice": 0.4375
+      },
+      "prompt": "a bunny jumps onto the bed",
+      "request_index": 196,
+      "same_noun_set": false,
+      "uuid": "8fa68b80-2c1c-5082-8f37-2582c3664ba9",
+      "vbench_q": 0.64522675795253
+    },
+    {
+      "clip_t": 0.30029296875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.1549221108930894,
+        "context_color_ciede2000": 0.6668119456667111,
+        "log_area_ratio": 0.11778301422987722,
+        "shape_one_minus_dice": 0.234375
+      },
+      "prompt": "panda is running in the park",
+      "request_index": 197,
+      "same_noun_set": false,
+      "uuid": "ee68e50c-bfc1-5e2b-ae65-36168c718259",
+      "vbench_q": 0.6082134963523786
+    },
+    {
+      "clip_t": 0.252197265625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.3462729576249523,
+        "context_color_ciede2000": 0.7996113365669275,
+        "log_area_ratio": 0.5913644922928704,
+        "shape_one_minus_dice": 0.6451612903225806
+      },
+      "prompt": "cat blue eyes ,white fur",
+      "request_index": 198,
+      "same_noun_set": false,
+      "uuid": "926eadde-a2b2-5a49-902a-36fab644f57c",
+      "vbench_q": 0.6075408933473468
+    },
+    {
+      "clip_t": 0.26513671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7174163093289334,
+        "context_color_ciede2000": 0.5087417698821001,
+        "log_area_ratio": 0.782378341295738,
+        "shape_one_minus_dice": 0.5076923076923077
+      },
+      "prompt": "a cute cat with a lovely smile",
+      "request_index": 200,
+      "same_noun_set": false,
+      "uuid": "51dc2e87-c17c-5b65-836c-12be4e13df43",
+      "vbench_q": 0.6070296830197602
+    },
+    {
+      "clip_t": 0.2998046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8843452435760256,
+        "context_color_ciede2000": 0.46026725474545516,
+        "log_area_ratio": 0.5660882644671131,
+        "shape_one_minus_dice": 0.3284671532846716
+      },
+      "prompt": "a red lion walking in blue sky",
+      "request_index": 203,
+      "same_noun_set": false,
+      "uuid": "5383c1d0-4237-5fad-9c7f-d96d8f58f6f1",
+      "vbench_q": 0.6093065117180689
+    },
+    {
+      "clip_t": 0.25048828125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.38947240449819676,
+        "context_color_ciede2000": 0.4404819968750433,
+        "log_area_ratio": 0.23562576127078638,
+        "shape_one_minus_dice": 0.3385826771653543
+      },
+      "prompt": "4 purple cats on a table",
+      "request_index": 205,
+      "same_noun_set": false,
+      "uuid": "bad5534a-a6a3-5892-a0ff-731f8747fb5c",
+      "vbench_q": 0.6046250162495322
+    },
+    {
+      "clip_t": 0.293701171875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.01877498467055454,
+        "context_color_ciede2000": 1.374454642048546,
+        "log_area_ratio": 0.2729639422485684,
+        "shape_one_minus_dice": 0.34883720930232553
+      },
+      "prompt": "a cute cat wagging its tail, 9:16 ratio",
+      "request_index": 206,
+      "same_noun_set": false,
+      "uuid": "3cd30f02-e922-54be-8f10-39c952574005",
+      "vbench_q": 0.6890836908076247
+    },
+    {
+      "clip_t": 0.2822265625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.37580670303861113,
+        "context_color_ciede2000": 0.7005681735673484,
+        "log_area_ratio": 0.8101419462815508,
+        "shape_one_minus_dice": 0.5813953488372092
+      },
+      "prompt": "A panda taking a selfie.",
+      "request_index": 208,
+      "same_noun_set": false,
+      "uuid": "c5690461-151d-51b7-9c2c-e2755b569f97",
+      "vbench_q": 0.682167800690187
+    },
+    {
+      "clip_t": 0.265380859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.332342947698507,
+        "context_color_ciede2000": 0.519175286283501,
+        "log_area_ratio": 0.2816397637408443,
+        "shape_one_minus_dice": 0.15873015873015872
+      },
+      "prompt": "A polar bear walking in the arctic snow, approaching, growling",
+      "request_index": 213,
+      "same_noun_set": false,
+      "uuid": "214789b7-12f5-5e45-95a7-7fb68e7ff7d0",
+      "vbench_q": 0.6593214959676982
+    },
+    {
+      "clip_t": 0.3095703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.3428950028631513,
+        "context_color_ciede2000": 2.653141100979438,
+        "log_area_ratio": 0.12260231770670617,
+        "shape_one_minus_dice": 0.3088235294117647
+      },
+      "prompt": "a tiger running in jungle",
+      "request_index": 216,
+      "same_noun_set": false,
+      "uuid": "315a9002-8860-5668-bef8-5d59d11b03bf",
+      "vbench_q": 0.6627118210221997
+    },
+    {
+      "clip_t": 0.267333984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5650939041830471,
+        "context_color_ciede2000": 1.5559795775861451,
+        "log_area_ratio": 0.720370696878551,
+        "shape_one_minus_dice": 0.5680000000000001
+      },
+      "prompt": "elephant walking by fluffy cars",
+      "request_index": 217,
+      "same_noun_set": false,
+      "uuid": "af93b074-a8bb-51e8-85b9-be00f75e2d9d",
+      "vbench_q": 0.6103337848092301
+    },
+    {
+      "clip_t": 0.30029296875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9538475973103699,
+        "context_color_ciede2000": 0.6497365466644103,
+        "log_area_ratio": 0.5235108450329047,
+        "shape_one_minus_dice": 0.6390977443609023
+      },
+      "prompt": "a panda eating a pie",
+      "request_index": 220,
+      "same_noun_set": false,
+      "uuid": "762f9a7b-0cad-582f-b8f6-95cbfd39e8d8",
+      "vbench_q": 0.6820326988523052
+    },
+    {
+      "clip_t": 0.227783203125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7699369322783983,
+        "context_color_ciede2000": 0.71589583799874,
+        "log_area_ratio": 0.05264379709675313,
+        "shape_one_minus_dice": 0.2647058823529411
+      },
+      "prompt": "horse running on the green field",
+      "request_index": 221,
+      "same_noun_set": false,
+      "uuid": "361ec4f0-27a6-518c-af7c-e0f70162d82d",
+      "vbench_q": 0.6570964032504787
+    },
+    {
+      "clip_t": 0.254638671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0360557338322698,
+        "context_color_ciede2000": 0.8611118090589841,
+        "log_area_ratio": 0.8175747017645378,
+        "shape_one_minus_dice": 0.4918032786885246
+      },
+      "prompt": "hyperrealistic white bunnies kissing on the full moon",
+      "request_index": 222,
+      "same_noun_set": false,
+      "uuid": "0833de95-85c0-58ac-97f4-5378b8d0a9b3",
+      "vbench_q": 0.6754702184331582
+    },
+    {
+      "clip_t": 0.240966796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5966601095115591,
+        "context_color_ciede2000": 0.6473952650219705,
+        "log_area_ratio": 0.2869332898953473,
+        "shape_one_minus_dice": 0.5223880597014925
+      },
+      "prompt": "a man crying with a rabbit",
+      "request_index": 223,
+      "same_noun_set": false,
+      "uuid": "85495555-1d94-56d3-a172-d6d2e4f5f8f5",
+      "vbench_q": 0.6682542961504334
+    },
+    {
+      "clip_t": 0.275146484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7352023460133339,
+        "context_color_ciede2000": 0.7238547732184059,
+        "log_area_ratio": 0.7657862949792711,
+        "shape_one_minus_dice": 0.6850393700787402
+      },
+      "prompt": "Create a young fox for a curious animal",
+      "request_index": 226,
+      "same_noun_set": false,
+      "uuid": "3afc859d-fc86-53d0-bcd1-fde3137097c3",
+      "vbench_q": 0.6593126603246617
+    },
+    {
+      "clip_t": 0.2115478515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7065922322861599,
+        "context_color_ciede2000": 0.9078033482104118,
+        "log_area_ratio": 0.4999559379725731,
+        "shape_one_minus_dice": 0.16279069767441856
+      },
+      "prompt": "An alien horse running across a field.",
+      "request_index": 227,
+      "same_noun_set": false,
+      "uuid": "f9831292-eedd-5712-8222-2b8850ef6a9d",
+      "vbench_q": 0.6765448983773197
+    },
+    {
+      "clip_t": 0.211669921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8354898838352574,
+        "context_color_ciede2000": 0.19545369165238596,
+        "log_area_ratio": 1.073957751017529,
+        "shape_one_minus_dice": 0.3787878787878788
+      },
+      "prompt": "young shepherd boy with sheep laughing",
+      "request_index": 228,
+      "same_noun_set": false,
+      "uuid": "1020f89e-9f29-50d5-bd5e-7722cc51378a",
+      "vbench_q": 0.6062573602402526
+    },
+    {
+      "clip_t": 0.282470703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5068747926353763,
+        "context_color_ciede2000": 2.225123633293797,
+        "log_area_ratio": 1.4042768467084135,
+        "shape_one_minus_dice": 0.5968992248062015
+      },
+      "prompt": "a cat drunk on the street,camera -pan,moving",
+      "request_index": 230,
+      "same_noun_set": false,
+      "uuid": "b41e89a7-8484-55d8-ab33-a4458afaa46a",
+      "vbench_q": 0.5904877354238448
+    },
+    {
+      "clip_t": 0.255126953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9686714029925935,
+        "context_color_ciede2000": 0.28887719753355573,
+        "log_area_ratio": 0.8653506022161765,
+        "shape_one_minus_dice": 0.472
+      },
+      "prompt": "a squirrel running up in a tree",
+      "request_index": 231,
+      "same_noun_set": false,
+      "uuid": "70b2b267-3a3e-5183-9778-b2c35e99c33e",
+      "vbench_q": 0.655700610817348
+    },
+    {
+      "clip_t": 0.292236328125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.4958455548310688,
+        "context_color_ciede2000": 0.9606957489620519,
+        "log_area_ratio": 0.641853935469469,
+        "shape_one_minus_dice": 0.40909090909090906
+      },
+      "prompt": "a mouse with 2 tails",
+      "request_index": 232,
+      "same_noun_set": false,
+      "uuid": "dd70bc65-b2a8-5102-b203-9e514e048996",
+      "vbench_q": 0.6565552466572189
+    },
+    {
+      "clip_t": 0.281982421875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7828916791802658,
+        "context_color_ciede2000": 1.026191755404004,
+        "log_area_ratio": 0.5316027465329175,
+        "shape_one_minus_dice": 0.603448275862069
+      },
+      "prompt": "an elephant and ants fighting each other",
+      "request_index": 233,
+      "same_noun_set": false,
+      "uuid": "327b4b58-b4f4-5810-802a-c4d3ce937d14",
+      "vbench_q": 0.6084291011430656
+    },
+    {
+      "clip_t": 0.2364501953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.22544171056662357,
+        "context_color_ciede2000": 1.3183200927452141,
+        "log_area_ratio": 0.47328772283230974,
+        "shape_one_minus_dice": 0.4380165289256198
+      },
+      "prompt": "a robot eating a chicken",
+      "request_index": 234,
+      "same_noun_set": false,
+      "uuid": "9517823c-51a8-5796-86ca-1a1574f6ba33",
+      "vbench_q": 0.5966078331650644
+    },
+    {
+      "clip_t": 0.296875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.27944541139114415,
+        "context_color_ciede2000": 0.8829566551479783,
+        "log_area_ratio": 0.48005402139251246,
+        "shape_one_minus_dice": 0.4744525547445255
+      },
+      "prompt": "a black Arabian horse galloping through the Sahara desert",
+      "request_index": 236,
+      "same_noun_set": false,
+      "uuid": "de5fe59c-8354-555f-9c5b-56c92715ad44",
+      "vbench_q": 0.6508251375701505
+    },
+    {
+      "clip_t": 0.217041015625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9500290058426548,
+        "context_color_ciede2000": 0.7667515621472761,
+        "log_area_ratio": 0.34876978221393246,
+        "shape_one_minus_dice": 0.639344262295082
+      },
+      "prompt": "Two cats fighting on a mountain",
+      "request_index": 237,
+      "same_noun_set": false,
+      "uuid": "f37e311b-456d-5117-8473-11968871269f",
+      "vbench_q": 0.6045439869018702
+    },
+    {
+      "clip_t": 0.296142578125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4509080794019829,
+        "context_color_ciede2000": 0.18822355587996992,
+        "log_area_ratio": 0.8484680883933822,
+        "shape_one_minus_dice": 0.708029197080292
+      },
+      "prompt": "a bunny jumping on a boat",
+      "request_index": 238,
+      "same_noun_set": false,
+      "uuid": "f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf",
+      "vbench_q": 0.6748631196279922
+    },
+    {
+      "clip_t": 0.299072265625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6132578049439413,
+        "context_color_ciede2000": 0.4005970976481666,
+        "log_area_ratio": 0.8741955804598218,
+        "shape_one_minus_dice": 0.5352112676056338
+      },
+      "prompt": "I am so excited dancing guina pig",
+      "request_index": 239,
+      "same_noun_set": false,
+      "uuid": "ea5ac52c-6651-5b4c-a765-de4854857e44",
+      "vbench_q": 0.5906490679971594
+    },
+    {
+      "clip_t": 0.26953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.003392520570177,
+        "context_color_ciede2000": 0.7872688345452826,
+        "log_area_ratio": 0.7648713587905144,
+        "shape_one_minus_dice": 0.5107913669064748
+      },
+      "prompt": "three cats fighting for an can",
+      "request_index": 240,
+      "same_noun_set": false,
+      "uuid": "1054a57a-5e04-55c1-90b9-4b5b97ea3c69",
+      "vbench_q": 0.6468370451414902
+    },
+    {
+      "clip_t": 0.222900390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2897530852261956,
+        "context_color_ciede2000": 1.2159245024871626,
+        "log_area_ratio": 0.5893145209176487,
+        "shape_one_minus_dice": 0.5967741935483871
+      },
+      "prompt": "one pig is sitting on the top of the Forbidden City",
+      "request_index": 242,
+      "same_noun_set": false,
+      "uuid": "7a871031-0bb9-582e-9533-18ea70a62b3d",
+      "vbench_q": 0.5971293696978532
+    },
+    {
+      "clip_t": 0.23876953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9157579162787485,
+        "context_color_ciede2000": 0.56130278727363,
+        "log_area_ratio": 0.19513052694160332,
+        "shape_one_minus_dice": 0.16800000000000004
+      },
+      "prompt": "mysterious tall white creature in the snow",
+      "request_index": 243,
+      "same_noun_set": false,
+      "uuid": "ae9d2df1-9d5a-51f6-a07c-94b3e39ae035",
+      "vbench_q": 0.6764385728102557
+    },
+    {
+      "clip_t": 0.2841796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.8839783189688026,
+        "context_color_ciede2000": 1.7269533652257754,
+        "log_area_ratio": 0.9320391009839808,
+        "shape_one_minus_dice": 0.6204379562043796
+      },
+      "prompt": "cinematic dog and cat in a ring",
+      "request_index": 245,
+      "same_noun_set": false,
+      "uuid": "89a662bf-974e-5f6b-8f74-3e96b1d4ccb6",
+      "vbench_q": 0.6824910594924851
+    },
+    {
+      "clip_t": 0.2301025390625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3355668356776333,
+        "context_color_ciede2000": 0.8926166701242809,
+        "log_area_ratio": 1.40042172691933,
+        "shape_one_minus_dice": 0.5371900826446281
+      },
+      "prompt": "2D cartoon, clever fox named Freddie. Freddie loved to read books,",
+      "request_index": 247,
+      "same_noun_set": false,
+      "uuid": "2b1a5c15-3f05-5f28-9f29-21a9d0a569d5",
+      "vbench_q": 0.6009144914304858
+    },
+    {
+      "clip_t": 0.29931640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.47457655746563115,
+        "context_color_ciede2000": 0.16159211515074293,
+        "log_area_ratio": 0.25064077490526493,
+        "shape_one_minus_dice": 0.171875
+      },
+      "prompt": "A white kitten with a pink bow.",
+      "request_index": 248,
+      "same_noun_set": false,
+      "uuid": "45b5b1f5-d82e-554a-a2ff-80e54085ab66",
+      "vbench_q": 0.6198733981492671
+    },
+    {
+      "clip_t": 0.281494140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7672116679527448,
+        "context_color_ciede2000": 1.5831078412846498,
+        "log_area_ratio": 0.5465437556651441,
+        "shape_one_minus_dice": 0.6030534351145038
+      },
+      "prompt": "An elephant walking with a cute girl, ultra realistic",
+      "request_index": 250,
+      "same_noun_set": false,
+      "uuid": "f6d514b7-e25b-548e-802b-fcf19a2d2bae",
+      "vbench_q": 0.6145499785751591
+    },
+    {
+      "clip_t": 0.251953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.37067632669897665,
+        "context_color_ciede2000": 1.4576303620716984,
+        "log_area_ratio": 1.245665704220312,
+        "shape_one_minus_dice": 0.6541353383458647
+      },
+      "prompt": "bad bunny being hit by a big man",
+      "request_index": 251,
+      "same_noun_set": false,
+      "uuid": "5a0e4c66-f129-5e41-921c-9efcdaf83486",
+      "vbench_q": 0.6806089059708648
+    },
+    {
+      "clip_t": 0.2401123046875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.38590897513220157,
+        "context_color_ciede2000": 1.0894584969356846,
+        "log_area_ratio": 0.9802309885256842,
+        "shape_one_minus_dice": 0.4354838709677419
+      },
+      "prompt": "lion attacked on two bulls in jungle.zoom in",
+      "request_index": 252,
+      "same_noun_set": false,
+      "uuid": "e433a5e1-f4a3-5f39-b4a9-d707835b3bb9",
+      "vbench_q": 0.591367879182244
+    },
+    {
+      "clip_t": 0.287841796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5241838022964816,
+        "context_color_ciede2000": 0.3485613154354004,
+        "log_area_ratio": 1.3260021886604767,
+        "shape_one_minus_dice": 0.7164179104477613
+      },
+      "prompt": "a naughty panda with bambo",
+      "request_index": 253,
+      "same_noun_set": false,
+      "uuid": "457fb229-3722-5503-b972-a0cb24fd5633",
+      "vbench_q": 0.6820849591250074
+    },
+    {
+      "clip_t": 0.2193603515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5987739019894351,
+        "context_color_ciede2000": 1.6561020255893926,
+        "log_area_ratio": 0.17824825316344772,
+        "shape_one_minus_dice": 0.6788321167883211
+      },
+      "prompt": "cleopatra in las vegas with a tiger floating device",
+      "request_index": 254,
+      "same_noun_set": false,
+      "uuid": "824e87a3-f968-5a75-b3c2-68864b1697c8",
+      "vbench_q": 0.6561497697275493
+    },
+    {
+      "clip_t": 0.287353515625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0551527292499323,
+        "context_color_ciede2000": 1.7882670182073095,
+        "log_area_ratio": 0.6776430082087398,
+        "shape_one_minus_dice": 0.5076923076923077
+      },
+      "prompt": "Create a black kitten asking for forgiveness",
+      "request_index": 255,
+      "same_noun_set": false,
+      "uuid": "e0e71b7b-865d-54b3-ad4a-4e815ff866e8",
+      "vbench_q": 0.668463085087009
+    },
+    {
+      "clip_t": 0.3095703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5085658372755537,
+        "context_color_ciede2000": 0.7776450997310853,
+        "log_area_ratio": 1.0426535971563993,
+        "shape_one_minus_dice": 0.5245901639344263
+      },
+      "prompt": "A tiger is chasing an antelope",
+      "request_index": 259,
+      "same_noun_set": false,
+      "uuid": "e3a9c60c-c313-5421-888e-fc4fde9a80a6",
+      "vbench_q": 0.6374805597796648
+    },
+    {
+      "clip_t": 0.30078125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.542503641038151,
+        "context_color_ciede2000": 0.3974278486890671,
+        "log_area_ratio": 0.664252741323707,
+        "shape_one_minus_dice": 0.44067796610169496
+      },
+      "prompt": "one panda is swimming in the pool",
+      "request_index": 260,
+      "same_noun_set": false,
+      "uuid": "a685107d-db48-5e9d-bdd2-b3c50fa628cf",
+      "vbench_q": 0.6891545917222135
+    },
+    {
+      "clip_t": 0.288330078125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.48004797901179835,
+        "context_color_ciede2000": 0.43358485097337757,
+        "log_area_ratio": 1.2229407625610231,
+        "shape_one_minus_dice": 0.6716417910447761
+      },
+      "prompt": "a cute fluffy panda eating noodles",
+      "request_index": 261,
+      "same_noun_set": false,
+      "uuid": "50ade1ae-181e-5c15-8ce3-2097e98193bf",
+      "vbench_q": 0.6797893453152977
+    },
+    {
+      "clip_t": 0.2196044921875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.075169461979465,
+        "context_color_ciede2000": 0.7004163781745877,
+        "log_area_ratio": 0.23898690586403037,
+        "shape_one_minus_dice": 0.7165354330708662
+      },
+      "prompt": "A speedy rabbit and a slow but determined tortoise agreed to race",
+      "request_index": 263,
+      "same_noun_set": false,
+      "uuid": "9182a51c-2387-52e6-845c-7bf70e6aa495",
+      "vbench_q": 0.6644492567806771
+    },
+    {
+      "clip_t": 0.206298828125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0858711291748535,
+        "context_color_ciede2000": 1.2223270490977396,
+        "log_area_ratio": 0.803735935619297,
+        "shape_one_minus_dice": 0.467741935483871
+      },
+      "prompt": "human face melts into a fox face",
+      "request_index": 265,
+      "same_noun_set": false,
+      "uuid": "c91132ae-b4e7-554c-882e-adcb7e120757",
+      "vbench_q": 0.6585541850708444
+    },
+    {
+      "clip_t": 0.2763671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.4952989594698414,
+        "context_color_ciede2000": 0.7249545136291262,
+        "log_area_ratio": 0.9542700055558735,
+        "shape_one_minus_dice": 0.712
+      },
+      "prompt": "cat cleaning its body with its tongue",
+      "request_index": 266,
+      "same_noun_set": false,
+      "uuid": "606a6a5e-999c-5e65-aea3-2bca9434de8b",
+      "vbench_q": 0.6770505686807329
+    },
+    {
+      "clip_t": 0.316162109375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6182095985421102,
+        "context_color_ciede2000": 0.3923993327159485,
+        "log_area_ratio": 0.07089585541532316,
+        "shape_one_minus_dice": 0.5
+      },
+      "prompt": "A cute puppy running on the grass",
+      "request_index": 267,
+      "same_noun_set": false,
+      "uuid": "b7f8e777-ec3d-5a28-a5da-e7ee7755e616",
+      "vbench_q": 0.6589218450351945
+    },
+    {
+      "clip_t": 0.218994140625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.299283628095659,
+        "context_color_ciede2000": 0.6259075111564874,
+        "log_area_ratio": 0.08972878514416273,
+        "shape_one_minus_dice": 0.47619047619047616
+      },
+      "prompt": "grasshopper jumping in the grass",
+      "request_index": 268,
+      "same_noun_set": false,
+      "uuid": "2ba57375-f9c4-50f4-9caa-76d00a966918",
+      "vbench_q": 0.6512284437070446
+    },
+    {
+      "clip_t": 0.273681640625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.33844455247544286,
+        "context_color_ciede2000": 0.4787083109513986,
+        "log_area_ratio": 0.6631448932035227,
+        "shape_one_minus_dice": 0.5873015873015873
+      },
+      "prompt": "the falling bear grab the vegetables",
+      "request_index": 269,
+      "same_noun_set": false,
+      "uuid": "19ec92e0-3bce-537e-832f-b06ec0d25ebd",
+      "vbench_q": 0.6073975527950325
+    },
+    {
+      "clip_t": 0.2529296875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.777303792936442,
+        "context_color_ciede2000": 1.4911056714360418,
+        "log_area_ratio": 1.5600451387058962,
+        "shape_one_minus_dice": 0.7058823529411764
+      },
+      "prompt": "a monkey and a turtle talking to each other.",
+      "request_index": 270,
+      "same_noun_set": false,
+      "uuid": "2fd47d65-76fc-5638-b3d2-c6c895055750",
+      "vbench_q": 0.6264381160032099
+    },
+    {
+      "clip_t": 0.255126953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.5005843018391443,
+        "context_color_ciede2000": 1.550006017699707,
+        "log_area_ratio": 0.4933078260969195,
+        "shape_one_minus_dice": 0.6774193548387097
+      },
+      "prompt": "cinematic rabbit eating a carrot",
+      "request_index": 271,
+      "same_noun_set": false,
+      "uuid": "6bafd3b1-3002-55ee-8417-53efd5db60c7",
+      "vbench_q": 0.6626803550199022
+    },
+    {
+      "clip_t": 0.259521484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.2142437727539555,
+        "context_color_ciede2000": 1.4826210586031,
+        "log_area_ratio": 0.7813713916246499,
+        "shape_one_minus_dice": 0.3731343283582089
+      },
+      "prompt": "a dog run in a road.",
+      "request_index": 272,
+      "same_noun_set": false,
+      "uuid": "ded0d442-40f4-5432-a136-409a7bf3fe59",
+      "vbench_q": 0.6208594158837111
+    },
+    {
+      "clip_t": 0.2626953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8525253666073066,
+        "context_color_ciede2000": 1.8673034964008757,
+        "log_area_ratio": 0.8259386746432719,
+        "shape_one_minus_dice": 0.6065573770491803
+      },
+      "prompt": "a lion with a panda",
+      "request_index": 273,
+      "same_noun_set": false,
+      "uuid": "c527d145-7dcc-5715-8b8e-a3323523437f",
+      "vbench_q": 0.6455924297172417
+    },
+    {
+      "clip_t": 0.26318359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.50462022655957,
+        "context_color_ciede2000": 0.9623328905754457,
+        "log_area_ratio": 0.7308875720531555,
+        "shape_one_minus_dice": 0.5555555555555556
+      },
+      "prompt": "“The cat is catching fish by the river.",
+      "request_index": 274,
+      "same_noun_set": false,
+      "uuid": "ce66b714-ce3b-5858-af6f-ae1f9cbef8b7",
+      "vbench_q": 0.6965312881453642
+    },
+    {
+      "clip_t": 0.28564453125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0388256331972194,
+        "context_color_ciede2000": 0.6341046543748594,
+        "log_area_ratio": 1.4799798325055544,
+        "shape_one_minus_dice": 0.31200000000000006
+      },
+      "prompt": "White Rabit on green grass land.",
+      "request_index": 276,
+      "same_noun_set": false,
+      "uuid": "5fa0376d-6848-5873-856f-c929685f0156",
+      "vbench_q": 0.5973647054966981
+    },
+    {
+      "clip_t": 0.28173828125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.660554875069237,
+        "context_color_ciede2000": 1.1302576147321264,
+        "log_area_ratio": 0.2587707218912766,
+        "shape_one_minus_dice": 0.23809523809523814
+      },
+      "prompt": "a panda running on a road",
+      "request_index": 277,
+      "same_noun_set": false,
+      "uuid": "7af9e3ef-63c6-5f88-9e84-7d86fa5c29ed",
+      "vbench_q": 0.654757343940613
+    },
+    {
+      "clip_t": 0.298095703125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.8656027886280157,
+        "context_color_ciede2000": 0.5366031307449172,
+        "log_area_ratio": 1.4245599537927918,
+        "shape_one_minus_dice": 0.6507936507936508
+      },
+      "prompt": "a giant panda destroying new york city",
+      "request_index": 278,
+      "same_noun_set": false,
+      "uuid": "4d66a5e0-ab8f-5494-a5dd-430db8851673",
+      "vbench_q": 0.6825603212608317
+    },
+    {
+      "clip_t": 0.28271484375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5364198536345486,
+        "context_color_ciede2000": 0.20689072412521148,
+        "log_area_ratio": 0.8440457712854577,
+        "shape_one_minus_dice": 0.6612903225806452
+      },
+      "prompt": "monkey playing in the pool",
+      "request_index": 279,
+      "same_noun_set": false,
+      "uuid": "800dd395-f9ba-52d4-ae24-82bf6c3861ae",
+      "vbench_q": 0.6853252605366682
+    },
+    {
+      "clip_t": 0.314453125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.048955384132103,
+        "context_color_ciede2000": 1.1253028974177834,
+        "log_area_ratio": 0.2054439906471674,
+        "shape_one_minus_dice": 0.17910447761194026
+      },
+      "prompt": "a tiger running from a mouse",
+      "request_index": 280,
+      "same_noun_set": false,
+      "uuid": "d69211d2-7a65-5fdc-b28e-04c0ca9641e4",
+      "vbench_q": 0.6724324414198446
+    },
+    {
+      "clip_t": 0.292724609375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.9534960080332893,
+        "context_color_ciede2000": 0.9164686691063745,
+        "log_area_ratio": 0.038360902531721294,
+        "shape_one_minus_dice": 0.7185185185185186
+      },
+      "prompt": "A pink penguin on the beach",
+      "request_index": 281,
+      "same_noun_set": false,
+      "uuid": "f88efc24-c6f7-59f4-8e44-b8bf66c1f657",
+      "vbench_q": 0.6549744360797846
+    },
+    {
+      "clip_t": 0.3212890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3648603714444678,
+        "context_color_ciede2000": 1.32451861454055,
+        "log_area_ratio": 0.4951343088731277,
+        "shape_one_minus_dice": 0.5725190839694656
+      },
+      "prompt": "cow jumping over the moon",
+      "request_index": 282,
+      "same_noun_set": false,
+      "uuid": "ff5a069f-389f-5f48-8ead-34d1b17b0870",
+      "vbench_q": 0.6048507540157388
+    },
+    {
+      "clip_t": 0.246337890625,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.3089938373647998,
+        "context_color_ciede2000": 1.2815336088877882,
+        "log_area_ratio": 0.2231435792142553,
+        "shape_one_minus_dice": 0.28682170542635654
+      },
+      "prompt": "alien T-Rex screaming loudly wide mouth open in dry desert",
+      "request_index": 283,
+      "same_noun_set": false,
+      "uuid": "e1682c01-4314-57be-abfe-21847cf28283",
+      "vbench_q": 0.6448639882898264
+    },
+    {
+      "clip_t": 0.273193359375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7843184296594531,
+        "context_color_ciede2000": 1.299505403013787,
+        "log_area_ratio": 0.7453329669243856,
+        "shape_one_minus_dice": 0.5877862595419847
+      },
+      "prompt": "young elephant trying to escape from a rope",
+      "request_index": 284,
+      "same_noun_set": false,
+      "uuid": "6e30a9fe-775e-54c3-b2dc-5f4390c42447",
+      "vbench_q": 0.6141327914292205
+    },
+    {
+      "clip_t": 0.279052734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.3783762190473407,
+        "context_color_ciede2000": 0.4724232940970775,
+        "log_area_ratio": 0.5441116302192867,
+        "shape_one_minus_dice": 0.4126984126984127
+      },
+      "prompt": "a bear running at the riverside",
+      "request_index": 285,
+      "same_noun_set": false,
+      "uuid": "324591d9-7ac3-57f6-b16f-d709314f6a36",
+      "vbench_q": 0.7138961586461285
+    },
+    {
+      "clip_t": 0.293701171875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.7381546307491242,
+        "context_color_ciede2000": 0.24989099012546204,
+        "log_area_ratio": 0.24231347634599515,
+        "shape_one_minus_dice": 0.7142857142857143
+      },
+      "prompt": "dolphin dancing on the beach",
+      "request_index": 286,
+      "same_noun_set": false,
+      "uuid": "e84d7ed7-b7e9-5ae9-bc29-7732d62f080f",
+      "vbench_q": 0.6609744495013884
+    },
+    {
+      "clip_t": 0.328125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.6928992898723781,
+        "context_color_ciede2000": 1.0987301864680656,
+        "log_area_ratio": 0.6165139155404874,
+        "shape_one_minus_dice": 0.29032258064516125
+      },
+      "prompt": "a cow and a chicken fighting",
+      "request_index": 287,
+      "same_noun_set": false,
+      "uuid": "5916727e-537e-5361-82fb-2c520c8a99cf",
+      "vbench_q": 0.5859079888205687
+    },
+    {
+      "clip_t": 0.2255859375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9371688021240693,
+        "context_color_ciede2000": 0.36835108030485675,
+        "log_area_ratio": 1.1345099391105304,
+        "shape_one_minus_dice": 0.4032258064516129
+      },
+      "prompt": "Werewolf vs Snake Man, a real scene from the movie.",
+      "request_index": 289,
+      "same_noun_set": false,
+      "uuid": "c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee",
+      "vbench_q": 0.6634481854216963
+    },
+    {
+      "clip_t": 0.270751953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7182289208732658,
+        "context_color_ciede2000": 0.9686913029475864,
+        "log_area_ratio": 0.9343092203469348,
+        "shape_one_minus_dice": 0.5121951219512195
+      },
+      "prompt": "A cow is drinking water",
+      "request_index": 290,
+      "same_noun_set": false,
+      "uuid": "9d333dcf-6ed2-5a72-bd9a-24d7bd2d5bf0",
+      "vbench_q": 0.5729381508755332
+    },
+    {
+      "clip_t": 0.2802734375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.9098892164666098,
+        "context_color_ciede2000": 1.0370973385587121,
+        "log_area_ratio": 0.03896593202688955,
+        "shape_one_minus_dice": 0.4354838709677419
+      },
+      "prompt": "A small pig is making juice",
+      "request_index": 291,
+      "same_noun_set": false,
+      "uuid": "7353e17a-596c-53da-9dd2-7d444fa70003",
+      "vbench_q": 0.6613786485098017
+    },
+    {
+      "clip_t": 0.31591796875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.5774039714347057,
+        "context_color_ciede2000": 0.6018280484527615,
+        "log_area_ratio": 0.9191037074911342,
+        "shape_one_minus_dice": 0.45038167938931295
+      },
+      "prompt": "camel running in the desert",
+      "request_index": 293,
+      "same_noun_set": false,
+      "uuid": "71945de0-b1ff-562d-bd50-9d859e27ce08",
+      "vbench_q": 0.5892238810321794
+    },
+    {
+      "clip_t": 0.285888671875,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7080871497402557,
+        "context_color_ciede2000": 1.3030521429005286,
+        "log_area_ratio": 0.3346773957066536,
+        "shape_one_minus_dice": 0.5074626865671642
+      },
+      "prompt": "The rabbit who was drinking alcohol",
+      "request_index": 294,
+      "same_noun_set": false,
+      "uuid": "1312725c-5dbf-532c-9960-d1f8a325f2d7",
+      "vbench_q": 0.6650874636608402
+    },
+    {
+      "clip_t": 0.27001953125,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 1.0414653999906265,
+        "context_color_ciede2000": 0.8461189034044714,
+        "log_area_ratio": 0.1758905977712434,
+        "shape_one_minus_dice": 0.3492063492063492
+      },
+      "prompt": "a real dragon eating a pig",
+      "request_index": 297,
+      "same_noun_set": false,
+      "uuid": "acb9e9d4-0c0a-533c-a2f3-957047fc0469",
+      "vbench_q": 0.6407930628958934
+    },
+    {
+      "clip_t": 0.298583984375,
+      "effective_gate_distances": {
+        "changed_color_ciede2000": 0.7975210682182825,
+        "context_color_ciede2000": 0.6178764173234176,
+        "log_area_ratio": 0.8080400909472693,
+        "shape_one_minus_dice": 0.5517241379310345
+      },
+      "prompt": "a beautiful walking grey elephant animation",
+      "request_index": 299,
+      "same_noun_set": false,
+      "uuid": "9984e153-bb63-5f9f-8768-608e85593e01",
+      "vbench_q": 0.6132474902548005
+    }
+  ],
+  "candidate": {
+    "accepted_requests": 183,
+    "balanced_quality_z_gain": 0.10423894765326114,
+    "clip_t_mean": 0.26808041431864754,
+    "clip_t_z_gain": 0.17158061544094289,
+    "hit_rate": 0.61,
+    "max_changed_color_distance": 1.9534960080332893,
+    "max_context_color_distance": 2.8316010377799574,
+    "max_log_area_ratio": 2.7902882829068236,
+    "max_shape_distance": 0.71875,
+    "vbench_q_mean": 0.6413573316078856,
+    "vbench_q_z_gain": 0.036897279865579384
+  },
+  "rejected_requests": [
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 0,
+      "uuid": "3384bf4f-88a8-5a0d-9487-f8d853c76d49"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 3,
+      "uuid": "f113d2f1-2627-5a10-9487-9fa16228f510"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 4,
+      "uuid": "f5e23c84-102f-5dda-b9f3-39d8bec20e01"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 7,
+      "uuid": "82f89e80-c1b4-5113-a860-2ab19bc72524"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 9,
+      "uuid": "639c5f3d-a8d8-5749-ae9a-36aa0dbf8f81"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 11,
+      "uuid": "3e670d3e-9de8-581e-ac11-c427b398ab02"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 12,
+      "uuid": "f54429d8-1024-5c5f-a8f0-b9cc3558069d"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 17,
+      "uuid": "583471c8-84dc-529f-b90d-6116e956e589"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 20,
+      "uuid": "43ba9045-9be8-5e80-bcd3-a96f517e496c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 21,
+      "uuid": "49e2a688-a56b-58ff-b0f1-f16200fe1f8b"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 27,
+      "uuid": "40332a8e-122c-54e7-bce1-1d1807f10adb"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 29,
+      "uuid": "a6f4005f-b89a-517a-aa65-aed0bc9e982a"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 37,
+      "uuid": "2c971575-aded-5f53-b158-aa39c20a1508"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 39,
+      "uuid": "8232a0d9-f939-5150-835b-4a2aa8e7125c"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 41,
+      "uuid": "e37b824e-00a1-5c7b-a784-1cd3ff4ec5f4"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 44,
+      "uuid": "72310ed8-5c5c-5eb8-991e-8d6055918148"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 46,
+      "uuid": "4343736f-42e3-59c3-ac47-f0b3da1b6721"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 49,
+      "uuid": "538a8d81-a464-57ce-b670-d08e5d1b8bc6"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 50,
+      "uuid": "18c6469f-8d36-5a25-ac0e-2d50cfbdd3af"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 53,
+      "uuid": "cb5d0428-6e55-513f-8b5d-938fb6ea93bb"
+    },
+    {
+      "failed_gates": [
+        "max_log_area_ratio",
+        "max_changed_color_distance"
+      ],
+      "request_index": 54,
+      "uuid": "ecb392be-e88f-5f6a-9433-67b880f13866"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 55,
+      "uuid": "6b1ce320-d14d-519d-a66f-e779270b8e1d"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 56,
+      "uuid": "ede7dbbd-39df-5a0c-a349-329aba5693e7"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 58,
+      "uuid": "8e310cdb-6792-5e25-90a1-54cbee4c7212"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 60,
+      "uuid": "8c5938b8-0c72-5a58-a797-30b7e3f507b9"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 63,
+      "uuid": "b25405dd-9cc8-5271-afd9-19930c9eceed"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 65,
+      "uuid": "37b13f22-f9c0-58c4-b371-f78494fc0cca"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 67,
+      "uuid": "52f795e4-f610-5a05-b8c4-b56be844171a"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 69,
+      "uuid": "36a496af-ec8e-5b8f-95ff-7ba144744344"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 71,
+      "uuid": "036d1cab-1fac-5f74-be8c-23b24e1c73f1"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 72,
+      "uuid": "e45dfaaa-f6f5-5ffb-9d1e-e68385582fa6"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 74,
+      "uuid": "f3a5ba46-89ce-5985-8ae0-b54401f393c0"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 77,
+      "uuid": "6a740cfd-e17b-5cce-b6dd-a9997a43cba0"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 78,
+      "uuid": "414d6569-0e91-59bf-aaa3-09598ebcbe5d"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 82,
+      "uuid": "7f4e0f7e-8b36-5143-85a0-c48e13da8898"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 84,
+      "uuid": "06474be5-47ff-5450-894a-3d35db021ba1"
+    },
+    {
+      "failed_gates": [
+        "max_context_color_distance",
+        "max_shape_distance"
+      ],
+      "request_index": 85,
+      "uuid": "0a036ba8-87eb-5d4f-8981-b57d78240388"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 88,
+      "uuid": "65c19d32-eaf3-5292-a45a-48047e283d06"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 90,
+      "uuid": "f5292589-9f59-52ad-9af7-2b19511c1e48"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 91,
+      "uuid": "c8ea3457-bb10-5d8c-ba7a-bef79e671373"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 101,
+      "uuid": "9233c432-da7e-5727-9362-b0afbb075f11"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 102,
+      "uuid": "6a8452de-f59d-5b02-a6dd-396853e39667"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 103,
+      "uuid": "408c63b7-820a-5624-a98b-01600fa61735"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 106,
+      "uuid": "fd6b8f69-8f72-5169-9d74-c941a6c1dccb"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 112,
+      "uuid": "b6c85aa0-b30d-533a-9984-f816e4cee757"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 114,
+      "uuid": "821331ce-dd71-59c9-9396-5ae946579f7c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 115,
+      "uuid": "b585779c-539f-51d5-b885-71b11c9be045"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 118,
+      "uuid": "b72866db-2313-5e97-8467-b6fe7d043be0"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 121,
+      "uuid": "2557673f-ac66-54fd-9daa-69a373372ef6"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 123,
+      "uuid": "0308627b-6d33-5301-b86f-514ba748c3e2"
+    },
+    {
+      "failed_gates": [
+        "max_log_area_ratio"
+      ],
+      "request_index": 124,
+      "uuid": "e8002e80-9118-542c-800a-47eb1768b3c1"
+    },
+    {
+      "failed_gates": [
+        "max_context_color_distance"
+      ],
+      "request_index": 126,
+      "uuid": "8321dd0f-01b9-5858-9dba-e79af65d6833"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 127,
+      "uuid": "80d8ee06-a935-5bbc-915b-27e481b77565"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 128,
+      "uuid": "6427bc01-ace4-5401-92ea-6fb0a79c0cf2"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 131,
+      "uuid": "5330d848-7729-55d4-b5c4-d0d431746273"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 132,
+      "uuid": "a8adc637-298f-5dc1-a900-80ea1f960b76"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 134,
+      "uuid": "c2730496-96ff-50d3-91cd-a7bfe35a5599"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 143,
+      "uuid": "f7415784-9a4d-594e-a984-a436c1172a35"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 144,
+      "uuid": "f8ecbc67-f3d3-5f23-908b-adc95e3f4fba"
+    },
+    {
+      "failed_gates": [
+        "max_log_area_ratio",
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 147,
+      "uuid": "8c01a6be-d700-5f94-a6d3-c3289fafd5f1"
+    },
+    {
+      "failed_gates": [
+        "max_context_color_distance",
+        "max_shape_distance"
+      ],
+      "request_index": 148,
+      "uuid": "3112bb1c-e7c9-517a-8fb9-9604dc04aaa5"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 151,
+      "uuid": "c0b76609-36e6-534d-bd09-cc5bb191e609"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 152,
+      "uuid": "76a4ebe1-ce76-571d-94c1-792130a3cdee"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 155,
+      "uuid": "b146e548-3d2a-532d-8c70-41f97899668c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 157,
+      "uuid": "50ed57da-7f9d-5282-be80-fc323858980f"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 158,
+      "uuid": "72ca93f7-9b85-5091-b386-9656137dff8b"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 161,
+      "uuid": "da1b9726-2e84-5990-98ba-189abce5ee82"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 162,
+      "uuid": "10de628d-4b77-5e28-9c0c-07339923b2ce"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 165,
+      "uuid": "c1d3c099-3128-5317-9780-609005eded17"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 166,
+      "uuid": "7312f5ff-cb20-5ec9-985b-da9dc6e57d3c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 172,
+      "uuid": "b9a5ba9c-e80c-57de-bfcc-58e69a2c320c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 173,
+      "uuid": "6ed77e43-5e68-5c35-8386-2aaf0f583001"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 175,
+      "uuid": "64699238-0ed9-5c4f-8417-3b05abc55dff"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 178,
+      "uuid": "a6f38145-8752-59f2-9643-9e9a64a10b72"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 179,
+      "uuid": "cab382a2-a649-5a5e-91ec-4d0b3f1729a0"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 180,
+      "uuid": "428144a1-df9c-53ea-8600-cdfbd986f9f5"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 181,
+      "uuid": "ab0b4360-cbf8-56fc-ab55-c604bfe5a5d7"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 183,
+      "uuid": "155d3768-ece4-5216-acce-84e987e97fae"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 185,
+      "uuid": "89b73002-2f9d-5906-abe8-a5d2b91b64a7"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 186,
+      "uuid": "c78fb6d5-f44b-5f43-933b-7adf858b04d3"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 188,
+      "uuid": "d4d509e0-203b-54f3-a88f-20da126e49ad"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 189,
+      "uuid": "4aab48a0-d755-54f4-bc20-26d43c7d4bbd"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 192,
+      "uuid": "32365d7c-3c5e-5451-8ea8-e4a8ae308292"
+    },
+    {
+      "failed_gates": [
+        "max_context_color_distance",
+        "max_log_area_ratio",
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 193,
+      "uuid": "6b9ad5ed-fcc9-53d5-b589-92184bb2c35d"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 195,
+      "uuid": "1c74662c-3371-5a60-97c0-aa37433035fa"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 199,
+      "uuid": "48e2929e-37b4-5cd8-9579-3a35c91cf539"
+    },
+    {
+      "failed_gates": [
+        "max_changed_color_distance"
+      ],
+      "request_index": 201,
+      "uuid": "f470e89e-6b1e-5b3a-b040-9afd61697a57"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 202,
+      "uuid": "a006acdc-3f72-540d-addf-ce42419f8753"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 204,
+      "uuid": "eb8c016e-c824-5a8f-bf01-454ec0c71634"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 207,
+      "uuid": "503aa518-bfe1-5295-abc0-5b914bee0657"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 209,
+      "uuid": "a9727950-6f62-5afc-af49-8c0c6f83aa1f"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 210,
+      "uuid": "f526f541-36f3-51d8-a467-ea2c8962a93f"
+    },
+    {
+      "failed_gates": [
+        "max_context_color_distance",
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 211,
+      "uuid": "ce008562-8233-50ac-9d87-d98967752890"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 212,
+      "uuid": "5e501f03-32de-5315-a4d4-414a5d52a3a0"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 214,
+      "uuid": "ede8ed92-d1d5-576e-8182-c76ba042b0a2"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 215,
+      "uuid": "168a1d1b-ef27-52ed-90a1-4c11473a8017"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 218,
+      "uuid": "4b03f6be-467c-5a8b-8545-2507d242fd64"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 219,
+      "uuid": "b7eeb209-0b35-5614-9788-edaba9e821a7"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 224,
+      "uuid": "f034462f-3db8-5ea0-bdc3-9f9b73a671c3"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 225,
+      "uuid": "15a01ce3-96e4-5b1b-a990-9c4f8ce41f92"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 229,
+      "uuid": "c5c0d1db-e550-589d-9e0f-741ad2e8b983"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 235,
+      "uuid": "a52125d9-6bce-54d7-bc75-ee21e209f566"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 241,
+      "uuid": "6b5687a9-8b24-57cb-a28d-d6e516389305"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 244,
+      "uuid": "149008b0-8c06-5132-9e50-bb849ad32ad8"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 246,
+      "uuid": "8240c9c1-dbf3-58f2-8bf8-725980f978db"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 249,
+      "uuid": "83a8b623-3cf5-5e77-9b77-e3ca162c340a"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 256,
+      "uuid": "66197908-d337-5f50-a597-e78228820fd3"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 257,
+      "uuid": "92e79980-e64b-59e0-abe1-964ccb3a0537"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 258,
+      "uuid": "0157a3dc-16e0-5875-9eeb-23296f5a8ee4"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 262,
+      "uuid": "cc7155fc-af58-53da-b9b7-c3f47f4ad49a"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 264,
+      "uuid": "f62f5fb1-d8a8-5d51-8eaa-b2fa639dfd3a"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 275,
+      "uuid": "b90844f5-fc05-5748-94ed-06128340f2ff"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 288,
+      "uuid": "426fcb72-19b9-5108-afec-005813542462"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 292,
+      "uuid": "269ff287-514d-5b08-940a-cfc1de77ec55"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 295,
+      "uuid": "810152c0-98b6-58b1-808f-108d5f87618c"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance"
+      ],
+      "request_index": 296,
+      "uuid": "cca99431-0a9d-5e4d-bbea-28ab46c90d01"
+    },
+    {
+      "failed_gates": [
+        "max_shape_distance",
+        "max_changed_color_distance"
+      ],
+      "request_index": 298,
+      "uuid": "22831823-aa1d-58cd-b55d-852242778fee"
+    }
+  ]
+}

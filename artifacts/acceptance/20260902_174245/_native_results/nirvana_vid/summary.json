@@ -1,0 +1,74 @@
+{
+  "method": "nirvana_vid",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+    "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+    "completed_step": 10,
+    "reuse_start_step": 10
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a cat is sleeping on a grassland, focus on the cat",
+    "model": "Wan2.2",
+    "method": "nirvana_vid",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 40,
+    "latency_s": 232.45852463506162,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/nirvana_vid/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/nirvana_vid/videos/target.mp4",
+    "output_hash": "c787e5e781ff8ab6728ad23dc54f9b238e76b4895c52248ae92a6d92de4e9330",
+    "cache_bytes": 14082696,
+    "extra": {
+      "executed_steps": 40,
+      "restart_step": 10,
+      "source_trajectory": true,
+      "cache_steps": [
+        10
+      ],
+      "dit_forward_s": 207.86591876577586,
+      "dense_c0": null,
+      "timing": {
+        "cache_lookup_s": 0.000291160074993968,
+        "cache_load_s": 0.009904489852488041,
+        "generation_s": 229.35375702707097,
+        "save_video_s": 3.06281581800431,
+        "hash_s": 0.03174273599870503,
+        "preprocess_breakdown_s": 0.0,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 232.45852463506162
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+        "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/source_dense/latents_step_009.pt",
+        "completed_step": 10,
+        "reuse_start_step": 10
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260902_174245/shared_cache/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "0",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

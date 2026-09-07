@@ -1,0 +1,58 @@
+[
+    {
+        "prompt_en": "a puppy dog crying outside the cave in winter",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1000_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a puppy dog crying outside the cave in winter",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1001_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a puppy dog crying outside the cave in winter",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1002_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4"
+        ]
+    },
+    {
+        "prompt_en": "a puppy dog crying outside the cave in winter",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/common_hit_arrival_0000/vbench/input_videos_d7af78e739b8b370/1003_3384bf4f-88a8-5a0d-9487-f8d853c76d49.mp4"
+        ]
+    }
+]

@@ -1,0 +1,8 @@
+{
+  "config_fingerprint": "d8cb418cb4f919b23892d2999be9ac3fe19d3046720d51672d7985338c29cbdc",
+  "entry_bytes": 1744809678,
+  "estimated_total_bytes": 1744809678000,
+  "format": "shared-cross-request-cache/v4",
+  "input_sha256": "435655933521243544cf80e1810667a78c86522ab0173a511bce7f84fce6986c",
+  "required_free_bytes": 2093771613600
+}

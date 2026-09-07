@@ -1,0 +1,205 @@
+\section{Method}
+
+\subsection{Overview and Problem Setup}
+
+Let $q$ denote a target video generation request and $\mathcal{B}=\{\mathcal{C}_1,\ldots,\mathcal{C}_M\}$ a cache bank constructed from completed historical requests.
+For each target request, \emph{Carnator} determines whether a historical cache contains computation that can be safely reused for the target generation.
+It first performs text-level recall to retrieve requests with compatible noun compositions, then runs a short target probe to construct generation-native object signatures from the model's internal attention states.
+These signatures are compared with the recalled cache signatures to produce a binary reuse decision.
+If no candidate is compatible, the target continues with standard generation.
+Otherwise, \emph{Carnator} reuses the accepted cache through a unified inference path that jointly exploits cached latent states and historical sparse attention patterns.
+Sec.~\ref{subsec-cache_compatibility} focuses on generation-level cache compatibility assessment, while Sec.~\ref{subsec-joint_reuse} develops a joint latent-attention reuse mechanism for exploiting accepted caches across latent trajectories and attention connectivity.
+
+
+\subsection{Generation-Level Cache Compatibility}
+\label{subsec-cache_compatibility}
+
+\paragraph{Generation-Native Signature Construction}
+\emph{Carnator} requires generation-level evidence before committing to cache reuse.
+For a request $r$ with prompt $y_r$, \emph{Carnator} performs a lightweight early probe and constructs an object-level Early Signature $S_r$ from the partially formed generation state.
+Each noun entity is localized from the model's internal cross- and self-attention states and summarized using compact reuse-relevant descriptors for subsequent cache compatibility assessment.
+
+For each noun entity $o\in\mathcal{N}(y_r)$, \emph{Carnator} applies Cross-to-Self Attention Probe (CSAP) to obtain its spatial support, following prior use of cross- and self-attention for semantic localization~\citep{liu2024towards,qi2023fatezero}.
+For visual token $i\in\Omega$, $A^{\mathrm{cross}}_{l,h}[i,o]$ denotes its cross-attention weight to noun $o$ at Transformer layer $l$ and head $h$.
+CSAP aggregates these responses as
+$C_i^o=\mathrm{Agg}_{l,h}A^{\mathrm{cross}}_{l,h}[i,o]$,
+with high- and low-response tokens forming the noun and noise seed sets $\mathcal{I}_o^{+}$ and $\mathcal{I}_o^{-}$, respectively.
+The seeds are then expanded through self-attention using
+$
+S_i^o=
+\operatorname{Agg}_{h}
+\left[
+\max_{u\in\mathcal I_o^{+}}A_h^{\mathrm{self}}[i,u]
+-
+\max_{u\in\mathcal I_o^{-}}A_h^{\mathrm{self}}[i,u]
+\right].
+$
+Fusing $C_i^o$ and $S_i^o$ and thresholding the resulting object-support score yields the Evidence Region
+$R_{r,o}^{\mathrm{evidence}}\subseteq\Omega$.
+
+\emph{Carnator} converts the Evidence Region into a binary spatial indicator
+$m_{r,o}\in\{0,1\}^{H\times W}$.
+Its normalized area and spatial centroid are
+$A_{r,o}=\sum_{h,w}m_{r,o}(h,w)/(HW)$
+and $\boldsymbol{\mu}_{r,o}$, respectively.
+Appearance is represented by the mean CIELAB color
+$\mathbf{c}_{r,o}^{\mathrm{Lab}}\in\mathbb{R}^3$
+over the corresponding decoded region.
+The resulting object-level signature is
+$
+s_{r,o}
+=
+(m_{r,o},A_{r,o},\boldsymbol{\mu}_{r,o},\mathbf{c}_{r,o}^{\mathrm{Lab}}).
+$
+
+We collect the noun-specific signatures into
+$S_r=\{s_{r,o}\mid o\in\mathcal{N}(y_r)\}$,
+which is stored with the reusable latent states and sparse-attention patterns of each completed historical request.
+
+\paragraph{Two-Stage Cross-Request Cache Retrieval}
+Given a target request $q$ and cache bank $\mathcal{B}$, \emph{Carnator} first performs efficient text-level candidate recall and then applies Early-Signature comparison for generation-level compatibility filtering.
+
+\emph{Carnator} retrieves the top-$K$ historical requests with the highest CLIP text similarity~\cite{radford2021learning}, forming the coarse candidate set $\widetilde{\mathcal{L}}_q$.
+Let $\mathcal{N}(y)$ denote the noun set extracted from prompt $y$.
+A candidate $\mathcal{C}_j\in\widetilde{\mathcal{L}}_q$ is retained only when
+$
+|\mathcal{N}(y_q)\setminus\mathcal{N}(y_j)|
+=
+|\mathcal{N}(y_j)\setminus\mathcal{N}(y_q)|
+\leq1.
+$
+For each retained candidate,
+$\mathcal{O}_{\mathrm{same}}=\mathcal{N}(y_q)\cap\mathcal{N}(y_j)$
+denotes the shared nouns, while $o_q$ and $o_j$ denote the target-only and historical-only nouns when one substitution exists.
+The retained candidates preserve their CLIP-similarity order.
+
+The target constructs its Early Signature $S_q$ once and compares it with the stored signature $S_j$ of each retained candidate $\mathcal{C}_j$.
+For the shared nouns, \emph{Carnator} measures the maximum appearance discrepancy
+$
+D_{\mathrm{context}}
+=
+\max_{o\in\mathcal{O}_{\mathrm{same}}}
+\Delta E_{00}
+\left(
+\mathbf{c}^{\mathrm{Lab}}_{q,o},
+\mathbf{c}^{\mathrm{Lab}}_{j,o}
+\right),
+$
+where $D_{\mathrm{context}}=0$ when $\mathcal{O}_{\mathrm{same}}$ is empty.
+When one noun substitution exists, \emph{Carnator} further compares the size, shape, and appearance of $o_q$ and $o_j$ as
+\[
+d_{\mathrm{size}}
+=
+\left|
+\log\frac{A_{q,o_q}}{A_{j,o_j}}
+\right|,
+\qquad
+d_{\mathrm{shape}}
+=
+1-
+\frac{
+2|\widetilde{m}_{q,o_q}\cap\widetilde{m}_{j,o_j}|
+}{
+|\widetilde{m}_{q,o_q}|+|\widetilde{m}_{j,o_j}|
+},
+\qquad
+d_{\mathrm{color}}
+=
+\Delta E_{00}
+\left(
+\mathbf{c}^{\mathrm{Lab}}_{q,o_q},
+\mathbf{c}^{\mathrm{Lab}}_{j,o_j}
+\right).
+\]
+Here, $\widetilde{m}_{q,o_q}$ and $\widetilde{m}_{j,o_j}$ denote centroid-aligned and scale-normalized object indicators.
+
+Given thresholds
+$\boldsymbol{\tau}
+=
+(\tau_{\mathrm{context}},
+\tau_{\mathrm{size}},
+\tau_{\mathrm{shape}},
+\tau_{\mathrm{color}})$,
+the compatibility decision is
+\[
+g_{\boldsymbol{\tau}}(q,\mathcal{C}_j)
+=
+\mathbb{I}[D_{\mathrm{context}}\leq\tau_{\mathrm{context}}]
+\mathbb{I}[d_{\mathrm{size}}\leq\tau_{\mathrm{size}}]
+\mathbb{I}[d_{\mathrm{shape}}\leq\tau_{\mathrm{shape}}]
+\mathbb{I}[d_{\mathrm{color}}\leq\tau_{\mathrm{color}}].
+\]
+For identical noun sets, only the shared-noun context criterion is applied.
+\emph{Carnator} selects the first compatible candidate in CLIP order and falls back to standard generation if none satisfies the rule.
+
+\paragraph{Risk-Constrained Threshold Calibration}
+\emph{Carnator} calibrates $\boldsymbol{\tau}$ from observed reuse outcomes, labeling each request--cache pair as
+$
+y_i=
+\mathbb{I}
+[\Delta Q_i^{(m)}\leq\epsilon_m,\ \forall m\in\mathcal{M}],
+$
+where $y_i=1$ denotes safe reuse.
+On the threshold-selection set, we choose
+ $
+\boldsymbol{\tau}^{\star}
+=
+\arg\max_{\boldsymbol{\tau}} C(\boldsymbol{\tau})
+\quad
+\mathrm{s.t.}
+\quad
+R(\boldsymbol{\tau})\leq\delta,
+\label{eq_threshold_calibration}
+$
+with
+$
+C(\boldsymbol{\tau})
+=
+\frac{1}{N}\sum_i g_{\boldsymbol{\tau}}(i),
+\qquad
+R(\boldsymbol{\tau})
+=
+\frac{\sum_i g_{\boldsymbol{\tau}}(i)(1-y_i)}
+{\sum_i g_{\boldsymbol{\tau}}(i)}.
+$
+The selected $\boldsymbol{\tau}^{\star}$ is then evaluated on a disjoint certification set and accepted only when the one-sided Clopper--Pearson upper bound satisfies
+$U_{\alpha}(u,n)\leq\delta$
+for $n$ accepted pairs with $u$ unsafe cases, at confidence level $1-\alpha$.
+
+\subsection{Joint Latent-Attention Inference with Cache Reuse}
+\label{subsec-joint_reuse}
+
+Once a historical cache $\mathcal{C}_{j^\star}$ is accepted, \emph{Carnator} jointly exploits two forms of reusable computation from the historical generation: its latent trajectory and sparse attention connectivity. The target generation resumes from a cached intermediate state and continues denoising under the target prompt. During the remaining generation process, latent reuse preserves historical computation in compatible regions, while attention reuse transfers the sparse interaction structure learned from the historical request. These two mechanisms operate at complementary levels, reducing redundant token updates and query--key interactions while retaining target-specific computation where necessary.
+
+\paragraph{Region-Guided Latent Reuse.}
+For latent reuse, \emph{Carnator} uses the object regions obtained from the accepted cache to localize target-specific computation. The Evidence Region $\mathcal{R}_{\mathrm{evidence}}$ is spatially expanded into an Active Region $\mathcal{R}_{\mathrm{active}}$ and a larger Context Region $\mathcal{R}_{\mathrm{context}}$, satisfying
+$
+\mathcal{R}_{\mathrm{evidence}}
+\subseteq
+\mathcal{R}_{\mathrm{active}}
+\subseteq
+\mathcal{R}_{\mathrm{context}}.
+$
+Tokens within $\mathcal{R}_{\mathrm{active}}$ are updated according to the target request, while the remaining latent states are inherited from the historical trajectory. Within selected middle Transformer layers, active tokens are recomputed using contextual keys and values from $\mathcal{R}_{\mathrm{context}}$, whereas tokens outside $\mathcal{R}_{\mathrm{active}}$ preserve their cached computation. We focus region-restricted updates on intermediate layers, motivated by prior observations that intermediate diffusion representations contain richer visual-semantic information~\citep{pnvr2023ld}. For each subsequent denoising step, the resulting latent can be expressed as
+\begin{equation}
+\mathbf{z}_{k+1}
+=
+\mathbf{1}_{\mathcal{R}_{\mathrm{active}}}
+\odot
+\widehat{\mathbf{z}}^{q}_{k+1}
++
+\left(
+1-\mathbf{1}_{\mathcal{R}_{\mathrm{active}}}
+\right)
+\odot
+\mathbf{z}^{j^\star}_{k+1},
+\label{eq_latent_reuse}
+\end{equation}
+where $\widehat{\mathbf{z}}^{q}_{k+1}$ denotes the target-updated latent and $\mathbf{z}^{j^\star}_{k+1}$ denotes the corresponding historical latent.
+
+
+\paragraph{Historical Sparse-Attention Reuse.}
+In parallel, \emph{Carnator} reuses the sparse attention structure recorded during the historical generation. For each denoising step, Transformer layer, and attention head, the historical request stores the blockwise connectivity that captures its dominant query--key interactions. During target inference, \emph{Carnator} recomputes the target $\mathbf{Q}$, $\mathbf{K}$, and $\mathbf{V}$ representations but reuses the historical sparse block structure to determine which query--key interactions are evaluated. Thus, the transferred computation describes \emph{where} attention is performed rather than reusing historical attention values themselves. This allows the target request to preserve its own representations while avoiding the dense attention computation associated with structurally redundant interactions.
+
+\paragraph{Joint Reuse in Intermediate Layers.}
+The two forms of reuse are combined in the middle Transformer layers. In these layers, historical sparse connectivity is further constrained by the target-specific computation domain defined by $\mathcal{R}_{\mathrm{active}}$ and $\mathcal{R}_{\mathrm{context}}$. Only historical connectivity associated with active queries and their valid contextual tokens is retained, so attention reuse is restricted to the portion of the historical structure that remains relevant to the target generation. Other Transformer layers directly reuse the historical sparse block structure without this additional region constraint. In this way, \emph{Carnator} combines region-guided latent reuse with connection-level attention reuse, reducing computation along both the token and attention dimensions while preserving target-specific semantic updates.
