@@ -1,0 +1,50 @@
+{
+  "full_computation": {
+    "resolution": "1280x704",
+    "fps": 24.0,
+    "total_frames": 121,
+    "sharpness_mean": 454.2257315825688,
+    "sharpness_std": 126.55583162733495,
+    "brightness_mean": 114.70503747188681,
+    "contrast_mean": 48.16016800919944,
+    "saturation_mean": 130.91606330640386,
+    "temporal_stability": 21.077772883910495,
+    "frames_analyzed": 30
+  },
+  "latent_only": {
+    "resolution": "1280x704",
+    "fps": 24.0,
+    "total_frames": 121,
+    "sharpness_mean": 454.2257315825688,
+    "sharpness_std": 126.55583162733495,
+    "brightness_mean": 114.70503747188681,
+    "contrast_mean": 48.16016800919944,
+    "saturation_mean": 130.91606330640386,
+    "temporal_stability": 21.077772883910495,
+    "frames_analyzed": 30
+  },
+  "attention_only": {
+    "resolution": "1280x704",
+    "fps": 24.0,
+    "total_frames": 121,
+    "sharpness_mean": 454.2257315825688,
+    "sharpness_std": 126.55583162733495,
+    "brightness_mean": 114.70503747188681,
+    "contrast_mean": 48.16016800919944,
+    "saturation_mean": 130.91606330640386,
+    "temporal_stability": 21.077772883910495,
+    "frames_analyzed": 30
+  },
+  "joint": {
+    "resolution": "1280x704",
+    "fps": 24.0,
+    "total_frames": 121,
+    "sharpness_mean": 454.2257315825688,
+    "sharpness_std": 126.55583162733495,
+    "brightness_mean": 114.70503747188681,
+    "contrast_mean": 48.16016800919944,
+    "saturation_mean": 130.91606330640386,
+    "temporal_stability": 21.077772883910495,
+    "frames_analyzed": 30
+  }
+}

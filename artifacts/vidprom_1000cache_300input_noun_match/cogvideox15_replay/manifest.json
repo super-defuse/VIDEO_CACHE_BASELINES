@@ -1,0 +1,13 @@
+{
+  "schema_version": "cogvideox15-hit-replay/v1",
+  "legacy_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305",
+  "methods": {
+    "nirvana_vid": 300,
+    "teacache": 300,
+    "chorus": 300,
+    "chorus2": 300,
+    "carnator_boundary_b5": 300
+  },
+  "requests": 300,
+  "teacache_hit_rate": "N/A"
+}

@@ -32,6 +32,11 @@
       "url": "https://github.com/beichenzbc/Long-CLIP.git",
       "commit": "3966af9ae9331666309a22128468b734db4672a7"
     },
+    "ltxvideo": {
+      "path": "external/LTX-Video",
+      "url": "https://github.com/Lightricks/LTX-Video.git",
+      "commit": "4b2d053057623ddd4d0a1d3e9cd28890e9ef487f"
+    },
     "vbench": {
       "path": "external/vbench",
       "url": "https://github.com/Vchitect/VBench.git",

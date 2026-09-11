@@ -1,3 +1,8 @@
-# Retrieval dependencies for the CogVideoX1.5 runtime.
-# Chorus is N/A for CogVideoX1.5, so ChromaDB is intentionally not installed.
+# Retrieval and Grounded-SAM-2 dependencies for CogVideoX1.5.
 -r retrieval-common.txt
+addict
+yapf
+timm
+supervision>=0.22.0
+pycocotools
+six==1.17.0

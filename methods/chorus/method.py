@@ -24,8 +24,17 @@ class Chorus(BaselineMethod):
 
     def generate(self, request, *, cached_latent=None, capture=False):
         assert self.adapter is not None
-        if self.adapter.model_name == "CogVideoX1.5":
-            raise NotImplementedError("Chorus is N/A for CogVideoX1.5")
+        # CogVideoX1.5 and Wan2.1 replay runners assign the source video and
+        # stage boundaries directly on the adapter; there is no namespace
+        # cache entry to consult.
+        if self.adapter.model_name in {"CogVideoX1.5", "Wan2.1"} or self.config.get("model") in {"cogvideox15", "wan21"}:
+            return self.adapter.generate(
+                request,
+                fast=cached_latent is not None,
+                cached_latent=cached_latent,
+                capture=capture,
+                method=self.name,
+            )
         # A cache miss produces a dense source trajectory. A semantic hit is a
         # target request even though it has no manually supplied cache_prompt.
         is_source = cached_latent is None

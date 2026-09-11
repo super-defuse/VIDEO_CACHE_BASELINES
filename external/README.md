@@ -16,6 +16,7 @@ weights remain outside this directory and are configured with `model_path`.
 | `wan2.2` | Wan2.2 model runtime |
 | `cogvideo` | CogVideo model runtime |
 | `lightx2v` | LightX2V distilled-Wan runtime |
+| `LTX-Video` | LTXV model runtime (official Lightricks source) |
 | `spargeattn` | SpargeAttn sparse-attention backend |
 | `grounded-sam2` | Grounded-SAM-2 mask backend |
 | `Long-CLIP` | Official LongCLIP module used by CHAI entity retrieval |

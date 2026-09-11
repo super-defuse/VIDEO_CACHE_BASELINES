@@ -4,9 +4,9 @@ methods:
     wan22: supported
     cogvideox15: supported
   chai:
-    environment: wan,cogvideo
+    environment: wan
     wan22: supported
-    cogvideox15: supported
+    cogvideox15: N/A-outside-cogvideox15-plan
   teacache:
     environment: wan,cogvideo
     wan22: supported
@@ -18,15 +18,19 @@ methods:
   carnator:
     environment: wan,cogvideo
     wan22: supported-via-matrix-cli
-    cogvideox15: supported-source-latent-reuse
-  chorus2:
-    environment: wan
+    cogvideox15: supported-via-carnator_boundary_b5
+  carnator_boundary_b5:
+    environment: cogvideo
     wan22: supported-via-native-cli
-    cogvideox15: N/A
+    cogvideox15: supported
+  chorus2:
+    environment: wan,cogvideo
+    wan22: supported-via-native-cli
+    cogvideox15: supported
   chorus:
-    environment: wan
+    environment: wan,cogvideo
     wan22: supported-via-source-target-matrix
-    cogvideox15: N/A
+    cogvideox15: supported
   chorus_no_tgaa:
     environment: wan
     wan22: supported-via-source-target-matrix

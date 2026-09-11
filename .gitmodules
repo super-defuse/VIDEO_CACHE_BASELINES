@@ -16,3 +16,6 @@
 [submodule "longclip"]
 	path = external/Long-CLIP
 	url = https://github.com/beichenzbc/Long-CLIP.git
+[submodule "ltxvideo"]
+	path = external/LTX-Video
+	url = https://github.com/Lightricks/LTX-Video.git

@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from scripts.generate_seedream_comparison_images import (
+from scripts.figures.generate_seedream_comparison_images import (
     DEFAULT_CANVAS_SIZE,
     DEFAULT_RESOLUTION,
     IMAGE_SPECS,

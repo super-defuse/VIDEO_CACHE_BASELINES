@@ -1,0 +1,22 @@
+
+================================================================================
+Running chorus2 on GPU 3 (first 10 samples)
+================================================================================
+
+Loaded 10 replay decisions for chorus2
+Loaded 1000 source prompts from index
+Output directory: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cogvideox15_5baselines_10samples/chorus2_20260909_180814_gpu3
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]Loading pipeline components...:  20%|██        | 1/5 [00:00<00:00,  4.93it/s]Loading pipeline components...:  40%|████      | 2/5 [00:03<00:05,  1.91s/it]`torch_dtype` is deprecated! Use `dtype` instead!
+
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s][A
+Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:06,  2.04s/it][A
+Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.14s/it][A
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:06<00:02,  2.13s/it][A
+Loading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.90s/it][ALoading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.98s/it]
+Loading pipeline components...:  60%|██████    | 3/5 [00:11<00:09,  4.68s/it]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s][ALoading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 65.56it/s]
+Loading pipeline components...: 100%|██████████| 5/5 [00:11<00:00,  2.12s/it]Loading pipeline components...: 100%|██████████| 5/5 [00:11<00:00,  2.32s/it]
+
+✓ chorus2 completed successfully
+  Processed 10 requests in 26.5s
+  Results: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/cogvideox15_5baselines_10samples/chorus2_20260909_180814_gpu3/results.jsonl

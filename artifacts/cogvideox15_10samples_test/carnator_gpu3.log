@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+  File "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/scripts/run_10samples_simple.py", line 15, in <module>
+    from core.registry import load_method
+ImportError: cannot import name 'load_method' from 'core.registry' (/home/tangxuebin/project/VIDEO_CACHE_BASELINES/core/registry.py)

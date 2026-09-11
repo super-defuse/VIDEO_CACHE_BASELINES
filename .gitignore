@@ -141,3 +141,59 @@ artifacts/acceptance/*/ti2v-5b/*/*/videos/
 
 # Diagnostic VBench input videos merely link to the retained 300-request run.
 artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/*/vbench/input_videos_*/
+
+# Archived logs, superseded scripts, and docs merged into docs/. Local reference
+# only; nothing here is part of the published repository state.
+/_archive/
+
+# Carnator single-request ablation: publish the design docs, summary, and quality
+# metrics; videos, caches, and per-variant run logs are regenerable locally.
+artifacts/ablation_req16_*/*/ablation/videos/
+artifacts/ablation_req16_*/*/ablation/cache/
+artifacts/ablation_req16_*/vbench/
+artifacts/ablation_req16_*/*/run.log
+
+# CogVideoX 10-sample and fusion-mask diagnostics. Keep the compact
+# results.jsonl and driver logs; the generated videos, temporary caches, and
+# source-preparation payloads stay local.
+artifacts/cogvideox15_10samples_test/*/videos/
+artifacts/cogvideox15_10samples_test/*/cache/
+artifacts/cogvideox15_5baselines_10samples/*/videos/
+artifacts/cogvideox15_5baselines_10samples/*/cache/
+artifacts/cogvideox15_5baselines_10samples/*/tmp_cache/
+artifacts/cogvideox15_5baselines_10samples/*/source_prepare/
+artifacts/fusion_mask_experiment_*/*/videos/
+artifacts/fusion_mask_experiment_*/*/cache/
+artifacts/fusion_mask_experiment_*/*/tmp_cache/
+artifacts/fusion_mask_experiment_*/*/source_prepare/
+
+# Mask overlay PNGs are a local diagnostic rendering, not a published result.
+artifacts/mask_visualization_carnator/
+
+# Wan2.1 run logs are append-only operational history; results.jsonl and the
+# aggregation outputs are the durable records.
+artifacts/wan21_experiment_logs/
+artifacts/wan21_rerun_logs/
+
+# Wan2.1 replay runs: keep results.jsonl, summaries, and reports; the 600MB of
+# generated videos, temporary caches, and VBench evaluator payloads stay local.
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/videos/
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/cache/
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/tmp_cache/
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/native/
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/vbench/
+artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/source_prepare/
+
+# CogVideoX 3-request adapter test payloads.
+artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/videos/
+artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/cache/
+artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/tmp_cache/
+artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/native/
+artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/vbench/
+
+# TODO(wan21-submodule): this checkout carries local patches that the Wan2.1
+# baselines depend on (`masks_like` in wan/utils/utils.py, plus 6 lines in
+# wan/modules/model.py). It is excluded until the patched tree is published to
+# a fork, at which point it becomes a submodule like external/wan2.2 and this
+# rule plus the line below are removed.
+external/Wan2.1/

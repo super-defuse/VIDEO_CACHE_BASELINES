@@ -1,0 +1,190 @@
+{
+  "method": "baseline",
+  "gpu": 3,
+  "seed": 20260218,
+  "limit": 10,
+  "arrival_start": 0,
+  "arrival_stop": 10,
+  "request_indices": null,
+  "forced_smoke": {
+    "enabled": false,
+    "request_0": null,
+    "request_1": null,
+    "hit_source_uuid": null,
+    "tea_cache": "not_applicable_target_only"
+  },
+  "early_signature_disabled": false,
+  "early_signature_thresholds": {
+    "max_context_color_distance": 2.5460641772840114,
+    "max_log_area_ratio": 1.6755377126043391,
+    "max_shape_distance": 1.0,
+    "max_changed_color_distance": 2.2003341853972085
+  },
+  "input": "/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv",
+  "cache_view": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/source_view",
+  "input_sha256": "345538f1e7bfb0988b40747150694246b11daaa74f78b8d803fa67f494283e9b",
+  "view_manifest_sha256": "99b69b28a0e8888791152fa7c8b7b91a401f999a387fd8d23552d1c5683cb1fe",
+  "persist_target_cache": false,
+  "request_error_policy": {
+    "mode": "record_and_continue",
+    "terminal_statuses": [
+      "ok",
+      "cache_miss",
+      "error"
+    ],
+    "quality_statuses": [
+      "ok"
+    ]
+  },
+  "warmup": {
+    "enabled": true,
+    "timed": false,
+    "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+    "target_prompt": "a cat is sleeping on a grassland, focus on the cat"
+  },
+  "native_worker_policy": null,
+  "dense_c0": {
+    "version": "wan22-dense-c0-v1",
+    "steps": 50
+  },
+  "denoising_timing": "cuda_synchronized_dit_forward; Carnator adds B5 probe",
+  "native_artifact_policy": "top_level_video_and_records_only",
+  "target_probe_enabled": false,
+  "target_probe_completed_step": null,
+  "target_probe_seed": null,
+  "git_revision": "fce2d37c897ac729bb4f07ce2cac6d67caf03ab5",
+  "config_fingerprint": "c6658cf3c2c31d94d879d26c9fc269926b52a99c077a3c4cf454697064fa9ce8",
+  "resolved_config": {
+    "model": "wan21",
+    "model_path": "/home/tangxuebin/models/Wan2.1-T2V-1.3B",
+    "wan_source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/Wan2.1",
+    "wan_config_key": "t2v-1.3B",
+    "device": "cuda:3",
+    "dtype": "bfloat16",
+    "width": 1280,
+    "height": 704,
+    "frames": 121,
+    "baseline_steps": 50,
+    "fast_steps": 8,
+    "seed": 20260218,
+    "guidance_scale": 5.0,
+    "shift": 5.0,
+    "solver": "unipc",
+    "source_cache_steps": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cache_attention": {
+      "blocks": [
+        0
+      ],
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "teacache": {
+      "relative_l1_threshold": 0.08,
+      "max_skip_steps": 2
+    },
+    "nirvana_vid": {
+      "reuse_start_step": 5,
+      "cache_steps": [
+        5
+      ]
+    },
+    "chorus": {
+      "stages": {
+        "k1": 5,
+        "k2": 30
+      },
+      "gamma_k": 1.5,
+      "gamma_o": 1.5,
+      "joint_gamma_1_6": {
+        "gamma_k": 1.3,
+        "gamma_o": 1.3
+      },
+      "joint_gamma_2_1": {
+        "gamma_k": 1.6,
+        "gamma_o": 1.6
+      },
+      "joint_gamma_2_0": {
+        "gamma_k": 2.0,
+        "gamma_o": 2.0
+      },
+      "tgaa_blocks": "all",
+      "tgaa_schedule": "linear_step_decay_approximation",
+      "mask_dilation_edit": 8,
+      "mask_dilation_see": 14,
+      "grounded_sam2": {
+        "release": "v1.0",
+        "commit": "dd4c514",
+        "root": "external/grounded-sam2",
+        "checkpoint_dir": "models/Grounded-SAM-2-v1.0",
+        "device": "cuda",
+        "hf_endpoint": "https://hf-mirror.com",
+        "box_threshold": 0.35,
+        "text_threshold": 0.25,
+        "sam_checkpoint": "sam2.1_hiera_large.pt",
+        "sam_config": "configs/sam2.1/sam2.1_hiera_l.yaml",
+        "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+        "groundingdino_config": "GroundingDINO_SwinT_OGC.py"
+      }
+    },
+    "cache_root": "cache",
+    "max_cache_bytes": 5368709120,
+    "retrieval": {
+      "nirvana_vid": {
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:3",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "reuse_step": 5
+      },
+      "chai": {
+        "backend": "longclip",
+        "longclip_checkpoint": "/home/tangxuebin/models/longclip/longclip-L.pt",
+        "longclip_module": "model.longclip",
+        "device": "cuda:3",
+        "vector_backend": "faiss",
+        "spacy_model": "en_core_web_sm",
+        "sim_thres_for_search": 0.9,
+        "sim_thres_for_add": 0.95
+      },
+      "chorus": {
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:3",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "stage_scheduler": {
+          "min_k1": 5,
+          "min_k2": 30,
+          "max_k1": 5,
+          "max_k2": 30
+        }
+      },
+      "carnator": {
+        "retrieval_version": "v2",
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:3",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "candidate_top_k": 20,
+        "stage2_candidate_top_k": 5,
+        "spacy_model": "en_core_web_sm",
+        "max_context_color_distance": 2.5460641772840114,
+        "max_log_area_ratio": 1.6755377126043391,
+        "max_shape_distance": 1.0,
+        "max_changed_color_distance": 2.2003341853972085
+      }
+    },
+    "dry_run": false
+  }
+}

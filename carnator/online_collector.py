@@ -361,7 +361,8 @@ class NativeOnlineCollector:
             token_grid,
         )
         model = self.runtime.pipe.model
-        if args.offload_model or self.runtime.pipe.init_on_cpu:
+        # Wan2.1's WanT2V has no ``init_on_cpu``; only Wan2.2's WanTI2V carries it.
+        if args.offload_model or getattr(self.runtime.pipe, "init_on_cpu", False):
             model.to(self.runtime.device)
             torch.cuda.empty_cache()
 

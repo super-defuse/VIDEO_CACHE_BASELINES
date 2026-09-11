@@ -1,0 +1,167 @@
+{
+  "schema_version": "wan21-experiment/v1",
+  "model": "Wan2.1-T2V-1.3B",
+  "model_path": "/home/tangxuebin/models/Wan2.1-T2V-1.3B",
+  "legacy_source_view": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/source_view",
+  "legacy_source_view_manifest_sha256": "99b69b28a0e8888791152fa7c8b7b91a401f999a387fd8d23552d1c5683cb1fe",
+  "input": "/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv",
+  "input_sha256": "345538f1e7bfb0988b40747150694246b11daaa74f78b8d803fa67f494283e9b",
+  "replay_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_replay",
+  "replay_sha256": "73314bd8390b801dd933431bb8ff85512f239283d09f9c42d5390496cef674f4",
+  "git_revision": "fce2d37c897ac729bb4f07ce2cac6d67caf03ab5",
+  "resolved_config": {
+    "model": "wan21",
+    "model_path": "/home/tangxuebin/models/Wan2.1-T2V-1.3B",
+    "wan_source": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/Wan2.1",
+    "wan_config_key": "t2v-1.3B",
+    "wan_version": 2.1,
+    "device": "cuda:4",
+    "dtype": "bfloat16",
+    "width": 1280,
+    "height": 704,
+    "frames": 121,
+    "baseline_steps": 50,
+    "fast_steps": 8,
+    "seed": 20260218,
+    "guidance_scale": 5.0,
+    "shift": 5.0,
+    "solver": "unipc",
+    "source_cache_steps": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cache_attention": {
+      "blocks": [
+        0
+      ],
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "teacache": {
+      "relative_l1_threshold": 0.08,
+      "max_skip_steps": 2
+    },
+    "nirvana_vid": {
+      "reuse_start_step": 5,
+      "cache_steps": [
+        5
+      ]
+    },
+    "chorus": {
+      "stages": {
+        "k1": 5,
+        "k2": 30
+      },
+      "gamma_k": 1.5,
+      "gamma_o": 1.5,
+      "joint_gamma_1_6": {
+        "gamma_k": 1.3,
+        "gamma_o": 1.3
+      },
+      "joint_gamma_2_1": {
+        "gamma_k": 1.6,
+        "gamma_o": 1.6
+      },
+      "joint_gamma_2_0": {
+        "gamma_k": 2.0,
+        "gamma_o": 2.0
+      },
+      "tgaa_blocks": "all",
+      "tgaa_schedule": "linear_step_decay_approximation",
+      "mask_dilation_edit": 8,
+      "mask_dilation_see": 14,
+      "grounded_sam2": {
+        "release": "v1.0",
+        "commit": "dd4c514",
+        "root": "external/grounded-sam2",
+        "checkpoint_dir": "models/Grounded-SAM-2-v1.0",
+        "device": "cuda",
+        "hf_endpoint": "https://hf-mirror.com",
+        "box_threshold": 0.35,
+        "text_threshold": 0.25,
+        "sam_checkpoint": "sam2.1_hiera_large.pt",
+        "sam_config": "configs/sam2.1/sam2.1_hiera_l.yaml",
+        "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+        "groundingdino_config": "GroundingDINO_SwinT_OGC.py"
+      }
+    },
+    "chorus2": {
+      "sparse_start_step": 10,
+      "layer_refresh_size": 8,
+      "outer_backend": "sparge-sage2"
+    },
+    "carnator_b5": {
+      "latent_injection_mode": "boundary-blend",
+      "boundary_alpha_function": "smoothstep",
+      "outer_backend": "sparge-sage2",
+      "ffn_backend": "w8a8"
+    },
+    "cache_root": "cache",
+    "max_cache_bytes": 5368709120,
+    "retrieval": {
+      "nirvana_vid": {
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:4",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "reuse_step": 5
+      },
+      "chai": {
+        "backend": "longclip",
+        "longclip_checkpoint": "/home/tangxuebin/models/longclip/longclip-L.pt",
+        "longclip_module": "model.longclip",
+        "device": "cuda:4",
+        "vector_backend": "faiss",
+        "spacy_model": "en_core_web_sm",
+        "sim_thres_for_search": 0.9,
+        "sim_thres_for_add": 0.95
+      },
+      "chorus": {
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:4",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "stage_scheduler": {
+          "min_k1": 5,
+          "min_k2": 30,
+          "max_k1": 5,
+          "max_k2": 30
+        }
+      },
+      "carnator": {
+        "retrieval_version": "v2",
+        "backend": "clip",
+        "model_id": "openai/clip-vit-large-patch14",
+        "device": "cuda:4",
+        "vector_backend": "chroma",
+        "min_similarity": 0.65,
+        "candidate_top_k": 20,
+        "stage2_candidate_top_k": 5,
+        "spacy_model": "en_core_web_sm",
+        "max_context_color_distance": 2.5460641772840114,
+        "max_log_area_ratio": 1.6755377126043391,
+        "max_shape_distance": 1.0,
+        "max_changed_color_distance": 2.2003341853972085
+      }
+    },
+    "dry_run": false
+  },
+  "replay_policy": "legacy hit/miss and source UUID are immutable ground truth; baseline runs every request",
+  "miss_policy": "skipped without generation (status cache_miss, latency 0)",
+  "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
+  "request_error_policy": "record error without changing replay decision",
+  "args": {
+    "method": "nirvana_vid",
+    "gpu": 4,
+    "limit": 10,
+    "seed": 20260218
+  }
+}

@@ -449,6 +449,42 @@ def dense_block_masked_attention(
     return torch.matmul(probs, vh).transpose(0, 1).to(dtype=q.dtype)
 
 
+def pack_bool_mask(mask: torch.Tensor) -> tuple[bytes, int]:
+    """Bit-pack a canonical attention mask into the v1 on-disk layout.
+
+    Elements are packed LSB-first: flat element ``k`` lands in byte ``k // 8``
+    at bit ``k % 8``, which is exactly what :func:`unpack_bool_mask` and
+    ``SourceBlockMaskCache._decode`` invert.  A ``torch.bool`` tensor spends a
+    whole byte per element, so this is an 8x reduction with no information loss.
+    """
+
+    if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool or mask.ndim != 3:
+        raise ValueError("canonical attention mask must be bool[heads,q_blocks,k_blocks]")
+    flat = mask.detach().cpu().contiguous().reshape(-1).to(torch.uint8)
+    element_count = int(flat.numel())
+    padding = (-element_count) % 8
+    if padding:
+        flat = torch.cat((flat, torch.zeros(padding, dtype=torch.uint8)))
+    # int16 accumulation keeps every byte unambiguously in 0..255.
+    weights = (1 << torch.arange(8, dtype=torch.uint8)).view(1, 8)
+    packed = (flat.view(-1, 8) * weights).sum(dim=1, dtype=torch.int16).to(torch.uint8)
+    return packed.numpy().tobytes(), element_count
+
+
+def unpack_bool_mask(payload: bytes, shape: list[int] | tuple[int, ...]) -> torch.Tensor:
+    """Invert :func:`pack_bool_mask` back into a ``torch.bool`` mask."""
+
+    if len(shape) != 3 or any(int(value) < 1 for value in shape):
+        raise ValueError("mask shape must be three positive dimensions")
+    element_count = math.prod(int(value) for value in shape)
+    if len(payload) != math.ceil(element_count / 8):
+        raise ValueError("bit-packed mask byte size does not match metadata")
+    raw = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
+    shifts = torch.arange(8, dtype=torch.uint8)
+    unpacked = ((raw.unsqueeze(1) >> shifts) & 1).reshape(-1)[:element_count]
+    return unpacked.to(torch.bool).reshape(tuple(int(value) for value in shape)).contiguous()
+
+
 class SourceBlockMaskCache:
     """Disk-backed source masks keyed by denoising step, CFG branch and layer."""
 
@@ -465,6 +501,7 @@ class SourceBlockMaskCache:
         cfg_branch_count: int | None = None,
         capture_block_mass: bool = False,
         create: bool = False,
+        pack_format: str | None = None,
     ) -> None:
         self.root = Path(root)
         self.config = config
@@ -475,14 +512,23 @@ class SourceBlockMaskCache:
         self.write_seconds = 0.0
         self.configuration_error: str | None = None
         self._bitpacked = False
+        self._created = False
         self._prepared_masks: dict[tuple[int, str, int], torch.Tensor] = {}
         self.capture_block_mass = bool(capture_block_mass)
         if create:
             if source_run_id is None or cfg_branch_count is None:
                 raise ValueError("source_run_id and cfg_branch_count are required to create a cache")
+            if pack_format is not None and pack_format not in {self.PACKED_FORMAT, self.CHORUS2_PACKED_FORMAT}:
+                raise ValueError(f"unsupported packed source block-mask format: {pack_format}")
             self.root.mkdir(parents=True, exist_ok=True)
+            # Opt-in: callers that do not ask for a packed format keep writing
+            # the original bool layout, so already-measured runs stay comparable.
+            # Reading is format-agnostic (_load_metadata detects it), so only the
+            # source side needs to choose.
+            self._bitpacked = pack_format is not None
+            self._created = True
             self.metadata = {
-                "format": self.FORMAT,
+                "format": pack_format or self.FORMAT,
                 "source_run_id": source_run_id,
                 "cfg_branches": int(cfg_branch_count),
                 "mask": asdict(config),
@@ -524,8 +570,11 @@ class SourceBlockMaskCache:
         started = time.perf_counter()
         mass = block_attention_mass(q, k, self.config.q_block_size, self.config.k_block_size)
         mask, coverage = block_mass_to_mask(mass, self.config.top_p, self.config.min_top_k)
-        if q.is_cuda:
-            torch.cuda.synchronize(q.device)
+        # The device-to-host copy below is itself the stream synchronization
+        # point for the kernels launched above, so no explicit
+        # torch.cuda.synchronize is needed -- draining the whole device per
+        # capture only stalled the pipeline the mask is meant to observe.
+        mask_cpu = mask.cpu()
         self.capture_seconds += time.perf_counter() - started
 
         seq_len, heads, head_dim = q.shape
@@ -533,14 +582,28 @@ class SourceBlockMaskCache:
         rel_path = Path("masks") / f"step{step:03d}_{branch}_layer{layer:02d}.pt"
         write_started = time.perf_counter()
         (self.root / rel_path).parent.mkdir(parents=True, exist_ok=True)
-        torch.save(mask.cpu(), self.root / rel_path)
+        packed_fields: dict[str, Any] = {}
+        if self._bitpacked:
+            payload, element_count = pack_bool_mask(mask_cpu)
+            (self.root / rel_path).write_bytes(payload)
+            packed_fields = {
+                "mask_shape": [int(value) for value in mask_cpu.shape],
+                "packed_elements": element_count,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        else:
+            torch.save(mask_cpu, self.root / rel_path)
         self.write_seconds += time.perf_counter() - write_started
         mass_path: Path | None = None
         if self.capture_block_mass:
             mass_path = Path("block_mass") / f"step{step:03d}_{branch}_layer{layer:02d}.pt"
             (self.root / mass_path).parent.mkdir(parents=True, exist_ok=True)
             torch.save(mass.cpu(), self.root / mass_path)
-        head_densities = mask.float().mean(dim=(1, 2))
+        # One float materialization feeds both density readings.  Reductions stay
+        # on the originating device and keep the original accumulation order so
+        # the reported numbers are bit-identical to the two-copy version.
+        float_mask = mask.float()
+        head_densities = float_mask.mean(dim=(1, 2))
         entry = {
             "step": int(step),
             "cfg_branch": str(branch),
@@ -550,7 +613,7 @@ class SourceBlockMaskCache:
             "dtype": str(q.dtype),
             "q_blocks": int(mask.shape[1]),
             "k_blocks": int(mask.shape[2]),
-            "density": float(mask.float().mean().item()),
+            "density": float(float_mask.mean().item()),
             "coverage": coverage,
             "head_density_min": float(head_densities.min().item()),
             "head_density_max": float(head_densities.max().item()),
@@ -560,11 +623,21 @@ class SourceBlockMaskCache:
                 else 0.0
             ),
         }
+        entry.update(packed_fields)
         if mass_path is not None:
             entry["block_mass_path"] = str(mass_path)
             entry["block_mass_dtype"] = str(mass.dtype)
         self.entries[key] = entry
-        self._write_metadata()
+        # metadata.json is deliberately not rewritten per capture: a source run
+        # performs thousands of captures and the file grows to ~600 KB, so
+        # re-serializing it every time burned gigabytes of I/O for a record that
+        # is only read after the stage finishes.  Entries accumulate in memory
+        # and flush() persists them once.
+
+    def flush(self) -> None:
+        """Persist accumulated entries. No-op for a cache opened for reading."""
+        if self._created:
+            self._write_metadata()
 
     def _decode(self, entry: dict[str, Any]) -> tuple[torch.Tensor, int, float]:
         started = time.perf_counter()
@@ -585,10 +658,7 @@ class SourceBlockMaskCache:
                 raise BlockMaskCacheError(f"invalid bit-packed source block-mask metadata: {path}")
             if len(payload) != math.ceil(expected_elements / 8):
                 raise BlockMaskCacheError(f"bit-packed source block-mask byte size mismatch: {path}")
-            encoded = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
-            shifts = torch.arange(8, dtype=torch.uint8)
-            mask = ((encoded.unsqueeze(1) >> shifts) & 1).reshape(-1)[:expected_elements]
-            mask = mask.to(torch.bool).reshape(shape).contiguous()
+            mask = unpack_bool_mask(payload, shape)
         else:
             try:
                 file_bytes = path.stat().st_size
@@ -656,6 +726,7 @@ class SourceBlockMaskCache:
         return self.prepare()
 
     def summary(self) -> dict[str, Any]:
+        self.flush()
         entries = list(self.entries.values())
         return {
             "source_mask_cache_id": self.metadata.get("source_run_id"),
@@ -1125,6 +1196,9 @@ class OuterSparseCaptureHooks(AbstractContextManager):
         for attn, original in reversed(self.originals):
             attn.forward = original
         self.originals.clear()
+        # Every production capture goes through this context manager, so this is
+        # the single point that persists metadata.json (see capture()).
+        self.cache.flush()
         return False
 
 

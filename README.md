@@ -33,7 +33,7 @@ PYTHONPATH=. python3 scripts/check_environment.py
 检索依赖按运行时拆分：
 
 - `wan`：CHAI 的 spaCy/FAISS，以及 Chorus 的 ChromaDB。
-- `cogvideo`：CHAI 的 spaCy/FAISS；Chorus 对 CogVideoX1.5 不支持，因此不装 ChromaDB。
+- `cogvideo`：CogVideoX1.5 dense、TeaCache、NIRVANA-VID、Chorus、Chorus2 和 Carnator Boundary B5。
 - `wan`、`vbench`：分别为 Wan 上游导入链和 VBench 评测安装 Conda-forge 的
   `decord=0.6.0` Python 3.10 构建，避免 PyPI wheel 的平台标签问题。
 - `wan`、`cogvideo` 使用 `numpy==2.2.6`，以匹配论文指定的 `faiss-cpu==1.13.0`；
@@ -107,12 +107,14 @@ conda run -n vbench env PYTHONNOUSERSITE=1 python -c \
   'import clip; clip.load("ViT-B/32", download_root="artifacts/vbench-cache/clip_model")'
 ```
 
-启用 Chorus 的 Grounded-SAM-2（需要匹配 PyTorch 的 `CUDA_HOME`）：
+启用 Chorus/Carnator 的 Grounded-SAM-2（需要匹配 PyTorch 的 `CUDA_HOME`；CogVideo 环境同样安装）：
 
 ```bash
 conda run -n wan env PYTHONNOUSERSITE=1 python -m pip install --no-build-isolation -e external/grounded-sam2
 conda run -n wan env PYTHONNOUSERSITE=1 python -m pip install addict yapf timm "supervision>=0.22.0" pycocotools
 conda run -n wan env PYTHONNOUSERSITE=1 python -m pip install --no-build-isolation -e external/grounded-sam2/grounding_dino
+conda run -n cogvideo python -m pip install --no-build-isolation -e external/grounded-sam2
+conda run -n cogvideo python -m pip install --no-build-isolation -e external/grounded-sam2/grounding_dino
 ```
 
 将 `sam2.1_hiera_large.pt` 放到
@@ -188,8 +190,8 @@ FlashAttention CUDA 调用、Runner 落盘，以及 Baseline、TeaCache、NIRVAN
 ### VidProM 300-request experiment
 
 正式实验的唯一入口是 [`scripts/benchmark/run_vidprom_300_experiment.py`](scripts/benchmark/run_vidprom_300_experiment.py)。
-它按 CSV 到达顺序在 GPU 3--7 分别运行五个基线，使用 1000-entry source view；Carnator
-仅在有候选时在线执行 step-5 Early Signature probe，所有新请求不写入 cache。
+Wan 仍按原协议运行；CogVideoX1.5 接入 TeaCache、NIRVANA-VID、Chorus、Chorus2 和 Carnator Boundary B5。
+后三者使用独立 CogVideo backend，不调用 Wan adapter；依赖或 schema 不满足时 fail-closed。
 
 该实验及 `artifacts/vidprom_1000cache_300input_noun_match/` 的结果固定基于
 `datasets/1000cache_300input_noun_match/`，Carnator 使用 v2（noun -> Early
@@ -206,25 +208,65 @@ conda run -n vbench env PYTHONPATH=. python scripts/benchmark/quality_runner.py 
 PYTHONPATH=. python scripts/benchmark/aggregate_vidprom_300_results.py
 ```
 
+CogVideoX1.5 先从旧 Wan 结果生成不可变的 300 条命中 replay；该步骤只读取旧 JSONL，不读取或改写 Wan latent：
+
+```bash
+PYTHONPATH=. python scripts/benchmark/build_cogvideo_hit_replay.py \
+  --legacy-root artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305 \
+  --output artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_replay
+
+# 只检查模型组件、replay schema 和输入 hash；不会生成视频
+conda run -n cogvideo env PYTHONPATH=. python \
+  scripts/benchmark/run_vidprom_300_experiment.py \
+  --model cogvideox15 --method nirvana_vid --gpu 3 --replay-root \
+  artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_replay --limit 300 --check-only
+```
+
+正式 300 条之前已完成 `--check-only`、单元测试、单请求 dense smoke、强制 hit/miss smoke 和固定前 5 条真实请求；
+**本轮未启动任何 CogVideo 300 条正式请求**。逐项状态见
+[`docs/cogvideox/KNOWN_ISSUES.md`](docs/cogvideox/KNOWN_ISSUES.md)，实验口径见
+[`docs/cogvideox/EXPERIMENT_PLAN.md`](docs/cogvideox/EXPERIMENT_PLAN.md)。
+
 GPU 分配、固定阈值、日志字段和产物清理规则见 [`docs/VIDPROM_1000CACHE_300INPUT_EXPERIMENT_PLAN.md`](docs/VIDPROM_1000CACHE_300INPUT_EXPERIMENT_PLAN.md)。
 
 ## Support
 
-| 方法 | Wan2.2 | CogVideoX1.5 |
-| --- | --- | --- |
-| Baseline / CHAI / TeaCache / NIRVANA-VID | 支持 | 支持 |
-| Carnator | 原生 C0/B0--B5 matrix | source-latent-restart adapter |
-| Chorus2 | 原生 SpargeAttn sparse-attention CLI | N/A |
-| Chorus / TGAA and no-TGAA ablations | source/target matrix | N/A |
-| Chorus TGAA joint-gamma probes (`1.30`, `1.6`, `2.0`) | source/target matrix | N/A |
+| 方法 | Wan2.2 | Wan2.1-T2V-1.3B | CogVideoX1.5 |
+| --- | --- | --- | --- |
+| Baseline / NIRVANA-VID | 支持 | 支持 | 支持 |
+| TeaCache | 支持 | 本计划外 | 支持 |
+| CHAI | 支持 | 本计划外 | 本计划外 |
+| Carnator Boundary B5 | 原生 C0/B0--B5 matrix | 支持 | 独立 B5 backend |
+| Chorus2 | 原生 SpargeAttn sparse-attention CLI | 支持 | 独立 FlexAttention backend |
+| Chorus | source/target matrix | 支持 | 独立 trajectory/TGAA backend |
+| Chorus Wan ablations/probes | 支持 | 本计划外 | 本计划外 |
+
+Wan2.1 的五个基线（baseline / nirvana_vid / chorus / chorus2 / carnator_boundary_b5）
+见 [docs/WAN21.md](docs/WAN21.md)。CogVideoX1.5 的适配**尚未跑完 300 请求正式实验**，
+代码路径完整但存在未验证缺口与历史 bug，见
+[docs/cogvideox/KNOWN_ISSUES.md](docs/cogvideox/KNOWN_ISSUES.md)。
 
 ## Layout
 
 - `core/`：协议、cache namespace、runner 和外部依赖解析。
-- `adapters/`、`methods/`、`carnator/`：全部基线实现与模型 hook。
+- `adapters/`、`methods/`、`carnator/`、`chorus2/`：全部基线实现与模型 hook。
+- `scripts/`：`run/`（正式入口）、`benchmark/`（VidProM 实验与聚合）、
+  `ablation/`（Carnator 消融）、`figures/`（图表生成）、`dev/`（临时启动器与诊断脚本）。
 - `external/`：锁定的第三方源码；提交见 `external/lock.json`。
 - `configs/`、`requirements/`、`environments/`：运行配置与三个 Conda 环境。
-- `docs/`：方法、adapter、评测、验收和来源记录。
+- `docs/`：方法、adapter、评测、验收和来源记录；索引见 [docs/README.md](docs/README.md)。
+
+各模型的适配文档：
+
+- Wan2.2（默认）：[docs/ADAPTERS.md](docs/ADAPTERS.md)、[docs/METHODS.md](docs/METHODS.md)
+- Wan2.1-T2V-1.3B：[docs/WAN21.md](docs/WAN21.md)
+- CogVideoX1.5：[docs/cogvideox/](docs/cogvideox/README.md)（适配未完成，见其中的
+  [KNOWN_ISSUES.md](docs/cogvideox/KNOWN_ISSUES.md)）
+
+Carnator 消融实验（论文 Table 3）见
+[docs/CARNATOR_ABLATION_STUDY.md](docs/CARNATOR_ABLATION_STUDY.md)。
+
+`_archive/` 存放已归档的日志、被取代的脚本和已被合并的旧文档，仅作本地参考，不入库。
 
 当前仅覆盖 T2V。文档职责和入口见 [docs/README.md](docs/README.md)；运行结果与验收数据见
 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。

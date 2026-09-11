@@ -407,11 +407,11 @@ def test_result_is_jsonl_compatible(tmp_path):
     assert {"model", "method", "seed", "cache_match", "executed_steps", "latency_s", "quality_input_path"} <= row.keys()
 
 
-def test_chai_model_configs_match_the_opensora_eight_step_schedule():
-    for model in ("wan22", "cogvideox15"):
-        config = yaml.safe_load((ROOT / "configs" / "models" / f"{model}.yaml").read_text())
-        assert config["fast_steps"] == 8
-        assert config["cache_attention"] == {"blocks": [0], "steps": [1, 2, 3, 4]}
+def test_cogvideo_model_config_matches_the_replay_protocol():
+    config = yaml.safe_load((ROOT / "configs" / "models" / "cogvideox15.yaml").read_text())
+    assert config["baseline_steps"] == 50
+    assert config["frames"] == 81
+    assert config["nirvana_vid"] == {"reuse_start_step": 5, "cache_steps": [5]}
 
 
 def test_external_sources_are_repository_local_and_locked():

@@ -1,0 +1,56 @@
+{
+  "experiment": "Carnator Ablation Study - Corrected",
+  "timestamp": "2026-09-09T10:23:49.654398",
+  "conda_env": "wan",
+  "request": {
+    "prompt": "A cute little lion and a wobbly penguin appear",
+    "cache_prompt": "a little dog and a penguin dancing",
+    "source_cache_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_032326/source_gen/source_gen",
+    "seed": 20260311,
+    "steps": 50
+  },
+  "configuration": {
+    "full_computation": "No optimization, FFN=fp",
+    "latent_only": "Middle(10-20) latent injection, no attention mask, outer dense, FFN=w8a8",
+    "attention_only": "No latent injection, outer(0-9,21-29) sparse attention, FFN=w8a8",
+    "joint": "Middle(10-20) latent+attention, outer(0-9,21-29) sparse, FFN=w8a8"
+  },
+  "variants": [
+    {
+      "variant": "full_computation",
+      "status": "success",
+      "exit_code": 0,
+      "elapsed": 413.16672825813293,
+      "gpu": 3,
+      "output_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/full_computation",
+      "log_file": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/full_computation/run.log"
+    },
+    {
+      "variant": "latent_only",
+      "status": "success",
+      "exit_code": 0,
+      "elapsed": 950.6225147247314,
+      "gpu": 4,
+      "output_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/latent_only",
+      "log_file": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/latent_only/run.log"
+    },
+    {
+      "variant": "attention_only",
+      "status": "success",
+      "exit_code": 0,
+      "elapsed": 839.7326045036316,
+      "gpu": 5,
+      "output_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/attention_only",
+      "log_file": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/attention_only/run.log"
+    },
+    {
+      "variant": "joint",
+      "status": "success",
+      "exit_code": 0,
+      "elapsed": 852.1428463459015,
+      "gpu": 6,
+      "output_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/joint",
+      "log_file": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/ablation_req16_20260909_100759/joint/run.log"
+    }
+  ]
+}

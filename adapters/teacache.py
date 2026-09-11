@@ -22,6 +22,7 @@ class TeaCacheController:
         self._consecutive_skips = 0
         self._decisions: dict[int, bool] = {}
         self.forward_seconds = 0.0
+        self.forward_calls = 0
 
     @staticmethod
     def _input(args: tuple[Any, ...], kwargs: dict[str, Any]) -> Any | None:
@@ -59,6 +60,7 @@ class TeaCacheController:
             nonlocal calls
             step, branch = divmod(calls, branches)
             calls += 1
+            self.forward_calls = calls
             value = self._input(args, kwargs)
             if branch == 0:
                 execute = self._should_execute(step, value, branches)

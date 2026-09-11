@@ -6,18 +6,41 @@ dtype: bfloat16
 width: 1360
 height: 768
 frames: 81
+fps: 16
 baseline_steps: 50
-fast_steps: 8
 seed: 20260218
 guidance_scale: 6.0
-source_cache_steps: [1, 2, 3, 4]
-cache_attention:
-  blocks: [0]
-  # Match the OpenSora CHAI 8-step express schedule: 0 < step < 5.
-  steps: [1, 2, 3, 4]
 teacache:
   relative_l1_threshold: 0.5
   max_skip_steps: 2
 nirvana_vid:
-  reuse_start_step: 10
-  cache_steps: [10]
+  reuse_start_step: 5
+  cache_steps: [5]
+chorus2:
+  sparse_start_step: 10
+  q_block_size: 128
+  k_block_size: 128
+  top_p: 0.95
+  min_top_k: 0.1
+  layer_refresh_size: 8
+  layers: all
+carnator_b5:
+  probe_step: 5
+  reuse_step: 10
+  regional_layers: 14-27
+  outer_sparse_layers: 0-13,28-41
+  q_block_size: 128
+  k_block_size: 128
+  top_p: 0.95
+  min_top_k: 0.1
+  # Fusion mask parameters (no longer use external segmentation)
+  attention_probe_layer: 15
+  mask_top_p: 0.02
+  mask_background_p: 0.02
+  fusion_eps: 0.2
+  fusion_gamma: 1.0
+  fusion_high_threshold: 0.45
+  fusion_low_threshold: 0.35
+  mask_spatial_medit_radius: 2
+  mask_spatial_msee_radius: 3
+

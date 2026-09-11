@@ -47,21 +47,37 @@ class WanT2VAdapter(T2VAdapter):
 
         self.torch = torch
         native_dense_c0 = bool(self.config.get("native_dense_c0", False))
-        pipeline_config = WAN_CONFIGS["ti2v-5B"]
+        # Support both wan21 (t2v-1.3B) and wan22 (ti2v-5B)
+        config_key = self.config.get("wan_config_key", "ti2v-5B")
+        pipeline_config = WAN_CONFIGS[config_key]
         if native_dense_c0:
             # The shared native C0 executor uses FP16; keep its resident
             # generic caller on the identical DiT dtype.
             pipeline_config = copy.deepcopy(pipeline_config)
             pipeline_config.param_dtype = torch.float16
-        self.pipeline = wan.WanTI2V(
-            config=pipeline_config,
-            checkpoint_dir=self.config["model_path"],
-            device_id=int(str(self.config["device"]).split(":")[-1]),
-            # The shared native Dense C0 executor moves this model to CUDA on
-            # first use. Other generic callers retain the previous behavior.
-            init_on_cpu=native_dense_c0,
-            convert_model_dtype=True,
-        )
+
+        # Detect Wan version based on available classes
+        # Wan2.1 uses WanT2V, Wan2.2 uses WanTI2V
+        if hasattr(wan, 'WanTI2V'):
+            # Wan2.2
+            self.pipeline = wan.WanTI2V(
+                config=pipeline_config,
+                checkpoint_dir=self.config["model_path"],
+                device_id=int(str(self.config["device"]).split(":")[-1]),
+                # The shared native Dense C0 executor moves this model to CUDA on
+                # first use. Other generic callers retain the previous behavior.
+                init_on_cpu=native_dense_c0,
+                convert_model_dtype=True,
+            )
+        elif hasattr(wan, 'WanT2V'):
+            # Wan2.1 - different API, doesn't support init_on_cpu or convert_model_dtype
+            self.pipeline = wan.WanT2V(
+                config=pipeline_config,
+                checkpoint_dir=self.config["model_path"],
+                device_id=int(str(self.config["device"]).split(":")[-1]),
+            )
+        else:
+            raise AttributeError("Neither WanTI2V (Wan2.2) nor WanT2V (Wan2.1) found in wan module")
 
     def prepare(self) -> None:
         self._load()
@@ -118,17 +134,33 @@ class WanT2VAdapter(T2VAdapter):
         source_cache_steps = self._source_cache_steps()
         target_cache_steps = set(int(step) for step in self.config["cache_attention"]["steps"])
         if not fast and not capture:
-            video = self.pipeline.t2v(
-                input_prompt=prompt,
-                size=(int(self.config["width"]), int(self.config["height"])),
-                frame_num=int(self.config["frames"]),
-                shift=float(self.config["shift"]),
-                sample_solver=self.config["solver"],
-                sampling_steps=int(steps),
-                guide_scale=float(self.config["guidance_scale"]),
-                seed=seed,
-                offload_model=False,
-            )
+            # Use appropriate method based on Wan version
+            if hasattr(self.pipeline, 't2v'):
+                # Wan2.2 API
+                video = self.pipeline.t2v(
+                    input_prompt=prompt,
+                    size=(int(self.config["width"]), int(self.config["height"])),
+                    frame_num=int(self.config["frames"]),
+                    shift=float(self.config["shift"]),
+                    sample_solver=self.config["solver"],
+                    sampling_steps=int(steps),
+                    guide_scale=float(self.config["guidance_scale"]),
+                    seed=seed,
+                    offload_model=False,
+                )
+            else:
+                # Wan2.1 API - uses generate method directly
+                video = self.pipeline.generate(
+                    input_prompt=prompt,
+                    size=(int(self.config["width"]), int(self.config["height"])),
+                    frame_num=int(self.config["frames"]),
+                    shift=float(self.config["shift"]),
+                    sample_solver=self.config["solver"],
+                    sampling_steps=int(steps),
+                    guide_scale=float(self.config["guidance_scale"]),
+                    seed=seed,
+                    offload_model=False,
+                )
             return Generation(video=video, latent=None, latent_step=max(source_cache_steps), extra={"executed_steps": int(steps)})
         if not self._patched:
             self._install_attention_patches()

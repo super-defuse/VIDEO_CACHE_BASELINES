@@ -27,12 +27,16 @@ if str(ROOT) not in sys.path:
 
 from adapters import make_adapter
 from core import CacheMatch, Request, Runner
+from core.cogvideo_runner import CogVideoReplayRunner
+from core.wan21_runner import Wan21ReplayRunner
 from core.cache import CacheEntry
 from core.registry import ensure_supported, make_method
 from core.retrieval import VectorRecord
 
-METHODS = ("nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5")
-GPU_BY_METHOD = {"nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
+METHODS = ("baseline", "nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5")
+GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
+# Wan2.1 runs one method per GPU; nirvana_vid takes teacache's idle slot.
+WAN21_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 GPU_COUNT = 8
 EARLY_SIGNATURE_THRESHOLDS = {
     # Representative noun-match calibration tuple: 270/300 pairs pass;
@@ -80,9 +84,10 @@ def resolved_config(
     device: str,
     dry_run: bool,
     *,
+    model_name: str = "wan22",
     early_signature_thresholds: dict[str, float] | None = None,
 ) -> dict[str, Any]:
-    model = {"model": "synthetic", "dry_run": True, "seed": 20260218} if dry_run else load_yaml(ROOT / "configs" / "models" / "wan22.yaml")
+    model = {"model": "synthetic", "dry_run": True, "seed": 20260218} if dry_run else load_yaml(ROOT / "configs" / "models" / f"{model_name}.yaml")
     methods = {} if dry_run else load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = {**model, **methods, "dry_run": dry_run, "device": device, "cache_root": "cache"}
     for key in ("model_path", "wan_source"):
@@ -355,24 +360,44 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
             request_indices=args.request_indices,
         )
         validate_forced_smoke(args, rows, view_rows)
-    if args.method == "carnator_boundary_b5":
+    if (args.method == "carnator_boundary_b5" and getattr(args, "model", "wan22") not in {"cogvideox15", "wan21"}):
         validate_carnator_signature_view(args.cache_view.expanduser().resolve(), view_rows)
     config = resolved_config(
         f"cuda:{args.gpu}",
         args.dry_run,
-        early_signature_thresholds=args.early_signature_thresholds,
+        model_name=getattr(args, "model", "wan22"),
+        early_signature_thresholds=getattr(args, "early_signature_thresholds", None),
     )
     if not args.dry_run:
+        model_path = Path(config["model_path"])
         # Carnator's native TI2V runner is intentionally separate from the
         # generic adapter registry; Chorus2 has the same native split.
-        if args.method != "carnator_boundary_b5":
+        if getattr(args, "model", "wan22") == "cogvideox15":
+            if args.replay_root is None:
+                raise ValueError("CogVideoX1.5 requires --replay-root built by build_cogvideo_hit_replay.py")
+            load_cogvideo_replay(args.replay_root, args.method, limit=300)
+            required = {
+                "model_index.json", "scheduler/scheduler_config.json", "tokenizer/tokenizer_config.json",
+                "text_encoder/config.json", "transformer/config.json", "vae/config.json",
+            }
+            missing = sorted(str(model_path / relative) for relative in required if not (model_path / relative).is_file())
+            if missing:
+                raise FileNotFoundError(f"CogVideoX1.5 checkpoint is incomplete: {missing}")
+        elif getattr(args, "model", "wan22") == "wan21":
+            if args.method == "teacache":
+                raise ValueError("teacache is not part of the Wan2.1 baseline set")
+            if args.method != "baseline":
+                if args.replay_root is None:
+                    raise ValueError("Wan2.1 replay methods require --replay-root from the legacy experiment")
+                load_replay_decisions(args.replay_root, args.method, limit=args.limit)
+        elif args.method != "carnator_boundary_b5":
             ensure_supported("wan22", "chorus" if args.method == "chorus2" else args.method)
-        model_path = Path(config["model_path"])
         if not model_path.is_dir():
-            raise FileNotFoundError(f"Wan checkpoint is missing: {model_path}")
+            raise FileNotFoundError(f"{getattr(args, 'model', 'wan22')} checkpoint is missing: {model_path}")
     return {
         "status": "ready",
         "method": args.method,
+        "model": getattr(args, "model", "wan22"),
         "gpu": args.gpu,
         "source_entries": len(view_rows),
         "input": str(args.input.expanduser().resolve()),
@@ -380,7 +405,246 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
         "view_manifest_sha256": sha256_file((args.cache_view / "view_manifest.json").resolve()),
         "config_fingerprint": hashlib.sha256(json.dumps(config, sort_keys=True, default=str).encode()).hexdigest(),
         "forced_smoke": forced_smoke_config(args),
+        "replay_root": str(args.replay_root) if args.replay_root else None,
     }
+
+
+def load_cogvideo_replay(root: Path, method: str, *, limit: int) -> dict[int, dict[str, Any]]:
+    path = root / f"{method}.jsonl"
+    if not path.is_file():
+        raise FileNotFoundError(f"CogVideo replay is missing: {path}")
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    if len(rows) != limit:
+        raise ValueError(f"CogVideo replay must contain {limit} rows, found {len(rows)}: {path}")
+    result: dict[int, dict[str, Any]] = {}
+    for expected, row in enumerate(rows):
+        if row.get("schema_version") != "cogvideox15-hit-replay/v1" or int(row.get("arrival_index", -1)) != expected:
+            raise ValueError(f"invalid CogVideo replay row {expected}: {path}")
+        result[int(row["request_index"])] = row
+    if len(result) != limit:
+        raise ValueError(f"CogVideo replay request_index values must be unique: {path}")
+    return result
+
+
+def write_cogvideo_run_manifest(output: Path, *, args: argparse.Namespace, config: dict[str, Any],
+                                replay_root: Path, replay_path: Path, view: Path) -> None:
+    try:
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        revision = "unknown"
+    model_path = Path(config["model_path"])
+    model_index = model_path / "model_index.json"
+    manifest = {
+        "schema_version": "cogvideox15-experiment/v1",
+        "model": "CogVideoX1.5",
+        "model_path": str(model_path),
+        "model_index_sha256": sha256_file(model_index) if model_index.is_file() else None,
+        "legacy_source_view": str(view),
+        "legacy_source_view_manifest_sha256": sha256_file(view / "view_manifest.json"),
+        "input": str(args.input),
+        "input_sha256": sha256_file(args.input),
+        "replay_root": str(replay_root),
+        "replay_sha256": sha256_file(replay_path),
+        "git_revision": revision,
+        "resolved_config": config,
+        "timing": {
+            "source_prepare_s": "source generation plus cache serialization; reported separately",
+            "target_e2e_s": "request wall clock excluding source preparation and output bookkeeping",
+            "denoising_s": "CUDA-synchronized CogVideo transformer forward time",
+        },
+        "replay_policy": "legacy hit/miss and source UUID are immutable ground truth",
+        "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
+        "request_error_policy": "record error without changing replay decision",
+        "args": {"method": args.method, "gpu": args.gpu, "limit": args.limit, "seed": args.seed},
+    }
+    (output / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def cogvideo_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
+    if args.replay_root is None:
+        raise ValueError("CogVideoX1.5 requires --replay-root")
+    config = resolved_config(f"cuda:{args.gpu}", args.dry_run, model_name="cogvideox15",
+                             early_signature_thresholds=getattr(args, "early_signature_thresholds", None))
+    replay_path = args.replay_root / f"{args.method}.jsonl"
+    replay = load_cogvideo_replay(args.replay_root, args.method, limit=300)
+    source_rows = view_rows_for_preload(view)
+    source_by_uuid = {row["uuid"]: row for row in source_rows}
+    if args.smoke_force_outcomes:
+        for row in rows:
+            decision = forced_smoke_decision(args, row["request_index"])
+            replay_row = dict(replay[row["request_index"]])
+            replay_row.update({
+                "decision": decision,
+                "hit": decision == "hit",
+                "source_uuid": SMOKE_FORCED_HIT_SOURCE_UUID if decision == "hit" else None,
+                "source_request_index": (
+                    int(source_by_uuid[SMOKE_FORCED_HIT_SOURCE_UUID].get("request_index", 0))
+                    if decision == "hit" else None
+                ),
+                "forced_smoke": True,
+            })
+            replay[row["request_index"]] = replay_row
+    if args.dry_run:
+        config = {**config, **load_yaml(ROOT / "configs" / "models" / "cogvideox15.yaml"),
+                  "model": "cogvideox15", "dry_run": True, "device": f"cuda:{args.gpu}"}
+    adapter = make_adapter("synthetic" if args.dry_run else "cogvideox15", config)
+    method = make_method(args.method, config)
+    method.adapter = adapter
+    runner = CogVideoReplayRunner(adapter, method, output_dir=output, replay=replay,
+                                  source_prompts=source_by_uuid, config=config)
+    write_cogvideo_run_manifest(output, args=args, config=config, replay_root=args.replay_root,
+                                replay_path=replay_path, view=view)
+    requests_path = output / "requests.jsonl"
+    run_results = runner.run(
+        (Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
+         for row in rows),
+        requests_path,
+    )
+    payloads = [asdict(result) for result in run_results]
+    records = []
+    for row, payload in zip(rows, payloads, strict=True):
+        match = payload.get("cache_match", {})
+        records.append({"arrival_index": row["arrival_index"], "request_index": row["request_index"],
+                        "uuid": row["uuid"], "prompt": row["prompt"], "method": args.method,
+                        "status": payload.get("status"), "error": payload.get("error"),
+                        "hit": match.get("hit"), "hit_object": match.get("source_uuid"),
+                        "replay_decision": replay[row["request_index"]]["decision"],
+                        "latency_s": payload.get("latency_s"),
+                        "source_prepare_s": payload.get("extra", {}).get("source_prepare_s", 0.0),
+                        "denoising_s": payload.get("extra", {}).get("timing", {}).get("denoising_s")} )
+    with (output / "request_records.jsonl").open("a", encoding="utf-8") as stream:
+        stream.write("\n".join(json.dumps(record, ensure_ascii=False) for record in records) + "\n")
+    shutil.copyfile(requests_path, output / "results.jsonl")
+    return payloads
+
+
+def load_replay_decisions(root: Path, method: str, *, limit: int) -> dict[int, dict[str, Any]]:
+    """Read the first ``limit`` legacy replay rows for a method.
+
+    Same schema as the CogVideo replay files; a short test run simply uses the
+    leading arrivals of the 300-row decision file.
+    """
+    path = root / f"{method}.jsonl"
+    if not path.is_file():
+        raise FileNotFoundError(f"replay decisions are missing: {path}")
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    result: dict[int, dict[str, Any]] = {}
+    for expected, row in enumerate(rows):
+        if row.get("schema_version") != "cogvideox15-hit-replay/v1" or int(row.get("arrival_index", -1)) != expected:
+            raise ValueError(f"invalid replay row {expected}: {path}")
+        if expected < limit:
+            previous = result.setdefault(int(row["request_index"]), row)
+            if previous is not row:
+                raise ValueError(f"replay request_index values must be unique: {path}")
+    if len(result) != min(limit, len(rows)):
+        raise ValueError(f"replay has fewer than {limit} usable rows: {path}")
+    return result
+
+
+def wan21_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
+    config = resolved_config(f"cuda:{args.gpu}", args.dry_run, model_name="wan21",
+                             early_signature_thresholds=getattr(args, "early_signature_thresholds", None))
+    replay = None
+    replay_path = None
+    if args.method != "baseline":
+        if args.replay_root is None:
+            raise ValueError("Wan2.1 replay methods require --replay-root from the legacy experiment")
+        replay_path = args.replay_root / f"{args.method}.jsonl"
+        replay = load_replay_decisions(args.replay_root, args.method, limit=args.limit)
+    if args.dry_run:
+        # Keep the method plugins on the wan21 branch even with the synthetic
+        # adapter behind it (same pattern as the CogVideo dry run).
+        config = {**config, **load_yaml(ROOT / "configs" / "models" / "wan21.yaml"),
+                  "model": "wan21", "dry_run": True, "device": f"cuda:{args.gpu}"}
+    adapter = make_adapter("synthetic" if args.dry_run else "wan21", config)
+    method = make_method(args.method, config)
+    method.adapter = adapter
+    if not args.dry_run and not args.resume:
+        # A full warm-up generation costs ~18 minutes on Wan2.1; only preload
+        # the resident models that would otherwise pollute the first request.
+        warmup_paths = ["model_load"]
+        if args.method == "chorus":
+            from methods.chorus.grounded_sam import GroundedSam2Segmenter
+
+            sam_config = {**config.get("chorus", {}).get("grounded_sam2", {}),
+                          "device": str(config.get("device", "cuda"))}
+            GroundedSam2Segmenter(sam_config)._load()
+            warmup_paths.append("chorus_sam_model_loaded")
+        write_warmup_record(output, paths=warmup_paths)
+    runner = Wan21ReplayRunner(adapter, method, output_dir=output, replay=replay,
+                               source_prompts={row["uuid"]: row for row in view_rows_for_preload(view)},
+                               config=config)
+    try:
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        revision = "unknown"
+    (output / "run_manifest.json").write_text(json.dumps({
+        "schema_version": "wan21-experiment/v1",
+        "model": "Wan2.1-T2V-1.3B",
+        "model_path": (str(Path(config["model_path"]).resolve()) if config.get("model_path") else None),
+        "legacy_source_view": str(view),
+        "legacy_source_view_manifest_sha256": sha256_file(view / "view_manifest.json"),
+        "input": str(args.input),
+        "input_sha256": sha256_file(args.input),
+        "replay_root": str(args.replay_root) if args.replay_root else None,
+        "replay_sha256": sha256_file(replay_path) if replay_path is not None else None,
+        "git_revision": revision,
+        "resolved_config": config,
+        "replay_policy": "legacy hit/miss and source UUID are immutable ground truth; baseline runs every request",
+        "miss_policy": "skipped without generation (status cache_miss, latency 0)",
+        "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
+        "request_error_policy": "record error without changing replay decision",
+        "args": {"method": args.method, "gpu": args.gpu, "limit": args.limit, "seed": args.seed},
+    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    # The runner streams its raw RequestResult rows here; the canonical
+    # requests.jsonl / request_records.jsonl are written below from the
+    # flattened payloads, exactly like the generic and native paths.
+    raw_path = output / "requests.raw.jsonl"
+    run_results = runner.run(
+        (Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
+         for row in rows),
+        raw_path,
+    )
+    payloads = []
+    for row, result in zip(rows, run_results, strict=True):
+        payload = asdict(result)
+        hit = bool(payload.get("cache_match", {}).get("hit"))
+        extra = payload.get("extra", {})
+        if payload.get("status") == "error":
+            payload.update({"arrival_index": row["arrival_index"], "video_path": None, "quality_input_path": None,
+                            "output_path": None, "denoising_s": None, "external_s": None, "hit_e2e_s": None,
+                            "hit_denoising_s": None, "hit": hit,
+                            "source_uuid": payload.get("cache_match", {}).get("source_uuid")})
+        elif payload.get("status") == "cache_miss":
+            payload.update({"arrival_index": row["arrival_index"], "video_path": None, "quality_input_path": None,
+                            "output_path": None, "denoising_s": None, "external_s": 0.0, "hit_e2e_s": None,
+                            "hit_denoising_s": None, "hit": False, "source_uuid": None, "latency_s": 0.0,
+                            "executed_steps": 0})
+        else:
+            # Flatten the timing fields the aggregation contract reads; the
+            # nested extra copy stays for the detailed audit trail.
+            denoising_s = extra.get("dit_forward_s")
+            if denoising_s is None and not args.dry_run:
+                raise RuntimeError(f"{args.method} did not report CUDA-synchronized DiT forward time")
+            denoising_s = float(denoising_s or 0.0)
+            external_s = (float(extra.get("chorus_llm_s", 0.0)) + float(extra.get("chorus_sam_s", 0.0))
+                          if args.method == "chorus" else 0.0)
+            payload.update({"arrival_index": row["arrival_index"], "video_path": payload.get("output_path"),
+                            "quality_input_path": payload.get("output_path"), "denoising_s": denoising_s,
+                            "external_s": external_s, "hit": hit,
+                            "hit_e2e_s": payload.get("latency_s") if hit else None,
+                            "hit_denoising_s": denoising_s if hit else None,
+                            "extra": {**extra, "denoising_timing": {
+                                "definition": "cuda_synchronized_dit_forward",
+                                "target_dit_forward_s": denoising_s - float(extra.get("probe_dit_forward_s", 0.0)),
+                                "probe_dit_forward_s": float(extra.get("probe_dit_forward_s", 0.0)),
+                                "total_dit_forward_s": denoising_s,
+                                "probe_steps": extra.get("probe_steps", 0)}}})
+        payloads.append(payload)
+    for row, payload in zip(rows, payloads, strict=True):
+        append_result_and_record(output, payload, row, args.method)
+    raw_path.unlink(missing_ok=True)
+    return payloads
 
 
 def source_path(view: Path, row: dict[str, Any], method: str) -> Path:
@@ -458,7 +722,10 @@ def warmup_generic(adapter: Any, method_name: str, output: Path, view: Path) -> 
     root.mkdir(parents=True, exist_ok=True)
     source = Request(-1, "warmup-dog", WARMUP_SOURCE_PROMPT, 20260218)
     target = Request(-2, "warmup-cat", WARMUP_TARGET_PROMPT, 20260218, cache_prompt=WARMUP_SOURCE_PROMPT)
-    if method_name == "teacache":
+    if method_name == "baseline":
+        adapter.generate(target, capture=False, method="baseline")
+        paths = ["baseline_warmup"]
+    elif method_name == "teacache":
         adapter.generate(target, capture=False, method="teacache")
         paths = ["target_only"]
     elif method_name == "nirvana_vid":
@@ -478,6 +745,9 @@ def warmup_generic(adapter: Any, method_name: str, output: Path, view: Path) -> 
         }
         GroundedSam2Segmenter(sam_config)._load()
         paths = ["source_capture", "chorus_sam_model_loaded"]
+    elif method_name == "chorus2":
+        adapter.generate(target, capture=False, method="chorus2")
+        paths = ["chorus2_warmup"]
     else:
         raise ValueError(f"unsupported generic warm-up method: {method_name}")
     synchronize_cuda()
@@ -490,9 +760,10 @@ def generic_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path
     config = resolved_config(
         f"cuda:{args.gpu}",
         args.dry_run,
-        early_signature_thresholds=args.early_signature_thresholds,
+        model_name=getattr(args, "model", "wan22"),
+        early_signature_thresholds=getattr(args, "early_signature_thresholds", None),
     )
-    adapter = make_adapter("synthetic" if args.dry_run else "wan22", config)
+    adapter = make_adapter("synthetic" if args.dry_run else getattr(args, "model", "wan22"), config)
     method = make_method(method_name, config)
     method.config["persist_target_cache"] = False
     runner = Runner(
@@ -991,14 +1262,15 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
     config = resolved_config(
         f"cuda:{args.gpu}",
         args.dry_run,
-        early_signature_thresholds=args.early_signature_thresholds,
+        model_name=getattr(args, "model", "wan22"),
+        early_signature_thresholds=getattr(args, "early_signature_thresholds", None),
     )
     matcher = None if args.dry_run else prompt_matcher(
         view,
         config,
         False,
         args.method,
-        early_signature_thresholds=args.early_signature_thresholds,
+        early_signature_thresholds=getattr(args, "early_signature_thresholds", None),
     )
     output.mkdir(parents=True, exist_ok=True)
     resident_collector = None
@@ -1246,12 +1518,74 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
     return [json.loads(line) for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines() if line]
 
 
+def run_quality_evaluation(output: Path, gpu: int, dry_run: bool) -> dict[str, Any]:
+    """Run quality evaluation and return summary statistics."""
+    results_path = output / "results.jsonl"
+    if not results_path.exists():
+        return {"status": "no_results", "clip_t": None, "vbench_q": None}
+
+    rows = [json.loads(line) for line in results_path.read_text(encoding="utf-8").splitlines() if line]
+    ok_rows = [row for row in rows if row.get("status") == "ok" and row.get("video_path")]
+
+    if not ok_rows:
+        return {"status": "no_videos", "clip_t": None, "vbench_q": None}
+
+    quality_script = ROOT / "scripts" / "benchmark" / "quality.py"
+    quality_env = os.environ.get("VCB_QUALITY_ENV", "vbench")
+
+    try:
+        cmd = [
+            "conda", "run", "--no-capture-output", "-n", quality_env,
+            "python", str(quality_script), str(output),
+            "--dimension", "subject_consistency", "background_consistency", "motion_smoothness",
+            "dynamic_degree", "aesthetic_quality", "imaging_quality"
+        ]
+        print(f"Running quality evaluation: {' '.join(cmd)}")
+        # quality.py -> quality_runner.py default to cuda:0, but --gpu names the
+        # physical device the method itself ran on.  Without this remap the
+        # quality stage always lands on physical GPU 0, which on a shared machine
+        # is routinely occupied by another tenant's job and OOMs the CLIP image
+        # encoding (see docs/WAN21_AGGREGATOR_AND_SOURCE_OPTIMIZATION_PLAN.md).
+        quality_env_vars = dict(os.environ)
+        quality_env_vars["CUDA_VISIBLE_DEVICES"] = str(gpu)
+        subprocess.run(cmd, check=True, cwd=ROOT, env=quality_env_vars)
+
+        # Read updated results
+        rows = [json.loads(line) for line in results_path.read_text(encoding="utf-8").splitlines() if line]
+        ok_rows = [row for row in rows if row.get("status") == "ok" and row.get("video_path")]
+
+        clip_scores = [row["clip_t"] for row in ok_rows if "clip_t" in row]
+        vbench_scores = [row["vbench_q"] for row in ok_rows if "vbench_q" in row]
+
+        return {
+            "status": "completed",
+            "clip_t": sum(clip_scores) / len(clip_scores) if clip_scores else None,
+            "vbench_q": sum(vbench_scores) / len(vbench_scores) if vbench_scores else None,
+            "evaluated_count": len(ok_rows),
+        }
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        # The run still writes results.jsonl and reports "completed"; make the
+        # degraded quality stage loud here so the aggregate table's blank cells
+        # are traceable to a real failure instead of looking like "not measured".
+        print(f"Quality evaluation failed: {e}", file=sys.stderr, flush=True)
+        print(
+            f"WARNING: {output.name} continued without CLIP-T / VBench-Q; "
+            f"results.jsonl will have empty quality columns and the aggregator will refuse it "
+            f"unless run with --allow-incomplete-quality.",
+            file=sys.stderr, flush=True,
+        )
+        return {"status": "failed", "error": str(e), "clip_t": None, "vbench_q": None}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--method", choices=METHODS, required=True)
+    parser.add_argument("--model", choices=("wan21", "wan22", "cogvideox15"), default="wan22")
     parser.add_argument("--gpu", type=int, required=True)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--cache-view", type=Path, default=DEFAULT_VIEW)
+    parser.add_argument("--replay-root", type=Path,
+                        help="CogVideo replay directory produced by build_cogvideo_hit_replay.py.")
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--run-dir", type=Path, help="Write this worker's results directly here instead of <output-root>/<method>.")
     parser.add_argument("--limit", type=int, default=1)
@@ -1282,15 +1616,18 @@ def main() -> int:
         help="Keep native request and target-probe artifacts for a focused diagnostic run.",
     )
     parser.add_argument("--allow-gpu-remap", action="store_true", help="Permit a temporary GPU other than the plan's 3..7 assignment.")
+    parser.add_argument("--skip-quality", action="store_true", help="Skip quality evaluation after experiment.")
     args = parser.parse_args()
     if args.gpu < 0 or args.gpu >= GPU_COUNT:
         raise SystemExit(f"--gpu must be in [0, {GPU_COUNT - 1}]")
     if args.gpu not in range(3, 8) and not args.allow_gpu_remap:
         raise SystemExit("--gpu outside the plan's 3..7 range requires --allow-gpu-remap")
-    if args.gpu != GPU_BY_METHOD[args.method] and not args.allow_gpu_remap:
-        raise SystemExit(f"{args.method} is assigned to GPU {GPU_BY_METHOD[args.method]}, got {args.gpu}")
+    assigned_gpu = (WAN21_GPU_BY_METHOD if args.model == "wan21" else GPU_BY_METHOD)[args.method]
+    if args.gpu != assigned_gpu and not args.allow_gpu_remap:
+        raise SystemExit(f"{args.method} on {args.model} is assigned to GPU {assigned_gpu}, got {args.gpu}")
     args.input = args.input.expanduser().resolve()
     args.cache_view = args.cache_view.expanduser().resolve()
+    args.replay_root = args.replay_root.expanduser().resolve() if args.replay_root else None
     args.output_root = args.output_root.expanduser().resolve()
     args.run_dir = args.run_dir.expanduser().resolve() if args.run_dir else None
     if args.limit < 1 or args.limit > 300:
@@ -1313,7 +1650,7 @@ def main() -> int:
                      request_indices=args.request_indices)
     view_rows = load_view(args.cache_view)
     validate_forced_smoke(args, rows, view_rows)
-    if args.method == "carnator_boundary_b5":
+    if args.method == "carnator_boundary_b5" and args.model != "cogvideox15":
         validate_carnator_signature_view(args.cache_view, view_rows)
     output = args.run_dir or args.output_root / args.method
     if output.exists() and args.overwrite and not args.resume:
@@ -1328,7 +1665,8 @@ def main() -> int:
     resolved = resolved_config(
         f"cuda:{args.gpu}",
         args.dry_run,
-        early_signature_thresholds=args.early_signature_thresholds,
+        model_name=args.model,
+        early_signature_thresholds=getattr(args, "early_signature_thresholds", None),
     )
     (output / "run_config.json").write_text(json.dumps({"method": args.method, "gpu": args.gpu, "seed": args.seed, "limit": args.limit,
                                                           "arrival_start": args.arrival_start, "arrival_stop": args.arrival_stop,
@@ -1361,9 +1699,33 @@ def main() -> int:
                                                           "git_revision": revision,
                                                           "config_fingerprint": hashlib.sha256(json.dumps(resolved, sort_keys=True, default=str).encode()).hexdigest(),
                                                           "resolved_config": resolved}, indent=2) + "\n", encoding="utf-8")
+    if args.model == "cogvideox15":
+        pending_rows, resumed_count = pending_rows_for_resume(output, rows, resume=args.resume)
+        if pending_rows:
+            cogvideo_run(args, pending_rows, args.cache_view, output)
+        completed = [json.loads(line).get("status") for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines()]
+        terminal = sum(status in {"ok", "cache_miss", "error"} for status in completed)
+        if terminal != len(rows):
+            raise RuntimeError(f"expected {len(rows)} terminal requests, found {terminal}")
+        errors = sum(status == "error" for status in completed)
+        ok = sum(status == "ok" for status in completed)
+
+        quality_result = {"clip_t": None, "vbench_q": None}
+        if not args.skip_quality and ok > 0:
+            quality_result = run_quality_evaluation(output, args.gpu, args.dry_run)
+
+        print(json.dumps({"status": "completed_with_errors" if errors else "completed", "model": args.model,
+                          "method": args.method, "requests": len(rows), "errors": errors,
+                          "resumed": resumed_count, "results": str(output / "requests.jsonl"),
+                          "clip_t": quality_result.get("clip_t"), "vbench_q": quality_result.get("vbench_q")}, ensure_ascii=False))
+        return 2 if errors else 0
     pending_rows, resumed_count = pending_rows_for_resume(output, rows, resume=args.resume)
     if pending_rows:
-        if args.method in {"nirvana_vid", "teacache", "chorus"}:
+        if args.model == "wan21":
+            # Every Wan2.1 method replays the legacy decisions through the
+            # dedicated runner; there is no generic/native split here.
+            wan21_run(args, pending_rows, args.cache_view, output)
+        elif args.method in {"nirvana_vid", "teacache", "chorus"}:
             generic_run(args, pending_rows, args.cache_view, output)
         else:
             native_run(args, pending_rows, args.cache_view, output)
@@ -1377,9 +1739,15 @@ def main() -> int:
     ok = sum(status == "ok" for status in completed)
     misses = sum(status == "cache_miss" for status in completed)
     errors = sum(status == "error" for status in completed)
+
+    quality_result = {"clip_t": None, "vbench_q": None}
+    if not args.skip_quality and ok > 0:
+        quality_result = run_quality_evaluation(output, args.gpu, args.dry_run)
+
     print(json.dumps({"status": "completed_with_errors" if errors else "completed", "method": args.method, "gpu": args.gpu,
                       "requests": len(rows), "ok": ok, "cache_miss": misses, "errors": errors,
-                      "resumed": resumed_count, "results": str(output / "requests.jsonl")}, ensure_ascii=False))
+                      "resumed": resumed_count, "results": str(output / "requests.jsonl"),
+                      "clip_t": quality_result.get("clip_t"), "vbench_q": quality_result.get("vbench_q")}, ensure_ascii=False))
     return 2 if errors else 0
 
 

@@ -96,6 +96,11 @@ def build_parser() -> argparse.ArgumentParser:
         default="smoothstep",
         help="Distance-to-Mbase interpolation used by boundary-blend injection.",
     )
+    parser.add_argument(
+        "--no-latent-injection",
+        action="store_true",
+        help="Disable latent injection (for attention-only ablation). Runs full 50 steps with only attention reuse.",
+    )
     parser.add_argument("--mask-layers", default="15")
     parser.add_argument("--mask-probe-step", type=int, default=5)
     parser.add_argument("--mask-self-layer", type=int, default=15)
@@ -377,10 +382,13 @@ def bootstrap_wan(wan_root: Path = DEFAULT_WAN_ROOT):
 
 def model_layout_status(model_dir: Path) -> dict[str, Any]:
     model_dir = model_dir.expanduser()
+    # Support both Wan2.1 and Wan2.2 VAE checkpoint names
+    vae_21 = (model_dir / "Wan2.1_VAE.pth").exists()
+    vae_22 = (model_dir / "Wan2.2_VAE.pth").exists()
     return {
         "exists": model_dir.exists(),
         "native_config_json": (model_dir / "config.json").exists(),
-        "vae_checkpoint": (model_dir / "Wan2.2_VAE.pth").exists(),
+        "vae_checkpoint": vae_21 or vae_22,
         "t5_checkpoint": (model_dir / "models_t5_umt5-xxl-enc-bf16.pth").exists(),
         "t5_tokenizer": (model_dir / "google" / "umt5-xxl").exists(),
     }
@@ -1087,7 +1095,9 @@ def build_fused_mbase_by_noun(
     # return type (a noun -> Mbase mapping) used by all callers.
     build_fused_mbase_by_noun.last_diagnostics = diagnostics
     model = runtime.pipe.model
-    if args.offload_model or runtime.pipe.init_on_cpu:
+    # Wan2.1's WanT2V has no ``init_on_cpu`` (it places the model on the device
+    # itself); only Wan2.2's WanTI2V carries that flag.
+    if args.offload_model or getattr(runtime.pipe, "init_on_cpu", False):
         model.to(runtime.device)
         torch.cuda.empty_cache()
     no_sync = getattr(model, "no_sync", nullcontext)
@@ -1573,6 +1583,9 @@ def seq_len_for(runtime: NativeRuntime, latent) -> int:
 
 def timestep_for(runtime: NativeRuntime, latent, timestep, seq_len: int):
     torch = runtime.torch
+    if getattr(runtime, "scalar_timesteps", False):
+        # Wan2.1 T2V shares one scalar [B] timestep across every token.
+        return torch.stack([timestep])
     _, mask2 = runtime.wan["masks_like"]([latent], zero=False)
     temporal_mask = mask2[0]
     timestep = torch.stack([timestep])
@@ -1890,8 +1903,9 @@ def run_native_t2v_stage(
         generator = torch.Generator(device=runtime.device).manual_seed(args.seed)
     seq_len = seq_len_for(runtime, latent)
     token_grid = token_grid_for(latent, pipe.patch_size)
-    if list(token_grid) != EXPECTED_TOKEN_GRID and args.height == 704 and args.width == 1280 and args.frames == 121:
-        raise ValueError(f"token grid {token_grid} != expected {EXPECTED_TOKEN_GRID}")
+    expected_token_grid = getattr(runtime, "expected_token_grid", EXPECTED_TOKEN_GRID)
+    if list(token_grid) != expected_token_grid and args.height == 704 and args.width == 1280 and args.frames == 121:
+        raise ValueError(f"token grid {token_grid} != expected {expected_token_grid}")
 
     scheduler = build_scheduler(runtime, args)
     if resume_start_step > 0 and hasattr(scheduler, "set_begin_index"):
@@ -1912,7 +1926,9 @@ def run_native_t2v_stage(
             save_latent(cache_dir / "latents_initial.pt", latent)
             cache_write_seconds += time.perf_counter() - cache_write_started
 
-    if args.offload_model or pipe.init_on_cpu:
+    # Wan2.1's WanT2V has no ``init_on_cpu`` (it places the model on the device
+    # itself); only Wan2.2's WanTI2V carries that flag.
+    if args.offload_model or getattr(pipe, "init_on_cpu", False):
         model.to(runtime.device)
         torch.cuda.empty_cache()
 
@@ -1972,22 +1988,24 @@ def run_native_t2v_stage(
                 generator=generator,
             )[0].squeeze(0)
             if source_trajectory is not None and mask_bundle is not None and step_index >= args.reuse_start_step:
-                source_path = source_trajectory.get(step_index)
-                if source_path is None:
-                    raise KeyError(f"source trajectory missing step {step_index}")
-                source_latent = load_latent(source_path, runtime.device, latent.dtype)
-                latent, elapsed, source_step, current_injection_stats = apply_latent_injection(
-                    latent,
-                    source_latent,
-                    mask_bundle,
-                    mode=args.latent_injection_mode,
-                    alpha_function=args.boundary_alpha_function,
-                )
-                injection_seconds += elapsed
-                injection_calls += 1
-                injection_mask_source_step = source_step
-                if not injection_stats:
-                    injection_stats = current_injection_stats
+                # Latent injection (can be disabled for attention-only ablation)
+                if not getattr(args, 'no_latent_injection', False):
+                    source_path = source_trajectory.get(step_index)
+                    if source_path is None:
+                        raise KeyError(f"source trajectory missing step {step_index}")
+                    source_latent = load_latent(source_path, runtime.device, latent.dtype)
+                    latent, elapsed, source_step, current_injection_stats = apply_latent_injection(
+                        latent,
+                        source_latent,
+                        mask_bundle,
+                        mode=args.latent_injection_mode,
+                        alpha_function=args.boundary_alpha_function,
+                    )
+                    injection_seconds += elapsed
+                    injection_calls += 1
+                    injection_mask_source_step = source_step
+                    if not injection_stats:
+                        injection_stats = current_injection_stats
             if save_trajectory and step_index >= trajectory_start_step:
                 cache_write_started = time.perf_counter()
                 trajectory[step_index] = Path(save_latent(cache_dir / f"latents_step_{step_index:03d}.pt", latent))
@@ -2073,7 +2091,7 @@ def run_native_t2v_stage(
             "resume_start_step": resume_start_step,
         },
         "masked_injection": {
-            "enabled": source_trajectory is not None and mask_bundle is not None,
+            "enabled": source_trajectory is not None and mask_bundle is not None and not getattr(args, 'no_latent_injection', False),
             "mode": injection_mode,
             "alpha_function": (
                 getattr(args, "boundary_alpha_function", None)
@@ -2160,7 +2178,9 @@ def build_native_self_contrast_mask_bundle(
     context, _context_null = encode_prompts(runtime, args, args.source_prompt)
 
     model = runtime.pipe.model
-    if args.offload_model or runtime.pipe.init_on_cpu:
+    # Wan2.1's WanT2V has no ``init_on_cpu`` (it places the model on the device
+    # itself); only Wan2.2's WanTI2V carries that flag.
+    if args.offload_model or getattr(runtime.pipe, "init_on_cpu", False):
         model.to(runtime.device)
         torch.cuda.empty_cache()
 

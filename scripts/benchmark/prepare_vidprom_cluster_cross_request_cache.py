@@ -226,32 +226,21 @@ def model_tree_fingerprint(path: Path) -> str:
 
 
 def pack_bool_mask(mask: Any) -> tuple[bytes, int]:
-    import torch
+    """Bit-pack a mask into the v1 layout shared with SourceBlockMaskCache.
 
-    if not isinstance(mask, torch.Tensor) or mask.dtype != torch.bool or mask.ndim != 3:
-        raise ValueError("canonical attention mask must be bool[heads,q_blocks,k_blocks]")
-    flat = mask.detach().cpu().contiguous().reshape(-1).to(torch.uint8)
-    element_count = int(flat.numel())
-    padding = (-element_count) % 8
-    if padding:
-        flat = torch.cat((flat, torch.zeros(padding, dtype=torch.uint8)))
-    weights = (1 << torch.arange(8, dtype=torch.uint8)).view(1, 8)
-    packed = (flat.view(-1, 8) * weights).sum(dim=1, dtype=torch.int16).to(torch.uint8)
-    return packed.numpy().tobytes(), element_count
+    Thin delegate so both writers cannot drift; imported lazily because this
+    module deliberately keeps carnator/torch off its import path.
+    """
+    from carnator.outer_sparse import pack_bool_mask as _pack_bool_mask
+
+    return _pack_bool_mask(mask)
 
 
-def unpack_bool_mask(payload: bytes, shape: list[int] | tuple[int, int, int]) -> Any:
-    import torch
+def unpack_bool_mask(payload: bytes, shape: list[int] | tuple[int, ...]) -> Any:
+    """Inverse of :func:`pack_bool_mask`, delegating to the shared implementation."""
+    from carnator.outer_sparse import unpack_bool_mask as _unpack_bool_mask
 
-    if len(shape) != 3 or any(int(value) < 1 for value in shape):
-        raise ValueError("mask shape must be three positive dimensions")
-    element_count = math.prod(int(value) for value in shape)
-    if len(payload) != math.ceil(element_count / 8):
-        raise ValueError("bit-packed mask byte size does not match metadata")
-    raw = torch.frombuffer(memoryview(bytearray(payload)), dtype=torch.uint8)
-    shifts = torch.arange(8, dtype=torch.uint8)
-    unpacked = ((raw.unsqueeze(1) >> shifts) & 1).reshape(-1)[:element_count]
-    return unpacked.to(torch.bool).reshape(tuple(int(value) for value in shape)).contiguous()
+    return _unpack_bool_mask(payload, shape)
 
 
 def load_canonical_mask(root: Path, entry: dict[str, Any]) -> Any:
