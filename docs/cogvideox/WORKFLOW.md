@@ -87,9 +87,9 @@ if decision == "hit":
     step5_latent = capture_probe(step=5)
     save_trajectory(trajectory); save_probe(step5_latent)
 
-    # mask：当前实现使用外部分割，见 FUSION_MASK.md
-    prompt_diff = extract_prompt_diff(source_prompt, target_prompt)
-    mask = segment_video_grounded_sam2(source_video, prompt_diff.removed)
+    # mask：纯 fusion mask，由 source 的 joint attention 分数生成，见 FUSION_MASK.md
+    self_scores, cross_scores = capture_joint_attention(source, layer=attention_probe_layer)
+    mask = build_canonical_fusion_mask(self_scores, cross_scores)
     save_mask(M_base, M_edit, M_see)
 
     target_probe = generate_until_step(target_prompt, step=5)
@@ -101,10 +101,10 @@ if decision == "hit":
         output = generate_from_step(target_prompt, start_step=10)
 ```
 
-命中请求 ≈ Source(~77s) + LLM/SAM2(~30s) + Target probe(~40s) + Target gen(~70s) ≈ 220s。
+命中请求 ≈ Source(~77s) + Target probe(~40s) + Target gen(~70s) ≈ 190s，无外部模型依赖。
 
-> ⚠️ 当前实现使用外部分割（同 Chorus），与 Wan2.2 的纯 fusion mask 算法不一致。
-> 重构设计见 [FUSION_MASK.md](FUSION_MASK.md)。
+> 早期实现用外部分割（同 Chorus），已重构为纯 fusion mask，见
+> [FUSION_MASK.md](FUSION_MASK.md) 与 [KNOWN_ISSUES.md](KNOWN_ISSUES.md) §3.2。
 
 ## 输出结构
 
@@ -152,7 +152,9 @@ CogVideo 结果写入新的 sibling 目录。
 ```
 
 `status` 取值：`ok` / `cache_miss` / `error`。error 是终态审计记录，不改写为 miss，
-也不计入 hit-rate 分母与质量评分。
+也不计入 hit-rate 分母与质量评分。**miss 不生成视频**，返回 `cache_miss`、`latency_s=0`、
+`executed_steps=0`、`extra.skipped=true`。聚合器把 `ok` 与 `cache_miss` 都算作已完成，
+命中率只数 `ok`，所以 miss 必须走短路而不是回退 dense。
 
 ## 质量评估与聚合
 
@@ -171,9 +173,10 @@ PYTHONPATH=. python scripts/benchmark/aggregate_vidprom_300_results.py \
 需要报告的指标：E2E s/request、Hit E2E s/hit、Denoising s/request、
 Hit denoising s/hit、External s/request（Chorus 的 LLM+SAM2）、CLIP-T、VBench-Q、Speedup。
 
-计时口径：denoising 是 CUDA 同步后的 DiT forward 时间；source cache preparation 不计入
-target E2E 与 denoising，但必须单独报告 `source_prepare_s`，不得把源生成成本隐藏在
-"预置缓存"中；warm-up 不计分。
+计时口径：denoising 是 CUDA 同步后的 DiT forward 时间。**`latency_s`、`hit_e2e_s` 与
+`target_e2e_s` 三者同值，都扣除命中后的 source preparation 区间与视频/hash 写盘开销**
+（见 [KNOWN_ISSUES.md](KNOWN_ISSUES.md) §3.3）；source 成本必须单独报告
+`source_prepare_s`，不得把源生成成本隐藏在"预置缓存"中；warm-up 不计分。
 
 ## 故障排查
 
@@ -191,7 +194,8 @@ target E2E 与 denoising，但必须单独报告 `source_prepare_s`，不得把�
 | nirvana_vid | `nirvana_vid` | 无 | ✅ |
 | chorus | `chorus` | LLM + SAM2 | ✅ |
 | chorus2 | `chorus2` | 无 | ✅ |
-| carnator_boundary_b5 | `carnator_b5`（+ 临时 `chorus`） | LLM + SAM2（临时） | ⚠️ 待重构 |
+| carnator_boundary_b5 | `carnator_b5` | 无 | ✅ |
 
 > 历史上 `scripts/run_5baselines_10samples*.py` 曾对 chorus2 误用 `chorus` 配置键，
-> 并为 carnator 漏配 `chorus` 键，导致 `KeyError`。详见 [KNOWN_ISSUES.md](KNOWN_ISSUES.md)。
+> 并为 carnator 漏配 `chorus` 键，导致 `KeyError`；carnator 当时还依赖外部分割。
+> 两者都已修复。详见 [KNOWN_ISSUES.md](KNOWN_ISSUES.md) §3.1 / §3.2。

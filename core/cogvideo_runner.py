@@ -60,7 +60,15 @@ class CogVideoReplayRunner:
             match = CacheMatch(True, str(source_uuid), int(source.get("request_index", 0)), "replay_hit",
                                metadata={"replay_decision": "hit", "legacy_status": replay.get("legacy_status")})
         elif decision == "miss":
+            # A miss is skipped without any generation: no video, zero latency and
+            # zero executed steps. This mirrors core/wan21_runner.py, core/runner.py
+            # and the documented miss_policy in run_vidprom_300_experiment.py. The
+            # teacache branch above deliberately does not reach here, because
+            # CacheMatch(kind="target_only") also has hit=False.
             match = CacheMatch(False, None, None, "replay_miss", metadata={"replay_decision": "miss"})
+            return RequestResult(request.request_index, request.uuid, request.prompt, self.model,
+                                 self.method.name, request.seed, match, 0, 0.0, "cache_miss",
+                                 extra={"replay": replay, "skipped": True})
         else:
             return self._error(request, CacheMatch(kind="replay_schema_error"), started,
                                f"unsupported replay decision: {decision!r}")
@@ -123,8 +131,11 @@ class CogVideoReplayRunner:
 
             # Align timing fields with early_signature_disabled experiment (wan version)
             denoising_s = generation.extra.get("dit_forward_s")
-            # latency_s: total end-to-end time excluding save/hash overhead
-            latency_s = max(0.0, elapsed - save_s - hash_s)
+            # latency_s: request wall clock excluding the post-hit cache preparation
+            # interval and the video/hash bookkeeping, matching the protocol in
+            # docs/VIDPROM_1000CACHE_300INPUT_EXPERIMENT_PLAN.md and core/wan21_runner.py.
+            # For a miss source_prepare_s is 0.0, so this is a no-op.
+            latency_s = max(0.0, elapsed - source_prepare_s - save_s - hash_s)
             # hit_e2e_s and hit_denoising_s: same as latency_s and denoising_s for hit case
             hit_e2e_s = latency_s if match.hit else None
             hit_denoising_s = denoising_s if match.hit else None
@@ -133,7 +144,7 @@ class CogVideoReplayRunner:
 
             timing = {
                 "source_prepare_s": source_prepare_s,
-                "target_e2e_s": max(0.0, elapsed - source_prepare_s - save_s - hash_s),
+                "target_e2e_s": latency_s,
                 "target_generation_s": target_s,
                 "denoising_s": denoising_s,
                 "save_video_s": save_s,

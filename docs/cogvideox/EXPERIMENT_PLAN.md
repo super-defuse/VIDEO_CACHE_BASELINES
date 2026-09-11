@@ -46,7 +46,7 @@
 - 其他四个基线待测试
 
 **旧验证状态**：
-- 五个方法的 `--check-only` 均为 `ready`；全仓单元测试为 `140 passed`
+- 五个方法的 `--check-only` 均为 `ready`；全仓单元测试为 `159 passed`（2026-09-11）
 - Chorus、Chorus2、Carnator 通过256x256、9帧、2步dense smoke和小尺寸backend smoke
 - forced miss/hit测试通过，缓存清理成功
 
