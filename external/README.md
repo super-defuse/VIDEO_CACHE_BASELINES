@@ -13,7 +13,8 @@ weights remain outside this directory and are configured with `model_path`.
 
 | Directory | Purpose |
 | --- | --- |
-| `wan2.2` | Wan2.2 model runtime |
+| `wan2.2` | Wan2.2 model runtime (patched fork) |
+| `Wan2.1` | Wan2.1 model runtime (patched fork, see below) |
 | `cogvideo` | CogVideo model runtime |
 | `lightx2v` | LightX2V distilled-Wan runtime |
 | `LTX-Video` | LTXV model runtime (official Lightricks source) |
@@ -33,6 +34,13 @@ git -C external/vbench checkout c2dd0593fb913a24bc4f4ebd8803fd8c49c7db2d
 It remains ignored by the parent repository so its large model and cache files
 cannot be committed accidentally. The VBench Python dependencies are installed
 by `scripts/create_environments.sh` into the `vbench` environment.
+
+`wan2.2` and `Wan2.1` are patched forks, not upstream checkouts, because the
+baselines depend on local changes to the model runtime. For `Wan2.1` the patch
+is a single commit on top of upstream `9737cba`: `masks_like` in
+`wan/utils/utils.py` (imported by `scripts/dev/check_wan21_preflight.py`) and a
+position reshape in `wan/modules/model.py`. Do not repoint these entries at the
+upstream URLs, or a fresh clone silently loses the patches.
 
 For Chorus, install the pinned Grounded-SAM-2 checkout into `wan` after the
 base environments exist:

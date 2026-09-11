@@ -1,6 +1,9 @@
 [submodule "wan22"]
 	path = external/wan2.2
 	url = https://github.com/super-defuse/Wan2.2.git
+[submodule "wan21"]
+	path = external/Wan2.1
+	url = https://github.com/MrcsTang/Wan2.1.git
 [submodule "cogvideo"]
 	path = external/cogvideo
 	url = https://github.com/THUDM/CogVideo.git

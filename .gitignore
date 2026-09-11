@@ -190,10 +190,3 @@ artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/cache/
 artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/tmp_cache/
 artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/native/
 artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/vbench/
-
-# TODO(wan21-submodule): this checkout carries local patches that the Wan2.1
-# baselines depend on (`masks_like` in wan/utils/utils.py, plus 6 lines in
-# wan/modules/model.py). It is excluded until the patched tree is published to
-# a fork, at which point it becomes a submodule like external/wan2.2 and this
-# rule plus the line below are removed.
-external/Wan2.1/

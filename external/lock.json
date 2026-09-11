@@ -7,6 +7,12 @@
       "url": "https://github.com/super-defuse/Wan2.2.git",
       "commit": "3b8c4f3ade605b9e71cb907cbecf284853cae936"
     },
+    "wan21": {
+      "path": "external/Wan2.1",
+      "url": "https://github.com/MrcsTang/Wan2.1.git",
+      "commit": "4bb2d4100090d654ee76efdb0bf76667cc43432d",
+      "note": "Fork of Wan-Video/Wan2.1 with two local patches the Wan2.1-T2V-1.3B baselines depend on: masks_like in wan/utils/utils.py and a position reshape in wan/modules/model.py."
+    },
     "cogvideo": {
       "path": "external/cogvideo",
       "url": "https://github.com/THUDM/CogVideo.git",
