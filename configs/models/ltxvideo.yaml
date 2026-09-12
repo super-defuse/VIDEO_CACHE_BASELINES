@@ -1,0 +1,108 @@
+# LTX-Video 0.9.7-dev (13B, diffusers layout).
+#
+# The checkpoint directory carries the transformer/VAE/scheduler/tokenizer and
+# only the T5 *config*; the T5-v1.1-XXL encoder weights live in a standalone
+# file, so ``t5_weights`` is loaded on top of ``text_encoder/config.json``.
+#
+# Resolution/frames are the experiment budget agreed for this model.  Both are
+# constrained by the VAE (spatial compression 32, temporal compression 8):
+# width/height must be divisible by 32 and frames must be 8k+1.
+model: ltxvideo
+model_path: models/LTX-Video-0.9.7-dev
+t5_weights: models/t5xxl_fp16.safetensors
+device: cuda:0
+dtype: bfloat16
+width: 768
+height: 512
+frames: 121
+# Diffusion-time frame rate, used both for the transformer's time-coordinate
+# normalisation and for writing the result.  ``LTXConditionPipeline.__call__``
+# takes ``frame_rate: int = 25`` and divides video_coords[:, 0] by it, so this
+# must stay 25 to match the stock pipeline (see adapters/ltx_pipeline.py).
+fps: 25
+baseline_steps: 50
+seed: 20260218
+max_sequence_length: 256
+negative_prompt: "worst quality, inconsistent motion, blurry, jittery, distorted"
+
+# Scalar CFG weight.  Only used when ``stg.enabled`` is false; with STG on the
+# piecewise ``stg.guidance_scale`` schedule below takes over, exactly as the
+# released ltxv-13b-0.9.7-dev config does.
+guidance_scale: 3.0
+
+# Spatio-temporal guidance (STG).  0.9.7-dev is a non-distilled checkpoint and
+# its released recipe is CFG + STG, which diffusers' LTXConditionPipeline does
+# not implement, so the shared hand-rolled sampler loop below provides it.
+#
+# The numeric schedule is the ``first_pass`` block of the released
+# configs/ltxv-13b-0.9.7-dev.yaml.  That file describes a multi-scale 30-step
+# pipeline while this experiment runs a single-stage 50-step schedule, so the
+# segments are mapped by normalised time through ``guidance_timesteps`` (the
+# same mechanism the reference implementation uses); the mapping is an
+# engineering alignment, not a bit-exact reproduction, and is recorded in every
+# request's ``extra``.  Set ``enabled: false`` to fall back to plain CFG.
+stg:
+  enabled: true
+  mode: attention_values
+  cfg_star_rescale: true
+  guidance_timesteps: [1.0, 0.996, 0.9933, 0.9850, 0.9767, 0.9008, 0.6180]
+  guidance_scale: [1, 1, 6, 8, 6, 1, 1]
+  stg_scale: [0, 0, 4, 4, 4, 2, 1]
+  rescaling_scale: [1, 1, 0.5, 0.5, 1, 1, 1]
+  skip_block_list: [[], [11, 25, 35, 39], [22, 35, 39], [28], [28], [28], [28]]
+
+# Baseline constants below mirror configs/models/wan21.yaml so the five
+# baselines sit at the same relative position in the 50-step schedule.
+nirvana_vid:
+  reuse_start_step: 5
+  cache_steps: [5]
+teacache:
+  relative_l1_threshold: 0.08
+  max_skip_steps: 2
+chorus:
+  stages: {k1: 5, k2: 30}       # target executes 50 - K1 = 45 steps, latent fusion on [K1, K2)
+  gamma_k: 1.5
+  gamma_o: 1.5
+chorus2:
+  sparse_start_step: 10         # masks captured/served from completed step 11
+  layer_refresh_size: 8
+  # Same block geometry as the Wan2.1 baseline: SpargeAttn's block-sparse
+  # SageAttention2 kernel, which only accepts Q=64/K=128.  SpargeAttn is the
+  # only backend the LTX replay has, so there is no backend knob to set.
+  q_block_size: 64
+  k_block_size: 128
+  top_p: 0.95
+  min_top_k: 0.1
+  layers: all
+carnator_b5:
+  # The Early Signature profile is defined at completed step 5; the target then
+  # resumes from the source step-9 latent and injects on completed steps 10..49.
+  probe_step: 5
+  reuse_step: 10
+  # 48 LTX blocks partitioned into middle third / outer two thirds, matching
+  # the Wan2.1 regional-vs-outer split.  The two sets must partition every block.
+  regional_layers: 16-31
+  outer_sparse_layers: 0-15,32-47
+  # Same block geometry as the Wan2.1 baseline (see chorus2 above).
+  q_block_size: 64
+  k_block_size: 128
+  top_p: 0.95
+  min_top_k: 0.1
+  layer_refresh_size: 8
+  # Soft (B5) latent fusion: base keeps the target, the band blends towards the
+  # source latent with a smoothstep alpha, everything outside is the source.
+  latent_injection_mode: boundary-blend
+  boundary_alpha_function: smoothstep
+  # Fusion mask parameters (self/cross attention fusion, no external segmentation).
+  # Cross attention proposes the noun seeds, self attention decides the mask; the
+  # Wan reference probes them at two different layers, so both are named here.
+  attention_probe_layer: 17
+  attention_self_layer: 17
+  mask_top_p: 0.02
+  mask_background_p: 0.02
+  fusion_eps: 0.2
+  fusion_gamma: 1.0
+  fusion_high_threshold: 0.45
+  fusion_low_threshold: 0.35
+  mask_spatial_medit_radius: 2
+  mask_spatial_msee_radius: 3

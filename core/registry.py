@@ -20,14 +20,14 @@ METHOD_MODULES = {
 }
 
 REAL_SUPPORTED = {
-    "baseline": {"wan22", "cogvideox15"},
+    "baseline": {"wan22", "cogvideox15", "ltxvideo"},
     "chai": {"wan22"},
     "teacache": {"wan22", "cogvideox15"},
-    "nirvana_vid": {"wan22", "cogvideox15"},
+    "nirvana_vid": {"wan22", "cogvideox15", "ltxvideo"},
     "carnator": set(),
-    "carnator_boundary_b5": {"cogvideox15"},
-    "chorus": {"wan22", "cogvideox15"},
-    "chorus2": {"cogvideox15"},
+    "carnator_boundary_b5": {"cogvideox15", "ltxvideo"},
+    "chorus": {"wan22", "cogvideox15", "ltxvideo"},
+    "chorus2": {"cogvideox15", "ltxvideo"},
     "chorus_no_tgaa": {"wan22"},
     "chorus_mbase_only": {"wan22"},
     "chorus_tgaa_joint_gamma_1_6": {"wan22"},

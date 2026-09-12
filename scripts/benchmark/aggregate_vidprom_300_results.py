@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MODEL_METHODS = {
     "wan22": ("nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5"),
     "wan21": ("baseline", "nirvana_vid", "chorus", "chorus2", "carnator_boundary_b5"),
+    "ltxvideo": ("baseline", "nirvana_vid", "chorus", "chorus2", "carnator_boundary_b5"),
 }
 # Methods without a cross-request cache: hit metrics are meaningless.
 NO_HIT_METHODS = {"teacache", "baseline"}

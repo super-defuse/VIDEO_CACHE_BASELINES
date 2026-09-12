@@ -37,6 +37,8 @@ METHODS = ("baseline", "nirvana_vid", "teacache", "chorus", "chorus2", "carnator
 GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 # Wan2.1 runs one method per GPU; nirvana_vid takes teacache's idle slot.
 WAN21_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
+# LTX-Video has no TeaCache entry in the matrix, so it uses the Wan2.1 assignment.
+LTX_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 GPU_COUNT = 8
 EARLY_SIGNATURE_THRESHOLDS = {
     # Representative noun-match calibration tuple: 270/300 pairs pass;
@@ -90,7 +92,8 @@ def resolved_config(
     model = {"model": "synthetic", "dry_run": True, "seed": 20260218} if dry_run else load_yaml(ROOT / "configs" / "models" / f"{model_name}.yaml")
     methods = {} if dry_run else load_yaml(ROOT / "configs" / "methods" / "default.yaml")
     config = {**model, **methods, "dry_run": dry_run, "device": device, "cache_root": "cache"}
-    for key in ("model_path", "wan_source"):
+    # ``t5_weights`` is LTX-Video's; the other two are Wan's.
+    for key in ("model_path", "wan_source", "t5_weights"):
         value = config.get(key)
         if value and not Path(value).is_absolute():
             config[key] = str((ROOT / value).resolve())
@@ -594,6 +597,12 @@ def wan21_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, 
         "miss_policy": "skipped without generation (status cache_miss, latency 0)",
         "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
         "request_error_policy": "record error without changing replay decision",
+        # Carnator's target runs a dense prefix before reuse and counts it in the
+        # request's dit_forward_s, so the manifest has to say so or the denoising
+        # column looks like a regression against a run that skipped the prefix.
+        "target_probe_enabled": args.method == "carnator_boundary_b5",
+        "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
+        "target_probe_seed": args.seed if args.method == "carnator_boundary_b5" else None,
         "args": {"method": args.method, "gpu": args.gpu, "limit": args.limit, "seed": args.seed},
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     # The runner streams its raw RequestResult rows here; the canonical
@@ -605,6 +614,19 @@ def wan21_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, 
          for row in rows),
         raw_path,
     )
+    payloads = flatten_replay_payloads(args, rows, run_results, output)
+    raw_path.unlink(missing_ok=True)
+    return payloads
+
+
+def flatten_replay_payloads(args: argparse.Namespace, rows: list[dict[str, Any]], run_results: list[Any],
+                            output: Path) -> list[dict[str, Any]]:
+    """Turn a replay runner's raw results into the aggregation contract rows.
+
+    Shared by the Wan2.1 and LTX-Video runs: both drive the same replay runner
+    and must emit identical ``requests.jsonl`` / ``request_records.jsonl`` rows
+    for the aggregator to compare them.
+    """
     payloads = []
     for row, result in zip(rows, run_results, strict=True):
         payload = asdict(result)
@@ -643,6 +665,81 @@ def wan21_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, 
         payloads.append(payload)
     for row, payload in zip(rows, payloads, strict=True):
         append_result_and_record(output, payload, row, args.method)
+    return payloads
+
+
+def ltxvideo_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
+    """LTX-Video replay run, structurally identical to the Wan2.1 one.
+
+    The same fixed legacy decisions drive the same five baselines through the
+    same replay runner; only the adapter and the method plugins' model branch
+    differ, plus the manifest's model identity.
+    """
+    config = resolved_config(f"cuda:{args.gpu}", args.dry_run, model_name="ltxvideo",
+                             early_signature_thresholds=getattr(args, "early_signature_thresholds", None))
+    replay = None
+    replay_path = None
+    if args.method != "baseline":
+        if args.replay_root is None:
+            raise ValueError("LTX-Video replay methods require --replay-root from the legacy experiment")
+        replay_path = args.replay_root / f"{args.method}.jsonl"
+        replay = load_replay_decisions(args.replay_root, args.method, limit=args.limit)
+    if args.dry_run:
+        config = {**config, **load_yaml(ROOT / "configs" / "models" / "ltxvideo.yaml"),
+                  "model": "ltxvideo", "dry_run": True, "device": f"cuda:{args.gpu}"}
+    adapter = make_adapter("synthetic" if args.dry_run else "ltxvideo", config)
+    method = make_method(args.method, config)
+    method.adapter = adapter
+    if not args.dry_run and not args.resume:
+        # The resident model plus Grounded-SAM-2 are the two loads that would
+        # otherwise land inside the first timed request.
+        warmup_paths = ["model_load"]
+        if args.method == "chorus":
+            from methods.chorus.grounded_sam import GroundedSam2Segmenter
+
+            sam_config = {**config.get("chorus", {}).get("grounded_sam2", {}),
+                          "device": str(config.get("device", "cuda"))}
+            GroundedSam2Segmenter(sam_config)._load()
+            warmup_paths.append("chorus_sam_model_loaded")
+        write_warmup_record(output, paths=warmup_paths)
+    runner = Wan21ReplayRunner(adapter, method, output_dir=output, replay=replay,
+                               source_prompts={row["uuid"]: row for row in view_rows_for_preload(view)},
+                               config=config, model="LTX-Video-0.9.7-dev")
+    try:
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        revision = "unknown"
+    (output / "run_manifest.json").write_text(json.dumps({
+        "schema_version": "ltxvideo-experiment/v1",
+        "model": "LTX-Video-0.9.7-dev",
+        "model_path": (str(Path(config["model_path"]).resolve()) if config.get("model_path") else None),
+        "legacy_source_view": str(view),
+        "legacy_source_view_manifest_sha256": sha256_file(view / "view_manifest.json"),
+        "input": str(args.input),
+        "input_sha256": sha256_file(args.input),
+        "replay_root": str(args.replay_root) if args.replay_root else None,
+        "replay_sha256": sha256_file(replay_path) if replay_path is not None else None,
+        "git_revision": revision,
+        "resolved_config": config,
+        "replay_policy": "legacy hit/miss and source UUID are immutable ground truth; baseline runs every request",
+        "miss_policy": "skipped without generation (status cache_miss, latency 0)",
+        "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
+        "request_error_policy": "record error without changing replay decision",
+        # Carnator's target runs a dense prefix before reuse and counts it in the
+        # request's dit_forward_s, so the manifest has to say so or the denoising
+        # column looks like a regression against a run that skipped the prefix.
+        "target_probe_enabled": args.method == "carnator_boundary_b5",
+        "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
+        "target_probe_seed": args.seed if args.method == "carnator_boundary_b5" else None,
+        "args": {"method": args.method, "gpu": args.gpu, "limit": args.limit, "seed": args.seed},
+    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    raw_path = output / "requests.raw.jsonl"
+    run_results = runner.run(
+        (Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
+         for row in rows),
+        raw_path,
+    )
+    payloads = flatten_replay_payloads(args, rows, run_results, output)
     raw_path.unlink(missing_ok=True)
     return payloads
 
@@ -1580,7 +1677,7 @@ def run_quality_evaluation(output: Path, gpu: int, dry_run: bool) -> dict[str, A
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--method", choices=METHODS, required=True)
-    parser.add_argument("--model", choices=("wan21", "wan22", "cogvideox15"), default="wan22")
+    parser.add_argument("--model", choices=("wan21", "wan22", "cogvideox15", "ltxvideo"), default="wan22")
     parser.add_argument("--gpu", type=int, required=True)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--cache-view", type=Path, default=DEFAULT_VIEW)
@@ -1622,7 +1719,11 @@ def main() -> int:
         raise SystemExit(f"--gpu must be in [0, {GPU_COUNT - 1}]")
     if args.gpu not in range(3, 8) and not args.allow_gpu_remap:
         raise SystemExit("--gpu outside the plan's 3..7 range requires --allow-gpu-remap")
-    assigned_gpu = (WAN21_GPU_BY_METHOD if args.model == "wan21" else GPU_BY_METHOD)[args.method]
+    assigned_gpu = (
+        WAN21_GPU_BY_METHOD if args.model == "wan21"
+        else LTX_GPU_BY_METHOD if args.model == "ltxvideo"
+        else GPU_BY_METHOD
+    )[args.method]
     if args.gpu != assigned_gpu and not args.allow_gpu_remap:
         raise SystemExit(f"{args.method} on {args.model} is assigned to GPU {assigned_gpu}, got {args.gpu}")
     args.input = args.input.expanduser().resolve()
@@ -1650,7 +1751,9 @@ def main() -> int:
                      request_indices=args.request_indices)
     view_rows = load_view(args.cache_view)
     validate_forced_smoke(args, rows, view_rows)
-    if args.method == "carnator_boundary_b5" and args.model != "cogvideox15":
+    # LTX-Video's Carnator source builds its own Early Signature inside the
+    # request, so unlike Wan2.1 it needs nothing from the cache view here.
+    if args.method == "carnator_boundary_b5" and args.model not in {"cogvideox15", "ltxvideo"}:
         validate_carnator_signature_view(args.cache_view, view_rows)
     output = args.run_dir or args.output_root / args.method
     if output.exists() and args.overwrite and not args.resume:
@@ -1693,6 +1796,8 @@ def main() -> int:
                                                               "retain_for_diagnostic" if args.retain_native_artifacts
                                                               else "top_level_video_and_records_only"
                                                           ),
+                                                          # Overwritten below for wan21 and ltxvideo, whose
+                                                          # runs write their own model-specific manifest.
                                                           "target_probe_enabled": args.method == "carnator_boundary_b5",
                                                           "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
                                                           "target_probe_seed": args.seed if args.method == "carnator_boundary_b5" else None,
@@ -1725,6 +1830,9 @@ def main() -> int:
             # Every Wan2.1 method replays the legacy decisions through the
             # dedicated runner; there is no generic/native split here.
             wan21_run(args, pending_rows, args.cache_view, output)
+        elif args.model == "ltxvideo":
+            # Same shape as Wan2.1: one replay runner for all five baselines.
+            ltxvideo_run(args, pending_rows, args.cache_view, output)
         elif args.method in {"nirvana_vid", "teacache", "chorus"}:
             generic_run(args, pending_rows, args.cache_view, output)
         else:

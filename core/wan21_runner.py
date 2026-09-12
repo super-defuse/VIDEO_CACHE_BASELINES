@@ -2,13 +2,26 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import time
+import traceback
 from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Any, Iterable
 
 from .types import CacheMatch, Request, RequestResult
+
+
+def _log_traceback(exc: BaseException) -> None:
+    """Print the full traceback of a per-request failure when asked to.
+
+    A request's error is recorded as a one-line message, which is the right
+    thing for the results table but useless for debugging.  Set
+    ``WAN21_RUNNER_TRACEBACK=1`` to also dump the traceback to stderr.
+    """
+    if os.environ.get("WAN21_RUNNER_TRACEBACK") == "1":
+        traceback.print_exception(type(exc), exc, exc.__traceback__)
 
 
 class Wan21ReplayRunner:
@@ -186,6 +199,7 @@ class Wan21ReplayRunner:
                                      **generation.extra,
                                  })
         except Exception as exc:
+            _log_traceback(exc)
             return self._error(request, match, started, f"{type(exc).__name__}: {exc}", replay=replay,
                                source_prepare_s=source_prepare_s, cleanup=cleanup)
         finally:
@@ -244,6 +258,7 @@ class Wan21ReplayRunner:
                                      **generation.extra,
                                  })
         except Exception as exc:
+            _log_traceback(exc)
             return self._error(request, match, started, f"{type(exc).__name__}: {exc}")
 
     def _error(self, request: Request, match: CacheMatch, started: float, message: str, *, replay: Any = None,

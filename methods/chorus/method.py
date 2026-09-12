@@ -24,10 +24,12 @@ class Chorus(BaselineMethod):
 
     def generate(self, request, *, cached_latent=None, capture=False):
         assert self.adapter is not None
-        # CogVideoX1.5 and Wan2.1 replay runners assign the source video and
-        # stage boundaries directly on the adapter; there is no namespace
-        # cache entry to consult.
-        if self.adapter.model_name in {"CogVideoX1.5", "Wan2.1"} or self.config.get("model") in {"cogvideox15", "wan21"}:
+        # CogVideoX1.5, Wan2.1 and LTX-Video replay runners assign the source
+        # video and stage boundaries directly on the adapter; there is no
+        # namespace cache entry to consult.
+        if self.adapter.model_name in {"CogVideoX1.5", "Wan2.1", "LtxVideo"} or self.config.get("model") in {
+            "cogvideox15", "wan21", "ltxvideo"
+        }:
             return self.adapter.generate(
                 request,
                 fast=cached_latent is not None,

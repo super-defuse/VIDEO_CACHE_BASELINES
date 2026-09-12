@@ -1,0 +1,6 @@
+baseline,arrival_count,window_start,window_end,window_hits,window_hit_rate,cumulative_hits,cumulative_hit_rate
+Dense Baseline,10,N/A,N/A,N/A,N/A,N/A,N/A
+NIRVANA-VID,10,1,10,8,0.8,8,0.8
+Chorus,10,1,10,8,0.8,8,0.8
+Chorus2,10,1,10,8,0.8,8,0.8
+Carnator Boundary B5,10,1,10,10,1.0,10,1.0

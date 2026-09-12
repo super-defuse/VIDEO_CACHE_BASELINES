@@ -3,6 +3,7 @@ methods:
     environment: wan,cogvideo
     wan22: supported
     cogvideox15: supported
+    ltxvideo: supported
   chai:
     environment: wan
     wan22: supported
@@ -15,6 +16,7 @@ methods:
     environment: wan,cogvideo
     wan22: supported
     cogvideox15: supported
+    ltxvideo: supported
   carnator:
     environment: wan,cogvideo
     wan22: supported-via-matrix-cli
@@ -23,14 +25,17 @@ methods:
     environment: cogvideo
     wan22: supported-via-native-cli
     cogvideox15: supported
+    ltxvideo: supported
   chorus2:
     environment: wan,cogvideo
     wan22: supported-via-native-cli
     cogvideox15: supported
+    ltxvideo: supported
   chorus:
     environment: wan,cogvideo
     wan22: supported-via-source-target-matrix
     cogvideox15: supported
+    ltxvideo: supported
   chorus_no_tgaa:
     environment: wan
     wan22: supported-via-source-target-matrix
