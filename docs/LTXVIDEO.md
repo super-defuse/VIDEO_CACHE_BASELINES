@@ -207,3 +207,15 @@ chorus2 的 1.055x 已接近 §9.1/§10.2 算出的约 1.07x 结构性上限。�
 carnator 的 target 时间**变大**是预期的：修正 B 之前它没有跑那 5 步 dense 探针，现在跑了，7.80 s（单请求 7.81 s）计入 `dit_forward_s`——这正是与 Wan 拉齐计时口径的代价。复用阶段本身从 57.48 s 降到 54.73 s（单请求 55.89 s）。
 
 单独微基准（`[1, 32, 6144, 128]` fp16，H100，均值 60 次）：dense SDPA 2.658 ms/次，sparge-sage2 在密度 0.60 时 1.120 ms/次（**2.37x**），密度 0.95 时 1.639 ms/次（1.62x）。`attn1` 一步 48 层 × 2 分支约 255 ms，而整步约 1550 ms，即 **attn1 只占单步 16 %**——所以即便 kernel 快 2.37x、且只在 40/50 步生效，chorus2 target 的结构性上限也只有约 1.07x。实测 1.055x（10 请求）已接近该上限，剩余差距来自真实掩码（top_p=0.95 的散乱分布）比微基准里的连续块掩码更难跑满。
+
+## 11. 回归测试
+
+LTX 适配的关键不变量由三个测试文件锁定，均不加载模型（`pytest tests/` 全绿，227 passed）：
+
+| 文件 | 锁定内容 |
+|------|---------|
+| `tests/test_ltx_sparse.py` | block mask 打包格式与校验和、跨几何回放拒绝、`prepare()` 记忆化后热路径零 I/O、SpargeAttn 的 CUDA/sm90/64-128 三重守卫、`run()` 的 HND 批处理与 FP16 转换、层刷新语义、处理器按分支各跑一次 |
+| `tests/test_ltx_attention.py` | `Medit ⊆ Msee` 的索引语义与缓存、TGAA 的差分 token 键缩放与输出缩放、`stg_mix` 只替换扰动行、区域 block 只回写 Medit 行（其余行逐位不变）、`install_regional_blocks` 的补丁与恢复 |
+| `tests/test_ltxvideo_adapter.py` | 五个基线的注册与 TeaCache 的拒绝、`resolved_config` 的路径绝对化与 64/128 几何、pointer/trajectory 两种 latent 序列化、denoise 的 `schedule_steps` 前缀口径（§9.2 修正 B）、分支标签来自切片而非计数 |
+
+其中 `schedule_steps` 那一项是修正 B 的回归保护：探针必须跑 50 步计划的前 5 步，而不是把 5 步重新缩放成一条短计划。
