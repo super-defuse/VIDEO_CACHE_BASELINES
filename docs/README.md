@@ -19,6 +19,7 @@
 | [PROVENANCE.md](PROVENANCE.md) | 仓库内实现的冻结来源。 |
 | [WAN21.md](WAN21.md) | Wan2.1-T2V-1.3B 上五个基线的适配与运行入口。 |
 | [WAN21_AGGREGATOR_AND_SOURCE_OPTIMIZATION_PLAN.md](WAN21_AGGREGATOR_AND_SOURCE_OPTIMIZATION_PLAN.md) | Wan2.1 聚合器修正与 Chorus2/Carnator source 优化的实施与验收记录。 |
+| [LTXVIDEO.md](LTXVIDEO.md) | LTX-Video 0.9.7-dev 上五个基线的适配规划、与 Wan2.1 的第二轮对齐修正，以及验证结果。 |
 | [CARNATOR_ABLATION_STUDY.md](CARNATOR_ABLATION_STUDY.md) | Carnator 消融实验（论文 Table 3）：设计、结果与分析。 |
 | [cogvideox/](cogvideox/README.md) | CogVideoX1.5 适配：实验计划、工作流、验证状态与 fusion mask 重构。 |
 

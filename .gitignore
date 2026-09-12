@@ -184,6 +184,19 @@ artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/native/
 artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/vbench/
 artifacts/vidprom_1000cache_300input_noun_match/results_wan21_*/*/source_prepare/
 
+# LTX-Video replay runs follow the same publication boundary as the Wan2.1 ones:
+# keep requests.jsonl, the compact audits and the aggregation outputs; the
+# generated videos, temporary caches, and VBench evaluator payloads stay local.
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/videos/
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/cache/
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/tmp_cache/
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/native/
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/vbench/
+artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo_*/*/source_prepare/
+
+# LTX run logs are append-only operational history, as the Wan2.1 ones are.
+artifacts/ltxvideo_experiment_logs/
+
 # CogVideoX 3-request adapter test payloads.
 artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/videos/
 artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/cache/
