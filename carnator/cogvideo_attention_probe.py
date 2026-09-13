@@ -1,294 +1,266 @@
-"""CogVideoX attention probing for Carnator fusion mask."""
+"""CogVideoX joint-attention probe for the Carnator fusion mask.
+
+CogVideoX has one attention module per block: ``attn1`` concatenates the caption
+and the video into a single joint sequence, so one hook yields both halves of
+the Wan/LTX probe pair -- the cross part (video queries against one noun's
+caption keys) that proposes the seeds, and the self part (video queries against
+the noun and background seed keys) that decides where the noun actually lands.
+Wan and LTX need two probe classes, and LTX needs a dedicated extra forward for
+the contrast; here the step-5 forward the source is already running is enough.
+
+The QKV math is ``adapters.cogvideo_attention.joint_qkv`` -- the same helper the
+Chorus2 and Carnator sparse processors substitute for diffusers'
+``CogVideoXAttnProcessor2_0`` -- so the probe cannot drift from the attention it
+is measuring, RoPE included.
+
+Only the ``cond`` row of a CFG batch is read.  The ``uncond`` row carries the
+negative prompt, where the noun's caption token indices name nothing at all, and
+averaging the two would smear the mask across the frame.
+"""
 
 from __future__ import annotations
 
-import torch
-from typing import Any, Dict, Tuple, Optional
+import contextlib
+import math
+from typing import Any, Mapping, Sequence
+
+# Queries are scored in chunks: the key set is one noun's 2% seed, which is still
+# ~900 keys on CogVideoX's 44880-token grid, so a full [heads, tokens, seeds]
+# logit map would be several gigabytes.
+DEFAULT_CHUNK_SIZE = 512
 
 
-class CogVideoAttentionProbe:
-    """Capture self and cross attention scores from CogVideoX joint attention."""
+class CogVideoMultiNounJointAttentionProbe(contextlib.AbstractContextManager):
+    """Capture the per-noun cross score and self contrast in one step-5 pass.
+
+    ``cross_layer`` proposes the seeds (``cross_scores``, ``seed_indices``) and
+    ``self_layer`` turns them into a per-noun contrast volume
+    (``self_records_by_noun``), mirroring
+    ``LtxMultiNounCrossAttentionProbe`` + ``LtxMultiNounSelfAttentionContrastProbe``
+    on a single joint-attention module.  The caller fuses the pair with
+    ``build_canonical_fusion_mask`` exactly as the Wan and LTX paths do.
+    """
 
     def __init__(
         self,
         transformer: Any,
-        layer_index: int = 15,
-        text_tokens: Optional[int] = None,
-        target_step: Optional[int] = None,
-    ):
-        """
-        Args:
-            transformer: CogVideoX transformer model
-            layer_index: Which layer to probe (default 15, middle layer)
-            text_tokens: Number of text tokens (will be detected if None)
-            target_step: Only capture at this denoising step (None = capture first)
-        """
+        *,
+        cross_layer: int,
+        self_layer: int,
+        positive_indices_by_noun: Mapping[str, Sequence[int]],
+        token_grid: tuple[int, int, int],
+        completed_step: int,
+        top_p: float = 0.02,
+        background_p: float = 0.02,
+        chunk_size: int = DEFAULT_CHUNK_SIZE,
+    ) -> None:
+        if not positive_indices_by_noun:
+            raise ValueError("multi-noun joint-attention probe needs at least one noun")
         self.transformer = transformer
-        self.layer_index = int(layer_index)
-        self.text_tokens = text_tokens
-        self.target_step = target_step
-        self.current_step = 0
-        self.captured: Dict[str, Any] = {}
-        self.handle = None
+        self.cross_layer = int(cross_layer)
+        self.self_layer = int(self_layer)
+        if self.self_layer < self.cross_layer:
+            raise ValueError(
+                "attention_self_layer must not precede attention_probe_layer: the contrast reads "
+                "the seeds the cross score produces earlier in the same transformer forward"
+            )
+        self.positive_indices_by_noun = {
+            str(noun): [int(item) for item in indices] for noun, indices in positive_indices_by_noun.items()
+        }
+        self.token_grid = (int(token_grid[0]), int(token_grid[1]), int(token_grid[2]))
+        self.token_count = math.prod(self.token_grid)
+        self.completed_step = int(completed_step)
+        if self.completed_step < 1:
+            raise ValueError("completed_step is 1-based and must be positive")
+        self.top_p = float(top_p)
+        self.background_p = float(background_p)
+        self.chunk_size = max(1, int(chunk_size))
+        self.calls: dict[int, int] = {}
+        self.records_by_noun: dict[str, list[dict[str, Any]]] = {
+            noun: [] for noun in self.positive_indices_by_noun
+        }
+        self.cross_scores: dict[str, Any] = {}
+        self.seed_indices: dict[str, tuple[Any, Any]] = {}
+        self.self_records_by_noun: dict[str, dict[str, Any]] = {}
+        self.handles: list[Any] = []
 
-    def __enter__(self):
-        """Install hook to capture attention scores."""
-        target_block = self.transformer.transformer_blocks[self.layer_index]
-        self.handle = target_block.attn1.register_forward_hook(self._capture_hook)
+    def __enter__(self) -> "CogVideoMultiNounJointAttentionProbe":
+        for layer_index in sorted({self.cross_layer, self.self_layer}):
+            blocks = self.transformer.transformer_blocks
+            if not 0 <= layer_index < len(blocks):
+                raise ValueError(f"CogVideo probe layer {layer_index} is outside the {len(blocks)}-block transformer")
+            attention = blocks[layer_index].attn1
+            self.handles.append(
+                attention.register_forward_pre_hook(self._make_hook(layer_index), with_kwargs=True)
+            )
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """Remove hook."""
-        if self.handle is not None:
-            self.handle.remove()
-            self.handle = None
+    def __exit__(self, exc_type: Any, exc: Any, traceback: Any) -> bool:
+        for handle in self.handles:
+            handle.remove()
+        self.handles.clear()
         return False
 
-    def _capture_hook(self, module, input, output):
-        """Hook function to capture hidden states during forward pass."""
-        # Input tuple: (hidden_states, encoder_hidden_states, ...)
-        # For CogVideoX joint attention, hidden_states is the concatenated [text, video] sequence
+    def validate(self) -> None:
+        """Fail closed: a probe that recorded nothing must not yield a mask."""
 
-        # Increment step counter
-        self.current_step += 1
+        expected = set(self.positive_indices_by_noun)
+        missing_cross = sorted(noun for noun in expected if not self.records_by_noun.get(noun))
+        if missing_cross:
+            raise RuntimeError(f"CogVideo joint-attention probe recorded no cross score for {missing_cross}")
+        missing_self = sorted(expected - set(self.self_records_by_noun))
+        if missing_self:
+            raise RuntimeError(f"CogVideo joint-attention probe recorded no self contrast for {missing_self}")
 
-        # Skip if we already captured or if not at target step
-        if 'hidden_states' in self.captured:
-            return
+    def summary(self) -> dict[str, Any]:
+        return {
+            "cross_layer": self.cross_layer,
+            "self_layer": self.self_layer,
+            "completed_step": self.completed_step,
+            "token_grid": list(self.token_grid),
+            "nouns": {
+                noun: {
+                    "caption_tokens": len(self.positive_indices_by_noun[noun]),
+                    "noun_seeds": int(self.seed_indices[noun][0].numel()),
+                    "background_seeds": int(self.seed_indices[noun][1].numel()),
+                    "contrast_min": float(record["self_contrast_max"].min().item()),
+                    "contrast_max": float(self.self_records_by_noun[noun]["self_contrast_max"].max().item()),
+                    "contrast_mean": float(self.self_records_by_noun[noun]["self_contrast_max"].mean().item()),
+                }
+                for noun, record in sorted(self.self_records_by_noun.items())
+            },
+        }
 
-        if self.target_step is not None and self.current_step != self.target_step:
-            return
+    # ------------------------------------------------------------- internals
 
-        if len(input) > 0:
-            # Capture the hidden states (concatenated text + video tokens)
-            hidden_states = input[0]
-            self.captured['hidden_states'] = hidden_states.detach().cpu()
+    def _conditioning_row(self, batch: int) -> int:
+        """Which batch row holds the plain conditional branch.
 
-        if len(input) > 1 and input[1] is not None:
-            # Capture encoder hidden states (if separate)
-            encoder_hidden_states = input[1]
-            self.captured['encoder_hidden_states'] = encoder_hidden_states.detach().cpu()
-
-        # Store reference for later extraction
-        self.captured['module'] = module
-        if output is not None:
-            self.captured['output'] = output
-
-    def extract_scores_from_forward(
-        self,
-        hidden_states: torch.Tensor,
-        encoder_hidden_states: torch.Tensor,
-        rotary_emb: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        ``CogVideoXPipeline`` feeds ``torch.cat([latents] * 2)`` with
+        ``prompt_embeds = cat([negative, positive])``, so the conditional row is
+        the last one; a single-row batch (no CFG) is conditional by definition.
         """
-        Manually compute attention scores to extract self and cross components.
 
-        Args:
-            hidden_states: Video latent states [B, T_video, D]
-            encoder_hidden_states: Text embeddings [B, T_text, D]
-            rotary_emb: Rotary position embeddings
+        return batch - 1 if batch >= 2 else 0
 
-        Returns:
-            self_scores: [B, H, T_video, T_video] - Video→Video attention
-            cross_scores: [B, H, T_video, T_text] - Video→Text attention
+    def _make_hook(self, layer_index: int):
+        def hook(attention: Any, args: tuple[Any, ...], kwargs: dict[str, Any]) -> None:
+            # Each block calls attn1 exactly once per transformer forward, so the
+            # per-layer call count is the 1-based completed step.  Counting here
+            # rather than reading a shared tracker keeps the probe independent of
+            # whatever step bookkeeping the enclosing run installs.
+            count = self.calls.get(layer_index, 0) + 1
+            self.calls[layer_index] = count
+            if count != self.completed_step:
+                return
+            self._capture(attention, layer_index, args, kwargs)
+
+        return hook
+
+    def _capture(self, attention: Any, layer_index: int, args: tuple[Any, ...], kwargs: dict[str, Any]) -> None:
+        import torch
+
+        from adapters.cogvideo_attention import joint_qkv
+
+        with torch.no_grad():
+            hidden_states = args[0] if args else kwargs.get("hidden_states")
+            text = kwargs.get("encoder_hidden_states")
+            if hidden_states is None or text is None:
+                raise RuntimeError("CogVideo joint-attention probe saw no video or caption states")
+            row = self._conditioning_row(int(hidden_states.shape[0]))
+            query, key, _value, text_tokens = joint_qkv(
+                attention, hidden_states[row: row + 1], text[row: row + 1], kwargs.get("image_rotary_emb")
+            )
+            video_tokens = int(query.shape[2]) - text_tokens
+            if video_tokens != self.token_count:
+                raise RuntimeError(
+                    f"CogVideo joint-attention probe saw {video_tokens} video tokens, but the "
+                    f"{self.token_grid} grid has {self.token_count}; the latent geometry changed"
+                )
+            video_query = query[:, :, text_tokens:]
+            scale = float(key.shape[-1]) ** -0.5
+            if layer_index == self.cross_layer:
+                self._capture_cross(video_query, key[:, :, :text_tokens], scale, layer_index)
+            if layer_index == self.self_layer:
+                self._capture_contrast(video_query, key[:, :, text_tokens:], scale)
+
+    def _capture_cross(self, video_query: Any, caption_key: Any, scale: float, layer_index: int) -> None:
+        """One score volume per noun: every video query against that noun's keys.
+
+        Raw pre-softmax logits, averaged over heads and the noun's own key
+        tokens, exactly as the Wan and LTX cross probes do.  There is no
+        softmax and no padding mask, so the caption's padding rows are simply
+        never indexed.
         """
-        if self.layer_index not in range(len(self.transformer.transformer_blocks)):
-            raise ValueError(f"Layer {self.layer_index} out of range")
 
-        attn = self.transformer.transformer_blocks[self.layer_index].attn1
+        import torch
 
-        # Get text token count
-        text_tokens = encoder_hidden_states.shape[1]
-        if self.text_tokens is None:
-            self.text_tokens = text_tokens
+        from carnator.masks import build_cross_attention_seed_scores, seed_indices_from_cross_score
 
-        # Concatenate text and video tokens
-        concat_states = torch.cat([encoder_hidden_states, hidden_states], dim=1)
-        batch, total_tokens, _ = concat_states.shape
+        caption_tokens = int(caption_key.shape[2])
+        for noun, indices in self.positive_indices_by_noun.items():
+            positive = torch.tensor(indices, device=caption_key.device, dtype=torch.long)
+            if int(positive.max().item()) >= caption_tokens:
+                raise RuntimeError(
+                    f"noun {noun!r} maps to caption token {int(positive.max().item())}, "
+                    f"beyond the {caption_tokens}-token caption"
+                )
+            score = (
+                torch.einsum("bhqd,bhkd->bhqk", video_query, caption_key.index_select(2, positive))
+                .mul(scale)
+                .mean(dim=(0, 1, 3))
+            )
+            self.records_by_noun[noun].append({
+                "step_index": self.completed_step - 1,
+                "layer_index": int(layer_index),
+                "positive": score.reshape(*self.token_grid).detach().float().cpu(),
+            })
+        self.cross_scores = {
+            noun: build_cross_attention_seed_scores(records, completed_step=self.completed_step)["score"].float()
+            for noun, records in self.records_by_noun.items()
+        }
+        self.seed_indices = {
+            noun: seed_indices_from_cross_score(score, top_p=self.top_p, background_p=self.background_p)
+            for noun, score in self.cross_scores.items()
+        }
 
-        # Compute Q, K, V
-        query = attn.to_q(concat_states)
-        key = attn.to_k(concat_states)
+    def _capture_contrast(self, video_query: Any, video_key: Any, scale: float) -> None:
+        """Per-noun max-logit contrast between the noun and background seeds.
 
-        # Reshape to multi-head format
-        head_dim = query.shape[-1] // attn.heads
-        query = query.view(batch, total_tokens, attn.heads, head_dim).transpose(1, 2)
-        key = key.view(batch, total_tokens, attn.heads, head_dim).transpose(1, 2)
-
-        # Apply normalization if present
-        if attn.norm_q is not None:
-            query = attn.norm_q(query)
-        if attn.norm_k is not None:
-            key = attn.norm_k(key)
-
-        # Apply rotary embeddings to video tokens only
-        if rotary_emb is not None:
-            from diffusers.models.embeddings import apply_rotary_emb
-            query[:, :, text_tokens:] = apply_rotary_emb(query[:, :, text_tokens:], rotary_emb)
-            key[:, :, text_tokens:] = apply_rotary_emb(key[:, :, text_tokens:], rotary_emb)
-
-        # Compute attention scores: [B, H, T_total, T_total]
-        scale = head_dim ** -0.5
-        scores = torch.matmul(query, key.transpose(-2, -1)) * scale
-
-        # Extract video query scores (rows corresponding to video tokens)
-        video_query_scores = scores[:, :, text_tokens:, :]  # [B, H, T_video, T_total]
-
-        # Split into self (V→V) and cross (V→T) attention
-        self_scores = video_query_scores[:, :, :, text_tokens:]  # [B, H, T_video, T_video]
-        cross_scores = video_query_scores[:, :, :, :text_tokens]  # [B, H, T_video, T_text]
-
-        return self_scores, cross_scores
-
-    def extract_scores_from_captured(self, text_tokens: int, rotary_emb: Any = None) -> Tuple[torch.Tensor, torch.Tensor]:
+        Cross attention only proposes seed locations; this contrast is what the
+        persisted ``Mbase`` is actually built from, so the two always run as a
+        pair.  The key set is only the seeds, so the token-by-token logit map is
+        still chunked over queries.
         """
-        Extract attention scores from captured hidden states during forward pass.
 
-        Args:
-            text_tokens: Number of text tokens
-            rotary_emb: Rotary position embeddings
+        import torch
 
-        Returns:
-            self_scores: [B, H, T_video, T_video] - Video→Video attention
-            cross_scores: [B, H, T_video, T_text] - Video→Text attention
-        """
-        if 'hidden_states' not in self.captured:
-            raise RuntimeError("No hidden states captured. Make sure the probe hook was triggered.")
-
-        hidden_states = self.captured['hidden_states']
-
-        # For CogVideoX joint attention, hidden_states is concatenated [text, video] sequence
-        # Shape should be [B, T_total, D] where T_total = T_text + T_video
-
-        # Use empty encoder_hidden_states since CogVideoX uses joint attention
-        encoder_hidden_states = hidden_states[:, :text_tokens, :]  # Text tokens
-        video_states = hidden_states[:, text_tokens:, :]  # Video tokens
-
-        return self.extract_scores_from_forward(
-            hidden_states=video_states,
-            encoder_hidden_states=encoder_hidden_states,
-            rotary_emb=rotary_emb,
-        )
-
-    def get_scores(self) -> Dict[str, torch.Tensor]:
-        """Return captured scores."""
-        return self.captured
-
-
-def compute_self_contrast_score(
-    self_scores: torch.Tensor,
-    token_grid_shape: Tuple[int, int, int],
-    noun_seed_indices: Optional[torch.Tensor] = None,
-    background_seed_indices: Optional[torch.Tensor] = None,
-    top_p: float = 0.02,
-    background_p: float = 0.02,
-) -> torch.Tensor:
-    """
-    Compute self-contrast score from self-attention scores.
-
-    Args:
-        self_scores: [B, H, T_video, T_video] - Self-attention scores
-        token_grid_shape: (T, H, W) - 3D token grid dimensions
-        noun_seed_indices: Indices of noun seed tokens (if None, computed from cross-attention)
-        background_seed_indices: Indices of background seed tokens
-        top_p: Fraction of tokens to use as noun seeds
-        background_p: Fraction of tokens to use as background seeds
-
-    Returns:
-        self_contrast: [T, H, W] - 3D self-contrast score
-    """
-    # Average over attention heads
-    self_scores_avg = self_scores.mean(dim=1)  # [B, T_video, T_video]
-
-    batch, num_tokens, _ = self_scores_avg.shape
-
-    # If seed indices not provided, use top-p selection
-    if noun_seed_indices is None or background_seed_indices is None:
-        # Use mean attention to all other tokens as a proxy
-        token_importance = self_scores_avg[0].sum(dim=0)  # [T_video]
-
-        # Select top-p tokens as noun seeds
-        k_noun = max(1, int(num_tokens * top_p))
-        noun_seed_indices = torch.topk(token_importance, k_noun).indices
-
-        # Select bottom-p tokens as background seeds
-        k_bg = max(1, int(num_tokens * background_p))
-        background_seed_indices = torch.topk(token_importance, k_bg, largest=False).indices
-
-    # Compute attention from each token to noun seeds and background seeds
-    noun_attention = self_scores_avg[:, :, noun_seed_indices].max(dim=-1)[0]  # [B, T_video]
-    bg_attention = self_scores_avg[:, :, background_seed_indices].max(dim=-1)[0]  # [B, T_video]
-
-    # Self-contrast = noun_attention - background_attention
-    self_contrast_flat = noun_attention - bg_attention  # [B, T_video]
-
-    # Reshape to 3D token grid
-    T, H, W = token_grid_shape
-    if self_contrast_flat.shape[1] != T * H * W:
-        raise ValueError(f"Token count mismatch: expected {T*H*W}, got {self_contrast_flat.shape[1]}")
-
-    self_contrast_3d = self_contrast_flat.reshape(batch, T, H, W)
-
-    return self_contrast_3d[0]  # Return first batch element [T, H, W]
-
-
-def compute_cross_attention_score(
-    cross_scores: torch.Tensor,
-    token_grid_shape: Tuple[int, int, int],
-    noun_token_indices: Optional[torch.Tensor] = None,
-) -> torch.Tensor:
-    """
-    Compute cross-attention score (video→text attention).
-
-    Args:
-        cross_scores: [B, H, T_video, T_text] - Cross-attention scores
-        token_grid_shape: (T, H, W) - 3D token grid dimensions
-        noun_token_indices: Text token indices corresponding to the noun
-
-    Returns:
-        cross_score: [T, H, W] - 3D cross-attention score
-    """
-    # Average over attention heads
-    cross_scores_avg = cross_scores.mean(dim=1)  # [B, T_video, T_text]
-
-    if noun_token_indices is not None:
-        # Use specified noun tokens
-        noun_cross = cross_scores_avg[:, :, noun_token_indices].max(dim=-1)[0]  # [B, T_video]
-    else:
-        # Use maximum cross-attention over all text tokens
-        noun_cross = cross_scores_avg.max(dim=-1)[0]  # [B, T_video]
-
-    # Reshape to 3D token grid
-    T, H, W = token_grid_shape
-    batch = noun_cross.shape[0]
-
-    if noun_cross.shape[1] != T * H * W:
-        raise ValueError(f"Token count mismatch: expected {T*H*W}, got {noun_cross.shape[1]}")
-
-    cross_score_3d = noun_cross.reshape(batch, T, H, W)
-
-    return cross_score_3d[0]  # Return first batch element [T, H, W]
-
-
-def infer_token_grid_shape(latent_shape: Tuple[int, ...]) -> Tuple[int, int, int]:
-    """
-    Infer 3D token grid shape from latent shape.
-
-    Args:
-        latent_shape: Shape of latent tensor, e.g. [B, C, T, H, W]
-
-    Returns:
-        (T, H, W): Token grid dimensions
-    """
-    if len(latent_shape) == 5:
-        # [B, C, T, H, W] format
-        _, _, t, h, w = latent_shape
-    elif len(latent_shape) == 4:
-        # [B, T, H, W] format
-        _, t, h, w = latent_shape
-    else:
-        raise ValueError(f"Unexpected latent shape: {latent_shape}")
-
-    # CogVideoX token grid is same as latent spatial dimensions
-    # (already in token space after VAE encoding and patchifying)
-    return (t, h, w)
+        if set(self.seed_indices) != set(self.positive_indices_by_noun):
+            raise RuntimeError(
+                "CogVideo self-contrast needs the cross-score seeds; set attention_self_layer "
+                "to the cross layer or to a later one"
+            )
+        for noun, (noun_indices, background_indices) in self.seed_indices.items():
+            noun_key = video_key.index_select(2, noun_indices.to(device=video_key.device, dtype=torch.long))
+            background_key = video_key.index_select(
+                2, background_indices.to(device=video_key.device, dtype=torch.long)
+            )
+            noun_parts: list[Any] = []
+            background_parts: list[Any] = []
+            for start in range(0, self.token_count, self.chunk_size):
+                stop = min(self.token_count, start + self.chunk_size)
+                query_chunk = video_query[:, :, start:stop]
+                noun_logits = torch.einsum("bhqd,bhkd->bhqk", query_chunk, noun_key).mul(scale)
+                background_logits = torch.einsum("bhqd,bhkd->bhqk", query_chunk, background_key).mul(scale)
+                noun_parts.append(noun_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu())
+                background_parts.append(
+                    background_logits.max(dim=3).values.mean(dim=(0, 1)).detach().float().cpu()
+                )
+                del noun_logits, background_logits
+            noun_max = torch.cat(noun_parts).reshape(*self.token_grid)
+            background_max = torch.cat(background_parts).reshape(*self.token_grid)
+            self.self_records_by_noun[noun] = {
+                "self_noun_max": noun_max,
+                "self_bg_max": background_max,
+                "self_contrast_max": noun_max - background_max,
+            }

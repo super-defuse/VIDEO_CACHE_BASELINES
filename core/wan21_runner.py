@@ -65,6 +65,15 @@ class Wan21ReplayRunner:
                 results.append(result)
         return results
 
+    def _verify_cache(self, tmp_cache: Path, source_uuid: str, cache_payload: Any, cached: Any,
+                      source_result: Any) -> None:
+        """Model-specific integrity check on the freshly written request cache.
+
+        A no-op for the Wan2.1/LTX-Video payloads, which are plain tensors or
+        dicts of tensors.  CogVideoX overrides this to pin the model config and
+        the replay source UUID onto the cache it is about to reuse.
+        """
+
     @staticmethod
     def _release_device_memory() -> None:
         """Return cached allocator segments between requests.
@@ -105,8 +114,10 @@ class Wan21ReplayRunner:
             return self._error(request, CacheMatch(kind="replay_schema_error"), started,
                                f"unsupported replay decision: {decision!r}")
         if not match.hit:
+            # A miss executes nothing, so it reports zero steps -- the same
+            # value core/runner.py and the documented miss_policy use.
             return RequestResult(request.request_index, request.uuid, request.prompt, self.model, self.method.name,
-                                 request.seed, match, None, 0.0, "cache_miss",
+                                 request.seed, match, 0, 0.0, "cache_miss",
                                  extra={"replay": replay, "skipped": True})
 
         source_prepare_s = 0.0
@@ -132,10 +143,18 @@ class Wan21ReplayRunner:
                     raise RuntimeError(f"Wan2.1 NIRVANA source cache has no completed step {reuse_step}")
                 cache_payload = cache_payload[reuse_step]
             elif self.method.name == "chorus":
-                if source_result.video is None:
-                    raise RuntimeError("Wan2.1 Chorus source generation did not return a video tensor")
-                source_video_path = tmp_cache / f"{match.source_uuid}.source.mp4"
-                self.adapter.save_video(source_result.video, source_video_path)
+                # A Chorus payload may carry its own source video (CogVideoX
+                # writes one next to the trajectory because its mask builder
+                # reads the path back out of the cache).  Only the payloads
+                # that do not get the generic save, so the file is never
+                # encoded twice.
+                if isinstance(cache_payload, dict) and cache_payload.get("source_video_path"):
+                    source_video_path = None
+                else:
+                    if source_result.video is None:
+                        raise RuntimeError(f"{self.model} Chorus source generation did not return a video tensor")
+                    source_video_path = tmp_cache / f"{match.source_uuid}.source.mp4"
+                    self.adapter.save_video(source_result.video, source_video_path)
             self.adapter.save_latent(cache_payload, tmp_cache / "latent.pt")
             source_prepare_s = time.perf_counter() - source_started
             # Cache loading and mask-cache GPU preparation stay outside the
@@ -143,6 +162,7 @@ class Wan21ReplayRunner:
             # (exclude_cache_prepare_latency / native prepare_s).
             load_started = time.perf_counter()
             cached = self.adapter.load_latent(tmp_cache / "latent.pt")
+            self._verify_cache(tmp_cache, match.source_uuid, cache_payload, cached, source_result)
             cache_load_s = time.perf_counter() - load_started
 
             target_request = request

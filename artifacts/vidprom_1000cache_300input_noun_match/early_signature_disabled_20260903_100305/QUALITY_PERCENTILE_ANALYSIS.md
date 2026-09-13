@@ -92,3 +92,163 @@ Each dimension's additive contribution to the composite (columns sum to the VBen
 | Chorus2 | 300 | 242 | 0.807 | 242 |
 | Carnator B5 | 300 | 300 | 1.000 | 300 |
 
+## Low-score tail (paired subset, n=201)
+
+### VBench-Q — tail quantiles
+
+| Method | Min | Worst-3 | P1 | P2.5 | P5 | P10 | P25 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 0.5692 | 0.5833 | 0.5915 | 0.5938 | 0.6007 | 0.6056 | 0.6206 |
+| TeaCache | 0.4593 | 0.4654 | 0.4707 | 0.5043 | 0.5182 | 0.5542 | 0.5829 |
+| Chorus | 0.5835 | 0.5849 | 0.5860 | 0.5905 | 0.5973 | 0.6025 | 0.6116 |
+| Chorus2 | 0.4592 | 0.5267 | 0.5644 | 0.5728 | 0.5882 | 0.6000 | 0.6156 |
+| Carnator B5 | 0.5557 | 0.5656 | 0.5729 | 0.5783 | 0.5819 | 0.5910 | 0.6115 |
+
+### VBench-Q — requests below absolute thresholds
+
+| Method | n<0.52 | n<0.55 | n<0.58 | n<0.6 | %<0.52 | %<0.55 | %<0.58 | %<0.6 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 0 | 0 | 1 | 9 | 0.0 | 0.0 | 0.5 | 4.5 |
+| TeaCache | 12 | 19 | 48 | 92 | 6.0 | 9.5 | 23.9 | 45.8 |
+| Chorus | 0 | 0 | 0 | 13 | 0.0 | 0.0 | 0.0 | 6.5 |
+| Chorus2 | 1 | 1 | 7 | 20 | 0.5 | 0.5 | 3.5 | 10.0 |
+| Carnator B5 | 0 | 0 | 9 | 33 | 0.0 | 0.0 | 4.5 | 16.4 |
+
+### VBench-Q — offset from the other methods, on each selector's own P25
+
+Each row selects the requests in that method's own lowest quartile; a negative value for the selector is expected mechanically (regression to the mean), so the comparison of interest is between the *other* columns, not against the selector.
+
+| Selector (P25) | NIRVANA-VID | TeaCache | Chorus | Chorus2 | Carnator B5 |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | -9.20 | -26.28 | -2.72 | +25.20 | +13.01 |
+| TeaCache | +32.60 | -89.65 | +20.04 | +16.48 | +20.53 |
+| Chorus | +14.58 | -29.89 | -18.91 | +22.73 | +11.49 |
+| Chorus2 | +27.43 | -41.47 | +18.01 | -23.20 | +19.24 |
+| Carnator B5 | +26.09 | -30.33 | +13.08 | +22.23 | -31.08 |
+
+### VBench-Q — pairwise deltas inside third-party low bands
+
+For each pair, the hard subset is defined by a method that is neither member of the pair, so selection cannot favour either side.
+
+| Pair | Selector | n | Δ (A−B) | A wins | p |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID − TeaCache | Chorus | 51 | +0.0356 | 72.5% | 0.002 |
+| NIRVANA-VID − TeaCache | Chorus2 | 51 | +0.0551 | 86.3% | 0.000 |
+| NIRVANA-VID − TeaCache | Carnator B5 | 51 | +0.0451 | 84.3% | 0.000 |
+| NIRVANA-VID − Chorus | TeaCache | 51 | +0.0101 | 51.0% | 1.000 |
+| NIRVANA-VID − Chorus | Chorus2 | 51 | +0.0075 | 51.0% | 1.000 |
+| NIRVANA-VID − Chorus | Carnator B5 | 51 | +0.0104 | 60.8% | 0.161 |
+| NIRVANA-VID − Chorus2 | TeaCache | 51 | +0.0129 | 58.8% | 0.262 |
+| NIRVANA-VID − Chorus2 | Chorus | 51 | -0.0065 | 41.2% | 0.262 |
+| NIRVANA-VID − Chorus2 | Carnator B5 | 51 | +0.0031 | 52.9% | 0.780 |
+| NIRVANA-VID − Carnator B5 | TeaCache | 51 | +0.0097 | 56.9% | 0.401 |
+| NIRVANA-VID − Carnator B5 | Chorus | 51 | +0.0025 | 52.9% | 0.780 |
+| NIRVANA-VID − Carnator B5 | Chorus2 | 51 | +0.0066 | 49.0% | 1.000 |
+| TeaCache − Chorus | NIRVANA-VID | 51 | -0.0188 | 29.4% | 0.005 |
+| TeaCache − Chorus | Chorus2 | 51 | -0.0476 | 11.8% | 0.000 |
+| TeaCache − Chorus | Carnator B5 | 51 | -0.0347 | 19.6% | 0.000 |
+| TeaCache − Chorus2 | NIRVANA-VID | 51 | -0.0412 | 25.5% | 0.001 |
+| TeaCache − Chorus2 | Chorus | 51 | -0.0421 | 19.6% | 0.000 |
+| TeaCache − Chorus2 | Carnator B5 | 51 | -0.0420 | 15.7% | 0.000 |
+| TeaCache − Carnator B5 | NIRVANA-VID | 51 | -0.0314 | 25.5% | 0.001 |
+| TeaCache − Carnator B5 | Chorus | 51 | -0.0331 | 29.4% | 0.005 |
+| TeaCache − Carnator B5 | Chorus2 | 51 | -0.0486 | 19.6% | 0.000 |
+| Chorus − Chorus2 | NIRVANA-VID | 51 | -0.0223 | 33.3% | 0.024 |
+| Chorus − Chorus2 | TeaCache | 51 | +0.0028 | 47.1% | 0.780 |
+| Chorus − Chorus2 | Carnator B5 | 51 | -0.0073 | 43.1% | 0.401 |
+| Chorus − Carnator B5 | NIRVANA-VID | 51 | -0.0126 | 41.2% | 0.262 |
+| Chorus − Carnator B5 | TeaCache | 51 | -0.0004 | 49.0% | 1.000 |
+| Chorus − Carnator B5 | Chorus2 | 51 | -0.0010 | 49.0% | 1.000 |
+| Chorus2 − Carnator B5 | NIRVANA-VID | 51 | +0.0098 | 64.7% | 0.049 |
+| Chorus2 − Carnator B5 | TeaCache | 51 | -0.0032 | 52.9% | 0.780 |
+| Chorus2 − Carnator B5 | Chorus | 51 | +0.0090 | 66.7% | 0.024 |
+
+### VBench-Q — every method's mean on each method's 10 worst requests
+
+| Worst-10 by | NIRVANA-VID | TeaCache | Chorus | Chorus2 | Carnator B5 |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 0.5924 | 0.5849 | 0.5992 | 0.6152 | 0.6213 |
+| TeaCache | 0.6429 | 0.4939 | 0.6436 | 0.6086 | 0.6347 |
+| Chorus | 0.6195 | 0.5788 | 0.5892 | 0.6335 | 0.6211 |
+| Chorus2 | 0.6351 | 0.5598 | 0.6385 | 0.5621 | 0.6369 |
+| Carnator B5 | 0.6491 | 0.6011 | 0.6395 | 0.6359 | 0.5747 |
+
+### CLIP-T — tail quantiles
+
+| Method | Min | Worst-3 | P1 | P2.5 | P5 | P10 | P25 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 0.1748 | 0.1838 | 0.1891 | 0.2095 | 0.2294 | 0.2428 | 0.2661 |
+| TeaCache | 0.1891 | 0.1926 | 0.1978 | 0.2191 | 0.2405 | 0.2515 | 0.2739 |
+| Chorus | 0.1964 | 0.2120 | 0.2214 | 0.2422 | 0.2491 | 0.2571 | 0.2791 |
+| Chorus2 | 0.1748 | 0.1900 | 0.2043 | 0.2296 | 0.2463 | 0.2646 | 0.2832 |
+| Carnator B5 | 0.1335 | 0.1428 | 0.1604 | 0.1819 | 0.1965 | 0.2181 | 0.2410 |
+
+### CLIP-T — requests below absolute thresholds
+
+| Method | n<0.18 | n<0.2 | n<0.22 | n<0.25 | %<0.18 | %<0.2 | %<0.22 | %<0.25 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 1 | 4 | 7 | 29 | 0.5 | 2.0 | 3.5 | 14.4 |
+| TeaCache | 0 | 3 | 6 | 20 | 0.0 | 1.5 | 3.0 | 10.0 |
+| Chorus | 0 | 1 | 2 | 13 | 0.0 | 0.5 | 1.0 | 6.5 |
+| Chorus2 | 1 | 2 | 5 | 11 | 0.5 | 1.0 | 2.5 | 5.5 |
+| Carnator B5 | 5 | 14 | 23 | 64 | 2.5 | 7.0 | 11.4 | 31.8 |
+
+### CLIP-T — offset from the other methods, on each selector's own P25
+
+Each row selects the requests in that method's own lowest quartile; a negative value for the selector is expected mechanically (regression to the mean), so the comparison of interest is between the *other* columns, not against the selector.
+
+| Selector (P25) | NIRVANA-VID | TeaCache | Chorus | Chorus2 | Carnator B5 |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | -29.75 | +20.17 | +9.44 | +29.30 | -29.16 |
+| TeaCache | +5.34 | -24.47 | +21.86 | +14.06 | -16.79 |
+| Chorus | -15.59 | +16.46 | -6.67 | +28.28 | -22.48 |
+| Chorus2 | +2.58 | -1.85 | +25.42 | -8.89 | -17.26 |
+| Carnator B5 | -5.24 | +21.87 | +22.35 | +30.70 | -69.68 |
+
+### CLIP-T — pairwise deltas inside third-party low bands
+
+For each pair, the hard subset is defined by a method that is neither member of the pair, so selection cannot favour either side.
+
+| Pair | Selector | n | Δ (A−B) | A wins | p |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID − TeaCache | Chorus | 51 | -0.0256 | 21.6% | 0.000 |
+| NIRVANA-VID − TeaCache | Chorus2 | 52 | +0.0035 | 50.0% | 1.000 |
+| NIRVANA-VID − TeaCache | Carnator B5 | 51 | -0.0217 | 27.5% | 0.002 |
+| NIRVANA-VID − Chorus | TeaCache | 51 | -0.0132 | 23.5% | 0.000 |
+| NIRVANA-VID − Chorus | Chorus2 | 52 | -0.0183 | 21.2% | 0.000 |
+| NIRVANA-VID − Chorus | Carnator B5 | 51 | -0.0221 | 17.6% | 0.000 |
+| NIRVANA-VID − Chorus2 | TeaCache | 51 | -0.0070 | 35.3% | 0.049 |
+| NIRVANA-VID − Chorus2 | Chorus | 51 | -0.0351 | 13.7% | 0.000 |
+| NIRVANA-VID − Chorus2 | Carnator B5 | 51 | -0.0287 | 25.5% | 0.001 |
+| NIRVANA-VID − Carnator B5 | TeaCache | 51 | +0.0177 | 76.5% | 0.000 |
+| NIRVANA-VID − Carnator B5 | Chorus | 51 | +0.0055 | 68.6% | 0.011 |
+| NIRVANA-VID − Carnator B5 | Chorus2 | 52 | +0.0159 | 67.3% | 0.018 |
+| TeaCache − Chorus | NIRVANA-VID | 51 | +0.0086 | 54.9% | 0.576 |
+| TeaCache − Chorus | Chorus2 | 52 | -0.0218 | 32.7% | 0.018 |
+| TeaCache − Chorus | Carnator B5 | 51 | -0.0004 | 51.0% | 1.000 |
+| TeaCache − Chorus2 | NIRVANA-VID | 51 | -0.0073 | 39.2% | 0.161 |
+| TeaCache − Chorus2 | Chorus | 51 | -0.0095 | 33.3% | 0.024 |
+| TeaCache − Chorus2 | Carnator B5 | 51 | -0.0071 | 39.2% | 0.161 |
+| TeaCache − Carnator B5 | NIRVANA-VID | 51 | +0.0395 | 76.5% | 0.000 |
+| TeaCache − Carnator B5 | Chorus | 51 | +0.0312 | 72.5% | 0.002 |
+| TeaCache − Carnator B5 | Chorus2 | 52 | +0.0123 | 57.7% | 0.332 |
+| Chorus − Chorus2 | NIRVANA-VID | 51 | -0.0159 | 33.3% | 0.024 |
+| Chorus − Chorus2 | TeaCache | 51 | +0.0062 | 54.9% | 0.576 |
+| Chorus − Chorus2 | Carnator B5 | 51 | -0.0067 | 41.2% | 0.262 |
+| Chorus − Carnator B5 | NIRVANA-VID | 51 | +0.0309 | 74.5% | 0.001 |
+| Chorus − Carnator B5 | TeaCache | 51 | +0.0309 | 86.3% | 0.000 |
+| Chorus − Carnator B5 | Chorus2 | 52 | +0.0341 | 84.6% | 0.000 |
+| Chorus2 − Carnator B5 | NIRVANA-VID | 51 | +0.0468 | 86.3% | 0.000 |
+| Chorus2 − Carnator B5 | TeaCache | 51 | +0.0247 | 70.6% | 0.005 |
+| Chorus2 − Carnator B5 | Chorus | 51 | +0.0406 | 84.3% | 0.000 |
+
+### CLIP-T — every method's mean on each method's 10 worst requests
+
+| Worst-10 by | NIRVANA-VID | TeaCache | Chorus | Chorus2 | Carnator B5 |
+| --- | --- | --- | --- | --- | --- |
+| NIRVANA-VID | 0.2044 | 0.2755 | 0.2594 | 0.2744 | 0.2150 |
+| TeaCache | 0.2512 | 0.2137 | 0.2615 | 0.2550 | 0.2303 |
+| Chorus | 0.2444 | 0.2798 | 0.2333 | 0.2788 | 0.2484 |
+| Chorus2 | 0.2605 | 0.2431 | 0.2769 | 0.2187 | 0.2369 |
+| Carnator B5 | 0.2541 | 0.2816 | 0.2865 | 0.2812 | 0.1690 |
+

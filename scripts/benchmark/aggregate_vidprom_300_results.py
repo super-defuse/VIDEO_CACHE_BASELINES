@@ -17,6 +17,7 @@ MODEL_METHODS = {
     "wan22": ("nirvana_vid", "teacache", "chorus", "chorus2", "carnator_boundary_b5"),
     "wan21": ("baseline", "nirvana_vid", "chorus", "chorus2", "carnator_boundary_b5"),
     "ltxvideo": ("baseline", "nirvana_vid", "chorus", "chorus2", "carnator_boundary_b5"),
+    "cogvideox15": ("baseline", "nirvana_vid", "chorus", "chorus2", "carnator_boundary_b5"),
 }
 # Methods without a cross-request cache: hit metrics are meaningless.
 NO_HIT_METHODS = {"teacache", "baseline"}
@@ -121,6 +122,13 @@ def validate_quality_completeness(
     raise AggregationError(message + "\n  pass --allow-incomplete-quality to summarize anyway.")
 
 
+# Fallback GPU slot per method, used only when run_config.json is unreadable.
+# The runner's per-model assignment (COGVIDEOX_GPU_BY_METHOD etc.) puts
+# nirvana_vid on slot 4; the older table here had it sharing the baseline slot.
+GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "teacache": 4, "chorus": 5, "chorus2": 6,
+                 "carnator_boundary_b5": 7}
+
+
 def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path) -> dict[str, Any]:
     ok = [row for row in rows if row.get("status") == "ok"]
     completed = [row for row in rows if row.get("status") in {"ok", "cache_miss"}]
@@ -143,8 +151,7 @@ def aggregate_method(method: str, rows: list[dict[str, Any]], method_root: Path)
     external = [float(row.get("external_s", 0.0)) for row in ok]
     clip = [float(row["clip_t"]) for row in ok if row.get("clip_t") is not None]
     vbench = [float(row["vbench_q"]) for row in ok if row.get("vbench_q") is not None]
-    gpu = {"baseline": 3, "nirvana_vid": 3, "teacache": 4, "chorus": 5, "chorus2": 6,
-           "carnator_boundary_b5": 7}[method]
+    gpu = GPU_BY_METHOD[method]
     config_path = method_root / "run_config.json"
     if config_path.is_file():
         try:

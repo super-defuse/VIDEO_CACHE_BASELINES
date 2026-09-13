@@ -39,6 +39,8 @@ GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 3, "teacache": 4, "chorus": 5, "c
 WAN21_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 # LTX-Video has no TeaCache entry in the matrix, so it uses the Wan2.1 assignment.
 LTX_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
+# CogVideoX1.5 has no TeaCache baseline either; one method per GPU, same slots.
+COGVIDEOX_GPU_BY_METHOD = {"baseline": 3, "nirvana_vid": 4, "chorus": 5, "chorus2": 6, "carnator_boundary_b5": 7}
 GPU_COUNT = 8
 EARLY_SIGNATURE_THRESHOLDS = {
     # Representative noun-match calibration tuple: 270/300 pairs pass;
@@ -376,9 +378,15 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
         # Carnator's native TI2V runner is intentionally separate from the
         # generic adapter registry; Chorus2 has the same native split.
         if getattr(args, "model", "wan22") == "cogvideox15":
-            if args.replay_root is None:
-                raise ValueError("CogVideoX1.5 requires --replay-root built by build_cogvideo_hit_replay.py")
-            load_cogvideo_replay(args.replay_root, args.method, limit=300)
+            # Same rule as Wan2.1/LTX-Video: four methods replay the immutable
+            # decisions, the baseline runs every arrival as a dense generation.
+            if args.method == "teacache":
+                raise ValueError("teacache is not part of the CogVideoX1.5 baseline set")
+            if args.method != "baseline":
+                if args.replay_root is None:
+                    raise ValueError("CogVideoX1.5 replay methods require --replay-root built by "
+                                     "build_cogvideo_hit_replay.py")
+                load_replay_decisions(args.replay_root, args.method, limit=args.limit)
             required = {
                 "model_index.json", "scheduler/scheduler_config.json", "tokenizer/tokenizer_config.json",
                 "text_encoder/config.json", "transformer/config.json", "vae/config.json",
@@ -412,25 +420,8 @@ def check_only(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
-def load_cogvideo_replay(root: Path, method: str, *, limit: int) -> dict[int, dict[str, Any]]:
-    path = root / f"{method}.jsonl"
-    if not path.is_file():
-        raise FileNotFoundError(f"CogVideo replay is missing: {path}")
-    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    if len(rows) != limit:
-        raise ValueError(f"CogVideo replay must contain {limit} rows, found {len(rows)}: {path}")
-    result: dict[int, dict[str, Any]] = {}
-    for expected, row in enumerate(rows):
-        if row.get("schema_version") != "cogvideox15-hit-replay/v1" or int(row.get("arrival_index", -1)) != expected:
-            raise ValueError(f"invalid CogVideo replay row {expected}: {path}")
-        result[int(row["request_index"])] = row
-    if len(result) != limit:
-        raise ValueError(f"CogVideo replay request_index values must be unique: {path}")
-    return result
-
-
 def write_cogvideo_run_manifest(output: Path, *, args: argparse.Namespace, config: dict[str, Any],
-                                replay_root: Path, replay_path: Path, view: Path) -> None:
+                                replay_root: Path | None, replay_path: Path | None, view: Path) -> None:
     try:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     except (OSError, subprocess.CalledProcessError):
@@ -446,33 +437,51 @@ def write_cogvideo_run_manifest(output: Path, *, args: argparse.Namespace, confi
         "legacy_source_view_manifest_sha256": sha256_file(view / "view_manifest.json"),
         "input": str(args.input),
         "input_sha256": sha256_file(args.input),
-        "replay_root": str(replay_root),
-        "replay_sha256": sha256_file(replay_path),
+        "replay_root": str(replay_root) if replay_root is not None else None,
+        "replay_sha256": sha256_file(replay_path) if replay_path is not None else None,
         "git_revision": revision,
         "resolved_config": config,
         "timing": {
             "source_prepare_s": "source generation plus cache serialization; reported separately",
-            "target_e2e_s": "request wall clock excluding source preparation and output bookkeeping",
+            "target_e2e_s": "request wall clock excluding source preparation, cache loading, "
+                            "method preprocessing and output bookkeeping",
             "denoising_s": "CUDA-synchronized CogVideo transformer forward time",
         },
-        "replay_policy": "legacy hit/miss and source UUID are immutable ground truth",
+        "replay_policy": "legacy hit/miss and source UUID are immutable ground truth; baseline runs every request",
+        "miss_policy": "skipped without generation (status cache_miss, latency 0)",
         "temporary_cache_policy": "tmp_cache/<method>/<arrival_index>_<source_uuid>, removed in finally",
         "request_error_policy": "record error without changing replay decision",
+        # Carnator's target runs a dense prefix before reuse and counts it in the
+        # request's dit_forward_s, so the manifest has to say so or the denoising
+        # column looks like a regression against a run that skipped the prefix.
+        "target_probe_enabled": args.method == "carnator_boundary_b5",
+        "target_probe_completed_step": 5 if args.method == "carnator_boundary_b5" else None,
+        "target_probe_seed": args.seed if args.method == "carnator_boundary_b5" else None,
         "args": {"method": args.method, "gpu": args.gpu, "limit": args.limit, "seed": args.seed},
     }
     (output / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def cogvideo_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path, output: Path) -> list[dict[str, Any]]:
-    if args.replay_root is None:
-        raise ValueError("CogVideoX1.5 requires --replay-root")
+    """CogVideoX1.5 replay run, structurally identical to the Wan2.1/LTX-Video ones.
+
+    The same fixed decisions drive the same five baselines through the same
+    replay runner; only the adapter, the method plugins' model branch and the
+    manifest's model identity differ.
+    """
     config = resolved_config(f"cuda:{args.gpu}", args.dry_run, model_name="cogvideox15",
                              early_signature_thresholds=getattr(args, "early_signature_thresholds", None))
-    replay_path = args.replay_root / f"{args.method}.jsonl"
-    replay = load_cogvideo_replay(args.replay_root, args.method, limit=300)
-    source_rows = view_rows_for_preload(view)
-    source_by_uuid = {row["uuid"]: row for row in source_rows}
+    replay = None
+    replay_path = None
+    if args.method != "baseline":
+        if args.replay_root is None:
+            raise ValueError("CogVideoX1.5 replay methods require --replay-root")
+        replay_path = args.replay_root / f"{args.method}.jsonl"
+        replay = load_replay_decisions(args.replay_root, args.method, limit=args.limit)
+    source_by_uuid = {row["uuid"]: row for row in view_rows_for_preload(view)}
     if args.smoke_force_outcomes:
+        if replay is None:
+            raise ValueError("--smoke-force-outcomes requires a replay decision file")
         for row in rows:
             decision = forced_smoke_decision(args, row["request_index"])
             replay_row = dict(replay[row["request_index"]])
@@ -493,31 +502,38 @@ def cogvideo_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Pat
     adapter = make_adapter("synthetic" if args.dry_run else "cogvideox15", config)
     method = make_method(args.method, config)
     method.adapter = adapter
+    if not args.dry_run and not args.resume:
+        # The resident model plus Grounded-SAM-2 are the two loads that would
+        # otherwise land inside the first timed request.
+        warmup_paths = ["model_load"]
+        if args.method == "chorus":
+            from methods.chorus.grounded_sam import GroundedSam2Segmenter
+
+            sam_config = {**config.get("chorus", {}).get("grounded_sam2", {}),
+                          "device": str(config.get("device", "cuda"))}
+            GroundedSam2Segmenter(sam_config)._load()
+            warmup_paths.append("chorus_sam_model_loaded")
+        write_warmup_record(output, paths=warmup_paths)
     runner = CogVideoReplayRunner(adapter, method, output_dir=output, replay=replay,
-                                  source_prompts=source_by_uuid, config=config)
+                                  source_prompts=source_by_uuid, config=config,
+                                  # Without this the inherited default labels every
+                                  # CogVideoX row "Wan2.1-T2V-1.3B", which is how the
+                                  # old smoke_two_requests_* results came to be read as
+                                  # CogVideoX evidence.
+                                  model="CogVideoX1.5-5B")
     write_cogvideo_run_manifest(output, args=args, config=config, replay_root=args.replay_root,
                                 replay_path=replay_path, view=view)
-    requests_path = output / "requests.jsonl"
+    # The runner streams its raw RequestResult rows here; the canonical
+    # requests.jsonl / request_records.jsonl are written below from the
+    # flattened payloads, exactly like the Wan2.1 and LTX-Video paths.
+    raw_path = output / "requests.raw.jsonl"
     run_results = runner.run(
         (Request(row["request_index"], row["uuid"], row["prompt"], args.seed + row["request_index"])
          for row in rows),
-        requests_path,
+        raw_path,
     )
-    payloads = [asdict(result) for result in run_results]
-    records = []
-    for row, payload in zip(rows, payloads, strict=True):
-        match = payload.get("cache_match", {})
-        records.append({"arrival_index": row["arrival_index"], "request_index": row["request_index"],
-                        "uuid": row["uuid"], "prompt": row["prompt"], "method": args.method,
-                        "status": payload.get("status"), "error": payload.get("error"),
-                        "hit": match.get("hit"), "hit_object": match.get("source_uuid"),
-                        "replay_decision": replay[row["request_index"]]["decision"],
-                        "latency_s": payload.get("latency_s"),
-                        "source_prepare_s": payload.get("extra", {}).get("source_prepare_s", 0.0),
-                        "denoising_s": payload.get("extra", {}).get("timing", {}).get("denoising_s")} )
-    with (output / "request_records.jsonl").open("a", encoding="utf-8") as stream:
-        stream.write("\n".join(json.dumps(record, ensure_ascii=False) for record in records) + "\n")
-    shutil.copyfile(requests_path, output / "results.jsonl")
+    payloads = flatten_replay_payloads(args, rows, run_results, output)
+    raw_path.unlink(missing_ok=True)
     return payloads
 
 
@@ -1722,6 +1738,7 @@ def main() -> int:
     assigned_gpu = (
         WAN21_GPU_BY_METHOD if args.model == "wan21"
         else LTX_GPU_BY_METHOD if args.model == "ltxvideo"
+        else COGVIDEOX_GPU_BY_METHOD if args.model == "cogvideox15"
         else GPU_BY_METHOD
     )[args.method]
     if args.gpu != assigned_gpu and not args.allow_gpu_remap:
@@ -1804,26 +1821,6 @@ def main() -> int:
                                                           "git_revision": revision,
                                                           "config_fingerprint": hashlib.sha256(json.dumps(resolved, sort_keys=True, default=str).encode()).hexdigest(),
                                                           "resolved_config": resolved}, indent=2) + "\n", encoding="utf-8")
-    if args.model == "cogvideox15":
-        pending_rows, resumed_count = pending_rows_for_resume(output, rows, resume=args.resume)
-        if pending_rows:
-            cogvideo_run(args, pending_rows, args.cache_view, output)
-        completed = [json.loads(line).get("status") for line in (output / "requests.jsonl").read_text(encoding="utf-8").splitlines()]
-        terminal = sum(status in {"ok", "cache_miss", "error"} for status in completed)
-        if terminal != len(rows):
-            raise RuntimeError(f"expected {len(rows)} terminal requests, found {terminal}")
-        errors = sum(status == "error" for status in completed)
-        ok = sum(status == "ok" for status in completed)
-
-        quality_result = {"clip_t": None, "vbench_q": None}
-        if not args.skip_quality and ok > 0:
-            quality_result = run_quality_evaluation(output, args.gpu, args.dry_run)
-
-        print(json.dumps({"status": "completed_with_errors" if errors else "completed", "model": args.model,
-                          "method": args.method, "requests": len(rows), "errors": errors,
-                          "resumed": resumed_count, "results": str(output / "requests.jsonl"),
-                          "clip_t": quality_result.get("clip_t"), "vbench_q": quality_result.get("vbench_q")}, ensure_ascii=False))
-        return 2 if errors else 0
     pending_rows, resumed_count = pending_rows_for_resume(output, rows, resume=args.resume)
     if pending_rows:
         if args.model == "wan21":
@@ -1833,6 +1830,10 @@ def main() -> int:
         elif args.model == "ltxvideo":
             # Same shape as Wan2.1: one replay runner for all five baselines.
             ltxvideo_run(args, pending_rows, args.cache_view, output)
+        elif args.model == "cogvideox15":
+            # Same shape again: the CogVideoX runner is the Wan2.1 replay
+            # runner plus its cache manifest check.
+            cogvideo_run(args, pending_rows, args.cache_view, output)
         elif args.method in {"nirvana_vid", "teacache", "chorus"}:
             generic_run(args, pending_rows, args.cache_view, output)
         else:

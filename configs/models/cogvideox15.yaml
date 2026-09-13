@@ -33,8 +33,13 @@ carnator_b5:
   k_block_size: 128
   top_p: 0.95
   min_top_k: 0.1
-  # Fusion mask parameters (no longer use external segmentation)
+  # Fusion mask: the step-5 joint-attention probe proposes the noun seeds and
+  # the self-attention contrast turns them into Mbase.  Nothing here segments a
+  # decoded frame, so no source video has to be encoded.
   attention_probe_layer: 15
+  # Must be 15 or later: the contrast reads the seeds the cross score produces
+  # earlier in the same transformer forward.
+  attention_self_layer: 15
   mask_top_p: 0.02
   mask_background_p: 0.02
   fusion_eps: 0.2
@@ -43,4 +48,8 @@ carnator_b5:
   fusion_low_threshold: 0.35
   mask_spatial_medit_radius: 2
   mask_spatial_msee_radius: 3
+  # Target-side reuse, same vocabulary as the Wan/LTX Carnator baselines.
+  latent_injection_mode: boundary-blend
+  boundary_alpha_function: smoothstep
+  ffn_backend: w8a8
 

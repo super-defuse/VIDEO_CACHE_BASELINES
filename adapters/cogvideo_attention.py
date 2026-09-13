@@ -6,6 +6,59 @@ from dataclasses import dataclass, field
 from typing import Any, Callable
 
 
+def caption_token_indices(tokenizer: Any, prompt: str, entities: list[Any], maximum: int) -> tuple[int, ...]:
+    """Locate entities inside the caption the text encoder actually sees.
+
+    ``CogVideoXPipeline.encode_prompt`` tokenizes with
+    ``padding="max_length", max_length=max_text_seq_length, truncation=True``,
+    so a token index found by re-tokenizing the prompt without padding names the
+    same position in the encoder's 226-row output.  Chorus' TGAA differential
+    tokens and Carnator's per-noun probe both key off this mapping.
+    """
+
+    prompt_ids = tokenizer(
+        prompt,
+        add_special_tokens=True,
+        truncation=True,
+        max_length=maximum,
+    ).input_ids
+    indices: set[int] = set()
+    for entity in entities:
+        entity_ids = tokenizer(str(entity), add_special_tokens=False).input_ids
+        if not entity_ids:
+            continue
+        width = len(entity_ids)
+        for start in range(max(0, len(prompt_ids) - width + 1)):
+            if prompt_ids[start:start + width] == entity_ids:
+                indices.update(range(start, start + width))
+    return tuple(sorted(indices))
+
+
+def cogvideo_token_grid(pipe: Any, *, frames: int, height: int, width: int) -> tuple[int, int, int]:
+    """The ``[T,H,W]`` grid the patch embed turns this run's latents into.
+
+    CogVideoX 1.5 pads the sampled latent frame count up to a multiple of
+    ``patch_size_t`` *before* patchifying (``CogVideoXPipeline`` step 5), so the
+    temporal token count is not ``frames // temporal_compression_ratio``: at the
+    configured 81 frames the pipeline samples 22 latent frames (the first of
+    which it drops again on decode) and patchifies them into 11 temporal tokens.
+    Both the token-space region masks and the latent-space blend weights are
+    derived from this grid, so it is computed in exactly one place.
+    """
+
+    config = pipe.transformer.config
+    patch = int(config.patch_size)
+    patch_t = int(config.patch_size_t or 1)
+    latent_frames = (int(frames) - 1) // int(pipe.vae_scale_factor_temporal) + 1
+    if patch_t > 1 and latent_frames % patch_t:
+        latent_frames += patch_t - latent_frames % patch_t
+    scale = int(pipe.vae_scale_factor_spatial)
+    grid = (latent_frames // patch_t, int(height) // scale // patch, int(width) // scale // patch)
+    if min(grid) < 1:
+        raise ValueError(f"CogVideoX token grid {grid} is degenerate for a {frames}x{height}x{width} run")
+    return grid
+
+
 def joint_qkv(attention: Any, hidden: Any, text: Any, rotary: Any) -> tuple[Any, Any, Any, int]:
     import torch
     from diffusers.models.embeddings import apply_rotary_emb

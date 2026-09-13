@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "<string>", line 4, in <module>
-  File "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/scripts/run_10samples_simple.py", line 15, in <module>
-    from methods import create_method
-ImportError: cannot import name 'create_method' from 'methods' (/home/tangxuebin/project/VIDEO_CACHE_BASELINES/methods/__init__.py)

@@ -9,6 +9,7 @@ from core.types import Generation, Request
 from adapters.cogvideo_attention import (
     CogVideoStepState,
     RegionalAttentionState,
+    caption_token_indices as _token_indices,
     install_regional_blocks,
     track_transformer_steps,
 )
@@ -27,25 +28,6 @@ def _work_dir(adapter: Any) -> Path:
     value = Path(path)
     value.mkdir(parents=True, exist_ok=True)
     return value
-
-
-def _token_indices(tokenizer: Any, prompt: str, entities: list[Any], maximum: int) -> tuple[int, ...]:
-    prompt_ids = tokenizer(
-        prompt,
-        add_special_tokens=True,
-        truncation=True,
-        max_length=maximum,
-    ).input_ids
-    indices: set[int] = set()
-    for entity in entities:
-        entity_ids = tokenizer(str(entity), add_special_tokens=False).input_ids
-        if not entity_ids:
-            continue
-        width = len(entity_ids)
-        for start in range(max(0, len(prompt_ids) - width + 1)):
-            if prompt_ids[start:start + width] == entity_ids:
-                indices.update(range(start, start + width))
-    return tuple(sorted(indices))
 
 
 def _source(adapter: Any, request: Request) -> Generation:
