@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "c1c256201464ca5711c844dd09d2fafd379c80334c09162b91abd4ae3765c605",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "89e57f0acbf8f7a4c1bba266aa6fd01a7894ef8549afad82d3ced15f477740a9"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "3fb6cd9572847e560c1b0b074ad6e8b78cc9fb4588b4b9b0cf987283be488410"
+  },
+  "objects": [
+    {
+      "area_frac": 0.318465918302536,
+      "centroid_yx": [
+        19.10883140563965,
+        41.05619812011719
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.48065185546875,
+          -3.356372356414795,
+          14.166738510131836
+        ],
+        "mean_rgb": [
+          109.89998626708984,
+          109.4906997680664,
+          84.43023681640625
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 286976
+      },
+      "dtype": "bool",
+      "noun": "bear",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.7355113625526428,
+      "centroid_yx": [
+        21.589031219482422,
+        39.94708251953125
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.098514556884766,
+          -3.0622057914733887,
+          13.567103385925293
+        ],
+        "mean_rgb": [
+          109.0926284790039,
+          108.44007110595703,
+          84.60697937011719
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 662784
+      },
+      "dtype": "bool",
+      "noun": "riverside",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "a bear running at the riverside",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

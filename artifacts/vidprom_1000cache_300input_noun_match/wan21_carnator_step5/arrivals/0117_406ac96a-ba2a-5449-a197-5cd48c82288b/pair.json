@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 117,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.822119858927461,
+    "context_color_ciede2000": 0.9035986477715373,
+    "log_area_ratio": 0.20060933902982758,
+    "shape_one_minus_dice": 0.40800000000000003
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.822119858927461,
+    "context_color_ciede2000": 0.9035986477715373,
+    "log_area_ratio": 0.20060933902982758,
+    "shape_one_minus_dice": 0.40800000000000003
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 117,
+  "source_nouns": [
+    "jungle",
+    "tiger",
+    "video"
+  ],
+  "source_only_nouns": [
+    "jungle"
+  ],
+  "source_prompt": "video of the tiger, sitting in a desolate jungle, grieving.",
+  "source_uuid": "e77f2829-3feb-5d3f-b760-c8946abc2732",
+  "status": "completed",
+  "target_nouns": [
+    "sky",
+    "tiger",
+    "video"
+  ],
+  "target_only_nouns": [
+    "sky"
+  ],
+  "target_prompt": "video of a single tiger looking up at the sky",
+  "target_uuid": "406ac96a-ba2a-5449-a197-5cd48c82288b",
+  "timing": {
+    "source_dit_forward_s": 109.77701033628546,
+    "source_probe_s": 139.6716776310932,
+    "target_dit_forward_s": 109.74320504372008,
+    "target_probe_s": 139.69625955703668,
+    "total_s": 279.3679371881299
+  }
+}

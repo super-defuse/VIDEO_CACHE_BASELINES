@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "e95e433f75cbe1d956775f6375d99773be6d121e5300bb592bac02594beb83df",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "140ae75efd7dc9f249f0fec48c6953500fe56fbcc2aadfb3b19ff9e75b0fe6ad"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "0fb38e59cf04e5c564c4298e55ac2c492d062f0df92422e82e19af47d25079cd"
+  },
+  "objects": [
+    {
+      "area_frac": 0.3383522629737854,
+      "centroid_yx": [
+        20.0134334564209,
+        35.57514572143555
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.26153564453125,
+          -2.9351186752319336,
+          13.363439559936523
+        ],
+        "mean_rgb": [
+          107.13229370117188,
+          106.25167846679688,
+          82.9185791015625
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 304896
+      },
+      "dtype": "bool",
+      "noun": "bat",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.4272727370262146,
+      "centroid_yx": [
+        19.339096069335938,
+        43.31183624267578
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.452396392822266,
+          -3.351335287094116,
+          13.662942886352539
+        ],
+        "mean_rgb": [
+          109.51490020751953,
+          109.4607925415039,
+          85.29658508300781
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 385024
+      },
+      "dtype": "bool",
+      "noun": "seconds",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "gray kitten morphing into vampire bat, fly away, 5 seconds",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

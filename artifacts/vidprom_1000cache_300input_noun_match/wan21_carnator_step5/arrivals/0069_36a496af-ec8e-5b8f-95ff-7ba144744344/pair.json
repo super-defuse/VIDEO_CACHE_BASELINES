@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 69,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.45564531316115664,
+    "context_color_ciede2000": 0.7555981978407214,
+    "log_area_ratio": 0.37420121922015215,
+    "shape_one_minus_dice": 0.5675675675675675
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.45564531316115664,
+    "context_color_ciede2000": 0.7555981978407214,
+    "log_area_ratio": 0.37420121922015215,
+    "shape_one_minus_dice": 0.5675675675675675
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 69,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "hotel"
+  ],
+  "target_only_nouns": [
+    "hotel"
+  ],
+  "target_prompt": "cat and dog loving at hotel",
+  "target_uuid": "36a496af-ec8e-5b8f-95ff-7ba144744344",
+  "timing": {
+    "source_dit_forward_s": 112.84534499933943,
+    "source_probe_s": 143.27020369912498,
+    "target_dit_forward_s": 112.80165074579418,
+    "target_probe_s": 143.42101897508837,
+    "total_s": 286.69122267421335
+  }
+}

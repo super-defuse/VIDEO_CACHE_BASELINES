@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 11,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5731310087601211,
+    "context_color_ciede2000": 0.20364206914348912,
+    "log_area_ratio": 1.524502316680662,
+    "shape_one_minus_dice": 0.4461538461538461
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5731310087601211,
+    "context_color_ciede2000": 0.20364206914348912,
+    "log_area_ratio": 1.524502316680662,
+    "shape_one_minus_dice": 0.4461538461538461
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 11,
+  "source_nouns": [
+    "baby",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog holding another dog as a baby",
+  "source_uuid": "bce6c6f3-952b-5151-8610-e86a2a60870d",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "groot"
+  ],
+  "target_only_nouns": [
+    "groot"
+  ],
+  "target_prompt": "Kitten and baby groot dancing together",
+  "target_uuid": "3e670d3e-9de8-581e-ac11-c427b398ab02",
+  "timing": {
+    "source_dit_forward_s": 113.06308372714557,
+    "source_probe_s": 142.63632797985338,
+    "target_dit_forward_s": 113.03923020302318,
+    "target_probe_s": 143.29529379797168,
+    "total_s": 285.93162177782506
+  }
+}

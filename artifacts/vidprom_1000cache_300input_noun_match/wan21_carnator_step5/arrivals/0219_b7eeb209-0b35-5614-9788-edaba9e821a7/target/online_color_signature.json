@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "fef08100b22f2097f17c03f007437cf112c471546cbfdf81887c8eabd637edb3",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "f60636731ab6b23b25ef7da1b8fda00713038265d452c51b22c652e44c1494a1"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "a28136612dded4ec0f5903c70d97ee3ddb0e1618abe559646c6e955277bd8ad6"
+  },
+  "objects": [
+    {
+      "area_frac": 0.28863635659217834,
+      "centroid_yx": [
+        15.379920959472656,
+        34.66535568237305
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.711463928222656,
+          -2.4343252182006836,
+          13.97447681427002
+        ],
+        "mean_rgb": [
+          109.43863677978516,
+          107.0521469116211,
+          82.95709228515625
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 260096
+      },
+      "dtype": "bool",
+      "noun": "man",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.2980113625526428,
+      "centroid_yx": [
+        18.97140121459961,
+        41.19256591796875
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.130226135253906,
+          -2.0873160362243652,
+          14.254578590393066
+        ],
+        "mean_rgb": [
+          111.21359252929688,
+          107.93753051757812,
+          83.52933502197266
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 268544
+      },
+      "dtype": "bool",
+      "noun": "reindeer",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "gingerbread man and rudolph the red nosed reindeer",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

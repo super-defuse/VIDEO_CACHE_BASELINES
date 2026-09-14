@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "39233e5b6434d58c52e35173c4863ff868d1a910559d15633178889215a1deef",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "81b276203a8b337752fbb4d3ea7b562cb5ffafd4b6bb64425762ba4db56dbb51"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "1b58f5c93095cf26f4c8aedead94e0bf4b94527489141eb8170d479f99c6c8e6"
+  },
+  "objects": [
+    {
+      "area_frac": 0.46079546213150024,
+      "centroid_yx": [
+        10.889025688171387,
+        39.10727310180664
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.288848876953125,
+          -3.0221056938171387,
+          13.592714309692383
+        ],
+        "mean_rgb": [
+          109.64617156982422,
+          108.85111999511719,
+          85.01495361328125
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 415232
+      },
+      "dtype": "bool",
+      "noun": "horizon",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.2960227131843567,
+      "centroid_yx": [
+        27.363723754882812,
+        36.877159118652344
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.98533248901367,
+          -3.0730409622192383,
+          13.710841178894043
+        ],
+        "mean_rgb": [
+          111.3335952758789,
+          110.64588928222656,
+          86.53162384033203
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 266752
+      },
+      "dtype": "bool",
+      "noun": "horse",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "a horse running toward horizon",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

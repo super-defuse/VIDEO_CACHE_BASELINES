@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 120,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.202732000983965,
+    "context_color_ciede2000": 2.6654279768036644,
+    "log_area_ratio": 0.6911997620658457,
+    "shape_one_minus_dice": 0.7739130434782608
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.202732000983965,
+    "context_color_ciede2000": 2.6654279768036644,
+    "log_area_ratio": 0.6911997620658457,
+    "shape_one_minus_dice": 0.7739130434782608
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 120,
+  "source_nouns": [
+    "chimpanzee",
+    "fighting"
+  ],
+  "source_only_nouns": [
+    "fighting"
+  ],
+  "source_prompt": "Donald Trump fighting with a chimpanzee",
+  "source_uuid": "bbc2e06b-a198-51d5-975c-0b9a00d50ffc",
+  "status": "completed",
+  "target_nouns": [
+    "biceps",
+    "chimpanzee"
+  ],
+  "target_only_nouns": [
+    "biceps"
+  ],
+  "target_prompt": "a muscular chimpanzee showing its biceps",
+  "target_uuid": "fb31a22e-f687-509a-8ebe-ed01c54fca91",
+  "timing": {
+    "source_dit_forward_s": 112.02867967681959,
+    "source_probe_s": 141.913911791984,
+    "target_dit_forward_s": 112.09557040105574,
+    "target_probe_s": 141.97439033794217,
+    "total_s": 283.88830212992616
+  }
+}

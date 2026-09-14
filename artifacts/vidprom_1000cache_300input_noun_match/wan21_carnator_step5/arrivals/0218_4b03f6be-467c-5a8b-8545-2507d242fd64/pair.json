@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 218,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7595001659387318,
+    "context_color_ciede2000": 0.4408750191296291,
+    "log_area_ratio": 0.2768410924745366,
+    "shape_one_minus_dice": 0.6240601503759399
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7595001659387318,
+    "context_color_ciede2000": 0.4408750191296291,
+    "log_area_ratio": 0.2768410924745366,
+    "shape_one_minus_dice": 0.6240601503759399
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 218,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "jackal",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "jackal"
+  ],
+  "target_prompt": "a jackal is standing,a tiger attacks him from behind.",
+  "target_uuid": "4b03f6be-467c-5a8b-8545-2507d242fd64",
+  "timing": {
+    "source_dit_forward_s": 111.40985516551882,
+    "source_probe_s": 140.74250195594504,
+    "target_dit_forward_s": 111.50146884517744,
+    "target_probe_s": 140.9606397668831,
+    "total_s": 281.70314172282815
+  }
+}

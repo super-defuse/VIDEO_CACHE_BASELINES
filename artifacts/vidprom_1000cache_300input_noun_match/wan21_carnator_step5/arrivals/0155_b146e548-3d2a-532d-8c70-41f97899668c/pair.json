@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 155,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4361332413896351,
+    "context_color_ciede2000": 0.8613982136652197,
+    "log_area_ratio": 0.16000824452010454,
+    "shape_one_minus_dice": 0.7166666666666667
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4361332413896351,
+    "context_color_ciede2000": 0.8613982136652197,
+    "log_area_ratio": 0.16000824452010454,
+    "shape_one_minus_dice": 0.7166666666666667
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 155,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "tiger",
+    "zebra"
+  ],
+  "target_only_nouns": [
+    "zebra"
+  ],
+  "target_prompt": "A tiger hunting a zebra",
+  "target_uuid": "b146e548-3d2a-532d-8c70-41f97899668c",
+  "timing": {
+    "source_dit_forward_s": 112.00868519279175,
+    "source_probe_s": 141.4668839231599,
+    "target_dit_forward_s": 112.03984960634261,
+    "target_probe_s": 141.54764335602522,
+    "total_s": 283.01452727918513
+  }
+}

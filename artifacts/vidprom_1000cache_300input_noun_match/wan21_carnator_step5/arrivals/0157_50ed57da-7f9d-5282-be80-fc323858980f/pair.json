@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 157,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8749904135926055,
+    "context_color_ciede2000": 2.0517608522506645,
+    "log_area_ratio": 0.08069355352174035,
+    "shape_one_minus_dice": 0.5671641791044777
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8749904135926055,
+    "context_color_ciede2000": 2.0517608522506645,
+    "log_area_ratio": 0.08069355352174035,
+    "shape_one_minus_dice": 0.5671641791044777
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 157,
+  "source_nouns": [
+    "cat",
+    "eyes",
+    "roof"
+  ],
+  "source_only_nouns": [
+    "eyes"
+  ],
+  "source_prompt": "cat with red eyes on the roof",
+  "source_uuid": "c1ca8cac-0eec-5e65-b662-1e2349c59086",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "roof",
+    "style"
+  ],
+  "target_only_nouns": [
+    "style"
+  ],
+  "target_prompt": "a cat jumping off a roof, manga panel, manga style",
+  "target_uuid": "50ed57da-7f9d-5282-be80-fc323858980f",
+  "timing": {
+    "source_dit_forward_s": 109.84574201866053,
+    "source_probe_s": 139.91994639206678,
+    "target_dit_forward_s": 109.8357139362488,
+    "target_probe_s": 140.14123175200075,
+    "total_s": 280.0611781440675
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 65,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.4432675606538634,
+    "context_color_ciede2000": 0.5804988531940772,
+    "log_area_ratio": 0.2756771376940862,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.4432675606538634,
+    "context_color_ciede2000": 0.5804988531940772,
+    "log_area_ratio": 0.2756771376940862,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 65,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "An cat turning into a Lion",
+  "source_uuid": "e438b7e7-d1c8-553a-8c89-7cd1be08bd77",
+  "status": "completed",
+  "target_nouns": [
+    "bodybuilding",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "bodybuilding"
+  ],
+  "target_prompt": "strong technological lion doing bodybuilding",
+  "target_uuid": "37b13f22-f9c0-58c4-b371-f78494fc0cca",
+  "timing": {
+    "source_dit_forward_s": 111.97203356982209,
+    "source_probe_s": 141.52005537995137,
+    "target_dit_forward_s": 112.01102952216752,
+    "target_probe_s": 141.51773867895827,
+    "total_s": 283.03779405890964
+  }
+}

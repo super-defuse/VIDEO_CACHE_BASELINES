@@ -1,0 +1,158 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "ea6fb1c66cfefbc63656c39a806f3811d708778ceeced5a6aba4eef9fb0ac32f",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "740cedc10e646aa1b1d4d4796477632409808623d2b059476f0e712c8f391573"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "5ccf8aed8de0d0bc0b6eb81cb66a0b4759b74ddaededd307a730f7ea4d533161"
+  },
+  "objects": [
+    {
+      "area_frac": 0.1661931872367859,
+      "centroid_yx": [
+        20.78119659423828,
+        34.769229888916016
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.06856155395508,
+          -2.935201406478882,
+          14.404474258422852
+        ],
+        "mean_rgb": [
+          109.85547637939453,
+          108.1821060180664,
+          83.0963363647461
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 149760
+      },
+      "dtype": "bool",
+      "noun": "cat",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.22073863446712494,
+      "centroid_yx": [
+        17.841699600219727,
+        34.26898193359375
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.38558578491211,
+          -2.9572231769561768,
+          13.946004867553711
+        ],
+        "mean_rgb": [
+          110.19434356689453,
+          108.99718475341797,
+          84.62224578857422
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 198912
+      },
+      "dtype": "bool",
+      "noun": "dog",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.3579545319080353,
+      "centroid_yx": [
+        18.576190948486328,
+        38.151588439941406
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.12795639038086,
+          -3.1893625259399414,
+          13.882745742797852
+        ],
+        "mean_rgb": [
+          109.09161376953125,
+          108.51066589355469,
+          84.12471771240234
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 322560
+      },
+      "dtype": "bool",
+      "noun": "fight",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    }
+  ],
+  "prompt": "big fat dog fight with yellow cat",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

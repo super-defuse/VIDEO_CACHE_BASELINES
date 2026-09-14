@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "db3eb6a2eeb10c14b381639aa9b0c0aa1794f898b1ac7938f79aa2fe61d03b40",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "9127af8907b58aa3358abd1571b1e0efb8a3779adbd91f6d398e1c766e786b87"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "e40b954b7608c4263de80e423643bbf451e51c0313a4928ca05e71412e6599a3"
+  },
+  "objects": [
+    {
+      "area_frac": 0.5272727012634277,
+      "centroid_yx": [
+        22.373384475708008,
+        39.02532196044922
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.949649810791016,
+          -2.975768566131592,
+          13.507246971130371
+        ],
+        "mean_rgb": [
+          111.3268814086914,
+          110.48529815673828,
+          86.74372100830078
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 475136
+      },
+      "dtype": "bool",
+      "noun": "dog",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.8224431872367859,
+      "centroid_yx": [
+        21.922624588012695,
+        39.67150115966797
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.135868072509766,
+          -3.0092265605926514,
+          13.498449325561523
+        ],
+        "mean_rgb": [
+          109.20124053955078,
+          108.48249053955078,
+          84.80280303955078
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 741120
+      },
+      "dtype": "bool",
+      "noun": "road",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "a dog is running on the road.",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

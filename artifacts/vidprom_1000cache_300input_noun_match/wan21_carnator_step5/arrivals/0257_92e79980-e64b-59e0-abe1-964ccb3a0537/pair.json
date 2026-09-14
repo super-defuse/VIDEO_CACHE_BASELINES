@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 257,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.36826597521636634,
+    "context_color_ciede2000": 0.7581220204784389,
+    "log_area_ratio": 0.3024883700066745,
+    "shape_one_minus_dice": 0.5724137931034483
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.36826597521636634,
+    "context_color_ciede2000": 0.7581220204784389,
+    "log_area_ratio": 0.3024883700066745,
+    "shape_one_minus_dice": 0.5724137931034483
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 257,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "An cat turning into a Lion",
+  "source_uuid": "e438b7e7-d1c8-553a-8c89-7cd1be08bd77",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "snores"
+  ],
+  "target_only_nouns": [
+    "snores"
+  ],
+  "target_prompt": "Milo surprised and stuck in Leo&#39;s golden mane as the lion snores",
+  "target_uuid": "92e79980-e64b-59e0-abe1-964ccb3a0537",
+  "timing": {
+    "source_dit_forward_s": 109.86193496524356,
+    "source_probe_s": 138.9799227840267,
+    "target_dit_forward_s": 109.91191199724562,
+    "target_probe_s": 138.98799009993672,
+    "total_s": 277.96791288396344
+  }
+}

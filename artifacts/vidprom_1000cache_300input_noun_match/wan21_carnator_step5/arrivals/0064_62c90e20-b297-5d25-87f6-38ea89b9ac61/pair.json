@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 64,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5798164604773955,
+    "context_color_ciede2000": 0.798375577852096,
+    "log_area_ratio": 0.1548229632272602,
+    "shape_one_minus_dice": 0.7068965517241379
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5798164604773955,
+    "context_color_ciede2000": 0.798375577852096,
+    "log_area_ratio": 0.1548229632272602,
+    "shape_one_minus_dice": 0.7068965517241379
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 64,
+  "source_nouns": [
+    "pandas",
+    "pape"
+  ],
+  "source_only_nouns": [
+    "pape"
+  ],
+  "source_prompt": "Two pandas discussing an academic pape",
+  "source_uuid": "bea118e5-2edf-5446-83d3-fb61c7a9e270",
+  "status": "completed",
+  "target_nouns": [
+    "pandas",
+    "stones"
+  ],
+  "target_only_nouns": [
+    "stones"
+  ],
+  "target_prompt": "Several pandas are sitting on stones",
+  "target_uuid": "62c90e20-b297-5d25-87f6-38ea89b9ac61",
+  "timing": {
+    "source_dit_forward_s": 112.86934823077172,
+    "source_probe_s": 142.87306286906824,
+    "target_dit_forward_s": 112.90856933919713,
+    "target_probe_s": 143.01190276700072,
+    "total_s": 285.88496563606896
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 214,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.5832717907453122,
+    "context_color_ciede2000": 1.4636424028745605,
+    "log_area_ratio": 1.1571174313428783,
+    "shape_one_minus_dice": 0.5454545454545454
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.5832717907453122,
+    "context_color_ciede2000": 1.4636424028745605,
+    "log_area_ratio": 1.1571174313428783,
+    "shape_one_minus_dice": 0.5454545454545454
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 214,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "tiger"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "hair",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "hair"
+  ],
+  "target_prompt": "giga chad, fighting huge lion, long hair",
+  "target_uuid": "ede8ed92-d1d5-576e-8182-c76ba042b0a2",
+  "timing": {
+    "source_dit_forward_s": 112.97632435522974,
+    "source_probe_s": 142.58749791095033,
+    "target_dit_forward_s": 112.99103553709574,
+    "target_probe_s": 142.75609773397446,
+    "total_s": 285.3435956449248
+  }
+}

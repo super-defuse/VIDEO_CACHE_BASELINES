@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 203,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 3.9268390145534178,
+    "context_color_ciede2000": 0.559796994950281,
+    "log_area_ratio": 1.3539589844568158,
+    "shape_one_minus_dice": 0.4852941176470589
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 3.9268390145534178,
+    "context_color_ciede2000": 0.559796994950281,
+    "log_area_ratio": 1.3539589844568158,
+    "shape_one_minus_dice": 0.4852941176470589
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 203,
+  "source_nouns": [
+    "cat",
+    "sky"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "an adorable cat flying in the blue sky",
+  "source_uuid": "bf7cc010-13bb-5cc6-b5d5-244fbef8b8a8",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "sky"
+  ],
+  "target_only_nouns": [
+    "lion"
+  ],
+  "target_prompt": "a red lion walking in blue sky",
+  "target_uuid": "5383c1d0-4237-5fad-9c7f-d96d8f58f6f1",
+  "timing": {
+    "source_dit_forward_s": 111.45167097169906,
+    "source_probe_s": 141.4839021859225,
+    "target_dit_forward_s": 111.41205910500139,
+    "target_probe_s": 140.9435901050456,
+    "total_s": 282.4274922909681
+  }
+}

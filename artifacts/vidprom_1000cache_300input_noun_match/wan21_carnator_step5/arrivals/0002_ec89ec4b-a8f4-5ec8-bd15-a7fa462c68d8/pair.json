@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 2,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4228966531845831,
+    "context_color_ciede2000": 0.44409814646329615,
+    "log_area_ratio": 0.6020067355320812,
+    "shape_one_minus_dice": 0.3870967741935484
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4228966531845831,
+    "context_color_ciede2000": 0.44409814646329615,
+    "log_area_ratio": 0.6020067355320812,
+    "shape_one_minus_dice": 0.3870967741935484
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 2,
+  "source_nouns": [
+    "lion",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "pig"
+  ],
+  "source_prompt": "a pig is eating lion",
+  "source_uuid": "fdc8ab9e-8480-5baa-a6c4-b975eef8a40b",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "mouse"
+  ],
+  "target_prompt": "when the mouse desperately requested the lion to set him free.",
+  "target_uuid": "ec89ec4b-a8f4-5ec8-bd15-a7fa462c68d8",
+  "timing": {
+    "source_dit_forward_s": 109.76105936802924,
+    "source_probe_s": 144.78612742386758,
+    "target_dit_forward_s": 109.66118396096863,
+    "target_probe_s": 138.84440074581653,
+    "total_s": 283.6305281696841
+  }
+}

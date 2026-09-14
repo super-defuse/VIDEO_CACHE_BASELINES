@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 266,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5408682926947267,
+    "context_color_ciede2000": 0.5705758922245971,
+    "log_area_ratio": 0.26736619382254584,
+    "shape_one_minus_dice": 0.6691729323308271
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5408682926947267,
+    "context_color_ciede2000": 0.5705758922245971,
+    "log_area_ratio": 0.26736619382254584,
+    "shape_one_minus_dice": 0.6691729323308271
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 266,
+  "source_nouns": [
+    "-seed",
+    "cat",
+    "tongue"
+  ],
+  "source_only_nouns": [
+    "-seed"
+  ],
+  "source_prompt": "a cat grooming itself meticulously with its tongue -seed 3706533",
+  "source_uuid": "1e1cd4c8-960e-5b66-a0a8-eff87adcac44",
+  "status": "completed",
+  "target_nouns": [
+    "body",
+    "cat",
+    "tongue"
+  ],
+  "target_only_nouns": [
+    "body"
+  ],
+  "target_prompt": "cat cleaning its body with its tongue",
+  "target_uuid": "606a6a5e-999c-5e65-aea3-2bca9434de8b",
+  "timing": {
+    "source_dit_forward_s": 113.23427193495445,
+    "source_probe_s": 143.85719735105522,
+    "target_dit_forward_s": 113.17052981909364,
+    "target_probe_s": 144.34060301212594,
+    "total_s": 288.19780036318116
+  }
+}

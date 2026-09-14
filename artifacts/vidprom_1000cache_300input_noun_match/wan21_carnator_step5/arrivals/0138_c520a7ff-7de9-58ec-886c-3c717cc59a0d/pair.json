@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 138,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5032661649810808,
+    "context_color_ciede2000": 1.0908971966238366,
+    "log_area_ratio": 1.1898560431993093,
+    "shape_one_minus_dice": 0.42622950819672134
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5032661649810808,
+    "context_color_ciede2000": 1.0908971966238366,
+    "log_area_ratio": 1.1898560431993093,
+    "shape_one_minus_dice": 0.42622950819672134
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 138,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "beer",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "beer"
+  ],
+  "target_prompt": "The rabbit that sits and drinks beer.",
+  "target_uuid": "c520a7ff-7de9-58ec-886c-3c717cc59a0d",
+  "timing": {
+    "source_dit_forward_s": 111.46174688916653,
+    "source_probe_s": 141.2274669141043,
+    "target_dit_forward_s": 111.38621478411369,
+    "target_probe_s": 141.0844551869668,
+    "total_s": 282.3119221010711
+  }
+}

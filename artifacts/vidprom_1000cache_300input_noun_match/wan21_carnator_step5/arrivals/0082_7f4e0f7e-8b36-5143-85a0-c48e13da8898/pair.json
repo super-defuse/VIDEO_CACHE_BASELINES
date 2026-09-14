@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 82,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.47596665094250384,
+    "context_color_ciede2000": 2.706748601018086,
+    "log_area_ratio": 0.9132711312278712,
+    "shape_one_minus_dice": 0.7719298245614035
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.47596665094250384,
+    "context_color_ciede2000": 2.706748601018086,
+    "log_area_ratio": 0.9132711312278712,
+    "shape_one_minus_dice": 0.7719298245614035
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 82,
+  "source_nouns": [
+    "cat",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a monkey cat is running",
+  "source_uuid": "3521434a-b244-5080-a666-48b79ac7fee1",
+  "status": "completed",
+  "target_nouns": [
+    "butterflies",
+    "monkey"
+  ],
+  "target_only_nouns": [
+    "butterflies"
+  ],
+  "target_prompt": "beautiful glowing butterflies surrounding the monkey",
+  "target_uuid": "7f4e0f7e-8b36-5143-85a0-c48e13da8898",
+  "timing": {
+    "source_dit_forward_s": 109.6873278862331,
+    "source_probe_s": 138.94837819295935,
+    "target_dit_forward_s": 109.7468590172939,
+    "target_probe_s": 138.62060256977566,
+    "total_s": 277.568980762735
+  }
+}

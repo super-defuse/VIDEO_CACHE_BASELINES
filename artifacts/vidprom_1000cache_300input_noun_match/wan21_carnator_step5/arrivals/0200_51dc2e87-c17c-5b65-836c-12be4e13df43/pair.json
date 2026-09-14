@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 200,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.39946777311794446,
+    "context_color_ciede2000": 0.5778667560309616,
+    "log_area_ratio": 0.28465321139109495,
+    "shape_one_minus_dice": 0.4032258064516129
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.39946777311794446,
+    "context_color_ciede2000": 0.5778667560309616,
+    "log_area_ratio": 0.28465321139109495,
+    "shape_one_minus_dice": 0.4032258064516129
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 200,
+  "source_nouns": [
+    "cat",
+    "eyes"
+  ],
+  "source_only_nouns": [
+    "eyes"
+  ],
+  "source_prompt": "a cat with nice and beautiful eyes",
+  "source_uuid": "9fab7331-3987-5669-92a9-b0e352e3800f",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "smile"
+  ],
+  "target_only_nouns": [
+    "smile"
+  ],
+  "target_prompt": "a cute cat with a lovely smile",
+  "target_uuid": "51dc2e87-c17c-5b65-836c-12be4e13df43",
+  "timing": {
+    "source_dit_forward_s": 112.15333996945992,
+    "source_probe_s": 141.84669790393673,
+    "target_dit_forward_s": 112.14192013721913,
+    "target_probe_s": 141.9838962678332,
+    "total_s": 283.8305941717699
+  }
+}

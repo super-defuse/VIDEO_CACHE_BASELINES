@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 277,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9131052158859068,
+    "context_color_ciede2000": 0.1654299754373319,
+    "log_area_ratio": 0.4427910019917456,
+    "shape_one_minus_dice": 0.6859504132231404
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9131052158859068,
+    "context_color_ciede2000": 0.1654299754373319,
+    "log_area_ratio": 0.4427910019917456,
+    "shape_one_minus_dice": 0.6859504132231404
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 277,
+  "source_nouns": [
+    "dog",
+    "road"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog is running on the road.",
+  "source_uuid": "6325a180-76bb-5ab5-a285-5bae82dc519f",
+  "status": "completed",
+  "target_nouns": [
+    "panda",
+    "road"
+  ],
+  "target_only_nouns": [
+    "panda"
+  ],
+  "target_prompt": "a panda running on a road",
+  "target_uuid": "7af9e3ef-63c6-5f88-9e84-7d86fa5c29ed",
+  "timing": {
+    "source_dit_forward_s": 109.81452391506173,
+    "source_probe_s": 139.57910515880212,
+    "target_dit_forward_s": 109.90310119371861,
+    "target_probe_s": 139.27535938704386,
+    "total_s": 278.854464545846
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 146,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.430045835919839,
+    "context_color_ciede2000": 1.147570518638097,
+    "log_area_ratio": 0.7102027818193185,
+    "shape_one_minus_dice": 0.8769230769230769
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.430045835919839,
+    "context_color_ciede2000": 1.147570518638097,
+    "log_area_ratio": 0.7102027818193185,
+    "shape_one_minus_dice": 0.8769230769230769
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 146,
+  "source_nouns": [
+    "symbols",
+    "turtle"
+  ],
+  "source_only_nouns": [
+    "symbols"
+  ],
+  "source_prompt": "turtle covered in evil symbols",
+  "source_uuid": "b13ba127-0ba2-5407-b61d-3e5d5701b5f4",
+  "status": "completed",
+  "target_nouns": [
+    "man",
+    "turtle"
+  ],
+  "target_only_nouns": [
+    "man"
+  ],
+  "target_prompt": "old black man eating a turtle",
+  "target_uuid": "25e92aa1-cad6-551b-886e-16b886413eb6",
+  "timing": {
+    "source_dit_forward_s": 113.19856751384214,
+    "source_probe_s": 143.41426566196606,
+    "target_dit_forward_s": 113.27705870592035,
+    "target_probe_s": 143.55713760410435,
+    "total_s": 286.9714032660704
+  }
+}

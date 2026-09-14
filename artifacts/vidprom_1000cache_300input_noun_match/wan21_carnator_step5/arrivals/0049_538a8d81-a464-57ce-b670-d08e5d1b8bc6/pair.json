@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 49,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.44633609360543647,
+    "context_color_ciede2000": 0.39789729099344323,
+    "log_area_ratio": 0.7397268678933853,
+    "shape_one_minus_dice": 0.6885245901639344
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.44633609360543647,
+    "context_color_ciede2000": 0.39789729099344323,
+    "log_area_ratio": 0.7397268678933853,
+    "shape_one_minus_dice": 0.6885245901639344
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 49,
+  "source_nouns": [
+    "cat",
+    "man",
+    "see"
+  ],
+  "source_only_nouns": [
+    "see"
+  ],
+  "source_prompt": "a man holding his cat and running towards a see",
+  "source_uuid": "63762915-f647-5717-8228-f14d9078383d",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "grass",
+    "man"
+  ],
+  "target_only_nouns": [
+    "grass"
+  ],
+  "target_prompt": "a cat running on the grass, with an old man",
+  "target_uuid": "538a8d81-a464-57ce-b670-d08e5d1b8bc6",
+  "timing": {
+    "source_dit_forward_s": 112.79196674912237,
+    "source_probe_s": 143.71243316982873,
+    "target_dit_forward_s": 112.80645421380177,
+    "target_probe_s": 143.77174592902884,
+    "total_s": 287.48417909885757
+  }
+}

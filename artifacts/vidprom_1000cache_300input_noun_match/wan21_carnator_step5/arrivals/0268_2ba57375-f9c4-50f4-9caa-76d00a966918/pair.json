@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 268,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7438181413731344,
+    "context_color_ciede2000": 1.270938083736427,
+    "log_area_ratio": 1.0075285251043709,
+    "shape_one_minus_dice": 0.676056338028169
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7438181413731344,
+    "context_color_ciede2000": 1.270938083736427,
+    "log_area_ratio": 1.0075285251043709,
+    "shape_one_minus_dice": 0.676056338028169
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 268,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cute little cat running on the grass",
+  "source_uuid": "ae0b87e5-4a64-51a6-adb2-b7c6b200dd99",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "jumping"
+  ],
+  "target_only_nouns": [
+    "jumping"
+  ],
+  "target_prompt": "grasshopper jumping in the grass",
+  "target_uuid": "2ba57375-f9c4-50f4-9caa-76d00a966918",
+  "timing": {
+    "source_dit_forward_s": 111.56775323254988,
+    "source_probe_s": 141.2839351987932,
+    "target_dit_forward_s": 111.46579731674865,
+    "target_probe_s": 141.15541800204664,
+    "total_s": 282.43935320083983
+  }
+}

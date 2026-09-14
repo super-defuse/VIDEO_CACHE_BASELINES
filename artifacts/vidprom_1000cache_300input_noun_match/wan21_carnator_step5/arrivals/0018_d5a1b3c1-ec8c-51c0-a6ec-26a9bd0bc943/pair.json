@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 18,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1248357459422393,
+    "context_color_ciede2000": 0.4433657600571344,
+    "log_area_ratio": 0.6063373764750158,
+    "shape_one_minus_dice": 0.5396825396825398
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1248357459422393,
+    "context_color_ciede2000": 0.4433657600571344,
+    "log_area_ratio": 0.6063373764750158,
+    "shape_one_minus_dice": 0.5396825396825398
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 18,
+  "source_nouns": [
+    "cat",
+    "eyes",
+    "roof"
+  ],
+  "source_only_nouns": [
+    "eyes"
+  ],
+  "source_prompt": "cat with red eyes on the roof",
+  "source_uuid": "c1ca8cac-0eec-5e65-b662-1e2349c59086",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "roof"
+  ],
+  "target_only_nouns": [
+    "dog"
+  ],
+  "target_prompt": "dog barking on a cat sitting on roof",
+  "target_uuid": "d5a1b3c1-ec8c-51c0-a6ec-26a9bd0bc943",
+  "timing": {
+    "source_dit_forward_s": 111.46369103924371,
+    "source_probe_s": 141.93920176988468,
+    "target_dit_forward_s": 111.40687025547959,
+    "target_probe_s": 141.6980909400154,
+    "total_s": 283.63729270990007
+  }
+}

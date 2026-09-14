@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 164,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.7473802770964024,
+    "context_color_ciede2000": 1.8558308732814033,
+    "log_area_ratio": 0.026814563738108383,
+    "shape_one_minus_dice": 0.44715447154471544
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.7473802770964024,
+    "context_color_ciede2000": 1.8558308732814033,
+    "log_area_ratio": 0.026814563738108383,
+    "shape_one_minus_dice": 0.44715447154471544
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 164,
+  "source_nouns": [
+    "maltipoo",
+    "year"
+  ],
+  "source_only_nouns": [
+    "maltipoo"
+  ],
+  "source_prompt": "cute maltipoo celebrate Chinese new year",
+  "source_uuid": "fc0cad55-3c52-5843-a928-c7d32172f247",
+  "status": "completed",
+  "target_nouns": [
+    "cats",
+    "year"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "siberian cats wishes happy new year",
+  "target_uuid": "d560d8e7-1b61-53ed-8e4e-5dc469b4c712",
+  "timing": {
+    "source_dit_forward_s": 112.91868107463233,
+    "source_probe_s": 142.91732383612543,
+    "target_dit_forward_s": 112.95968389301561,
+    "target_probe_s": 142.99178014998324,
+    "total_s": 285.9091039861087
+  }
+}

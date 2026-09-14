@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 276,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0209919627002284,
+    "context_color_ciede2000": 0.4927584457525061,
+    "log_area_ratio": 1.8193679733960972,
+    "shape_one_minus_dice": 0.4492753623188406
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0209919627002284,
+    "context_color_ciede2000": 0.4927584457525061,
+    "log_area_ratio": 1.8193679733960972,
+    "shape_one_minus_dice": 0.4492753623188406
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 276,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "Cute cat in the grass",
+  "source_uuid": "18adafd6-1076-50bf-9cae-db4dde219e83",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "land"
+  ],
+  "target_only_nouns": [
+    "land"
+  ],
+  "target_prompt": "White Rabit on green grass land.",
+  "target_uuid": "5fa0376d-6848-5873-856f-c929685f0156",
+  "timing": {
+    "source_dit_forward_s": 113.19082432729192,
+    "source_probe_s": 143.32031622203067,
+    "target_dit_forward_s": 113.23365207039751,
+    "target_probe_s": 143.9412672710605,
+    "total_s": 287.26158349309117
+  }
+}

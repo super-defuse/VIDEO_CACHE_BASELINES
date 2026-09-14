@@ -1,0 +1,158 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "d188cd5bc0e10d8e237d8bf93e75ca3f418028dfff42881bf4a925bdd5f9ccc6",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "74f0cf4e889825ea641ddf736d51640bcc07c6c952f29f0e0a0f6967616f3b40"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "67bb128e231729c04fbb972ab19cd764a269c801d9c56e3861cfd5bbd29c1225"
+  },
+  "objects": [
+    {
+      "area_frac": 0.25852271914482117,
+      "centroid_yx": [
+        28.83296775817871,
+        40.03736114501953
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.35845184326172,
+          -2.5561344623565674,
+          13.707996368408203
+        ],
+        "mean_rgb": [
+          110.57305908203125,
+          108.73662567138672,
+          84.90325927734375
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 232960
+      },
+      "dtype": "bool",
+      "noun": "cheese",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.4482954442501068,
+      "centroid_yx": [
+        27.669200897216797,
+        44.0430908203125
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.94753646850586,
+          -2.3177108764648438,
+          13.681190490722656
+        ],
+        "mean_rgb": [
+          109.99800109863281,
+          107.64649963378906,
+          84.04003143310547
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 403968
+      },
+      "dtype": "bool",
+      "noun": "plate",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.2764204442501068,
+      "centroid_yx": [
+        16.87975311279297,
+        31.792394638061523
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.61701965332031,
+          -2.705773115158081,
+          13.533623695373535
+        ],
+        "mean_rgb": [
+          108.45291900634766,
+          107.02751922607422,
+          83.52559661865234
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 249088
+      },
+      "dtype": "bool",
+      "noun": "rat",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    }
+  ],
+  "prompt": "a big rat eating a plate of cheese",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

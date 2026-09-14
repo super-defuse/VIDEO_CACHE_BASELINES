@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 75,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.161214331083881,
+    "context_color_ciede2000": 0.7621112031665606,
+    "log_area_ratio": 0.6161196318729373,
+    "shape_one_minus_dice": 0.7540983606557377
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.161214331083881,
+    "context_color_ciede2000": 0.7621112031665606,
+    "log_area_ratio": 0.6161196318729373,
+    "shape_one_minus_dice": 0.7540983606557377
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 75,
+  "source_nouns": [
+    "bat",
+    "case"
+  ],
+  "source_only_nouns": [
+    "case"
+  ],
+  "source_prompt": "a bat sitting in a case and looking outside",
+  "source_uuid": "8466584b-19e7-574e-a827-5102d7411a71",
+  "status": "completed",
+  "target_nouns": [
+    "bat",
+    "seconds"
+  ],
+  "target_only_nouns": [
+    "seconds"
+  ],
+  "target_prompt": "gray kitten morphing into vampire bat, fly away, 5 seconds",
+  "target_uuid": "3325e221-aa5e-5df0-918d-e6c14749a14f",
+  "timing": {
+    "source_dit_forward_s": 112.02994912909344,
+    "source_probe_s": 142.00029080011882,
+    "target_dit_forward_s": 111.98559701582417,
+    "target_probe_s": 141.7684343161527,
+    "total_s": 283.7687251162715
+  }
+}

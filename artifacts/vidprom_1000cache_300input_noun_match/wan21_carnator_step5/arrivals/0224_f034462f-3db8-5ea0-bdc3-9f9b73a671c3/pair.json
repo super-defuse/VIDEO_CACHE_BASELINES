@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 224,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1611809928882642,
+    "context_color_ciede2000": 0.3407876302322017,
+    "log_area_ratio": 0.3067507839156935,
+    "shape_one_minus_dice": 0.5846153846153845
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1611809928882642,
+    "context_color_ciede2000": 0.3407876302322017,
+    "log_area_ratio": 0.3067507839156935,
+    "shape_one_minus_dice": 0.5846153846153845
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 224,
+  "source_nouns": [
+    "cat",
+    "definition"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "High definition, white gray cat walking",
+  "source_uuid": "e3230e1a-78ce-5d4b-a021-526d203eaec0",
+  "status": "completed",
+  "target_nouns": [
+    "definition",
+    "unicorn"
+  ],
+  "target_only_nouns": [
+    "unicorn"
+  ],
+  "target_prompt": "black unicorn, realistic, high definition",
+  "target_uuid": "f034462f-3db8-5ea0-bdc3-9f9b73a671c3",
+  "timing": {
+    "source_dit_forward_s": 113.03143401117995,
+    "source_probe_s": 143.11339019308798,
+    "target_dit_forward_s": 113.0581942233257,
+    "target_probe_s": 143.19975866703317,
+    "total_s": 286.31314886012115
+  }
+}

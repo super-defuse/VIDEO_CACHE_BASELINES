@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 111,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 3.0607967854987743,
+    "context_color_ciede2000": 2.4976945194771165,
+    "log_area_ratio": 0.06792735904323803,
+    "shape_one_minus_dice": 0.6752136752136753
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 3.0607967854987743,
+    "context_color_ciede2000": 2.4976945194771165,
+    "log_area_ratio": 0.06792735904323803,
+    "shape_one_minus_dice": 0.6752136752136753
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 111,
+  "source_nouns": [
+    "dog",
+    "picture",
+    "playing"
+  ],
+  "source_only_nouns": [
+    "playing"
+  ],
+  "source_prompt": "a dog playing in the green mountains anime picture",
+  "source_uuid": "e78292e0-051f-50b9-8763-e90ddc1f7156",
+  "status": "completed",
+  "target_nouns": [
+    "cupcake",
+    "dog",
+    "picture"
+  ],
+  "target_only_nouns": [
+    "cupcake"
+  ],
+  "target_prompt": "a picture of a dog eating a cupcake",
+  "target_uuid": "04ffe6a5-3453-55db-9a40-cc8225082dac",
+  "timing": {
+    "source_dit_forward_s": 113.17874134122394,
+    "source_probe_s": 143.82599944295362,
+    "target_dit_forward_s": 113.20217630336992,
+    "target_probe_s": 143.79440550808795,
+    "total_s": 287.62040495104156
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "890d2e2b9e873f3c30a9a2dc1aba88d427fc69cde3f7407523e1d0d125884cd1",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "c7ff1d24c1579c635eb1ffffe4bf2116ec2e50f5b8205e9832f3ee27579d22f8"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "f1054aba5821cf45c921b1d0cd3b08ca7e7564d2f18c5be2bdf5eb5b7ef0ea99"
+  },
+  "objects": [
+    {
+      "area_frac": 0.3531250059604645,
+      "centroid_yx": [
+        11.78841495513916,
+        42.9058723449707
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.093597412109375,
+          -3.0814096927642822,
+          13.873738288879395
+        ],
+        "mean_rgb": [
+          109.26785278320312,
+          108.39677429199219,
+          84.05974578857422
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 318208
+      },
+      "dtype": "bool",
+      "noun": "cats",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.2647727131843567,
+      "centroid_yx": [
+        6.839056015014648,
+        42.14592361450195
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.285343170166016,
+          -3.3849570751190186,
+          13.927544593811035
+        ],
+        "mean_rgb": [
+          106.70662689208984,
+          106.53678894042969,
+          82.01852416992188
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 238592
+      },
+      "dtype": "bool",
+      "noun": "mountain",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "Two cats fighting on a mountain",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

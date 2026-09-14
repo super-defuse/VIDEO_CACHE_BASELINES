@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 267,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0254080018339378,
+    "context_color_ciede2000": 0.12319858158449455,
+    "log_area_ratio": 1.150572078371504,
+    "shape_one_minus_dice": 0.4126984126984127
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0254080018339378,
+    "context_color_ciede2000": 0.12319858158449455,
+    "log_area_ratio": 1.150572078371504,
+    "shape_one_minus_dice": 0.4126984126984127
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 267,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cute little cat running on the grass",
+  "source_uuid": "ae0b87e5-4a64-51a6-adb2-b7c6b200dd99",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "puppy"
+  ],
+  "target_only_nouns": [
+    "puppy"
+  ],
+  "target_prompt": "A cute puppy running on the grass",
+  "target_uuid": "b7f8e777-ec3d-5a28-a5da-e7ee7755e616",
+  "timing": {
+    "source_dit_forward_s": 109.86808516387828,
+    "source_probe_s": 139.17609860096127,
+    "target_dit_forward_s": 109.89752405649051,
+    "target_probe_s": 139.45212134788744,
+    "total_s": 278.6282199488487
+  }
+}

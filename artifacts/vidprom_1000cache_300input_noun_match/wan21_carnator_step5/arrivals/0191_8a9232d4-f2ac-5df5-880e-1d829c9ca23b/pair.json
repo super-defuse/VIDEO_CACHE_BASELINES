@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 191,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7494154743768447,
+    "context_color_ciede2000": 0.2858645543316999,
+    "log_area_ratio": 1.4799196221972977,
+    "shape_one_minus_dice": 0.65625
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7494154743768447,
+    "context_color_ciede2000": 0.2858645543316999,
+    "log_area_ratio": 1.4799196221972977,
+    "shape_one_minus_dice": 0.65625
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 191,
+  "source_nouns": [
+    "crocodile",
+    "lake"
+  ],
+  "source_only_nouns": [
+    "crocodile"
+  ],
+  "source_prompt": "CARTOON good crocodile swims in the lake",
+  "source_uuid": "9407da5b-aa90-56c5-a955-cc2ef9254022",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "lake"
+  ],
+  "target_only_nouns": [
+    "bear"
+  ],
+  "target_prompt": "A bear was drinking by the lake",
+  "target_uuid": "8a9232d4-f2ac-5df5-880e-1d829c9ca23b",
+  "timing": {
+    "source_dit_forward_s": 113.05009889625944,
+    "source_probe_s": 143.01486624684185,
+    "target_dit_forward_s": 113.09348822245374,
+    "target_probe_s": 142.70984528097324,
+    "total_s": 285.7247115278151
+  }
+}

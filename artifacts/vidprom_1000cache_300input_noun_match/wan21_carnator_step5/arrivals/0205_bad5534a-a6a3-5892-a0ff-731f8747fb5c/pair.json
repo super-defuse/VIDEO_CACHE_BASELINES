@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 205,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9618029358175679,
+    "context_color_ciede2000": 0.14984114787133618,
+    "log_area_ratio": 0.6919931134595914,
+    "shape_one_minus_dice": 0.4590163934426229
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9618029358175679,
+    "context_color_ciede2000": 0.14984114787133618,
+    "log_area_ratio": 0.6919931134595914,
+    "shape_one_minus_dice": 0.4590163934426229
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 205,
+  "source_nouns": [
+    "cat",
+    "table"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat on the table",
+  "source_uuid": "da43b386-85e7-5d5f-a114-3448856e8486",
+  "status": "completed",
+  "target_nouns": [
+    "cats",
+    "table"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "4 purple cats on a table",
+  "target_uuid": "bad5534a-a6a3-5892-a0ff-731f8747fb5c",
+  "timing": {
+    "source_dit_forward_s": 112.21122553176247,
+    "source_probe_s": 142.0460140448995,
+    "target_dit_forward_s": 112.1862285961397,
+    "target_probe_s": 142.17108939704485,
+    "total_s": 284.21710344194435
+  }
+}

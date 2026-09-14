@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 193,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.8999480759231786,
+    "context_color_ciede2000": 0.6741402361264345,
+    "log_area_ratio": 0.75488948274177,
+    "shape_one_minus_dice": 0.7647058823529411
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.8999480759231786,
+    "context_color_ciede2000": 0.6741402361264345,
+    "log_area_ratio": 0.75488948274177,
+    "shape_one_minus_dice": 0.7647058823529411
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 193,
+  "source_nouns": [
+    "frog",
+    "guitar"
+  ],
+  "source_only_nouns": [
+    "guitar"
+  ],
+  "source_prompt": "frog playing guitar, very reliastic",
+  "source_uuid": "b018eccd-0b02-59a6-85ec-6540637b3fc4",
+  "status": "completed",
+  "target_nouns": [
+    "frog",
+    "python"
+  ],
+  "target_only_nouns": [
+    "python"
+  ],
+  "target_prompt": "a kong fu frog fighting a python and beats it",
+  "target_uuid": "6b9ad5ed-fcc9-53d5-b589-92184bb2c35d",
+  "timing": {
+    "source_dit_forward_s": 111.51018811296672,
+    "source_probe_s": 141.20324976393022,
+    "target_dit_forward_s": 111.30455481540412,
+    "target_probe_s": 140.77157646184787,
+    "total_s": 281.9748262257781
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 198,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.49845134478641623,
+    "context_color_ciede2000": 0.9230891785430775,
+    "log_area_ratio": 0.7542023534792885,
+    "shape_one_minus_dice": 0.7164179104477613
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.49845134478641623,
+    "context_color_ciede2000": 0.9230891785430775,
+    "log_area_ratio": 0.7542023534792885,
+    "shape_one_minus_dice": 0.7164179104477613
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 198,
+  "source_nouns": [
+    "cat",
+    "eyes"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat with nice and beautiful eyes",
+  "source_uuid": "9fab7331-3987-5669-92a9-b0e352e3800f",
+  "status": "completed",
+  "target_nouns": [
+    "eyes",
+    "fur"
+  ],
+  "target_only_nouns": [
+    "fur"
+  ],
+  "target_prompt": "cat blue eyes ,white fur",
+  "target_uuid": "926eadde-a2b2-5a49-902a-36fab644f57c",
+  "timing": {
+    "source_dit_forward_s": 111.46443038107827,
+    "source_probe_s": 140.94491369999014,
+    "target_dit_forward_s": 111.37879028497264,
+    "target_probe_s": 141.14193314197473,
+    "total_s": 282.08684684196487
+  }
+}

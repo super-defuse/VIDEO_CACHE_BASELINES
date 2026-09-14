@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 239,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9979895024520665,
+    "context_color_ciede2000": 0.5465795087708354,
+    "log_area_ratio": 0.5776957715340435,
+    "shape_one_minus_dice": 0.5680000000000001
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9979895024520665,
+    "context_color_ciede2000": 0.5465795087708354,
+    "log_area_ratio": 0.5776957715340435,
+    "shape_one_minus_dice": 0.5680000000000001
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 239,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "dancing",
+    "pig"
+  ],
+  "target_only_nouns": [
+    "dancing"
+  ],
+  "target_prompt": "I am so excited dancing guina pig",
+  "target_uuid": "ea5ac52c-6651-5b4c-a765-de4854857e44",
+  "timing": {
+    "source_dit_forward_s": 113.02059636334889,
+    "source_probe_s": 142.66862900811248,
+    "target_dit_forward_s": 113.03628442180343,
+    "target_probe_s": 143.0892826570198,
+    "total_s": 285.75791166513227
+  }
+}

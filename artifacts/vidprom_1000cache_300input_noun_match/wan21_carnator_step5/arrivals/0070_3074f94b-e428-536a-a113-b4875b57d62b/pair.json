@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 70,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.137964088075375,
+    "context_color_ciede2000": 0.30873617377689805,
+    "log_area_ratio": 0.636840972269728,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.137964088075375,
+    "context_color_ciede2000": 0.30873617377689805,
+    "log_area_ratio": 0.636840972269728,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 70,
+  "source_nouns": [
+    "dogs",
+    "lawn"
+  ],
+  "source_only_nouns": [
+    "dogs"
+  ],
+  "source_prompt": "Cheerful dogs are running on the lawn",
+  "source_uuid": "bf7310c5-4da4-50d3-a329-ef9d31ec6f3d",
+  "status": "completed",
+  "target_nouns": [
+    "lawn",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "rabbit"
+  ],
+  "target_prompt": "A cute rabbit running on the lawn",
+  "target_uuid": "3074f94b-e428-536a-a113-b4875b57d62b",
+  "timing": {
+    "source_dit_forward_s": 111.98214753903449,
+    "source_probe_s": 141.8838666700758,
+    "target_dit_forward_s": 111.99865842820145,
+    "target_probe_s": 142.1595976939425,
+    "total_s": 284.0434643640183
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 232,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.3156176031750988,
+    "context_color_ciede2000": 0.14128190909714794,
+    "log_area_ratio": 0.26562237565859453,
+    "shape_one_minus_dice": 0.6935483870967742
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.3156176031750988,
+    "context_color_ciede2000": 0.14128190909714794,
+    "log_area_ratio": 0.26562237565859453,
+    "shape_one_minus_dice": 0.6935483870967742
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 232,
+  "source_nouns": [
+    "cat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat chasing a mouse",
+  "source_uuid": "733dfd62-bf59-5a86-b814-7853651919a6",
+  "status": "completed",
+  "target_nouns": [
+    "mouse",
+    "tails"
+  ],
+  "target_only_nouns": [
+    "tails"
+  ],
+  "target_prompt": "a mouse with 2 tails",
+  "target_uuid": "dd70bc65-b2a8-5102-b203-9e514e048996",
+  "timing": {
+    "source_dit_forward_s": 109.78773258323781,
+    "source_probe_s": 138.88172900001518,
+    "target_dit_forward_s": 109.86068418365903,
+    "target_probe_s": 138.86190504790284,
+    "total_s": 277.743634047918
+  }
+}

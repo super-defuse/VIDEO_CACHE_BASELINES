@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 34,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0288054392903943,
+    "context_color_ciede2000": 0.761248460713638,
+    "log_area_ratio": 0.6840492455907583,
+    "shape_one_minus_dice": 0.6747967479674797
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0288054392903943,
+    "context_color_ciede2000": 0.761248460713638,
+    "log_area_ratio": 0.6840492455907583,
+    "shape_one_minus_dice": 0.6747967479674797
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 34,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "rabbit",
+    "universe"
+  ],
+  "target_only_nouns": [
+    "universe"
+  ],
+  "target_prompt": "rabbit jumping along the universe",
+  "target_uuid": "80cf5af1-74cc-54e5-a00b-5e90f32dadfd",
+  "timing": {
+    "source_dit_forward_s": 112.80325132794678,
+    "source_probe_s": 142.8420505260583,
+    "target_dit_forward_s": 112.79555302974768,
+    "target_probe_s": 142.6838284181431,
+    "total_s": 285.5258789442014
+  }
+}

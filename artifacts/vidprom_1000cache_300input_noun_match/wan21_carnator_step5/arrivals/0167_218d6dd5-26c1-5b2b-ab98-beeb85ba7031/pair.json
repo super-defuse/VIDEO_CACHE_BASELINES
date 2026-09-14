@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 167,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7604147912694501,
+    "context_color_ciede2000": 0.3684956705061901,
+    "log_area_ratio": 0.24174873420881726,
+    "shape_one_minus_dice": 0.29600000000000004
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7604147912694501,
+    "context_color_ciede2000": 0.3684956705061901,
+    "log_area_ratio": 0.24174873420881726,
+    "shape_one_minus_dice": 0.29600000000000004
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 167,
+  "source_nouns": [
+    "cat",
+    "hat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "give me a cat with hat",
+  "source_uuid": "a6ccfa18-c16b-5158-a1c6-af4e884825a5",
+  "status": "completed",
+  "target_nouns": [
+    "fish",
+    "hat"
+  ],
+  "target_only_nouns": [
+    "fish"
+  ],
+  "target_prompt": "pink fish wearing a hat",
+  "target_uuid": "218d6dd5-26c1-5b2b-ab98-beeb85ba7031",
+  "timing": {
+    "source_dit_forward_s": 109.79258054215461,
+    "source_probe_s": 139.10548890405335,
+    "target_dit_forward_s": 109.78451433847658,
+    "target_probe_s": 138.8189637970645,
+    "total_s": 277.92445270111784
+  }
+}

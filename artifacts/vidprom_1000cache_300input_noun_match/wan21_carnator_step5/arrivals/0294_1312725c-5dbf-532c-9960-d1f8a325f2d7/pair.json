@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 294,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.24443915304317504,
+    "context_color_ciede2000": 0.9420262985851919,
+    "log_area_ratio": 1.0380324851243026,
+    "shape_one_minus_dice": 0.42622950819672134
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.24443915304317504,
+    "context_color_ciede2000": 0.9420262985851919,
+    "log_area_ratio": 1.0380324851243026,
+    "shape_one_minus_dice": 0.42622950819672134
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 294,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "alcohol",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "alcohol"
+  ],
+  "target_prompt": "The rabbit who was drinking alcohol",
+  "target_uuid": "1312725c-5dbf-532c-9960-d1f8a325f2d7",
+  "timing": {
+    "source_dit_forward_s": 113.1810850657057,
+    "source_probe_s": 143.2828427858185,
+    "target_dit_forward_s": 113.18305511004291,
+    "target_probe_s": 143.155003573047,
+    "total_s": 286.4378463588655
+  }
+}

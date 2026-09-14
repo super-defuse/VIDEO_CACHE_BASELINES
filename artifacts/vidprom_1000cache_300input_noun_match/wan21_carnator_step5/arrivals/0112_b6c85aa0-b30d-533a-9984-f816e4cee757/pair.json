@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 112,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5590531274422811,
+    "context_color_ciede2000": 1.1586814204963338,
+    "log_area_ratio": 0.13296392978728516,
+    "shape_one_minus_dice": 0.5572519083969465
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5590531274422811,
+    "context_color_ciede2000": 1.1586814204963338,
+    "log_area_ratio": 0.13296392978728516,
+    "shape_one_minus_dice": 0.5572519083969465
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 112,
+  "source_nouns": [
+    "anime",
+    "style",
+    "window"
+  ],
+  "source_only_nouns": [
+    "style"
+  ],
+  "source_prompt": "kitten walks by the window, anime style",
+  "source_uuid": "4bb88932-ed1c-5c34-b439-44f1d0d1f03e",
+  "status": "completed",
+  "target_nouns": [
+    "anime",
+    "boy",
+    "window"
+  ],
+  "target_only_nouns": [
+    "boy"
+  ],
+  "target_prompt": "a boy jumping from window with rat from house anime",
+  "target_uuid": "b6c85aa0-b30d-533a-9984-f816e4cee757",
+  "timing": {
+    "source_dit_forward_s": 109.80235474789515,
+    "source_probe_s": 139.93908493802883,
+    "target_dit_forward_s": 109.80465157725848,
+    "target_probe_s": 139.83575913798995,
+    "total_s": 279.7748440760188
+  }
+}

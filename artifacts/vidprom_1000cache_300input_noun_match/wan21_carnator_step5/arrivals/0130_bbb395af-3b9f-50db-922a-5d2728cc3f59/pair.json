@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 130,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.511131400362074,
+    "context_color_ciede2000": 1.1763258709907998,
+    "log_area_ratio": 0.3301889680383186,
+    "shape_one_minus_dice": 0.45736434108527135
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.511131400362074,
+    "context_color_ciede2000": 1.1763258709907998,
+    "log_area_ratio": 0.3301889680383186,
+    "shape_one_minus_dice": 0.45736434108527135
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 130,
+  "source_nouns": [
+    "kitten",
+    "rat"
+  ],
+  "source_only_nouns": [
+    "rat"
+  ],
+  "source_prompt": "A kitten and a black rat playing together",
+  "source_uuid": "15682704-8c76-5cb6-b745-38b529d4f700",
+  "status": "completed",
+  "target_nouns": [
+    "fox",
+    "kitten"
+  ],
+  "target_only_nouns": [
+    "fox"
+  ],
+  "target_prompt": "Adorable fox licking a kitten",
+  "target_uuid": "bbb395af-3b9f-50db-922a-5d2728cc3f59",
+  "timing": {
+    "source_dit_forward_s": 112.04750587861054,
+    "source_probe_s": 141.81717353779823,
+    "target_dit_forward_s": 112.05874503590167,
+    "target_probe_s": 141.6012976290658,
+    "total_s": 283.41847116686404
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 194,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5184447959480221,
+    "context_color_ciede2000": 1.7711031125989343,
+    "log_area_ratio": 0.279301615382831,
+    "shape_one_minus_dice": 0.40157480314960625
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5184447959480221,
+    "context_color_ciede2000": 1.7711031125989343,
+    "log_area_ratio": 0.279301615382831,
+    "shape_one_minus_dice": 0.40157480314960625
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 194,
+  "source_nouns": [
+    "eagle",
+    "rooster"
+  ],
+  "source_only_nouns": [
+    "rooster"
+  ],
+  "source_prompt": "a rooster fighting a eagle",
+  "source_uuid": "eafc32ba-96f8-5ec4-bd13-6c19a7115b9c",
+  "status": "completed",
+  "target_nouns": [
+    "eagle",
+    "paws"
+  ],
+  "target_only_nouns": [
+    "paws"
+  ],
+  "target_prompt": "eagle flying with chich in paws",
+  "target_uuid": "16b589ec-1054-5396-ab2e-e02cd17d3236",
+  "timing": {
+    "source_dit_forward_s": 112.94754591118544,
+    "source_probe_s": 142.56733217206784,
+    "target_dit_forward_s": 112.95505262399092,
+    "target_probe_s": 142.74079161696136,
+    "total_s": 285.3081237890292
+  }
+}

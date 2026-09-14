@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 182,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6274947208509104,
+    "context_color_ciede2000": 0.27958228310126704,
+    "log_area_ratio": 0.26833129160464064,
+    "shape_one_minus_dice": 0.6503496503496504
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6274947208509104,
+    "context_color_ciede2000": 0.27958228310126704,
+    "log_area_ratio": 0.26833129160464064,
+    "shape_one_minus_dice": 0.6503496503496504
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 182,
+  "source_nouns": [
+    "dancing",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "dancing"
+  ],
+  "source_prompt": "monkey dancing -ar 9:16",
+  "source_uuid": "1c909a36-1e85-5d30-b750-7a36d1f3e5fe",
+  "status": "completed",
+  "target_nouns": [
+    "bitcoin",
+    "monkey"
+  ],
+  "target_only_nouns": [
+    "bitcoin"
+  ],
+  "target_prompt": "a abstract looking monkey holding bitcoin",
+  "target_uuid": "a9f24964-15a4-5943-936a-45867c105142",
+  "timing": {
+    "source_dit_forward_s": 109.80515366746113,
+    "source_probe_s": 139.1538674950134,
+    "target_dit_forward_s": 109.80869307601824,
+    "target_probe_s": 139.00089232809842,
+    "total_s": 278.1547598231118
+  }
+}

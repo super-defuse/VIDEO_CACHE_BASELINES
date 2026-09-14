@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 44,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9028246310582188,
+    "context_color_ciede2000": 0.8998117913632472,
+    "log_area_ratio": 0.6008539892393481,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9028246310582188,
+    "context_color_ciede2000": 0.8998117913632472,
+    "log_area_ratio": 0.6008539892393481,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 44,
+  "source_nouns": [
+    "puppy",
+    "trees"
+  ],
+  "source_only_nouns": [
+    "trees"
+  ],
+  "source_prompt": "little puppy running and climbing trees",
+  "source_uuid": "6fad46d3-c304-5363-b6ed-6f03f6ec8793",
+  "status": "completed",
+  "target_nouns": [
+    "book",
+    "puppy"
+  ],
+  "target_only_nouns": [
+    "book"
+  ],
+  "target_prompt": "small puppy playing with book",
+  "target_uuid": "72310ed8-5c5c-5eb8-991e-8d6055918148",
+  "timing": {
+    "source_dit_forward_s": 112.834062110167,
+    "source_probe_s": 143.0792153510265,
+    "target_dit_forward_s": 112.79610190191306,
+    "target_probe_s": 142.61261808592826,
+    "total_s": 285.69183343695477
+  }
+}

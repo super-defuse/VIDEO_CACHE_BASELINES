@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 183,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5164116660118943,
+    "context_color_ciede2000": 1.445205197252655,
+    "log_area_ratio": 0.8533467953960325,
+    "shape_one_minus_dice": 0.680672268907563
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5164116660118943,
+    "context_color_ciede2000": 1.445205197252655,
+    "log_area_ratio": 0.8533467953960325,
+    "shape_one_minus_dice": 0.680672268907563
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 183,
+  "source_nouns": [
+    "bird",
+    "duck"
+  ],
+  "source_only_nouns": [
+    "bird"
+  ],
+  "source_prompt": "a bird eating a duck",
+  "source_uuid": "ecf52156-c5f1-55c9-a6d5-f033a1045f34",
+  "status": "completed",
+  "target_nouns": [
+    "beach",
+    "duck"
+  ],
+  "target_only_nouns": [
+    "beach"
+  ],
+  "target_prompt": "A little duck in a beach",
+  "target_uuid": "155d3768-ece4-5216-acce-84e987e97fae",
+  "timing": {
+    "source_dit_forward_s": 111.52445581345819,
+    "source_probe_s": 140.96041702199727,
+    "target_dit_forward_s": 111.39565920992754,
+    "target_probe_s": 141.30879141786136,
+    "total_s": 282.26920843985863
+  }
+}

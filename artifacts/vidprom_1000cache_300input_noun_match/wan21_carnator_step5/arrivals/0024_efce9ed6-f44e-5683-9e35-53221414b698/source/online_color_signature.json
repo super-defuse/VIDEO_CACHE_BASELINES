@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "50e7e32a0e7c6820d57efc7f2234301e04ab4142b3190914c2fef95e64f79fb4",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "aeaca8c3a97e6d7a715ace9a474fb1ab09ac4f9a683abbd8599ca25fd1fcdda7"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "89943f342bee7c46b948c97c101697bc1e36fc600f270b5380ec0d22e9550258"
+  },
+  "objects": [
+    {
+      "area_frac": 0.32613635063171387,
+      "centroid_yx": [
+        25.29094123840332,
+        34.24216079711914
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.502445220947266,
+          -2.592818260192871,
+          13.299549102783203
+        ],
+        "mean_rgb": [
+          108.24308776855469,
+          106.70307159423828,
+          83.61729431152344
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 293888
+      },
+      "dtype": "bool",
+      "noun": "amount",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.10284090787172318,
+      "centroid_yx": [
+        19.154695510864258,
+        46.70441818237305
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.027530670166016,
+          -3.1246232986450195,
+          13.869170188903809
+        ],
+        "mean_rgb": [
+          109.0511245727539,
+          108.19796752929688,
+          83.78938293457031
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 92672
+      },
+      "dtype": "bool",
+      "noun": "crow",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.7670454382896423,
+      "centroid_yx": [
+        21.046667098999023,
+        39.741111755371094
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.988155364990234,
+          -3.1277270317077637,
+          13.896286010742188
+        ],
+        "mean_rgb": [
+          108.88285827636719,
+          108.16127014160156,
+          83.75830078125
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 691200
+      },
+      "dtype": "bool",
+      "noun": "pot",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.2798295319080353,
+      "centroid_yx": [
+        29.25482177734375,
+        30.916751861572266
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.61137008666992,
+          -2.582343339920044,
+          13.191476821899414
+        ],
+        "mean_rgb": [
+          108.38602447509766,
+          106.97777557373047,
+          84.07413482666016
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 252160
+      },
+      "dtype": "bool",
+      "noun": "water",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "onec a crow was thirsty. He was looking for water here and there. Suddenly he saw a pot with little amount of water in it.",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

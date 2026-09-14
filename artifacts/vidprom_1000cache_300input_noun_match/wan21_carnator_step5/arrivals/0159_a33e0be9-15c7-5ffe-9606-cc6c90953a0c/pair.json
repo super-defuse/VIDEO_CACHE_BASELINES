@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 159,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1768205767407438,
+    "context_color_ciede2000": 0.7745484200748972,
+    "log_area_ratio": 0.6638767859680542,
+    "shape_one_minus_dice": 0.5873015873015873
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1768205767407438,
+    "context_color_ciede2000": 0.7745484200748972,
+    "log_area_ratio": 0.6638767859680542,
+    "shape_one_minus_dice": 0.5873015873015873
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 159,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "rabbit",
+    "strawberry"
+  ],
+  "target_only_nouns": [
+    "strawberry"
+  ],
+  "target_prompt": "the rabbit eat the strawberry animate",
+  "target_uuid": "a33e0be9-15c7-5ffe-9606-cc6c90953a0c",
+  "timing": {
+    "source_dit_forward_s": 112.9304599291645,
+    "source_probe_s": 142.95696716895327,
+    "target_dit_forward_s": 112.93204770516604,
+    "target_probe_s": 142.91434752801433,
+    "total_s": 285.8713146969676
+  }
+}

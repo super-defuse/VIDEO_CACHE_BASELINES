@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 137,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9651027085898126,
+    "context_color_ciede2000": 0.44598446470763947,
+    "log_area_ratio": 0.43725676529084273,
+    "shape_one_minus_dice": 0.609375
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9651027085898126,
+    "context_color_ciede2000": 0.44598446470763947,
+    "log_area_ratio": 0.43725676529084273,
+    "shape_one_minus_dice": 0.609375
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 137,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "branch",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "branch"
+  ],
+  "target_prompt": "squirrel eating acorn in the branch of a tree",
+  "target_uuid": "0578978f-36fa-500a-a95f-edd7e45f5840",
+  "timing": {
+    "source_dit_forward_s": 109.76865984825417,
+    "source_probe_s": 138.9388831818942,
+    "target_dit_forward_s": 109.81951805460267,
+    "target_probe_s": 139.3617550781928,
+    "total_s": 278.300638260087
+  }
+}

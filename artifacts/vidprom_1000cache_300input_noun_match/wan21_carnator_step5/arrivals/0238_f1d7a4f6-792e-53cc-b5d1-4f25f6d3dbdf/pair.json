@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 238,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8500678305827479,
+    "context_color_ciede2000": 0.8149099778394675,
+    "log_area_ratio": 0.26602564150071867,
+    "shape_one_minus_dice": 0.5939849624060151
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8500678305827479,
+    "context_color_ciede2000": 0.8149099778394675,
+    "log_area_ratio": 0.26602564150071867,
+    "shape_one_minus_dice": 0.5939849624060151
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 238,
+  "source_nouns": [
+    "boat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "mouse"
+  ],
+  "source_prompt": "Mickey mouse dancing on a boat",
+  "source_uuid": "66b8b77b-c24c-5e00-bb97-145fee96f9f8",
+  "status": "completed",
+  "target_nouns": [
+    "boat",
+    "bunny"
+  ],
+  "target_only_nouns": [
+    "bunny"
+  ],
+  "target_prompt": "a bunny jumping on a boat",
+  "target_uuid": "f1d7a4f6-792e-53cc-b5d1-4f25f6d3dbdf",
+  "timing": {
+    "source_dit_forward_s": 111.52647482603788,
+    "source_probe_s": 141.42122612218373,
+    "target_dit_forward_s": 111.46192455058917,
+    "target_probe_s": 141.36689581302926,
+    "total_s": 282.788121935213
+  }
+}

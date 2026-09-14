@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 174,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1577498736115808,
+    "context_color_ciede2000": 0.2855899284927911,
+    "log_area_ratio": 0.1023423511232095,
+    "shape_one_minus_dice": 0.6666666666666667
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1577498736115808,
+    "context_color_ciede2000": 0.2855899284927911,
+    "log_area_ratio": 0.1023423511232095,
+    "shape_one_minus_dice": 0.6666666666666667
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 174,
+  "source_nouns": [
+    "goat",
+    "hill"
+  ],
+  "source_only_nouns": [
+    "hill"
+  ],
+  "source_prompt": "a goat is going to a beautiful hill",
+  "source_uuid": "d024d756-979a-5b21-a89b-0d894ea51d6d",
+  "status": "completed",
+  "target_nouns": [
+    "goat",
+    "grass"
+  ],
+  "target_only_nouns": [
+    "grass"
+  ],
+  "target_prompt": "show a goat chewing grass",
+  "target_uuid": "c83eaf4f-3988-5230-9402-9a89af746c49",
+  "timing": {
+    "source_dit_forward_s": 112.91829513083212,
+    "source_probe_s": 142.55647963797674,
+    "target_dit_forward_s": 112.95482611074112,
+    "target_probe_s": 142.73372070095502,
+    "total_s": 285.29020033893175
+  }
+}

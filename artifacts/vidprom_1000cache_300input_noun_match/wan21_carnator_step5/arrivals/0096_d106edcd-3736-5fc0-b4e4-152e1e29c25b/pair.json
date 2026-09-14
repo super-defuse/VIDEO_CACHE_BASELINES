@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 96,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9747039406880733,
+    "context_color_ciede2000": 2.029635683101994,
+    "log_area_ratio": 0.005710217166224745,
+    "shape_one_minus_dice": 0.7007874015748031
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9747039406880733,
+    "context_color_ciede2000": 2.029635683101994,
+    "log_area_ratio": 0.005710217166224745,
+    "shape_one_minus_dice": 0.7007874015748031
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 96,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "beach",
+    "cat",
+    "dog"
+  ],
+  "target_only_nouns": [
+    "beach"
+  ],
+  "target_prompt": "a dog waiting a cat on beach",
+  "target_uuid": "d106edcd-3736-5fc0-b4e4-152e1e29c25b",
+  "timing": {
+    "source_dit_forward_s": 113.15001688105986,
+    "source_probe_s": 143.74904320994392,
+    "target_dit_forward_s": 113.15101069910452,
+    "target_probe_s": 144.0127704681363,
+    "total_s": 287.7618136780802
+  }
+}

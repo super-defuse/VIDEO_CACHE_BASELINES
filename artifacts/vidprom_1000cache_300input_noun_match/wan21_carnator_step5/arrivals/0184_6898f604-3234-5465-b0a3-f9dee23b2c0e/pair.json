@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 184,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6794216503253205,
+    "context_color_ciede2000": 0.36420765186607235,
+    "log_area_ratio": 0.5436154768033177,
+    "shape_one_minus_dice": 0.5474452554744526
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6794216503253205,
+    "context_color_ciede2000": 0.36420765186607235,
+    "log_area_ratio": 0.5436154768033177,
+    "shape_one_minus_dice": 0.5474452554744526
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 184,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "panda",
+    "person"
+  ],
+  "target_only_nouns": [
+    "person"
+  ],
+  "target_prompt": "A lesser panda is standing up and talking like a person.",
+  "target_uuid": "6898f604-3234-5465-b0a3-f9dee23b2c0e",
+  "timing": {
+    "source_dit_forward_s": 112.98649607249536,
+    "source_probe_s": 142.8899331560824,
+    "target_dit_forward_s": 113.02547674602829,
+    "target_probe_s": 142.773748411797,
+    "total_s": 285.6636815678794
+  }
+}

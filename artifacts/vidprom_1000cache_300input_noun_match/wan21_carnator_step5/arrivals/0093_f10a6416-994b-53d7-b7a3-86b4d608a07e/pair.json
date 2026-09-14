@@ -1,0 +1,55 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000"
+  ],
+  "arrival_index": 93,
+  "comparability": "same_nouns",
+  "distances": {
+    "changed_color_ciede2000": null,
+    "context_color_ciede2000": 0.6371350983624777,
+    "log_area_ratio": null,
+    "shape_one_minus_dice": null
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.0,
+    "context_color_ciede2000": 0.6371350983624777,
+    "log_area_ratio": 0.0,
+    "shape_one_minus_dice": 0.0
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 93,
+  "source_nouns": [
+    "boxing",
+    "cat",
+    "dog",
+    "ring"
+  ],
+  "source_only_nouns": [],
+  "source_prompt": "cinematic, a cat and dog in a boxing ring",
+  "source_uuid": "9a359b1f-e400-55bd-826c-45ecd51a7d2b",
+  "status": "completed",
+  "target_nouns": [
+    "boxing",
+    "cat",
+    "dog",
+    "ring"
+  ],
+  "target_only_nouns": [],
+  "target_prompt": "cinematic, a dog a cat in a boxing ring",
+  "target_uuid": "f10a6416-994b-53d7-b7a3-86b4d608a07e",
+  "timing": {
+    "source_dit_forward_s": 111.40233222907409,
+    "source_probe_s": 142.42284890916198,
+    "target_dit_forward_s": 111.39789118012413,
+    "target_probe_s": 142.4591556438245,
+    "total_s": 284.8820045529865
+  }
+}

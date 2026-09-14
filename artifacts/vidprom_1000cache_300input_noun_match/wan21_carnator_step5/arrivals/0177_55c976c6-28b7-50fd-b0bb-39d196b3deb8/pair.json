@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 177,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1385745642028045,
+    "context_color_ciede2000": 0.7500854958456403,
+    "log_area_ratio": 0.11679926865998655,
+    "shape_one_minus_dice": 0.5373134328358209
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1385745642028045,
+    "context_color_ciede2000": 0.7500854958456403,
+    "log_area_ratio": 0.11679926865998655,
+    "shape_one_minus_dice": 0.5373134328358209
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 177,
+  "source_nouns": [
+    "cow",
+    "cub",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cub"
+  ],
+  "source_prompt": "cow eating grass and its cub rounding cow",
+  "source_uuid": "4ad375c2-2c1b-59b3-bbb5-26c421a7728a",
+  "status": "completed",
+  "target_nouns": [
+    "cow",
+    "fork",
+    "grass"
+  ],
+  "target_only_nouns": [
+    "fork"
+  ],
+  "target_prompt": "A cyber cow eating red grass with a fork",
+  "target_uuid": "55c976c6-28b7-50fd-b0bb-39d196b3deb8",
+  "timing": {
+    "source_dit_forward_s": 109.75731473276392,
+    "source_probe_s": 139.50240783393383,
+    "target_dit_forward_s": 109.81854951893911,
+    "target_probe_s": 139.752228659112,
+    "total_s": 279.25463649304584
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 269,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.28910044263505885,
+    "context_color_ciede2000": 1.3417249832954499,
+    "log_area_ratio": 0.1962743660785321,
+    "shape_one_minus_dice": 0.34306569343065696
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.28910044263505885,
+    "context_color_ciede2000": 1.3417249832954499,
+    "log_area_ratio": 0.1962743660785321,
+    "shape_one_minus_dice": 0.34306569343065696
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 269,
+  "source_nouns": [
+    "-motion",
+    "bear"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "bear being laughing -motion 4",
+  "source_uuid": "191a8155-b123-5575-8487-15bbaee6e4de",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "vegetables"
+  ],
+  "target_only_nouns": [
+    "vegetables"
+  ],
+  "target_prompt": "the falling bear grab the vegetables",
+  "target_uuid": "19ec92e0-3bce-537e-832f-b06ec0d25ebd",
+  "timing": {
+    "source_dit_forward_s": 113.06381893600337,
+    "source_probe_s": 143.0043286329601,
+    "target_dit_forward_s": 113.08519497490488,
+    "target_probe_s": 143.03547459491529,
+    "total_s": 286.0398032278754
+  }
+}

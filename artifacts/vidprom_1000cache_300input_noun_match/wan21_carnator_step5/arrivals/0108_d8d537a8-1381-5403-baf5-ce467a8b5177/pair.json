@@ -1,0 +1,53 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000"
+  ],
+  "arrival_index": 108,
+  "comparability": "same_nouns",
+  "distances": {
+    "changed_color_ciede2000": null,
+    "context_color_ciede2000": 2.2228146481740603,
+    "log_area_ratio": null,
+    "shape_one_minus_dice": null
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.0,
+    "context_color_ciede2000": 2.2228146481740603,
+    "log_area_ratio": 0.0,
+    "shape_one_minus_dice": 0.0
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 108,
+  "source_nouns": [
+    "ball",
+    "cat",
+    "wool"
+  ],
+  "source_only_nouns": [],
+  "source_prompt": "a cat running on a big pink fluffy wool ball",
+  "source_uuid": "a79888ed-c694-5b7d-a6d2-1ff59a8768bb",
+  "status": "completed",
+  "target_nouns": [
+    "ball",
+    "cat",
+    "wool"
+  ],
+  "target_only_nouns": [],
+  "target_prompt": "an orange cat chasing a little wool ball",
+  "target_uuid": "d8d537a8-1381-5403-baf5-ce467a8b5177",
+  "timing": {
+    "source_dit_forward_s": 111.41989824618213,
+    "source_probe_s": 141.19751229602844,
+    "target_dit_forward_s": 111.35530759231187,
+    "target_probe_s": 141.74124063691124,
+    "total_s": 282.9387529329397
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 56,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.880465765534253,
+    "context_color_ciede2000": 0.0,
+    "log_area_ratio": 0.23984541207756657,
+    "shape_one_minus_dice": 0.4307692307692308
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.880465765534253,
+    "context_color_ciede2000": 0.0,
+    "log_area_ratio": 0.23984541207756657,
+    "shape_one_minus_dice": 0.4307692307692308
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 56,
+  "source_nouns": [
+    "chicken"
+  ],
+  "source_only_nouns": [
+    "chicken"
+  ],
+  "source_prompt": "a chicken eating a rotisserie chicken",
+  "source_uuid": "9d9013c0-d18c-5147-8b2b-a7f96775eef8",
+  "status": "completed",
+  "target_nouns": [
+    "elephant"
+  ],
+  "target_only_nouns": [
+    "elephant"
+  ],
+  "target_prompt": "a big elephant and a small elephant",
+  "target_uuid": "ede7dbbd-39df-5a0c-a349-329aba5693e7",
+  "timing": {
+    "source_dit_forward_s": 113.12033781711943,
+    "source_probe_s": 142.32721188711002,
+    "target_dit_forward_s": 113.12051154114306,
+    "target_probe_s": 142.2160935138818,
+    "total_s": 284.5433054009918
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 260,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.127271668034651,
+    "context_color_ciede2000": 1.3860649771853668,
+    "log_area_ratio": 0.18942178903166337,
+    "shape_one_minus_dice": 0.7333333333333334
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.127271668034651,
+    "context_color_ciede2000": 1.3860649771853668,
+    "log_area_ratio": 0.18942178903166337,
+    "shape_one_minus_dice": 0.7333333333333334
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 260,
+  "source_nouns": [
+    "pool",
+    "swimming"
+  ],
+  "source_only_nouns": [
+    "swimming"
+  ],
+  "source_prompt": "hello kitty swimming in a pool",
+  "source_uuid": "a510424a-ce2f-5ab8-8b73-703f34e23cd5",
+  "status": "completed",
+  "target_nouns": [
+    "panda",
+    "pool"
+  ],
+  "target_only_nouns": [
+    "panda"
+  ],
+  "target_prompt": "one panda is swimming in the pool",
+  "target_uuid": "a685107d-db48-5e9d-bdd2-b3c50fa628cf",
+  "timing": {
+    "source_dit_forward_s": 112.22711423225701,
+    "source_probe_s": 142.3553310551215,
+    "target_dit_forward_s": 112.22069738595746,
+    "target_probe_s": 141.8848482288886,
+    "total_s": 284.2401792840101
+  }
+}

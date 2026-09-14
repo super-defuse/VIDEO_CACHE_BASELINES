@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 125,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1457543795377323,
+    "context_color_ciede2000": 1.572123025006726,
+    "log_area_ratio": 0.5841021249230155,
+    "shape_one_minus_dice": 0.7
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1457543795377323,
+    "context_color_ciede2000": 1.572123025006726,
+    "log_area_ratio": 0.5841021249230155,
+    "shape_one_minus_dice": 0.7
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 125,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "television",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "television"
+  ],
+  "target_prompt": "A tiger coming out of a television.",
+  "target_uuid": "6adf0b1a-cbd8-588f-a6f7-268d04ce166a",
+  "timing": {
+    "source_dit_forward_s": 112.01619640318677,
+    "source_probe_s": 141.47589745698497,
+    "target_dit_forward_s": 112.13629741594195,
+    "target_probe_s": 141.84243393107317,
+    "total_s": 283.31833138805814
+  }
+}

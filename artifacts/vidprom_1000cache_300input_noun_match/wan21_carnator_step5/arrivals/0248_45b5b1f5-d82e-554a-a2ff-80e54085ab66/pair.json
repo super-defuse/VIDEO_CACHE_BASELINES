@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 248,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.997449903637896,
+    "context_color_ciede2000": 0.19498324259585292,
+    "log_area_ratio": 0.23854936922800943,
+    "shape_one_minus_dice": 0.4796747967479674
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.997449903637896,
+    "context_color_ciede2000": 0.19498324259585292,
+    "log_area_ratio": 0.23854936922800943,
+    "shape_one_minus_dice": 0.4796747967479674
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 248,
+  "source_nouns": [
+    "bow",
+    "kitty"
+  ],
+  "source_only_nouns": [
+    "kitty"
+  ],
+  "source_prompt": "A kitty with a bow",
+  "source_uuid": "76859598-4d34-57e0-a18f-57d7115deff0",
+  "status": "completed",
+  "target_nouns": [
+    "bow",
+    "kitten"
+  ],
+  "target_only_nouns": [
+    "kitten"
+  ],
+  "target_prompt": "A white kitten with a pink bow.",
+  "target_uuid": "45b5b1f5-d82e-554a-a2ff-80e54085ab66",
+  "timing": {
+    "source_dit_forward_s": 111.4137655296363,
+    "source_probe_s": 140.85214241896756,
+    "target_dit_forward_s": 111.45276784291491,
+    "target_probe_s": 140.94767844188027,
+    "total_s": 281.79982086084783
+  }
+}

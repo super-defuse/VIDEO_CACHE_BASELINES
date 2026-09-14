@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 256,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9594665023763438,
+    "context_color_ciede2000": 0.8571123000736045,
+    "log_area_ratio": 1.031907238611972,
+    "shape_one_minus_dice": 0.5126050420168067
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9594665023763438,
+    "context_color_ciede2000": 0.8571123000736045,
+    "log_area_ratio": 1.031907238611972,
+    "shape_one_minus_dice": 0.5126050420168067
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 256,
+  "source_nouns": [
+    "banana",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog eating a banana",
+  "source_uuid": "5fce7515-50ce-5aa2-9bb4-2309098284ff",
+  "status": "completed",
+  "target_nouns": [
+    "banana",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "tree"
+  ],
+  "target_prompt": "monkey eat banana in tree",
+  "target_uuid": "66197908-d337-5f50-a597-e78228820fd3",
+  "timing": {
+    "source_dit_forward_s": 113.1764674235601,
+    "source_probe_s": 143.10815659188665,
+    "target_dit_forward_s": 113.24454898643307,
+    "target_probe_s": 143.57869823509827,
+    "total_s": 286.6868548269849
+  }
+}

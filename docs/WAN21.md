@@ -85,6 +85,27 @@ baseline 自身作为加速比参照，其 speedup 列恒为 N/A；`cache_miss` 
 | VAE 16 通道 vs 48 通道 | chai delegate 按配置加载，解码路径不变 |
 | utils 只有 `cache_video`（无 `save_video`） | `Wan21Adapter.save_video` 直接用 `cache_video` |
 
+## Step-5 Early Signature 数据集（gate 阈值离线扫描）
+
+正式 300 请求实验里每次命中都要重跑整个 Carnator source（50 步轨迹、融合掩码模板、
+外层路由掩码、source 视频），约需 10 天；但拟合四个 Early Signature gate 只需要第 5 步的
+signature。该数据集因此对每条 arrival 只跑两个 5 步 dense prefix——回放选中的 source prompt
+和 arrival 的 target prompt——并用与正式 source/target 完全相同的
+`wan21_native.run_wan21_target_probe` 采集，因此写出的 signature 与正式实验逐位一致。
+
+```bash
+# 300 条，GPU 3-7 分片，跑完自动 --summarize；可中断续跑
+bash scripts/benchmark/run_wan21_carnator_step5_signatures.sh
+```
+
+产物在 `artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/`：每个
+`arrivals/<arrival>_<uuid>/pair.json` 记录四条 gate 距离与名词替换情况，`quality/` 汇总为
+`step5_pair_distances.{csv,jsonl}` 和 `step5_hit_rate_sweep.csv`。
+
+口径边界：该数据集没有复用 latent、也不产出视频，`cache_ready` 恒为 false，**不能报告真实
+cache hit**；命中/未命中真值仍只由回放文件提供。它给出的是任意阈值元组下的 gate 接受率，
+足以离线重算命中率而不重新生成——这也是它相对 60 对强制复用标定的价值所在。
+
 ## 文件结构
 
 ```
@@ -97,6 +118,7 @@ scripts/benchmark/
   aggregate_vidprom_300_results.py   # --model wan21 聚合
   run_wan21_all_test.sh              # 10 请求测试
   run_wan21_all_formal.sh            # 300 请求正式实验
+  run_wan21_carnator_step5_signatures.{py,sh}  # step-5 signature 数据集（离线 gate 扫描）
 external/Wan2.1/                     # Wan2.1 源码
 models/Wan2.1-T2V-1.3B/              # 权重（VAE/DiT/T5）
 ```

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 68,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1216829798234305,
+    "context_color_ciede2000": 0.2792602963288611,
+    "log_area_ratio": 0.3173872199012287,
+    "shape_one_minus_dice": 0.40740740740740744
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1216829798234305,
+    "context_color_ciede2000": 0.2792602963288611,
+    "log_area_ratio": 0.3173872199012287,
+    "shape_one_minus_dice": 0.40740740740740744
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 68,
+  "source_nouns": [
+    "bed",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "cat walking on a bed",
+  "source_uuid": "9d2c5e94-b2a8-5b4b-abd3-8849984e9bad",
+  "status": "completed",
+  "target_nouns": [
+    "bed",
+    "cats"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "cute cats in the bed",
+  "target_uuid": "de479c45-ddb5-5bcb-aaa3-40dbaf332b36",
+  "timing": {
+    "source_dit_forward_s": 111.35687580751255,
+    "source_probe_s": 141.04805660620332,
+    "target_dit_forward_s": 111.36525202682242,
+    "target_probe_s": 141.0070659208577,
+    "total_s": 282.05512252706103
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 160,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.5171305274666609,
+    "context_color_ciede2000": 0.9280796570291739,
+    "log_area_ratio": 0.016385943195726962,
+    "shape_one_minus_dice": 0.7966101694915254
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.5171305274666609,
+    "context_color_ciede2000": 0.9280796570291739,
+    "log_area_ratio": 0.016385943195726962,
+    "shape_one_minus_dice": 0.7966101694915254
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 160,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "An cat turning into a Lion",
+  "source_uuid": "e438b7e7-d1c8-553a-8c89-7cd1be08bd77",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "head"
+  ],
+  "target_only_nouns": [
+    "head"
+  ],
+  "target_prompt": "A cat moving the head",
+  "target_uuid": "b9450c96-a21b-57a8-bf17-e45db3ba3262",
+  "timing": {
+    "source_dit_forward_s": 112.06914248480462,
+    "source_probe_s": 141.6433327139821,
+    "target_dit_forward_s": 112.06457423535176,
+    "target_probe_s": 141.60666066105478,
+    "total_s": 283.24999337503687
+  }
+}

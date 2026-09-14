@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 131,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9986165057406187,
+    "context_color_ciede2000": 1.0267639117909715,
+    "log_area_ratio": 0.10321538213716451,
+    "shape_one_minus_dice": 0.7183098591549295
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9986165057406187,
+    "context_color_ciede2000": 1.0267639117909715,
+    "log_area_ratio": 0.10321538213716451,
+    "shape_one_minus_dice": 0.7183098591549295
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 131,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "fight"
+  ],
+  "target_only_nouns": [
+    "fight"
+  ],
+  "target_prompt": "big fat dog fight with yellow cat",
+  "target_uuid": "5330d848-7729-55d4-b5c4-d0d431746273",
+  "timing": {
+    "source_dit_forward_s": 113.17650099424645,
+    "source_probe_s": 143.77994469786063,
+    "target_dit_forward_s": 113.22579305130057,
+    "target_probe_s": 143.65238800481893,
+    "total_s": 287.43233270267956
+  }
+}

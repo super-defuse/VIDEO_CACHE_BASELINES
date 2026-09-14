@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 63,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.6840417199121052,
+    "context_color_ciede2000": 0.5534533842931953,
+    "log_area_ratio": 0.13795948637581582,
+    "shape_one_minus_dice": 0.6376811594202898
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.6840417199121052,
+    "context_color_ciede2000": 0.5534533842931953,
+    "log_area_ratio": 0.13795948637581582,
+    "shape_one_minus_dice": 0.6376811594202898
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 63,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "apple",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "apple"
+  ],
+  "target_prompt": "giraffe eating apple from tree . zoom out",
+  "target_uuid": "b25405dd-9cc8-5271-afd9-19930c9eceed",
+  "timing": {
+    "source_dit_forward_s": 111.55333726946265,
+    "source_probe_s": 141.1866411960218,
+    "target_dit_forward_s": 111.53365854430012,
+    "target_probe_s": 141.36892344988883,
+    "total_s": 282.55556464591064
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 67,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7560055439521797,
+    "context_color_ciede2000": 2.2549768289037844,
+    "log_area_ratio": 0.021506184692501325,
+    "shape_one_minus_dice": 0.5492957746478873
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7560055439521797,
+    "context_color_ciede2000": 2.2549768289037844,
+    "log_area_ratio": 0.021506184692501325,
+    "shape_one_minus_dice": 0.5492957746478873
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 67,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "donkey",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "donkey"
+  ],
+  "target_prompt": "donkey sitting on the horse",
+  "target_uuid": "52f795e4-f610-5a05-b8c4-b56be844171a",
+  "timing": {
+    "source_dit_forward_s": 109.74049484031275,
+    "source_probe_s": 138.61789120384492,
+    "target_dit_forward_s": 109.73786550969817,
+    "target_probe_s": 138.85771491378546,
+    "total_s": 277.4756061176304
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 122,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4059360166803056,
+    "context_color_ciede2000": 0.8717292050560415,
+    "log_area_ratio": 0.05001037137007814,
+    "shape_one_minus_dice": 0.37777777777777777
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4059360166803056,
+    "context_color_ciede2000": 0.8717292050560415,
+    "log_area_ratio": 0.05001037137007814,
+    "shape_one_minus_dice": 0.37777777777777777
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 122,
+  "source_nouns": [
+    "birthday",
+    "cake",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "birthday"
+  ],
+  "source_prompt": "a cat making a birthday cake",
+  "source_uuid": "fa79923b-df03-5b23-8a24-6b5fcb83ae3a",
+  "status": "completed",
+  "target_nouns": [
+    "cake",
+    "cat",
+    "lots"
+  ],
+  "target_only_nouns": [
+    "lots"
+  ],
+  "target_prompt": "cat eating lots of cake",
+  "target_uuid": "3fb62a80-f098-5a30-abdd-a1089d93f6f3",
+  "timing": {
+    "source_dit_forward_s": 109.77842175820842,
+    "source_probe_s": 139.5767820919864,
+    "target_dit_forward_s": 109.77229931787588,
+    "target_probe_s": 139.88635932118632,
+    "total_s": 279.4631414131727
+  }
+}

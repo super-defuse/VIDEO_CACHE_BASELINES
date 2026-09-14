@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 12,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.2846586482102729,
+    "context_color_ciede2000": 0.29783067416156067,
+    "log_area_ratio": 0.3668273515478418,
+    "shape_one_minus_dice": 0.25984251968503935
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.2846586482102729,
+    "context_color_ciede2000": 0.29783067416156067,
+    "log_area_ratio": 0.3668273515478418,
+    "shape_one_minus_dice": 0.25984251968503935
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 12,
+  "source_nouns": [
+    "dog",
+    "legs"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "red dog with seven legs realistic",
+  "source_uuid": "02ca2a6e-8624-53f6-a0db-259e0b7f963e",
+  "status": "completed",
+  "target_nouns": [
+    "legs",
+    "poodle"
+  ],
+  "target_only_nouns": [
+    "poodle"
+  ],
+  "target_prompt": "long poodle with 1000 legs",
+  "target_uuid": "f54429d8-1024-5c5f-a8f0-b9cc3558069d",
+  "timing": {
+    "source_dit_forward_s": 109.62667502230033,
+    "source_probe_s": 138.6005727990996,
+    "target_dit_forward_s": 109.65776751399972,
+    "target_probe_s": 138.79102433403023,
+    "total_s": 277.39159713312984
+  }
+}

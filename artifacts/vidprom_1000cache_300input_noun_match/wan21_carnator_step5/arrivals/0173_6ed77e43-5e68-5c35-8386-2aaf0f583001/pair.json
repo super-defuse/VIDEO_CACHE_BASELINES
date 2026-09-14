@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 173,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.25221636705319417,
+    "context_color_ciede2000": 0.7849904605437658,
+    "log_area_ratio": 0.14129007391263917,
+    "shape_one_minus_dice": 0.712
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.25221636705319417,
+    "context_color_ciede2000": 0.7849904605437658,
+    "log_area_ratio": 0.14129007391263917,
+    "shape_one_minus_dice": 0.712
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 173,
+  "source_nouns": [
+    "cat",
+    "dragon"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "dragon flying and eating a cat",
+  "source_uuid": "8e36a373-d7c2-5fab-81fc-aeedc3e43865",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "dragon"
+  ],
+  "target_only_nouns": [
+    "baby"
+  ],
+  "target_prompt": "A happy Chinese baby dragon",
+  "target_uuid": "6ed77e43-5e68-5c35-8386-2aaf0f583001",
+  "timing": {
+    "source_dit_forward_s": 111.3896142502781,
+    "source_probe_s": 140.85992308100685,
+    "target_dit_forward_s": 111.41796415299177,
+    "target_probe_s": 140.8427180738654,
+    "total_s": 281.70264115487225
+  }
+}

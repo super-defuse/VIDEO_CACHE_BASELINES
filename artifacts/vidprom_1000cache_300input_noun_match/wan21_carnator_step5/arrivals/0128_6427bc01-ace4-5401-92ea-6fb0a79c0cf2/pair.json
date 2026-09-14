@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 128,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.2361179568594296,
+    "context_color_ciede2000": 1.4174202252096435,
+    "log_area_ratio": 0.8547178127951023,
+    "shape_one_minus_dice": 0.5806451612903225
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.2361179568594296,
+    "context_color_ciede2000": 1.4174202252096435,
+    "log_area_ratio": 0.8547178127951023,
+    "shape_one_minus_dice": 0.5806451612903225
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 128,
+  "source_nouns": [
+    "cat",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a monkey cat is running",
+  "source_uuid": "3521434a-b244-5080-a666-48b79ac7fee1",
+  "status": "completed",
+  "target_nouns": [
+    "monkey",
+    "r1"
+  ],
+  "target_only_nouns": [
+    "r1"
+  ],
+  "target_prompt": "a monkey riding a yamaha r1",
+  "target_uuid": "6427bc01-ace4-5401-92ea-6fb0a79c0cf2",
+  "timing": {
+    "source_dit_forward_s": 111.35515573085286,
+    "source_probe_s": 141.00373403797857,
+    "target_dit_forward_s": 111.35701007256284,
+    "target_probe_s": 140.91519024781883,
+    "total_s": 281.9189242857974
+  }
+}

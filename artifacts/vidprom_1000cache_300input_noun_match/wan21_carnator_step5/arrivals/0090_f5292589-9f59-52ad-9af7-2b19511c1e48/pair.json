@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 90,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1525756503786517,
+    "context_color_ciede2000": 4.2594184835940245,
+    "log_area_ratio": 0.3860068220498046,
+    "shape_one_minus_dice": 0.7315436241610738
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1525756503786517,
+    "context_color_ciede2000": 4.2594184835940245,
+    "log_area_ratio": 0.3860068220498046,
+    "shape_one_minus_dice": 0.7315436241610738
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 90,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "horse",
+    "seashore"
+  ],
+  "target_only_nouns": [
+    "seashore"
+  ],
+  "target_prompt": "A white horse running on the seashore",
+  "target_uuid": "f5292589-9f59-52ad-9af7-2b19511c1e48",
+  "timing": {
+    "source_dit_forward_s": 111.93167618103325,
+    "source_probe_s": 141.37769418093376,
+    "target_dit_forward_s": 111.96269452851266,
+    "target_probe_s": 141.50334596191533,
+    "total_s": 282.8810401428491
+  }
+}

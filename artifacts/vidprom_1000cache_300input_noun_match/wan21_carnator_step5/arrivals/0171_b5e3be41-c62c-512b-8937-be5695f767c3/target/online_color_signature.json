@@ -1,0 +1,123 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "5bdbf4c1390d941ba2da895942d2fccadf636309f6c0b8de2955f635d28e9aed",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "9d827d5aadeb3c7a1d6a47fb1dc854bdc9d658648b1bc8e55ad462e0217eb33a"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "d625e3d52af0ab4c584d69ea800ba22ded0cfb0b1a861e3d9cb41df01c7a9ba5"
+  },
+  "objects": [
+    {
+      "area_frac": 0.17443181574344635,
+      "centroid_yx": [
+        25.22638511657715,
+        41.77198791503906
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          43.68922805786133,
+          -2.366809844970703,
+          13.424361228942871
+        ],
+        "mean_rgb": [
+          106.625,
+          104.53009796142578,
+          81.38056945800781
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 157184
+      },
+      "dtype": "bool",
+      "noun": "monkey",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.5463067889213562,
+      "centroid_yx": [
+        17.459178924560547,
+        39.49142074584961
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.1176872253418,
+          -3.534029006958008,
+          14.33586311340332
+        ],
+        "mean_rgb": [
+          108.7647933959961,
+          108.68086242675781,
+          83.30182647705078
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 492288
+      },
+      "dtype": "bool",
+      "noun": "vines",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    }
+  ],
+  "prompt": "Introduce Momo, the mischievous monkey, swinging playfully from vines and giggling.",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

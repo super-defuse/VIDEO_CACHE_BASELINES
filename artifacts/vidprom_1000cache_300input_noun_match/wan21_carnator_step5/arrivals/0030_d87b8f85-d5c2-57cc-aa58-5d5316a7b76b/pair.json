@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 30,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.3705160833906638,
+    "context_color_ciede2000": 1.285425365633245,
+    "log_area_ratio": 0.6573249313176084,
+    "shape_one_minus_dice": 0.5125
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.3705160833906638,
+    "context_color_ciede2000": 1.285425365633245,
+    "log_area_ratio": 0.6573249313176084,
+    "shape_one_minus_dice": 0.5125
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 30,
+  "source_nouns": [
+    "fox",
+    "mansion"
+  ],
+  "source_only_nouns": [
+    "mansion"
+  ],
+  "source_prompt": "raven and a fox walking though the mansion",
+  "source_uuid": "f574078d-edfb-594f-820c-6a8ff74b3cf3",
+  "status": "completed",
+  "target_nouns": [
+    "fox",
+    "video"
+  ],
+  "target_only_nouns": [
+    "video"
+  ],
+  "target_prompt": "Make a video in which only one fox is visible and it was sitting hungry",
+  "target_uuid": "d87b8f85-d5c2-57cc-aa58-5d5316a7b76b",
+  "timing": {
+    "source_dit_forward_s": 111.94319119025022,
+    "source_probe_s": 141.8532893289812,
+    "target_dit_forward_s": 111.89056393597275,
+    "target_probe_s": 141.637316289125,
+    "total_s": 283.4906056181062
+  }
+}

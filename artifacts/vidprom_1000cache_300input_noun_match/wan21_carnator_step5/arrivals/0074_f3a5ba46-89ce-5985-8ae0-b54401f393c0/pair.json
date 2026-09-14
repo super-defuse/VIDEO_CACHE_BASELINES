@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 74,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1109159158989648,
+    "context_color_ciede2000": 0.6389080756044316,
+    "log_area_ratio": 0.8084464016320003,
+    "shape_one_minus_dice": 0.6721311475409837
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1109159158989648,
+    "context_color_ciede2000": 0.6389080756044316,
+    "log_area_ratio": 0.8084464016320003,
+    "shape_one_minus_dice": 0.6721311475409837
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 74,
+  "source_nouns": [
+    "buffalo",
+    "dogs"
+  ],
+  "source_only_nouns": [
+    "buffalo"
+  ],
+  "source_prompt": "German Shepherd dogs chasing a buffalo",
+  "source_uuid": "1927090a-e650-5858-8c30-7d1e6e41c3cc",
+  "status": "completed",
+  "target_nouns": [
+    "dogs",
+    "peasants"
+  ],
+  "target_only_nouns": [
+    "peasants"
+  ],
+  "target_prompt": "Peruvian peasants with their shepherd dogs",
+  "target_uuid": "f3a5ba46-89ce-5985-8ae0-b54401f393c0",
+  "timing": {
+    "source_dit_forward_s": 112.79599315742962,
+    "source_probe_s": 142.60413531190716,
+    "target_dit_forward_s": 112.87284823670052,
+    "target_probe_s": 142.85452686203644,
+    "total_s": 285.4586621739436
+  }
+}

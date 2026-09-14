@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 186,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5726513371091413,
+    "context_color_ciede2000": 0.9494844070524026,
+    "log_area_ratio": 0.64811585702503,
+    "shape_one_minus_dice": 0.5714285714285714
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5726513371091413,
+    "context_color_ciede2000": 0.9494844070524026,
+    "log_area_ratio": 0.64811585702503,
+    "shape_one_minus_dice": 0.5714285714285714
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 186,
+  "source_nouns": [
+    "cat",
+    "toy",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "toy"
+  ],
+  "source_prompt": "A beautiful cat is watching a Christmas tree toy on a Christmas tree",
+  "source_uuid": "2c939624-85cf-5da5-ae13-fb7d3228e3f2",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dance",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "dance"
+  ],
+  "target_prompt": "cat and rabit dance under tree",
+  "target_uuid": "c78fb6d5-f44b-5f43-933b-7adf858b04d3",
+  "timing": {
+    "source_dit_forward_s": 113.18519376730546,
+    "source_probe_s": 143.5467069139704,
+    "target_dit_forward_s": 113.17451153602451,
+    "target_probe_s": 144.0917577398941,
+    "total_s": 287.6384646538645
+  }
+}

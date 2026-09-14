@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 188,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7692268051464833,
+    "context_color_ciede2000": 0.5256996936054913,
+    "log_area_ratio": 1.2939210628853828,
+    "shape_one_minus_dice": 0.6031746031746033
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7692268051464833,
+    "context_color_ciede2000": 0.5256996936054913,
+    "log_area_ratio": 1.2939210628853828,
+    "shape_one_minus_dice": 0.6031746031746033
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 188,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cute little cat running on the grass",
+  "source_uuid": "ae0b87e5-4a64-51a6-adb2-b7c6b200dd99",
+  "status": "completed",
+  "target_nouns": [
+    "bunny",
+    "grass"
+  ],
+  "target_only_nouns": [
+    "bunny"
+  ],
+  "target_prompt": "A cute little bunny is jumping happily on the grass",
+  "target_uuid": "d4d509e0-203b-54f3-a88f-20da126e49ad",
+  "timing": {
+    "source_dit_forward_s": 111.37346884189174,
+    "source_probe_s": 141.04612825694494,
+    "target_dit_forward_s": 111.53249634173699,
+    "target_probe_s": 141.5520803348627,
+    "total_s": 282.59820859180763
+  }
+}

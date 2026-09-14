@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 163,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8278692942419559,
+    "context_color_ciede2000": 1.2301778799214642,
+    "log_area_ratio": 0.10470508339095179,
+    "shape_one_minus_dice": 0.359375
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8278692942419559,
+    "context_color_ciede2000": 1.2301778799214642,
+    "log_area_ratio": 0.10470508339095179,
+    "shape_one_minus_dice": 0.359375
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 163,
+  "source_nouns": [
+    "cat",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a monkey cat is running",
+  "source_uuid": "3521434a-b244-5080-a666-48b79ac7fee1",
+  "status": "completed",
+  "target_nouns": [
+    "monkey",
+    "screen"
+  ],
+  "target_only_nouns": [
+    "screen"
+  ],
+  "target_prompt": "a monkey coming out of the screen",
+  "target_uuid": "16dbf8fd-5195-508f-9ab4-c8de5f7a9758",
+  "timing": {
+    "source_dit_forward_s": 111.37505052192137,
+    "source_probe_s": 141.05193586903624,
+    "target_dit_forward_s": 111.38217689632438,
+    "target_probe_s": 141.3163278179709,
+    "total_s": 282.36826368700713
+  }
+}

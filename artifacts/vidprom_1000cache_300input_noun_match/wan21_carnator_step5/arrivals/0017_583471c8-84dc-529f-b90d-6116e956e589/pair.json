@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 17,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.46360121953915157,
+    "context_color_ciede2000": 1.3200961553556512,
+    "log_area_ratio": 0.01414174229680497,
+    "shape_one_minus_dice": 0.835820895522388
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.46360121953915157,
+    "context_color_ciede2000": 1.3200961553556512,
+    "log_area_ratio": 0.01414174229680497,
+    "shape_one_minus_dice": 0.835820895522388
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 17,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "moving",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "moving"
+  ],
+  "target_prompt": "fast moving tiger and lamborghini",
+  "target_uuid": "583471c8-84dc-529f-b90d-6116e956e589",
+  "timing": {
+    "source_dit_forward_s": 109.63805611198768,
+    "source_probe_s": 138.51797793991864,
+    "target_dit_forward_s": 109.6540746469982,
+    "target_probe_s": 139.00824297894724,
+    "total_s": 277.5262209188659
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 121,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.2887746830659026,
+    "context_color_ciede2000": 1.087072290857211,
+    "log_area_ratio": 0.3304902005473259,
+    "shape_one_minus_dice": 0.5873015873015873
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.2887746830659026,
+    "context_color_ciede2000": 1.087072290857211,
+    "log_area_ratio": 0.3304902005473259,
+    "shape_one_minus_dice": 0.5873015873015873
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 121,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "goat",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "goat"
+  ],
+  "target_prompt": "a little goat dancing in the snow",
+  "target_uuid": "2557673f-ac66-54fd-9daa-69a373372ef6",
+  "timing": {
+    "source_dit_forward_s": 113.15006301319227,
+    "source_probe_s": 143.3526450728532,
+    "target_dit_forward_s": 113.22221560846083,
+    "target_probe_s": 143.1579165859148,
+    "total_s": 286.510561658768
+  }
+}

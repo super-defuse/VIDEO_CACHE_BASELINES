@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 210,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.2372135411221217,
+    "context_color_ciede2000": 1.4411556857544137,
+    "log_area_ratio": 1.3615610546198014,
+    "shape_one_minus_dice": 0.6507936507936508
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.2372135411221217,
+    "context_color_ciede2000": 1.4411556857544137,
+    "log_area_ratio": 1.3615610546198014,
+    "shape_one_minus_dice": 0.6507936507936508
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 210,
+  "source_nouns": [
+    "dog",
+    "duck"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog and a duck",
+  "source_uuid": "de7ee833-65f5-56ee-9e92-2b06a6083cdd",
+  "status": "completed",
+  "target_nouns": [
+    "background",
+    "duck"
+  ],
+  "target_only_nouns": [
+    "background"
+  ],
+  "target_prompt": "he dance with Donald duck on yellow and green background,",
+  "target_uuid": "f526f541-36f3-51d8-a467-ea2c8962a93f",
+  "timing": {
+    "source_dit_forward_s": 112.2395389880985,
+    "source_probe_s": 141.95434958511032,
+    "target_dit_forward_s": 112.19795908825472,
+    "target_probe_s": 142.40111434599385,
+    "total_s": 284.35546393110417
+  }
+}

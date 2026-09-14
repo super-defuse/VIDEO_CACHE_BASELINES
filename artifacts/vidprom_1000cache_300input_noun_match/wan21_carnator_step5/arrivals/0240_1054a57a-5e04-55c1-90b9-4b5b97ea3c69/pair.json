@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 240,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.38412359406292035,
+    "context_color_ciede2000": 0.18005193583583673,
+    "log_area_ratio": 0.01729771191530862,
+    "shape_one_minus_dice": 0.5538461538461539
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.38412359406292035,
+    "context_color_ciede2000": 0.18005193583583673,
+    "log_area_ratio": 0.01729771191530862,
+    "shape_one_minus_dice": 0.5538461538461539
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 240,
+  "source_nouns": [
+    "cats",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "two cats were playing, one dog seeing",
+  "source_uuid": "85036a8f-a324-5929-b50c-3b885c0ce848",
+  "status": "completed",
+  "target_nouns": [
+    "can",
+    "cats"
+  ],
+  "target_only_nouns": [
+    "can"
+  ],
+  "target_prompt": "three cats fighting for an can",
+  "target_uuid": "1054a57a-5e04-55c1-90b9-4b5b97ea3c69",
+  "timing": {
+    "source_dit_forward_s": 112.20190389850177,
+    "source_probe_s": 141.93605342297815,
+    "target_dit_forward_s": 112.2215808541514,
+    "target_probe_s": 141.98874709708616,
+    "total_s": 283.9248005200643
+  }
+}

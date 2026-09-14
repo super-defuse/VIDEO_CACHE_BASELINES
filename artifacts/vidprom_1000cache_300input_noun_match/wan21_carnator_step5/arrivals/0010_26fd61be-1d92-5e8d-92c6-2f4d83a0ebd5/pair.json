@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 10,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.6337077054306781,
+    "context_color_ciede2000": 0.6397641500229733,
+    "log_area_ratio": 1.0611428364774709,
+    "shape_one_minus_dice": 0.5
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.6337077054306781,
+    "context_color_ciede2000": 0.6397641500229733,
+    "log_area_ratio": 1.0611428364774709,
+    "shape_one_minus_dice": 0.5
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 10,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "tiger"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "human",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "human"
+  ],
+  "target_prompt": "a human is trying to talk to an lion",
+  "target_uuid": "26fd61be-1d92-5e8d-92c6-2f4d83a0ebd5",
+  "timing": {
+    "source_dit_forward_s": 111.78550910088234,
+    "source_probe_s": 141.2405995700974,
+    "target_dit_forward_s": 111.85677331802435,
+    "target_probe_s": 141.63447227794677,
+    "total_s": 282.8750718480442
+  }
+}

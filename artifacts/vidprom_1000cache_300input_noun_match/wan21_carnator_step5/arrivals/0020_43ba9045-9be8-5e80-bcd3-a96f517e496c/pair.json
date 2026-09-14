@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 20,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7168707576749932,
+    "context_color_ciede2000": 1.3320952049715407,
+    "log_area_ratio": 0.5238676335431347,
+    "shape_one_minus_dice": 0.6451612903225806
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7168707576749932,
+    "context_color_ciede2000": 1.3320952049715407,
+    "log_area_ratio": 0.5238676335431347,
+    "shape_one_minus_dice": 0.6451612903225806
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 20,
+  "source_nouns": [
+    "bird",
+    "duck"
+  ],
+  "source_only_nouns": [
+    "bird"
+  ],
+  "source_prompt": "a bird eating a duck",
+  "source_uuid": "ecf52156-c5f1-55c9-a6d5-f033a1045f34",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "duck"
+  ],
+  "target_only_nouns": [
+    "baby"
+  ],
+  "target_prompt": "A cute baby duck is jumping and singing",
+  "target_uuid": "43ba9045-9be8-5e80-bcd3-a96f517e496c",
+  "timing": {
+    "source_dit_forward_s": 111.87153616873547,
+    "source_probe_s": 141.50153185101226,
+    "target_dit_forward_s": 111.90316207357682,
+    "target_probe_s": 141.76320459414274,
+    "total_s": 283.264736445155
+  }
+}

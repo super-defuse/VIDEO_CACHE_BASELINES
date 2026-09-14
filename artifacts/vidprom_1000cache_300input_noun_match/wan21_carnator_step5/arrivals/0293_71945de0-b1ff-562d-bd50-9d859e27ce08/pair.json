@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 293,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.46334579829148126,
+    "context_color_ciede2000": 0.37763735297174295,
+    "log_area_ratio": 0.049338747389390994,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.46334579829148126,
+    "context_color_ciede2000": 0.37763735297174295,
+    "log_area_ratio": 0.049338747389390994,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 293,
+  "source_nouns": [
+    "camels",
+    "desert"
+  ],
+  "source_only_nouns": [
+    "camels"
+  ],
+  "source_prompt": "camels walking in the desert",
+  "source_uuid": "059f7ea8-3d60-5d26-903f-5c5f7a0e76ee",
+  "status": "completed",
+  "target_nouns": [
+    "camel",
+    "desert"
+  ],
+  "target_only_nouns": [
+    "camel"
+  ],
+  "target_prompt": "camel running in the desert",
+  "target_uuid": "71945de0-b1ff-562d-bd50-9d859e27ce08",
+  "timing": {
+    "source_dit_forward_s": 111.54824680252932,
+    "source_probe_s": 141.43249926017597,
+    "target_dit_forward_s": 111.45585193810984,
+    "target_probe_s": 141.5309661598876,
+    "total_s": 282.9634654200636
+  }
+}

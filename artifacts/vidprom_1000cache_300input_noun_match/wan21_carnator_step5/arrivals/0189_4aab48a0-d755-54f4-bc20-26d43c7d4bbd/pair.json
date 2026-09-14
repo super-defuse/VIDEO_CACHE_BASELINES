@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 189,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.399335625958525,
+    "context_color_ciede2000": 0.44081293357893014,
+    "log_area_ratio": 0.2737099630162988,
+    "shape_one_minus_dice": 0.7377049180327868
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.399335625958525,
+    "context_color_ciede2000": 0.44081293357893014,
+    "log_area_ratio": 0.2737099630162988,
+    "shape_one_minus_dice": 0.7377049180327868
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 189,
+  "source_nouns": [
+    "clouds",
+    "sea"
+  ],
+  "source_only_nouns": [
+    "sea"
+  ],
+  "source_prompt": "Dog running in the sea of clouds",
+  "source_uuid": "5efcde65-6b3a-54d8-9fb8-c77c1401effd",
+  "status": "completed",
+  "target_nouns": [
+    "clouds",
+    "fox"
+  ],
+  "target_only_nouns": [
+    "fox"
+  ],
+  "target_prompt": "a fox jumping inside the clouds",
+  "target_uuid": "4aab48a0-d755-54f4-bc20-26d43c7d4bbd",
+  "timing": {
+    "source_dit_forward_s": 112.95978091610596,
+    "source_probe_s": 142.95426331204362,
+    "target_dit_forward_s": 112.95160466642119,
+    "target_probe_s": 142.88997892220505,
+    "total_s": 285.84424223424867
+  }
+}

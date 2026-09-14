@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "8c1cc884674506ba1fc0cc203bd1b9e88653468e41729feb601f0f5941733ddb",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "3359f490763e7ccbbe9e739d197ae4111ee6fdc2c5514cb889fbc2be2234044c"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "c37c469d39ee79ceb2da95c1900e36da2c30e15f90fe4ed858c248422709b0ed"
+  },
+  "objects": [
+    {
+      "area_frac": 0.2193181812763214,
+      "centroid_yx": [
+        17.626943588256836,
+        32.67875671386719
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.29275131225586,
+          -2.896352529525757,
+          13.392144203186035
+        ],
+        "mean_rgb": [
+          107.23028564453125,
+          106.40216064453125,
+          83.0206069946289
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 197632
+      },
+      "dtype": "bool",
+      "noun": "cat",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.412215918302536,
+      "centroid_yx": [
+        22.110958099365234,
+        38.23776626586914
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.120609283447266,
+          -2.5910086631774902,
+          12.959765434265137
+        ],
+        "mean_rgb": [
+          107.0367202758789,
+          105.80281829833984,
+          83.32769775390625
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 371456
+      },
+      "dtype": "bool",
+      "noun": "eyes",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.2289772778749466,
+      "centroid_yx": [
+        17.820098876953125,
+        28.471464157104492
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.438880920410156,
+          -2.3543474674224854,
+          12.796937942504883
+        ],
+        "mean_rgb": [
+          108.0749282836914,
+          106.48993682861328,
+          84.46682739257812
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 206336
+      },
+      "dtype": "bool",
+      "noun": "fur",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.2857954502105713,
+      "centroid_yx": [
+        18.492048263549805,
+        37.24453353881836
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.93171691894531,
+          -2.771757125854492,
+          13.290572166442871
+        ],
+        "mean_rgb": [
+          108.97843933105469,
+          107.89032745361328,
+          84.72008514404297
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 257536
+      },
+      "dtype": "bool",
+      "noun": "up",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "black cat, realistic, beautiful, not very lush fur, opens and closes eyes, face close-up",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

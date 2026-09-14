@@ -1,0 +1,37 @@
+{
+  "created_at": "2026-09-13T11:47:58+00:00",
+  "git_revision": "648734a987a51f4cebc10a2cc4fba888895fb015",
+  "gpus": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "input": "/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_random300_input.csv",
+  "input_sha256": "345538f1e7bfb0988b40747150694246b11daaa74f78b8d803fa67f494283e9b",
+  "limit": 300,
+  "method": "carnator_boundary_b5",
+  "model": "Wan2.1-T2V-1.3B",
+  "phase": "all",
+  "probe_contract": {
+    "capture": "carnator.adapters.wan21_native.run_wan21_target_probe",
+    "completed_step": 5,
+    "seed": "the fixed experiment seed for both sides, matching the formal source and the formal target probe",
+    "skipped": [
+      "50-step source trajectory",
+      "fusion mask template",
+      "outer routing masks",
+      "40-step target reuse",
+      "videos"
+    ],
+    "total_steps": 50
+  },
+  "purpose": "collect step-5 Early Signatures only, so the four gate thresholds can be swept offline without the 50-step source or the 40-step reuse",
+  "replay_policy": "the legacy decision file still owns hit/miss and the source UUID; every arrival in it is a hit, so this dataset reports gate acceptance only",
+  "replay_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_replay",
+  "replay_sha256": "d30916fd17f6b7895500b15d4bdfc9b5355ef569f1472fb104e04dae3f29615a",
+  "resume": true,
+  "schema_version": "wan21-carnator-step5-signatures/v1",
+  "source_view": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vidprom_1000cache_300input_noun_match/source_view"
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 226,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.378561873190138,
+    "context_color_ciede2000": 1.4209848435594445,
+    "log_area_ratio": 0.60480776597282,
+    "shape_one_minus_dice": 0.4193548387096774
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.378561873190138,
+    "context_color_ciede2000": 1.4209848435594445,
+    "log_area_ratio": 0.60480776597282,
+    "shape_one_minus_dice": 0.4193548387096774
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 226,
+  "source_nouns": [
+    "animal",
+    "walking"
+  ],
+  "source_only_nouns": [
+    "walking"
+  ],
+  "source_prompt": "a cute animal walking and jumping",
+  "source_uuid": "2c837715-8ddb-5915-8d1d-19246b51a06c",
+  "status": "completed",
+  "target_nouns": [
+    "animal",
+    "fox"
+  ],
+  "target_only_nouns": [
+    "fox"
+  ],
+  "target_prompt": "Create a young fox for a curious animal",
+  "target_uuid": "3afc859d-fc86-53d0-bcd1-fde3137097c3",
+  "timing": {
+    "source_dit_forward_s": 113.12344976281747,
+    "source_probe_s": 143.13621862302534,
+    "target_dit_forward_s": 113.16113222320564,
+    "target_probe_s": 142.93676149798557,
+    "total_s": 286.0729801210109
+  }
+}

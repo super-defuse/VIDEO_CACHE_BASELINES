@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 250,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6920355402380993,
+    "context_color_ciede2000": 1.1077198075927834,
+    "log_area_ratio": 0.8171998848984131,
+    "shape_one_minus_dice": 0.5
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6920355402380993,
+    "context_color_ciede2000": 1.1077198075927834,
+    "log_area_ratio": 0.8171998848984131,
+    "shape_one_minus_dice": 0.5
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 250,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "girl"
+  ],
+  "target_only_nouns": [
+    "girl"
+  ],
+  "target_prompt": "An elephant walking with a cute girl, ultra realistic",
+  "target_uuid": "f6d514b7-e25b-548e-802b-fcf19a2d2bae",
+  "timing": {
+    "source_dit_forward_s": 112.18009997229092,
+    "source_probe_s": 141.80083418590948,
+    "target_dit_forward_s": 112.2211314078886,
+    "target_probe_s": 142.32679529907182,
+    "total_s": 284.1276294849813
+  }
+}

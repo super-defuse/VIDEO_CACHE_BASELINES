@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 234,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.39305327648624766,
+    "context_color_ciede2000": 0.7336149590079379,
+    "log_area_ratio": 0.4640667900786058,
+    "shape_one_minus_dice": 0.453125
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.39305327648624766,
+    "context_color_ciede2000": 0.7336149590079379,
+    "log_area_ratio": 0.4640667900786058,
+    "shape_one_minus_dice": 0.453125
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 234,
+  "source_nouns": [
+    "dog",
+    "robot"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a robot and a dog",
+  "source_uuid": "792d78a5-2dfa-5eea-8c34-04c1de09e5f3",
+  "status": "completed",
+  "target_nouns": [
+    "chicken",
+    "robot"
+  ],
+  "target_only_nouns": [
+    "chicken"
+  ],
+  "target_prompt": "a robot eating a chicken",
+  "target_uuid": "9517823c-51a8-5796-86ca-1a1574f6ba33",
+  "timing": {
+    "source_dit_forward_s": 113.04072313685901,
+    "source_probe_s": 142.62804643600248,
+    "target_dit_forward_s": 113.0540029075928,
+    "target_probe_s": 142.71832369081676,
+    "total_s": 285.34637012681924
+  }
+}

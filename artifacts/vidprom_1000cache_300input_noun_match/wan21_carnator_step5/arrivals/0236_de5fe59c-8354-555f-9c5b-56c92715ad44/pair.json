@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 236,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7582129621421785,
+    "context_color_ciede2000": 0.8263253816793567,
+    "log_area_ratio": 0.3238493012429049,
+    "shape_one_minus_dice": 0.6440677966101696
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7582129621421785,
+    "context_color_ciede2000": 0.8263253816793567,
+    "log_area_ratio": 0.3238493012429049,
+    "shape_one_minus_dice": 0.6440677966101696
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 236,
+  "source_nouns": [
+    "desert",
+    "horses"
+  ],
+  "source_only_nouns": [
+    "horses"
+  ],
+  "source_prompt": "2 horses running in the desert",
+  "source_uuid": "2cfcd821-fe72-556a-9048-64e4f2cc163d",
+  "status": "completed",
+  "target_nouns": [
+    "desert",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "a black Arabian horse galloping through the Sahara desert",
+  "target_uuid": "de5fe59c-8354-555f-9c5b-56c92715ad44",
+  "timing": {
+    "source_dit_forward_s": 113.11222797492519,
+    "source_probe_s": 143.29127285000868,
+    "target_dit_forward_s": 113.13136554625817,
+    "target_probe_s": 143.43701955094002,
+    "total_s": 286.7282924009487
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 195,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6836098328582254,
+    "context_color_ciede2000": 0.3717973775479716,
+    "log_area_ratio": 0.20318672725946202,
+    "shape_one_minus_dice": 0.5703703703703704
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6836098328582254,
+    "context_color_ciede2000": 0.3717973775479716,
+    "log_area_ratio": 0.20318672725946202,
+    "shape_one_minus_dice": 0.5703703703703704
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 195,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "pig",
+    "style"
+  ],
+  "target_only_nouns": [
+    "style"
+  ],
+  "target_prompt": "a pig in a tuxedo ,photorealistic style",
+  "target_uuid": "1c74662c-3371-5a60-97c0-aa37433035fa",
+  "timing": {
+    "source_dit_forward_s": 112.10471151699312,
+    "source_probe_s": 141.67593282298185,
+    "target_dit_forward_s": 112.2215368906036,
+    "target_probe_s": 141.72186379111372,
+    "total_s": 283.39779661409557
+  }
+}

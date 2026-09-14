@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 162,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6505401568158315,
+    "context_color_ciede2000": 1.5276646189545904,
+    "log_area_ratio": 0.1805050275983632,
+    "shape_one_minus_dice": 0.6842105263157895
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6505401568158315,
+    "context_color_ciede2000": 1.5276646189545904,
+    "log_area_ratio": 0.1805050275983632,
+    "shape_one_minus_dice": 0.6842105263157895
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 162,
+  "source_nouns": [
+    "dog",
+    "street",
+    "superhero"
+  ],
+  "source_only_nouns": [
+    "superhero"
+  ],
+  "source_prompt": "a dog flying like a superhero down the street",
+  "source_uuid": "4a6c038f-e601-5b95-aed6-8d47ba071da6",
+  "status": "completed",
+  "target_nouns": [
+    "dog",
+    "shake",
+    "street"
+  ],
+  "target_only_nouns": [
+    "shake"
+  ],
+  "target_prompt": "a dog shake it hands on the street",
+  "target_uuid": "10de628d-4b77-5e28-9c0c-07339923b2ce",
+  "timing": {
+    "source_dit_forward_s": 109.79519548942335,
+    "source_probe_s": 140.10865837708116,
+    "target_dit_forward_s": 109.8127303100191,
+    "target_probe_s": 139.76541968691163,
+    "total_s": 279.8740780639928
+  }
+}

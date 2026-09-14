@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 237,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6074204168261492,
+    "context_color_ciede2000": 0.9944116974996345,
+    "log_area_ratio": 0.0812502493953391,
+    "shape_one_minus_dice": 0.5680000000000001
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6074204168261492,
+    "context_color_ciede2000": 0.9944116974996345,
+    "log_area_ratio": 0.0812502493953391,
+    "shape_one_minus_dice": 0.5680000000000001
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 237,
+  "source_nouns": [
+    "mountain",
+    "top"
+  ],
+  "source_only_nouns": [
+    "top"
+  ],
+  "source_prompt": "wolf on the top of mountain",
+  "source_uuid": "2b08a8ca-34d9-56ac-b7a4-285ee4ad71db",
+  "status": "completed",
+  "target_nouns": [
+    "cats",
+    "mountain"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "Two cats fighting on a mountain",
+  "target_uuid": "f37e311b-456d-5117-8473-11968871269f",
+  "timing": {
+    "source_dit_forward_s": 109.8588766544126,
+    "source_probe_s": 139.1282562490087,
+    "target_dit_forward_s": 109.85214961646125,
+    "target_probe_s": 139.00123091205023,
+    "total_s": 278.12948716105893
+  }
+}

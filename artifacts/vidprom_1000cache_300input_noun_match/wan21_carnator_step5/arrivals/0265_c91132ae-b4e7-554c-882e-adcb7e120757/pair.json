@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 265,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8869487176319024,
+    "context_color_ciede2000": 1.2038833782711917,
+    "log_area_ratio": 0.19460090166591354,
+    "shape_one_minus_dice": 0.4700854700854701
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8869487176319024,
+    "context_color_ciede2000": 1.2038833782711917,
+    "log_area_ratio": 0.19460090166591354,
+    "shape_one_minus_dice": 0.4700854700854701
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 265,
+  "source_nouns": [
+    "dog",
+    "face"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "running dog and surprised face",
+  "source_uuid": "5ce29163-034a-5d99-8342-a0545c085b78",
+  "status": "completed",
+  "target_nouns": [
+    "face",
+    "fox"
+  ],
+  "target_only_nouns": [
+    "fox"
+  ],
+  "target_prompt": "human face melts into a fox face",
+  "target_uuid": "c91132ae-b4e7-554c-882e-adcb7e120757",
+  "timing": {
+    "source_dit_forward_s": 112.2515025024768,
+    "source_probe_s": 142.01009045215324,
+    "target_dit_forward_s": 112.1936572571285,
+    "target_probe_s": 141.75887367408723,
+    "total_s": 283.76896412624046
+  }
+}

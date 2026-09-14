@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 231,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9033233165882762,
+    "context_color_ciede2000": 0.35891515036647864,
+    "log_area_ratio": 0.1462780054732037,
+    "shape_one_minus_dice": 0.8625954198473282
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9033233165882762,
+    "context_color_ciede2000": 0.35891515036647864,
+    "log_area_ratio": 0.1462780054732037,
+    "shape_one_minus_dice": 0.8625954198473282
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 231,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "squirrel",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "squirrel"
+  ],
+  "target_prompt": "a squirrel running up in a tree",
+  "target_uuid": "70b2b267-3a3e-5183-9778-b2c35e99c33e",
+  "timing": {
+    "source_dit_forward_s": 113.13801133446395,
+    "source_probe_s": 143.13845092710108,
+    "target_dit_forward_s": 113.14516762364656,
+    "target_probe_s": 143.45914327795617,
+    "total_s": 286.59759420505725
+  }
+}

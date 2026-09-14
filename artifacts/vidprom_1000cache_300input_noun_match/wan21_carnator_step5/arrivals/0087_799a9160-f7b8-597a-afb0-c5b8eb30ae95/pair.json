@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 87,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1582879161967472,
+    "context_color_ciede2000": 0.763680073703227,
+    "log_area_ratio": 0.4633632095004897,
+    "shape_one_minus_dice": 0.674074074074074
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1582879161967472,
+    "context_color_ciede2000": 0.763680073703227,
+    "log_area_ratio": 0.4633632095004897,
+    "shape_one_minus_dice": 0.674074074074074
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 87,
+  "source_nouns": [
+    "bridge",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat is running on the bridge",
+  "source_uuid": "69ceb3f4-2b7d-5f5a-ad5e-1698bfda560d",
+  "status": "completed",
+  "target_nouns": [
+    "bridge",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "panda"
+  ],
+  "target_prompt": "panda walking fast in the golden bridge",
+  "target_uuid": "799a9160-f7b8-597a-afb0-c5b8eb30ae95",
+  "timing": {
+    "source_dit_forward_s": 109.73279855190776,
+    "source_probe_s": 139.03788377693854,
+    "target_dit_forward_s": 109.77745247702114,
+    "target_probe_s": 139.07451993995346,
+    "total_s": 278.112403716892
+  }
+}

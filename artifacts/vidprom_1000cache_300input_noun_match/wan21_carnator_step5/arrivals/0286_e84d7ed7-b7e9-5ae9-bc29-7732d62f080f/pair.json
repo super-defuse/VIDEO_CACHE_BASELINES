@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 286,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9441560411259746,
+    "context_color_ciede2000": 0.40470585289111083,
+    "log_area_ratio": 0.3159769114520535,
+    "shape_one_minus_dice": 0.9285714285714286
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9441560411259746,
+    "context_color_ciede2000": 0.40470585289111083,
+    "log_area_ratio": 0.3159769114520535,
+    "shape_one_minus_dice": 0.9285714285714286
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 286,
+  "source_nouns": [
+    "beach",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "dog running on the beach",
+  "source_uuid": "7d3510ef-003f-55bc-af1a-a1262c8cbe51",
+  "status": "completed",
+  "target_nouns": [
+    "beach",
+    "dolphin"
+  ],
+  "target_only_nouns": [
+    "dolphin"
+  ],
+  "target_prompt": "dolphin dancing on the beach",
+  "target_uuid": "e84d7ed7-b7e9-5ae9-bc29-7732d62f080f",
+  "timing": {
+    "source_dit_forward_s": 113.19653628882952,
+    "source_probe_s": 143.23644698387943,
+    "target_dit_forward_s": 113.19774823868647,
+    "target_probe_s": 143.37401836086065,
+    "total_s": 286.6104653447401
+  }
+}

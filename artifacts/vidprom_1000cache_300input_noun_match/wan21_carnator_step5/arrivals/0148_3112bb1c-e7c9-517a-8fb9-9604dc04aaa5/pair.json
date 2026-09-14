@@ -1,0 +1,62 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 148,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.799982553444086,
+    "context_color_ciede2000": 0.9949487574309315,
+    "log_area_ratio": 0.13812654292769974,
+    "shape_one_minus_dice": 0.631578947368421
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.799982553444086,
+    "context_color_ciede2000": 0.9949487574309315,
+    "log_area_ratio": 0.13812654292769974,
+    "shape_one_minus_dice": 0.631578947368421
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 148,
+  "source_nouns": [
+    "chicken",
+    "dinosaur",
+    "size",
+    "style"
+  ],
+  "source_only_nouns": [
+    "size"
+  ],
+  "source_prompt": "A small dinosaur the same size of a chicken walking next to a chicken majestically across vast landscape.pixar style",
+  "source_uuid": "2e6c8079-e71b-5bfc-ae42-c154d4c4aff8",
+  "status": "completed",
+  "target_nouns": [
+    "anime",
+    "chicken",
+    "dinosaur",
+    "style"
+  ],
+  "target_only_nouns": [
+    "anime"
+  ],
+  "target_prompt": "black chicken running from a dinosaur anime style",
+  "target_uuid": "3112bb1c-e7c9-517a-8fb9-9604dc04aaa5",
+  "timing": {
+    "source_dit_forward_s": 111.35138737177476,
+    "source_probe_s": 142.28386914008297,
+    "target_dit_forward_s": 111.36411080043763,
+    "target_probe_s": 142.5412636990659,
+    "total_s": 284.82513283914886
+  }
+}

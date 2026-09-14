@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 79,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1554164710268509,
+    "context_color_ciede2000": 0.6209472430237957,
+    "log_area_ratio": 0.8382325811670722,
+    "shape_one_minus_dice": 0.46031746031746035
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1554164710268509,
+    "context_color_ciede2000": 0.6209472430237957,
+    "log_area_ratio": 0.8382325811670722,
+    "shape_one_minus_dice": 0.46031746031746035
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 79,
+  "source_nouns": [
+    "3d",
+    "lion",
+    "zebra"
+  ],
+  "source_only_nouns": [
+    "zebra"
+  ],
+  "source_prompt": "3d cute lion having zebra happily",
+  "source_uuid": "d3732348-71a8-5cd1-87d3-ac9526fb16b9",
+  "status": "completed",
+  "target_nouns": [
+    "3d",
+    "jungle",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "jungle"
+  ],
+  "target_prompt": "3d lion walking on jungle",
+  "target_uuid": "b7ac9f06-338b-5024-ae65-b0f5c6aad6c8",
+  "timing": {
+    "source_dit_forward_s": 112.88893038011156,
+    "source_probe_s": 143.37903120112605,
+    "target_dit_forward_s": 112.82701292610727,
+    "target_probe_s": 143.52873383508995,
+    "total_s": 286.907765036216
+  }
+}

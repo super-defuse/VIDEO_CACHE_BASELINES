@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 36,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.0744879282536712,
+    "context_color_ciede2000": 1.5374590921496623,
+    "log_area_ratio": 0.16086253469120773,
+    "shape_one_minus_dice": 0.8151260504201681
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.0744879282536712,
+    "context_color_ciede2000": 1.5374590921496623,
+    "log_area_ratio": 0.16086253469120773,
+    "shape_one_minus_dice": 0.8151260504201681
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 36,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "rock",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "rock"
+  ],
+  "target_prompt": "a white tiger sitting under a black rock",
+  "target_uuid": "e386c298-cea4-5ae4-bab7-b19149f11dc5",
+  "timing": {
+    "source_dit_forward_s": 113.03832864109427,
+    "source_probe_s": 142.70999155705795,
+    "target_dit_forward_s": 113.13061357918195,
+    "target_probe_s": 142.9331889289897,
+    "total_s": 285.64318048604764
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 133,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4263898768723014,
+    "context_color_ciede2000": 0.26461972170125664,
+    "log_area_ratio": 0.2095172731503563,
+    "shape_one_minus_dice": 0.6212121212121212
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4263898768723014,
+    "context_color_ciede2000": 0.26461972170125664,
+    "log_area_ratio": 0.2095172731503563,
+    "shape_one_minus_dice": 0.6212121212121212
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 133,
+  "source_nouns": [
+    "cat",
+    "fish"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat eat a fish",
+  "source_uuid": "e23e115f-241f-5d91-bd6a-8df063bba0e6",
+  "status": "completed",
+  "target_nouns": [
+    "fish",
+    "mouth"
+  ],
+  "target_only_nouns": [
+    "mouth"
+  ],
+  "target_prompt": "kitten caught a fish in his mouth",
+  "target_uuid": "0fa2ab16-861e-591c-b771-c15e56cf3ad4",
+  "timing": {
+    "source_dit_forward_s": 111.32215431611985,
+    "source_probe_s": 140.80985208693892,
+    "target_dit_forward_s": 111.36069901916198,
+    "target_probe_s": 140.85091589204967,
+    "total_s": 281.6607679789886
+  }
+}

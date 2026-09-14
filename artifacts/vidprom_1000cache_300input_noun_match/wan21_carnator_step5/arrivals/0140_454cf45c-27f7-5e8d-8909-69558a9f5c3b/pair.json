@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 140,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7208946845811705,
+    "context_color_ciede2000": 0.9906520830482642,
+    "log_area_ratio": 0.4986451571473388,
+    "shape_one_minus_dice": 0.640625
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7208946845811705,
+    "context_color_ciede2000": 0.9906520830482642,
+    "log_area_ratio": 0.4986451571473388,
+    "shape_one_minus_dice": 0.640625
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 140,
+  "source_nouns": [
+    "car",
+    "pony"
+  ],
+  "source_only_nouns": [
+    "pony"
+  ],
+  "source_prompt": "a pony driving a car",
+  "source_uuid": "624ca419-88c8-5b28-b905-15cf0b625fcc",
+  "status": "completed",
+  "target_nouns": [
+    "car",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "car transforming into a horse",
+  "target_uuid": "454cf45c-27f7-5e8d-8909-69558a9f5c3b",
+  "timing": {
+    "source_dit_forward_s": 111.98649945599027,
+    "source_probe_s": 141.9358434949536,
+    "target_dit_forward_s": 112.03997672675177,
+    "target_probe_s": 142.0590437259525,
+    "total_s": 283.9948872209061
+  }
+}

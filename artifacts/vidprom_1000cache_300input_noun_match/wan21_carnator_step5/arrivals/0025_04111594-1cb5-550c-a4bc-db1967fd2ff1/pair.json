@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 25,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9530624532304268,
+    "context_color_ciede2000": 0.7743563847551148,
+    "log_area_ratio": 0.5847037285202362,
+    "shape_one_minus_dice": 0.5606060606060606
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9530624532304268,
+    "context_color_ciede2000": 0.7743563847551148,
+    "log_area_ratio": 0.5847037285202362,
+    "shape_one_minus_dice": 0.5606060606060606
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 25,
+  "source_nouns": [
+    "frog",
+    "guitar"
+  ],
+  "source_only_nouns": [
+    "guitar"
+  ],
+  "source_prompt": "frog playing guitar, very reliastic",
+  "source_uuid": "b018eccd-0b02-59a6-85ec-6540637b3fc4",
+  "status": "completed",
+  "target_nouns": [
+    "frog",
+    "pond"
+  ],
+  "target_only_nouns": [
+    "pond"
+  ],
+  "target_prompt": "a frog jumping into a pond",
+  "target_uuid": "04111594-1cb5-550c-a4bc-db1967fd2ff1",
+  "timing": {
+    "source_dit_forward_s": 111.8518633604981,
+    "source_probe_s": 141.67872560210526,
+    "target_dit_forward_s": 111.93541612057015,
+    "target_probe_s": 141.8335830878932,
+    "total_s": 283.51230868999846
+  }
+}

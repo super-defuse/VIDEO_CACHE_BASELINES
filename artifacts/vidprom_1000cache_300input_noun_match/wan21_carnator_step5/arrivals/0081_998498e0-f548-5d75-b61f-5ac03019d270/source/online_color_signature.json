@@ -1,0 +1,158 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "61576aa883078188b4c27b2e510a446d07b00eb3c06fd791dc01c9634b04d05a",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "ad1db28ee39fc3a133557eed4147d72099218461bf0906afb40c73ca0f2ec2dc"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "4302ba5a70930741af3eac9abd22694c7b16d1ef93b12553fb1e55a46ce6fe26"
+  },
+  "objects": [
+    {
+      "area_frac": 0.22159090638160706,
+      "centroid_yx": [
+        13.855128288269043,
+        34.482051849365234
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.386985778808594,
+          -2.7831921577453613,
+          13.182222366333008
+        ],
+        "mean_rgb": [
+          110.06568145751953,
+          108.98670196533203,
+          85.96422576904297
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 199680
+      },
+      "dtype": "bool",
+      "noun": "border",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.5553977489471436,
+      "centroid_yx": [
+        14.917135238647461,
+        41.149871826171875
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.45085906982422,
+          -3.127028226852417,
+          13.884285926818848
+        ],
+        "mean_rgb": [
+          110.07630920410156,
+          109.27845764160156,
+          84.88614654541016
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 500480
+      },
+      "dtype": "bool",
+      "noun": "collie",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.18068182468414307,
+      "centroid_yx": [
+        29.55031394958496,
+        34.6053466796875
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.21651840209961,
+          -1.8220767974853516,
+          14.179758071899414
+        ],
+        "mean_rgb": [
+          109.27830505371094,
+          105.54999542236328,
+          81.49732971191406
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 162816
+      },
+      "dtype": "bool",
+      "noun": "pizza",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    }
+  ],
+  "prompt": "a border collie eating pizza",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

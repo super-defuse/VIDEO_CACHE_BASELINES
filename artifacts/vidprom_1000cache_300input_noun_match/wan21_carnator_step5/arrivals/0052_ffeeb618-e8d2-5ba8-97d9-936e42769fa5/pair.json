@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 52,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.46315458774076773,
+    "context_color_ciede2000": 0.6789926648382162,
+    "log_area_ratio": 0.747848263943995,
+    "shape_one_minus_dice": 0.6460176991150443
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.46315458774076773,
+    "context_color_ciede2000": 0.6789926648382162,
+    "log_area_ratio": 0.747848263943995,
+    "shape_one_minus_dice": 0.6460176991150443
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 52,
+  "source_nouns": [
+    "cream",
+    "frog",
+    "ice"
+  ],
+  "source_only_nouns": [
+    "frog"
+  ],
+  "source_prompt": "A frog eats ice cream",
+  "source_uuid": "50b62ff1-7e2a-5914-8c7d-387c056a2be4",
+  "status": "completed",
+  "target_nouns": [
+    "beer",
+    "cream",
+    "ice"
+  ],
+  "target_only_nouns": [
+    "beer"
+  ],
+  "target_prompt": "monkey eats ice cream and drinks beer",
+  "target_uuid": "ffeeb618-e8d2-5ba8-97d9-936e42769fa5",
+  "timing": {
+    "source_dit_forward_s": 109.71553384396248,
+    "source_probe_s": 139.78919724794105,
+    "target_dit_forward_s": 109.78785815020092,
+    "target_probe_s": 139.54234281810932,
+    "total_s": 279.33154006605037
+  }
+}

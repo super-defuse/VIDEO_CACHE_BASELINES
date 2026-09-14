@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 99,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1728207399537607,
+    "context_color_ciede2000": 1.0035652476691983,
+    "log_area_ratio": 0.057244488481597106,
+    "shape_one_minus_dice": 0.5151515151515151
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1728207399537607,
+    "context_color_ciede2000": 1.0035652476691983,
+    "log_area_ratio": 0.057244488481597106,
+    "shape_one_minus_dice": 0.5151515151515151
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 99,
+  "source_nouns": [
+    "cat",
+    "eyes"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat with nice and beautiful eyes",
+  "source_uuid": "9fab7331-3987-5669-92a9-b0e352e3800f",
+  "status": "completed",
+  "target_nouns": [
+    "eyes",
+    "fox"
+  ],
+  "target_only_nouns": [
+    "fox"
+  ],
+  "target_prompt": "cute tiny fox slowly blink eyes ratio 16:9",
+  "target_uuid": "218ae330-861d-5866-864d-1fe6c1f4f5b2",
+  "timing": {
+    "source_dit_forward_s": 112.90341438516043,
+    "source_probe_s": 142.69841359788552,
+    "target_dit_forward_s": 112.9129304161761,
+    "target_probe_s": 142.85428882716224,
+    "total_s": 285.55270242504776
+  }
+}

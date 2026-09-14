@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 172,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0680110933726947,
+    "context_color_ciede2000": 0.7846219917557524,
+    "log_area_ratio": 0.2138011237234599,
+    "shape_one_minus_dice": 0.5488721804511278
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0680110933726947,
+    "context_color_ciede2000": 0.7846219917557524,
+    "log_area_ratio": 0.2138011237234599,
+    "shape_one_minus_dice": 0.5488721804511278
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 172,
+  "source_nouns": [
+    "forest",
+    "lion",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "forest"
+  ],
+  "source_prompt": "The mouse is talking to the lion in forest",
+  "source_uuid": "5759ee4b-77d2-591a-a1db-86d1117af916",
+  "status": "completed",
+  "target_nouns": [
+    "fight",
+    "lion",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "fight"
+  ],
+  "target_prompt": "micky mouse picking a fight with lion. photo realistic",
+  "target_uuid": "b9a5ba9c-e80c-57de-bfcc-58e69a2c320c",
+  "timing": {
+    "source_dit_forward_s": 109.82522960426286,
+    "source_probe_s": 139.51135309203528,
+    "target_dit_forward_s": 109.81309309229255,
+    "target_probe_s": 139.59279687982053,
+    "total_s": 279.1041499718558
+  }
+}

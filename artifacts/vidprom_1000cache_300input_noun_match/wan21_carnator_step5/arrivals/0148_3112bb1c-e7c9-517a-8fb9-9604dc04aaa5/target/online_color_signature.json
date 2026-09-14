@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "846398080ee2d3e693f9f6e490660f18460b8ab235a2ea6eeb2c350169954dbb",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "ba122a495f905af3f140ca4ab6d2bc9b3f41f482d0aedc8b78833865691850ad"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "635158e522409178d5a4ae41fda1f6e7451e38ac65172b35ec817f152437a7e9"
+  },
+  "objects": [
+    {
+      "area_frac": 0.4426136314868927,
+      "centroid_yx": [
+        22.92618751525879,
+        40.838253021240234
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.224510192871094,
+          -3.5091464519500732,
+          13.962084770202637
+        ],
+        "mean_rgb": [
+          108.82832336425781,
+          108.92394256591797,
+          84.18622589111328
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 398848
+      },
+      "dtype": "bool",
+      "noun": "anime",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.20681817829608917,
+      "centroid_yx": [
+        12.891483306884766,
+        33.53571319580078
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.07157516479492,
+          -2.882636070251465,
+          13.224969863891602
+        ],
+        "mean_rgb": [
+          106.68290710449219,
+          105.81400299072266,
+          82.7702407836914
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 186368
+      },
+      "dtype": "bool",
+      "noun": "chicken",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.4519886374473572,
+      "centroid_yx": [
+        15.678818702697754,
+        37.64110565185547
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.7512321472168,
+          -3.4725234508514404,
+          14.090317726135254
+        ],
+        "mean_rgb": [
+          107.85330200195312,
+          107.75789642333984,
+          82.83209228515625
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 407296
+      },
+      "dtype": "bool",
+      "noun": "dinosaur",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.5247159004211426,
+      "centroid_yx": [
+        18.390363693237305,
+        42.10882568359375
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.68848419189453,
+          -3.4201555252075195,
+          14.158622741699219
+        ],
+        "mean_rgb": [
+          110.29739379882812,
+          110.03033447265625,
+          84.99092864990234
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 472832
+      },
+      "dtype": "bool",
+      "noun": "style",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "black chicken running from a dinosaur anime style",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

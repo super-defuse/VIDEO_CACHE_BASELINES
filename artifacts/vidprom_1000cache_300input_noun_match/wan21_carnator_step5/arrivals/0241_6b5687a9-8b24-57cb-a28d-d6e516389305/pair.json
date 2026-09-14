@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 241,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.3856579250964423,
+    "context_color_ciede2000": 1.0241830896458692,
+    "log_area_ratio": 0.6405974962269252,
+    "shape_one_minus_dice": 0.7073170731707317
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.3856579250964423,
+    "context_color_ciede2000": 1.0241830896458692,
+    "log_area_ratio": 0.6405974962269252,
+    "shape_one_minus_dice": 0.7073170731707317
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 241,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "lying",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "lying"
+  ],
+  "target_prompt": "A husky lying in the snow",
+  "target_uuid": "6b5687a9-8b24-57cb-a28d-d6e516389305",
+  "timing": {
+    "source_dit_forward_s": 113.10553810698912,
+    "source_probe_s": 143.32974306703545,
+    "target_dit_forward_s": 113.14615661092103,
+    "target_probe_s": 143.3326064008288,
+    "total_s": 286.66234946786426
+  }
+}

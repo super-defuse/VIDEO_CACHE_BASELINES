@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 73,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9000149268648192,
+    "context_color_ciede2000": 0.47848899018277535,
+    "log_area_ratio": 0.5838767964491429,
+    "shape_one_minus_dice": 0.59375
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9000149268648192,
+    "context_color_ciede2000": 0.47848899018277535,
+    "log_area_ratio": 0.5838767964491429,
+    "shape_one_minus_dice": 0.59375
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 73,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "squirrel",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "squirrel"
+  ],
+  "target_prompt": "4. Sally the squirrel gracefully leaping from tree to tree.",
+  "target_uuid": "6c94d1da-f823-5b65-af67-e658553f7c4a",
+  "timing": {
+    "source_dit_forward_s": 111.36643947428092,
+    "source_probe_s": 141.00195344211534,
+    "target_dit_forward_s": 111.34949568007141,
+    "target_probe_s": 140.92850756808184,
+    "total_s": 281.9304610101972
+  }
+}

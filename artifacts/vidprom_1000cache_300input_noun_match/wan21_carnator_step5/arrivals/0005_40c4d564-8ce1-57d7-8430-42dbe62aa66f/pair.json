@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 5,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.25403366190344623,
+    "context_color_ciede2000": 0.49171459927233835,
+    "log_area_ratio": 0.41985381117138615,
+    "shape_one_minus_dice": 0.6638655462184874
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.25403366190344623,
+    "context_color_ciede2000": 0.49171459927233835,
+    "log_area_ratio": 0.41985381117138615,
+    "shape_one_minus_dice": 0.6638655462184874
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 5,
+  "source_nouns": [
+    "cat",
+    "dragon"
+  ],
+  "source_only_nouns": [
+    "dragon"
+  ],
+  "source_prompt": "dragon flying and eating a cat",
+  "source_uuid": "8e36a373-d7c2-5fab-81fc-aeedc3e43865",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dinosaur"
+  ],
+  "target_only_nouns": [
+    "dinosaur"
+  ],
+  "target_prompt": "black cat riding a dinosaur",
+  "target_uuid": "40c4d564-8ce1-57d7-8430-42dbe62aa66f",
+  "timing": {
+    "source_dit_forward_s": 111.79844733886421,
+    "source_probe_s": 141.56959429802373,
+    "target_dit_forward_s": 111.8280847419519,
+    "target_probe_s": 141.48556210193783,
+    "total_s": 283.05515639996156
+  }
+}

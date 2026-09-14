@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 299,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8148183075530064,
+    "context_color_ciede2000": 1.152687003652556,
+    "log_area_ratio": 0.6901947468684329,
+    "shape_one_minus_dice": 0.708029197080292
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8148183075530064,
+    "context_color_ciede2000": 1.152687003652556,
+    "log_area_ratio": 0.6901947468684329,
+    "shape_one_minus_dice": 0.708029197080292
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 299,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "animation",
+    "elephant"
+  ],
+  "target_only_nouns": [
+    "animation"
+  ],
+  "target_prompt": "a beautiful walking grey elephant animation",
+  "target_uuid": "9984e153-bb63-5f9f-8768-608e85593e01",
+  "timing": {
+    "source_dit_forward_s": 113.16728303418495,
+    "source_probe_s": 142.9241544911638,
+    "target_dit_forward_s": 113.09772477508523,
+    "target_probe_s": 143.1967357939575,
+    "total_s": 286.1208902851213
+  }
+}

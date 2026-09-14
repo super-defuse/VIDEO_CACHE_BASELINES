@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 243,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 3.7703361762727288,
+    "context_color_ciede2000": 1.3946568403539665,
+    "log_area_ratio": 0.2941225147478103,
+    "shape_one_minus_dice": 0.5909090909090908
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 3.7703361762727288,
+    "context_color_ciede2000": 1.3946568403539665,
+    "log_area_ratio": 0.2941225147478103,
+    "shape_one_minus_dice": 0.5909090909090908
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 243,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "creature",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "creature"
+  ],
+  "target_prompt": "mysterious tall white creature in the snow",
+  "target_uuid": "ae9d2df1-9d5a-51f6-a07c-94b3e39ae035",
+  "timing": {
+    "source_dit_forward_s": 111.44448938081041,
+    "source_probe_s": 141.25575406802818,
+    "target_dit_forward_s": 111.43230420839973,
+    "target_probe_s": 140.9209849049803,
+    "total_s": 282.17673897300847
+  }
+}

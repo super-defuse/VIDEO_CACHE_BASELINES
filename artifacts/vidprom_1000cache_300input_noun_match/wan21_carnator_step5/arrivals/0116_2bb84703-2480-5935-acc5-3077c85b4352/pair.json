@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 116,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.536752982984505,
+    "context_color_ciede2000": 0.17633056831181143,
+    "log_area_ratio": 0.02358603825353696,
+    "shape_one_minus_dice": 0.22137404580152675
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.536752982984505,
+    "context_color_ciede2000": 0.17633056831181143,
+    "log_area_ratio": 0.02358603825353696,
+    "shape_one_minus_dice": 0.22137404580152675
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 116,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "An cat turning into a Lion",
+  "source_uuid": "e438b7e7-d1c8-553a-8c89-7cd1be08bd77",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "wolf"
+  ],
+  "target_only_nouns": [
+    "wolf"
+  ],
+  "target_prompt": "A wolf transforming into a lion",
+  "target_uuid": "2bb84703-2480-5935-acc5-3077c85b4352",
+  "timing": {
+    "source_dit_forward_s": 113.19827748299576,
+    "source_probe_s": 143.02789284591563,
+    "target_dit_forward_s": 113.2418820951134,
+    "target_probe_s": 142.9207507208921,
+    "total_s": 285.94864356680773
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 77,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7810528335338608,
+    "context_color_ciede2000": 0.1878261510811299,
+    "log_area_ratio": 0.9981482721930642,
+    "shape_one_minus_dice": 0.5285714285714286
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7810528335338608,
+    "context_color_ciede2000": 0.1878261510811299,
+    "log_area_ratio": 0.9981482721930642,
+    "shape_one_minus_dice": 0.5285714285714286
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 77,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "event",
+    "pig"
+  ],
+  "target_only_nouns": [
+    "event"
+  ],
+  "target_prompt": "pig ritual event in Indonesia",
+  "target_uuid": "6a740cfd-e17b-5cce-b6dd-a9997a43cba0",
+  "timing": {
+    "source_dit_forward_s": 109.73427671822719,
+    "source_probe_s": 138.67451512394473,
+    "target_dit_forward_s": 109.71638852544129,
+    "target_probe_s": 139.02481420780532,
+    "total_s": 277.69932933175005
+  }
+}

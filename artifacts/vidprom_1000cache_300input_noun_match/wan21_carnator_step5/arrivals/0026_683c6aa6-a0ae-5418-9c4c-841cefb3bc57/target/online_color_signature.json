@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "d33267025d0b25a239cd6eb6528083bd67ab23b69da359b993d49826ac1b6e33",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "5f7dc35b54e38f8bc3f90993da95777f64719c885d4d8d65e3dce53de1183159"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "18d515a9d07663ce4f5238af25a5affb7173fb7252fe0273964b94cfe677f331"
+  },
+  "objects": [
+    {
+      "area_frac": 0.13948863744735718,
+      "centroid_yx": [
+        20.830957412719727,
+        39.17922592163086
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.88511276245117,
+          -2.620699882507324,
+          13.316402435302734
+        ],
+        "mean_rgb": [
+          109.2186279296875,
+          107.62034606933594,
+          84.496826171875
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 125696
+      },
+      "dtype": "bool",
+      "noun": "bone",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.2599431872367859,
+      "centroid_yx": [
+        23.399999618530273,
+        40.848087310791016
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          46.4400749206543,
+          -3.137173652648926,
+          13.379871368408203
+        ],
+        "mean_rgb": [
+          112.15953063964844,
+          111.78363800048828,
+          88.15748596191406
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 234240
+      },
+      "dtype": "bool",
+      "noun": "dog",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.7451704740524292,
+      "centroid_yx": [
+        21.13724708557129,
+        40.126190185546875
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.924949645996094,
+          -2.924914598464966,
+          13.899725914001465
+        ],
+        "mean_rgb": [
+          109.08607482910156,
+          107.89451599121094,
+          83.60944366455078
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 671488
+      },
+      "dtype": "bool",
+      "noun": "hill",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.20624999701976776,
+      "centroid_yx": [
+        19.55234146118164,
+        40.073001861572266
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.4249267578125,
+          -2.488060712814331,
+          13.061009407043457
+        ],
+        "mean_rgb": [
+          108.09506225585938,
+          106.43730926513672,
+          83.86508178710938
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 185856
+      },
+      "dtype": "bool",
+      "noun": "mouth",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "dog running up a hill with a bone in its mouth",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 212,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.4748149344399135,
+    "context_color_ciede2000": 0.3725394001399251,
+    "log_area_ratio": 0.4589895377961708,
+    "shape_one_minus_dice": 0.5338345864661654
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.4748149344399135,
+    "context_color_ciede2000": 0.3725394001399251,
+    "log_area_ratio": 0.4589895377961708,
+    "shape_one_minus_dice": 0.5338345864661654
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 212,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "banana",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "banana"
+  ],
+  "target_prompt": "monkey and banana on the tree",
+  "target_uuid": "5e501f03-32de-5315-a4d4-414a5d52a3a0",
+  "timing": {
+    "source_dit_forward_s": 109.83726690011099,
+    "source_probe_s": 139.04621290578507,
+    "target_dit_forward_s": 109.8650970668532,
+    "target_probe_s": 139.4636499879416,
+    "total_s": 278.5098628937267
+  }
+}

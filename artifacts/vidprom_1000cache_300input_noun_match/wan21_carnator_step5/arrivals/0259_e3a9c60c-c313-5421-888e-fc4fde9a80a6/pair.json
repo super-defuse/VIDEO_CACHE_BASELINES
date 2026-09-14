@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 259,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9521402675827754,
+    "context_color_ciede2000": 1.317029591378766,
+    "log_area_ratio": 0.09831464291051503,
+    "shape_one_minus_dice": 0.6638655462184874
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9521402675827754,
+    "context_color_ciede2000": 1.317029591378766,
+    "log_area_ratio": 0.09831464291051503,
+    "shape_one_minus_dice": 0.6638655462184874
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 259,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "antelope",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "antelope"
+  ],
+  "target_prompt": "A tiger is chasing an antelope",
+  "target_uuid": "e3a9c60c-c313-5421-888e-fc4fde9a80a6",
+  "timing": {
+    "source_dit_forward_s": 113.0584117565304,
+    "source_probe_s": 142.64314452395774,
+    "target_dit_forward_s": 113.06327224825509,
+    "target_probe_s": 142.71804515388794,
+    "total_s": 285.3611896778457
+  }
+}

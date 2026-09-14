@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 94,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5267444337965358,
+    "context_color_ciede2000": 0.358020197387583,
+    "log_area_ratio": 1.3904035808019,
+    "shape_one_minus_dice": 0.7121212121212122
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5267444337965358,
+    "context_color_ciede2000": 0.358020197387583,
+    "log_area_ratio": 1.3904035808019,
+    "shape_one_minus_dice": 0.7121212121212122
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 94,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cute little cat running on the grass",
+  "source_uuid": "ae0b87e5-4a64-51a6-adb2-b7c6b200dd99",
+  "status": "completed",
+  "target_nouns": [
+    "corgi",
+    "grass"
+  ],
+  "target_only_nouns": [
+    "corgi"
+  ],
+  "target_prompt": "A corgi running on the grass",
+  "target_uuid": "f746c795-8b27-59d5-972a-7556c7514389",
+  "timing": {
+    "source_dit_forward_s": 112.84120402601548,
+    "source_probe_s": 142.8243409951683,
+    "target_dit_forward_s": 112.80695353611372,
+    "target_probe_s": 143.25718736019917,
+    "total_s": 286.0815283553675
+  }
+}

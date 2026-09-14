@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 9,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6209018651900595,
+    "context_color_ciede2000": 0.5093478133928493,
+    "log_area_ratio": 0.8271302700552983,
+    "shape_one_minus_dice": 0.28358208955223885
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6209018651900595,
+    "context_color_ciede2000": 0.5093478133928493,
+    "log_area_ratio": 0.8271302700552983,
+    "shape_one_minus_dice": 0.28358208955223885
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 9,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "pig",
+    "robot"
+  ],
+  "target_only_nouns": [
+    "robot"
+  ],
+  "target_prompt": "giant pig transforms into robot",
+  "target_uuid": "639c5f3d-a8d8-5749-ae9a-36aa0dbf8f81",
+  "timing": {
+    "source_dit_forward_s": 112.74940668209456,
+    "source_probe_s": 142.33303040592,
+    "target_dit_forward_s": 112.73594079329632,
+    "target_probe_s": 142.5869051660411,
+    "total_s": 284.9199355719611
+  }
+}

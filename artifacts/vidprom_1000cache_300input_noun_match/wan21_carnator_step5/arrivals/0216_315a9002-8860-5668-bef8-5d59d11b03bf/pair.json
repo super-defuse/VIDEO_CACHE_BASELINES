@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 216,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.2001251775213955,
+    "context_color_ciede2000": 0.4774918132410412,
+    "log_area_ratio": 0.9641820110347253,
+    "shape_one_minus_dice": 0.6612903225806452
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.2001251775213955,
+    "context_color_ciede2000": 0.4774918132410412,
+    "log_area_ratio": 0.9641820110347253,
+    "shape_one_minus_dice": 0.6612903225806452
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 216,
+  "source_nouns": [
+    "jungle",
+    "tigers"
+  ],
+  "source_only_nouns": [
+    "tigers"
+  ],
+  "source_prompt": "two tigers fighting in a jungle",
+  "source_uuid": "571e610e-b968-56e4-96aa-18ca051fb9e5",
+  "status": "completed",
+  "target_nouns": [
+    "jungle",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "tiger"
+  ],
+  "target_prompt": "a tiger running in jungle",
+  "target_uuid": "315a9002-8860-5668-bef8-5d59d11b03bf",
+  "timing": {
+    "source_dit_forward_s": 113.10905830212869,
+    "source_probe_s": 143.05488346493803,
+    "target_dit_forward_s": 113.09923972561955,
+    "target_probe_s": 143.16289766016416,
+    "total_s": 286.2177811251022
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 278,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.3769951240652128,
+    "context_color_ciede2000": 0.6514311403466998,
+    "log_area_ratio": 0.3358959954697504,
+    "shape_one_minus_dice": 0.48091603053435117
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.3769951240652128,
+    "context_color_ciede2000": 0.6514311403466998,
+    "log_area_ratio": 0.3358959954697504,
+    "shape_one_minus_dice": 0.48091603053435117
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 278,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "city",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "city"
+  ],
+  "target_prompt": "a giant panda destroying new york city",
+  "target_uuid": "4d66a5e0-ab8f-5494-a5dd-430db8851673",
+  "timing": {
+    "source_dit_forward_s": 111.61992567917332,
+    "source_probe_s": 141.26736925099976,
+    "target_dit_forward_s": 111.53878999990411,
+    "target_probe_s": 141.51417767303064,
+    "total_s": 282.7815469240304
+  }
+}

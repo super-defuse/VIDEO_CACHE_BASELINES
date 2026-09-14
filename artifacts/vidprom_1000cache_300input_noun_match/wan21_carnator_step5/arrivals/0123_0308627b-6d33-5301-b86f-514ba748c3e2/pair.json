@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 123,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8617898474005597,
+    "context_color_ciede2000": 0.7042316617040311,
+    "log_area_ratio": 0.027554390537892687,
+    "shape_one_minus_dice": 0.7619047619047619
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8617898474005597,
+    "context_color_ciede2000": 0.7042316617040311,
+    "log_area_ratio": 0.027554390537892687,
+    "shape_one_minus_dice": 0.7619047619047619
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 123,
+  "source_nouns": [
+    "field",
+    "raccoon"
+  ],
+  "source_only_nouns": [
+    "raccoon"
+  ],
+  "source_prompt": "little raccoon runs across the field",
+  "source_uuid": "0a811015-694c-595f-b382-ef636dbd1967",
+  "status": "completed",
+  "target_nouns": [
+    "field",
+    "ice"
+  ],
+  "target_only_nouns": [
+    "ice"
+  ],
+  "target_prompt": "unicorn running on ice field",
+  "target_uuid": "0308627b-6d33-5301-b86f-514ba748c3e2",
+  "timing": {
+    "source_dit_forward_s": 111.40625061374158,
+    "source_probe_s": 141.46025159582496,
+    "target_dit_forward_s": 111.2938750302419,
+    "target_probe_s": 141.21859019296244,
+    "total_s": 282.6788417887874
+  }
+}

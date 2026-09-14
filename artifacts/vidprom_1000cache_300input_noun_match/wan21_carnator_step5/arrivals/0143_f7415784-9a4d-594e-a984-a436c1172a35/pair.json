@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 143,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.44997114010395656,
+    "context_color_ciede2000": 1.140282319991044,
+    "log_area_ratio": 0.3990824233929723,
+    "shape_one_minus_dice": 0.6744186046511628
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.44997114010395656,
+    "context_color_ciede2000": 1.140282319991044,
+    "log_area_ratio": 0.3990824233929723,
+    "shape_one_minus_dice": 0.6744186046511628
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 143,
+  "source_nouns": [
+    "dancing",
+    "panda",
+    "rice"
+  ],
+  "source_only_nouns": [
+    "rice"
+  ],
+  "source_prompt": "panda dancing while eating rice",
+  "source_uuid": "0a9c5b35-9902-5e0c-b7bc-9ad4a363172c",
+  "status": "completed",
+  "target_nouns": [
+    "dancing",
+    "panda",
+    "spectacles"
+  ],
+  "target_only_nouns": [
+    "spectacles"
+  ],
+  "target_prompt": "A cute panda wearing spectacles dancing",
+  "target_uuid": "f7415784-9a4d-594e-a984-a436c1172a35",
+  "timing": {
+    "source_dit_forward_s": 111.47779492964037,
+    "source_probe_s": 141.8075338290073,
+    "target_dit_forward_s": 111.32862619310617,
+    "target_probe_s": 141.77750006783754,
+    "total_s": 283.58503389684483
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 104,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1595882808061035,
+    "context_color_ciede2000": 1.531037251679186,
+    "log_area_ratio": 0.6040194859476825,
+    "shape_one_minus_dice": 0.6721311475409837
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1595882808061035,
+    "context_color_ciede2000": 1.531037251679186,
+    "log_area_ratio": 0.6040194859476825,
+    "shape_one_minus_dice": 0.6721311475409837
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 104,
+  "source_nouns": [
+    "boat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "boat"
+  ],
+  "source_prompt": "Mickey mouse dancing on a boat",
+  "source_uuid": "66b8b77b-c24c-5e00-bb97-145fee96f9f8",
+  "status": "completed",
+  "target_nouns": [
+    "ganesh",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "ganesh"
+  ],
+  "target_prompt": "Lord ganesh dancing with mouse",
+  "target_uuid": "ea4f4bce-ad50-5fa4-b178-26497adadfed",
+  "timing": {
+    "source_dit_forward_s": 112.85887306672521,
+    "source_probe_s": 143.02349531813525,
+    "target_dit_forward_s": 112.86019861372188,
+    "target_probe_s": 142.6139432908967,
+    "total_s": 285.63743860903196
+  }
+}

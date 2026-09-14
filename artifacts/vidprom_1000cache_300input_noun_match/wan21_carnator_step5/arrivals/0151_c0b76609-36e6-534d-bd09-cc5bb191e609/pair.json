@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 151,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.47558241349292163,
+    "context_color_ciede2000": 0.3866898357559795,
+    "log_area_ratio": 0.11447720008881669,
+    "shape_one_minus_dice": 0.6176470588235294
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.47558241349292163,
+    "context_color_ciede2000": 0.3866898357559795,
+    "log_area_ratio": 0.11447720008881669,
+    "shape_one_minus_dice": 0.6176470588235294
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 151,
+  "source_nouns": [
+    "river",
+    "sheep",
+    "water"
+  ],
+  "source_only_nouns": [
+    "sheep"
+  ],
+  "source_prompt": "a sheep bending down to drink water from a river",
+  "source_uuid": "0c2b403a-60c4-5872-bdd6-7074c8d9f345",
+  "status": "completed",
+  "target_nouns": [
+    "giraffe",
+    "river",
+    "water"
+  ],
+  "target_only_nouns": [
+    "giraffe"
+  ],
+  "target_prompt": "a giraffe bending down to drink water from a river",
+  "target_uuid": "c0b76609-36e6-534d-bd09-cc5bb191e609",
+  "timing": {
+    "source_dit_forward_s": 113.23405161569826,
+    "source_probe_s": 143.86062376387417,
+    "target_dit_forward_s": 113.20869032433257,
+    "target_probe_s": 143.81811553705484,
+    "total_s": 287.678739300929
+  }
+}

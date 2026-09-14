@@ -1,0 +1,158 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "152862687c5843d7b73575bc49321866c51edafb99ec65ba9ccc8f2b529dcf2c",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "4553f3227d8faabf9d50b1983c3e2ace37e3dfb0fef976be0cab3a11e647cfe7"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "8f4ea35cfce7fe68b3b02537e8c08913fc5dc62229b39ff539150d2530ac928d"
+  },
+  "objects": [
+    {
+      "area_frac": 0.15937499701976776,
+      "centroid_yx": [
+        22.88591766357422,
+        39.194297790527344
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.01787185668945,
+          -2.374210834503174,
+          14.126605033874512
+        ],
+        "mean_rgb": [
+          110.35590362548828,
+          107.830810546875,
+          83.5333023071289
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 143616
+      },
+      "dtype": "bool",
+      "noun": "animals",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.48806819319725037,
+      "centroid_yx": [
+        17.990686416625977,
+        39.26484298706055
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.91077423095703,
+          -3.1394522190093994,
+          13.778007507324219
+        ],
+        "mean_rgb": [
+          108.52119445800781,
+          107.95700073242188,
+          83.7705078125
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 439808
+      },
+      "dtype": "bool",
+      "noun": "feast",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.11676136404275894,
+      "centroid_yx": [
+        21.029197692871094,
+        43.304134368896484
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.958290100097656,
+          -2.13718318939209,
+          14.319535255432129
+        ],
+        "mean_rgb": [
+          110.93965911865234,
+          107.54011535644531,
+          82.96324920654297
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 105216
+      },
+      "dtype": "bool",
+      "noun": "lion",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    }
+  ],
+  "prompt": "Leo the lion sharing a feast with other animals.",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

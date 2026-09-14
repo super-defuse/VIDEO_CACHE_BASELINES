@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 32,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0682339921188293,
+    "context_color_ciede2000": 0.4155915791741352,
+    "log_area_ratio": 1.1578336336641093,
+    "shape_one_minus_dice": 0.5161290322580645
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0682339921188293,
+    "context_color_ciede2000": 0.4155915791741352,
+    "log_area_ratio": 1.1578336336641093,
+    "shape_one_minus_dice": 0.5161290322580645
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 32,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "elephant"
+  ],
+  "target_prompt": "a cute rabbit talking to an elephant",
+  "target_uuid": "6dc1a1bf-1c66-5d66-a922-d92c5c1011be",
+  "timing": {
+    "source_dit_forward_s": 109.75524418591522,
+    "source_probe_s": 139.10100726690143,
+    "target_dit_forward_s": 109.74589998880401,
+    "target_probe_s": 138.66541795805097,
+    "total_s": 277.7664252249524
+  }
+}

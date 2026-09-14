@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 13,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.836991595444556,
+    "context_color_ciede2000": 0.8880185580277522,
+    "log_area_ratio": 1.2254104990626693,
+    "shape_one_minus_dice": 0.4042553191489362
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.836991595444556,
+    "context_color_ciede2000": 0.8880185580277522,
+    "log_area_ratio": 1.2254104990626693,
+    "shape_one_minus_dice": 0.4042553191489362
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 13,
+  "source_nouns": [
+    "cat",
+    "eyes"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat with nice and beautiful eyes",
+  "source_uuid": "9fab7331-3987-5669-92a9-b0e352e3800f",
+  "status": "completed",
+  "target_nouns": [
+    "eyes",
+    "family"
+  ],
+  "target_only_nouns": [
+    "family"
+  ],
+  "target_prompt": "big eyes owl blinking family",
+  "target_uuid": "cf19d5e1-b414-5332-bcc9-0232eb6498f9",
+  "timing": {
+    "source_dit_forward_s": 111.36492558778264,
+    "source_probe_s": 140.85313738510013,
+    "target_dit_forward_s": 111.41607333067805,
+    "target_probe_s": 141.44955992116593,
+    "total_s": 282.30269730626605
+  }
+}

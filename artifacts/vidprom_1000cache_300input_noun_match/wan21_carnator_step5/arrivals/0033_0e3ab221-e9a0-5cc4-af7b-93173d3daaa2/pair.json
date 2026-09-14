@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 33,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4566739483009153,
+    "context_color_ciede2000": 0.8900907859971559,
+    "log_area_ratio": 0.6367680734908133,
+    "shape_one_minus_dice": 0.44285714285714284
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4566739483009153,
+    "context_color_ciede2000": 0.8900907859971559,
+    "log_area_ratio": 0.6367680734908133,
+    "shape_one_minus_dice": 0.44285714285714284
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 33,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "mud",
+    "pig"
+  ],
+  "target_only_nouns": [
+    "mud"
+  ],
+  "target_prompt": "pig rolling around in mud",
+  "target_uuid": "0e3ab221-e9a0-5cc4-af7b-93173d3daaa2",
+  "timing": {
+    "source_dit_forward_s": 111.40755486465059,
+    "source_probe_s": 140.78119748015888,
+    "target_dit_forward_s": 111.31595695437863,
+    "target_probe_s": 141.15916925598867,
+    "total_s": 281.94036673614755
+  }
+}

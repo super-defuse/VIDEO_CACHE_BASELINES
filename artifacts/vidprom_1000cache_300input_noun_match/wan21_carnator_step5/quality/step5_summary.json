@@ -1,0 +1,30 @@
+{
+  "arrivals": 300,
+  "best_hit_rate": {
+    "accepted": 300,
+    "hit_rate_all_arrivals": 1.0,
+    "hit_rate_comparable": 1.0,
+    "max_changed_color_distance": 3.9268390145534178,
+    "max_context_color_distance": 4.2594184835940245,
+    "max_log_area_ratio": 1.9361144639166445,
+    "max_shape_distance": 1.0,
+    "rejected_by_gates": 0,
+    "unscorable": 0
+  },
+  "comparable": 300,
+  "completed": 300,
+  "default_thresholds": {
+    "max_changed_color_distance": 2.2003341853972085,
+    "max_context_color_distance": 2.5460641772840114,
+    "max_log_area_ratio": 1.6755377126043391,
+    "max_shape_distance": 1.0
+  },
+  "default_thresholds_in_sweep": null,
+  "errors": 0,
+  "max_threshold_values": 12,
+  "records": 300,
+  "schema_version": "wan21-carnator-step5-signatures/v1",
+  "summarized_at": "2026-09-13T16:36:40+00:00",
+  "sweep_tuples": 20736,
+  "unscorable": 0
+}

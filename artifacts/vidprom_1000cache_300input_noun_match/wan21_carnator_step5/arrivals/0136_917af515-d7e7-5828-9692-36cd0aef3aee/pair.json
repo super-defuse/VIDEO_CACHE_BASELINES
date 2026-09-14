@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 136,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6524343027497196,
+    "context_color_ciede2000": 0.6736595014635004,
+    "log_area_ratio": 0.5033320046678247,
+    "shape_one_minus_dice": 0.6935483870967742
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6524343027497196,
+    "context_color_ciede2000": 0.6736595014635004,
+    "log_area_ratio": 0.5033320046678247,
+    "shape_one_minus_dice": 0.6935483870967742
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 136,
+  "source_nouns": [
+    "banana",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog eating a banana",
+  "source_uuid": "5fce7515-50ce-5aa2-9bb4-2309098284ff",
+  "status": "completed",
+  "target_nouns": [
+    "banana",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "lion"
+  ],
+  "target_prompt": "a lion eating a banana",
+  "target_uuid": "917af515-d7e7-5828-9692-36cd0aef3aee",
+  "timing": {
+    "source_dit_forward_s": 113.19237416959368,
+    "source_probe_s": 143.11823850194924,
+    "target_dit_forward_s": 113.24377779918723,
+    "target_probe_s": 143.263918165816,
+    "total_s": 286.38215666776523
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 235,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7347697607391277,
+    "context_color_ciede2000": 0.5469122236602137,
+    "log_area_ratio": 0.5927324634519071,
+    "shape_one_minus_dice": 0.7730496453900709
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7347697607391277,
+    "context_color_ciede2000": 0.5469122236602137,
+    "log_area_ratio": 0.5927324634519071,
+    "shape_one_minus_dice": 0.7730496453900709
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 235,
+  "source_nouns": [
+    "dancing",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "dancing"
+  ],
+  "source_prompt": "monkey dancing -ar 9:16",
+  "source_uuid": "1c909a36-1e85-5d30-b750-7a36d1f3e5fe",
+  "status": "completed",
+  "target_nouns": [
+    "monkey",
+    "video"
+  ],
+  "target_only_nouns": [
+    "video"
+  ],
+  "target_prompt": "generate a video monkey walking on wather",
+  "target_uuid": "a52125d9-6bce-54d7-bc75-ee21e209f566",
+  "timing": {
+    "source_dit_forward_s": 112.0991262847092,
+    "source_probe_s": 141.97120352601632,
+    "target_dit_forward_s": 112.19231116585433,
+    "target_probe_s": 142.18704030686058,
+    "total_s": 284.1582438328769
+  }
+}

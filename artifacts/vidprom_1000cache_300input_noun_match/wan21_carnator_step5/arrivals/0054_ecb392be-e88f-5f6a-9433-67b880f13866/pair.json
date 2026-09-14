@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 54,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0403091662661632,
+    "context_color_ciede2000": 0.9879285616927267,
+    "log_area_ratio": 0.8156405606263663,
+    "shape_one_minus_dice": 0.5
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0403091662661632,
+    "context_color_ciede2000": 0.9879285616927267,
+    "log_area_ratio": 0.8156405606263663,
+    "shape_one_minus_dice": 0.5
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 54,
+  "source_nouns": [
+    "lion",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "pig"
+  ],
+  "source_prompt": "a pig is eating lion",
+  "source_uuid": "fdc8ab9e-8480-5baa-a6c4-b975eef8a40b",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "machete"
+  ],
+  "target_only_nouns": [
+    "machete"
+  ],
+  "target_prompt": "Am with a machete running after a lion",
+  "target_uuid": "ecb392be-e88f-5f6a-9433-67b880f13866",
+  "timing": {
+    "source_dit_forward_s": 112.79163363040425,
+    "source_probe_s": 142.2629311340861,
+    "target_dit_forward_s": 112.82351629366167,
+    "target_probe_s": 142.9059329680167,
+    "total_s": 285.1688641021028
+  }
+}

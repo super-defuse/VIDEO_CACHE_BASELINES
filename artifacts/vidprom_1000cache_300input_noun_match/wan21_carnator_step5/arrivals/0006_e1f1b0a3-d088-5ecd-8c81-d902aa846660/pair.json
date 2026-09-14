@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 6,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6571099792813231,
+    "context_color_ciede2000": 1.4879476854169416,
+    "log_area_ratio": 0.6871266984819577,
+    "shape_one_minus_dice": 0.4782608695652174
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6571099792813231,
+    "context_color_ciede2000": 1.4879476854169416,
+    "log_area_ratio": 0.6871266984819577,
+    "shape_one_minus_dice": 0.4782608695652174
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 6,
+  "source_nouns": [
+    "cat",
+    "space",
+    "suit"
+  ],
+  "source_only_nouns": [
+    "suit"
+  ],
+  "source_prompt": "a cat flying in the space with space suit",
+  "source_uuid": "b42ee92d-4cbc-58d5-ade0-de7e23214548",
+  "status": "completed",
+  "target_nouns": [
+    "astronaut",
+    "cat",
+    "space"
+  ],
+  "target_only_nouns": [
+    "astronaut"
+  ],
+  "target_prompt": "a cat astronaut floating in outer space",
+  "target_uuid": "e1f1b0a3-d088-5ecd-8c81-d902aa846660",
+  "timing": {
+    "source_dit_forward_s": 112.99798255297355,
+    "source_probe_s": 143.8955059540458,
+    "target_dit_forward_s": 113.04582258267328,
+    "target_probe_s": 143.67256248602644,
+    "total_s": 287.56806844007224
+  }
+}

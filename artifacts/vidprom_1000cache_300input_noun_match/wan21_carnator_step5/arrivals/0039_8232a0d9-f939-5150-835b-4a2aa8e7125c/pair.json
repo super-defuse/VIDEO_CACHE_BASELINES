@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 39,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0677899647299733,
+    "context_color_ciede2000": 1.357548810541055,
+    "log_area_ratio": 0.10832959097447342,
+    "shape_one_minus_dice": 0.540983606557377
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0677899647299733,
+    "context_color_ciede2000": 1.357548810541055,
+    "log_area_ratio": 0.10832959097447342,
+    "shape_one_minus_dice": 0.540983606557377
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 39,
+  "source_nouns": [
+    "desert",
+    "jungle",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "desert"
+  ],
+  "source_prompt": "tiger sprinting trough jungle and desert",
+  "source_uuid": "1d72c482-3375-586b-88ba-67827110dda5",
+  "status": "completed",
+  "target_nouns": [
+    "jungle",
+    "lion",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "lion"
+  ],
+  "target_prompt": "a tiger and a lion fighting in the jungle",
+  "target_uuid": "8232a0d9-f939-5150-835b-4a2aa8e7125c",
+  "timing": {
+    "source_dit_forward_s": 112.71610256028362,
+    "source_probe_s": 143.53513327613473,
+    "target_dit_forward_s": 112.7653702548705,
+    "target_probe_s": 143.4788673259318,
+    "total_s": 287.0140006020665
+  }
+}

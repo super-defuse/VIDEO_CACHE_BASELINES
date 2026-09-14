@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 101,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5707020054373756,
+    "context_color_ciede2000": 0.23702357201766486,
+    "log_area_ratio": 1.3820660290740963,
+    "shape_one_minus_dice": 0.29600000000000004
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5707020054373756,
+    "context_color_ciede2000": 0.23702357201766486,
+    "log_area_ratio": 1.3820660290740963,
+    "shape_one_minus_dice": 0.29600000000000004
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 101,
+  "source_nouns": [
+    "city",
+    "streets"
+  ],
+  "source_only_nouns": [
+    "streets"
+  ],
+  "source_prompt": "Goat jumping and running on the streets of the city",
+  "source_uuid": "10431145-5728-55b5-b92d-fb1e747d115f",
+  "status": "completed",
+  "target_nouns": [
+    "city",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "a running horse in a city",
+  "target_uuid": "9233c432-da7e-5727-9362-b0afbb075f11",
+  "timing": {
+    "source_dit_forward_s": 113.09943487285636,
+    "source_probe_s": 143.86319658416323,
+    "target_dit_forward_s": 113.14023006823845,
+    "target_probe_s": 143.19503248715773,
+    "total_s": 287.05822907132097
+  }
+}

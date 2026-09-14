@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 196,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.3840444285853926,
+    "context_color_ciede2000": 0.33123082677804455,
+    "log_area_ratio": 0.8107440930745186,
+    "shape_one_minus_dice": 0.6
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.3840444285853926,
+    "context_color_ciede2000": 0.33123082677804455,
+    "log_area_ratio": 0.8107440930745186,
+    "shape_one_minus_dice": 0.6
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 196,
+  "source_nouns": [
+    "bed",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "cat walking on a bed",
+  "source_uuid": "9d2c5e94-b2a8-5b4b-abd3-8849984e9bad",
+  "status": "completed",
+  "target_nouns": [
+    "bed",
+    "bunny"
+  ],
+  "target_only_nouns": [
+    "bunny"
+  ],
+  "target_prompt": "a bunny jumps onto the bed",
+  "target_uuid": "8fa68b80-2c1c-5082-8f37-2582c3664ba9",
+  "timing": {
+    "source_dit_forward_s": 113.09149944433011,
+    "source_probe_s": 143.2001024680212,
+    "target_dit_forward_s": 113.10908707208,
+    "target_probe_s": 143.21856188890524,
+    "total_s": 286.41866435692646
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 40,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.5011017318929754,
+    "context_color_ciede2000": 0.4914217068146961,
+    "log_area_ratio": 0.08841857205237975,
+    "shape_one_minus_dice": 0.7666666666666666
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.5011017318929754,
+    "context_color_ciede2000": 0.4914217068146961,
+    "log_area_ratio": 0.08841857205237975,
+    "shape_one_minus_dice": 0.7666666666666666
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 40,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "snow",
+    "wolf"
+  ],
+  "target_only_nouns": [
+    "wolf"
+  ],
+  "target_prompt": "A wolf running and jumping in the snow",
+  "target_uuid": "4a587643-f49f-5abe-bed7-77f3cd2c385d",
+  "timing": {
+    "source_dit_forward_s": 111.98285996587947,
+    "source_probe_s": 142.00686167995445,
+    "target_dit_forward_s": 111.89871337707154,
+    "target_probe_s": 141.48261613911018,
+    "total_s": 283.48947781906463
+  }
+}

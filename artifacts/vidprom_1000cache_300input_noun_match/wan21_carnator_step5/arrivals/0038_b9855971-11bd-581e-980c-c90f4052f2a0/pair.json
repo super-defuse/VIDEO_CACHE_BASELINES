@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 38,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.25713348134061,
+    "context_color_ciede2000": 0.6671733491383339,
+    "log_area_ratio": 0.22053229251395567,
+    "shape_one_minus_dice": 0.696969696969697
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.25713348134061,
+    "context_color_ciede2000": 0.6671733491383339,
+    "log_area_ratio": 0.22053229251395567,
+    "shape_one_minus_dice": 0.696969696969697
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 38,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "jaguar",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "jaguar"
+  ],
+  "target_prompt": "Bengal tiger defeating a jaguar",
+  "target_uuid": "b9855971-11bd-581e-980c-c90f4052f2a0",
+  "timing": {
+    "source_dit_forward_s": 111.36711130081676,
+    "source_probe_s": 140.64872176991776,
+    "target_dit_forward_s": 111.47911139577627,
+    "target_probe_s": 140.86133161420003,
+    "total_s": 281.5100533841178
+  }
+}

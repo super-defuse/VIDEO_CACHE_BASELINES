@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 83,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7279625306986398,
+    "context_color_ciede2000": 0.30066528641161155,
+    "log_area_ratio": 0.8660601288940336,
+    "shape_one_minus_dice": 0.5633802816901409
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7279625306986398,
+    "context_color_ciede2000": 0.30066528641161155,
+    "log_area_ratio": 0.8660601288940336,
+    "shape_one_minus_dice": 0.5633802816901409
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 83,
+  "source_nouns": [
+    "cat",
+    "half",
+    "house"
+  ],
+  "source_only_nouns": [
+    "half"
+  ],
+  "source_prompt": "cat cutting a house in half",
+  "source_uuid": "30984eba-508c-5554-b4b9-3cc683ef4424",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "house",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "mouse"
+  ],
+  "target_prompt": "real cat chasing the mouse inside the house looking very natural",
+  "target_uuid": "a539d48d-30c2-5da8-871f-98af3fb2c3b8",
+  "timing": {
+    "source_dit_forward_s": 111.37227844796143,
+    "source_probe_s": 141.96340887900442,
+    "target_dit_forward_s": 111.41475180303678,
+    "target_probe_s": 141.51389714702964,
+    "total_s": 283.47730602603406
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 168,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.8098432887622606,
+    "context_color_ciede2000": 0.5131023414430664,
+    "log_area_ratio": 0.011279981053819057,
+    "shape_one_minus_dice": 0.7815126050420168
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.8098432887622606,
+    "context_color_ciede2000": 0.5131023414430664,
+    "log_area_ratio": 0.011279981053819057,
+    "shape_one_minus_dice": 0.7815126050420168
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 168,
+  "source_nouns": [
+    "cat",
+    "dragon"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "dragon flying and eating a cat",
+  "source_uuid": "8e36a373-d7c2-5fab-81fc-aeedc3e43865",
+  "status": "completed",
+  "target_nouns": [
+    "dragon",
+    "house"
+  ],
+  "target_only_nouns": [
+    "house"
+  ],
+  "target_prompt": "A dragon standing on a dwarven house",
+  "target_uuid": "bb799b08-e256-5a06-a6f1-48a1a254baeb",
+  "timing": {
+    "source_dit_forward_s": 111.40187227772549,
+    "source_probe_s": 140.85314918891527,
+    "target_dit_forward_s": 111.42270447430201,
+    "target_probe_s": 140.99073133897036,
+    "total_s": 281.84388052788563
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 7,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.613604686006122,
+    "context_color_ciede2000": 0.8839478438260928,
+    "log_area_ratio": 0.4714936100558277,
+    "shape_one_minus_dice": 0.6461538461538461
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.613604686006122,
+    "context_color_ciede2000": 0.8839478438260928,
+    "log_area_ratio": 0.4714936100558277,
+    "shape_one_minus_dice": 0.6461538461538461
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 7,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "coconut",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "coconut"
+  ],
+  "target_prompt": "a white coconut rolling in snow",
+  "target_uuid": "82f89e80-c1b4-5113-a860-2ab19bc72524",
+  "timing": {
+    "source_dit_forward_s": 109.64251776784658,
+    "source_probe_s": 139.03327514696866,
+    "target_dit_forward_s": 109.66368545242585,
+    "target_probe_s": 138.87831523711793,
+    "total_s": 277.9115903840866
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 58,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.77203405013962,
+    "context_color_ciede2000": 2.1162318984379254,
+    "log_area_ratio": 0.6809889877106328,
+    "shape_one_minus_dice": 0.8412698412698413
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.77203405013962,
+    "context_color_ciede2000": 2.1162318984379254,
+    "log_area_ratio": 0.6809889877106328,
+    "shape_one_minus_dice": 0.8412698412698413
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 58,
+  "source_nouns": [
+    "ball",
+    "crab",
+    "yarn"
+  ],
+  "source_only_nouns": [
+    "crab"
+  ],
+  "source_prompt": "the crab gets caught in the ball of yarn and jumps",
+  "source_uuid": "f673f9b5-7dda-5581-bc5e-776d563b792a",
+  "status": "completed",
+  "target_nouns": [
+    "ball",
+    "playing",
+    "yarn"
+  ],
+  "target_only_nouns": [
+    "playing"
+  ],
+  "target_prompt": "A kitten playing with a yarn ball",
+  "target_uuid": "8e310cdb-6792-5e25-90a1-54cbee4c7212",
+  "timing": {
+    "source_dit_forward_s": 111.46515392069705,
+    "source_probe_s": 141.44138044095598,
+    "target_dit_forward_s": 111.47253941115923,
+    "target_probe_s": 141.45145190507174,
+    "total_s": 282.8928323460277
+  }
+}

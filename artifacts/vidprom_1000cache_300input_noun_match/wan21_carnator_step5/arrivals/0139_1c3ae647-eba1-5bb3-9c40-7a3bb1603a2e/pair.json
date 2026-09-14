@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 139,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.4357108260484055,
+    "context_color_ciede2000": 0.9928866720132581,
+    "log_area_ratio": 0.6977406133950744,
+    "shape_one_minus_dice": 0.6885245901639344
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.4357108260484055,
+    "context_color_ciede2000": 0.9928866720132581,
+    "log_area_ratio": 0.6977406133950744,
+    "shape_one_minus_dice": 0.6885245901639344
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 139,
+  "source_nouns": [
+    "cat",
+    "mountain",
+    "top"
+  ],
+  "source_only_nouns": [
+    "mountain"
+  ],
+  "source_prompt": "a cat dancing on the top of mountain",
+  "source_uuid": "aaa2a558-04b7-5218-bf80-dab45720c775",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "peak",
+    "top"
+  ],
+  "target_only_nouns": [
+    "peak"
+  ],
+  "target_prompt": "a cat sleeping on top of a impossible peak",
+  "target_uuid": "1c3ae647-eba1-5bb3-9c40-7a3bb1603a2e",
+  "timing": {
+    "source_dit_forward_s": 112.85524021997117,
+    "source_probe_s": 143.34086217102595,
+    "target_dit_forward_s": 112.96317663602531,
+    "target_probe_s": 143.4800368240103,
+    "total_s": 286.82089899503626
+  }
+}

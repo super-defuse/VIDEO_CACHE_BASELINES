@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 95,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9926773035914974,
+    "context_color_ciede2000": 0.6380883110217697,
+    "log_area_ratio": 1.0853719860811317,
+    "shape_one_minus_dice": 0.5798319327731092
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9926773035914974,
+    "context_color_ciede2000": 0.6380883110217697,
+    "log_area_ratio": 1.0853719860811317,
+    "shape_one_minus_dice": 0.5798319327731092
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 95,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "bush",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "bush"
+  ],
+  "target_prompt": "rabbit jumping out of the bush",
+  "target_uuid": "87530fc1-83e4-521d-83c4-97e5b6a785b7",
+  "timing": {
+    "source_dit_forward_s": 112.00805951398797,
+    "source_probe_s": 141.8811529870145,
+    "target_dit_forward_s": 112.0380374302622,
+    "target_probe_s": 141.76904722093605,
+    "total_s": 283.65020020795055
+  }
+}

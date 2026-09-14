@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 211,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8197943632471956,
+    "context_color_ciede2000": 0.7983954931378189,
+    "log_area_ratio": 0.1840930561945819,
+    "shape_one_minus_dice": 0.6285714285714286
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8197943632471956,
+    "context_color_ciede2000": 0.7983954931378189,
+    "log_area_ratio": 0.1840930561945819,
+    "shape_one_minus_dice": 0.6285714285714286
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 211,
+  "source_nouns": [
+    "bear",
+    "dancing",
+    "video"
+  ],
+  "source_only_nouns": [
+    "video"
+  ],
+  "source_prompt": "video of a dancing bear",
+  "source_uuid": "00e11379-2994-5833-95a1-1ac981c7fefc",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "dancing",
+    "plush"
+  ],
+  "target_only_nouns": [
+    "plush"
+  ],
+  "target_prompt": "A green plush bear dancing",
+  "target_uuid": "ce008562-8233-50ac-9d87-d98967752890",
+  "timing": {
+    "source_dit_forward_s": 113.12564327474684,
+    "source_probe_s": 143.7743127879221,
+    "target_dit_forward_s": 113.11533429077826,
+    "target_probe_s": 144.09031749214046,
+    "total_s": 287.86463028006256
+  }
+}

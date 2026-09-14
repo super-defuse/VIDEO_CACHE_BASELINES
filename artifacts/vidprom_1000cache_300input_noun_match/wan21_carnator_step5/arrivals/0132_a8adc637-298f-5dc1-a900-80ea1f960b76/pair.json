@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 132,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.24700521155540883,
+    "context_color_ciede2000": 1.013268217565643,
+    "log_area_ratio": 0.17068170081414547,
+    "shape_one_minus_dice": 0.5905511811023623
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.24700521155540883,
+    "context_color_ciede2000": 1.013268217565643,
+    "log_area_ratio": 0.17068170081414547,
+    "shape_one_minus_dice": 0.5905511811023623
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 132,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "tea"
+  ],
+  "target_only_nouns": [
+    "tea"
+  ],
+  "target_prompt": "dog and cat drink tea",
+  "target_uuid": "a8adc637-298f-5dc1-a900-80ea1f960b76",
+  "timing": {
+    "source_dit_forward_s": 109.71387440827675,
+    "source_probe_s": 139.4616181170568,
+    "target_dit_forward_s": 109.76143153687008,
+    "target_probe_s": 139.67563487193547,
+    "total_s": 279.13725298899226
+  }
+}

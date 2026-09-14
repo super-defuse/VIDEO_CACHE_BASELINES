@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 107,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6876577547101846,
+    "context_color_ciede2000": 1.2146998196199326,
+    "log_area_ratio": 0.26550822128477636,
+    "shape_one_minus_dice": 0.776
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6876577547101846,
+    "context_color_ciede2000": 1.2146998196199326,
+    "log_area_ratio": 0.26550822128477636,
+    "shape_one_minus_dice": 0.776
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 107,
+  "source_nouns": [
+    "bear",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a golden dog chasing a bear",
+  "source_uuid": "bbe39181-1af7-57ef-94b5-474c14537ef9",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "tree"
+  ],
+  "target_prompt": "cinematic, 9:16, handsome muscular blue god krishna fighting a fierce muscular bear, the bear is breathing and holding a tree.",
+  "target_uuid": "0eae76a5-5464-5912-ac1f-c9de4d3cc496",
+  "timing": {
+    "source_dit_forward_s": 109.66719215339981,
+    "source_probe_s": 138.4581673599314,
+    "target_dit_forward_s": 109.76025842921808,
+    "target_probe_s": 138.9963083481416,
+    "total_s": 277.454475708073
+  }
+}

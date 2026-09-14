@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 71,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5026145088644687,
+    "context_color_ciede2000": 1.5715799437237488,
+    "log_area_ratio": 0.05608062605556088,
+    "shape_one_minus_dice": 0.5223880597014925
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5026145088644687,
+    "context_color_ciede2000": 1.5715799437237488,
+    "log_area_ratio": 0.05608062605556088,
+    "shape_one_minus_dice": 0.5223880597014925
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 71,
+  "source_nouns": [
+    "cat",
+    "footage",
+    "man"
+  ],
+  "source_only_nouns": [
+    "footage"
+  ],
+  "source_prompt": "declassified footage of a cat man hybrid",
+  "source_uuid": "de06a9b3-df13-5b61-a79a-bef1c8d2f5f4",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "man",
+    "water"
+  ],
+  "target_only_nouns": [
+    "water"
+  ],
+  "target_prompt": "water cat kissing a man",
+  "target_uuid": "036d1cab-1fac-5f74-be8c-23b24e1c73f1",
+  "timing": {
+    "source_dit_forward_s": 113.13771978835575,
+    "source_probe_s": 144.05380153097212,
+    "target_dit_forward_s": 113.20055501768366,
+    "target_probe_s": 143.9309031330049,
+    "total_s": 287.984704663977
+  }
+}

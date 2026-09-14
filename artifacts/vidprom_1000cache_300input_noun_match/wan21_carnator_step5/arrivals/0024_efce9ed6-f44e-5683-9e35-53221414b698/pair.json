@@ -1,0 +1,62 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 24,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.24417281970570268,
+    "context_color_ciede2000": 0.8751827970179878,
+    "log_area_ratio": 0.06980561552014071,
+    "shape_one_minus_dice": 0.44525547445255476
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.24417281970570268,
+    "context_color_ciede2000": 0.8751827970179878,
+    "log_area_ratio": 0.06980561552014071,
+    "shape_one_minus_dice": 0.44525547445255476
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 24,
+  "source_nouns": [
+    "amount",
+    "crow",
+    "pot",
+    "water"
+  ],
+  "source_only_nouns": [
+    "amount"
+  ],
+  "source_prompt": "onec a crow was thirsty. He was looking for water here and there. Suddenly he saw a pot with little amount of water in it.",
+  "source_uuid": "ca1ff1bf-d6c9-5c4c-a9da-84aa0463dcd6",
+  "status": "completed",
+  "target_nouns": [
+    "crow",
+    "half",
+    "pot",
+    "water"
+  ],
+  "target_only_nouns": [
+    "half"
+  ],
+  "target_prompt": "a crow came across the half filled water pot",
+  "target_uuid": "efce9ed6-f44e-5683-9e35-53221414b698",
+  "timing": {
+    "source_dit_forward_s": 112.75685203284957,
+    "source_probe_s": 144.0744020070415,
+    "target_dit_forward_s": 112.79323466890492,
+    "target_probe_s": 143.77386739198118,
+    "total_s": 287.8482693990227
+  }
+}

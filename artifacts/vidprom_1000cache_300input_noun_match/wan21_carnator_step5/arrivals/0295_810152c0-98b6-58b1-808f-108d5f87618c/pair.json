@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 295,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9304942216833928,
+    "context_color_ciede2000": 1.2509871682817362,
+    "log_area_ratio": 0.4526338406744853,
+    "shape_one_minus_dice": 0.6557377049180328
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9304942216833928,
+    "context_color_ciede2000": 1.2509871682817362,
+    "log_area_ratio": 0.4526338406744853,
+    "shape_one_minus_dice": 0.6557377049180328
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 295,
+  "source_nouns": [
+    "puppy",
+    "trees"
+  ],
+  "source_only_nouns": [
+    "trees"
+  ],
+  "source_prompt": "little puppy running and climbing trees",
+  "source_uuid": "6fad46d3-c304-5363-b6ed-6f03f6ec8793",
+  "status": "completed",
+  "target_nouns": [
+    "poodle",
+    "puppy"
+  ],
+  "target_only_nouns": [
+    "poodle"
+  ],
+  "target_prompt": "toy poodle puppy Merry Christmas",
+  "target_uuid": "810152c0-98b6-58b1-808f-108d5f87618c",
+  "timing": {
+    "source_dit_forward_s": 112.31075247377157,
+    "source_probe_s": 142.46599787194282,
+    "target_dit_forward_s": 112.40410874201916,
+    "target_probe_s": 142.47482849797234,
+    "total_s": 284.94082636991516
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 115,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6304713201656961,
+    "context_color_ciede2000": 1.2578413116264375,
+    "log_area_ratio": 0.29096615610081955,
+    "shape_one_minus_dice": 0.6451612903225806
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6304713201656961,
+    "context_color_ciede2000": 1.2578413116264375,
+    "log_area_ratio": 0.29096615610081955,
+    "shape_one_minus_dice": 0.6451612903225806
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 115,
+  "source_nouns": [
+    "food",
+    "story"
+  ],
+  "source_only_nouns": [
+    "story"
+  ],
+  "source_prompt": "story The blue Jay is looking for food",
+  "source_uuid": "8db5fdab-cfc8-555a-a89d-3831258f5898",
+  "status": "completed",
+  "target_nouns": [
+    "food",
+    "moustache"
+  ],
+  "target_only_nouns": [
+    "moustache"
+  ],
+  "target_prompt": "Black Cat with moustache eating food.",
+  "target_uuid": "b585779c-539f-51d5-b885-71b11c9be045",
+  "timing": {
+    "source_dit_forward_s": 112.05956399906427,
+    "source_probe_s": 141.59362333407626,
+    "target_dit_forward_s": 112.06803133594804,
+    "target_probe_s": 141.8556871721521,
+    "total_s": 283.44931050622836
+  }
+}

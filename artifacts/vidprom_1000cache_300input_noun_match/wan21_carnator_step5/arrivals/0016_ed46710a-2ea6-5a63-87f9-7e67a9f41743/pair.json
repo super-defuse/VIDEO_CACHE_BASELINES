@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 16,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.906448925977209,
+    "context_color_ciede2000": 0.7247498944768607,
+    "log_area_ratio": 1.0860136877582474,
+    "shape_one_minus_dice": 0.5263157894736843
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.906448925977209,
+    "context_color_ciede2000": 0.7247498944768607,
+    "log_area_ratio": 1.0860136877582474,
+    "shape_one_minus_dice": 0.5263157894736843
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 16,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "tiger"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "penguin"
+  ],
+  "target_only_nouns": [
+    "penguin"
+  ],
+  "target_prompt": "A cute little lion and a wobbly penguin appear",
+  "target_uuid": "ed46710a-2ea6-5a63-87f9-7e67a9f41743",
+  "timing": {
+    "source_dit_forward_s": 112.97887061280198,
+    "source_probe_s": 142.6766446060501,
+    "target_dit_forward_s": 113.04594360128976,
+    "target_probe_s": 142.94284971384332,
+    "total_s": 285.6194943198934
+  }
+}

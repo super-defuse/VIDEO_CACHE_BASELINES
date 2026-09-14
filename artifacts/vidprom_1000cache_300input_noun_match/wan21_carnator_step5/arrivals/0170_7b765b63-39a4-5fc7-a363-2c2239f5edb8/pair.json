@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 170,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7169283479908727,
+    "context_color_ciede2000": 0.8433444820652728,
+    "log_area_ratio": 0.5925424576413967,
+    "shape_one_minus_dice": 0.5737704918032787
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7169283479908727,
+    "context_color_ciede2000": 0.8433444820652728,
+    "log_area_ratio": 0.5925424576413967,
+    "shape_one_minus_dice": 0.5737704918032787
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 170,
+  "source_nouns": [
+    "cat",
+    "moon"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat jumps up to the moon",
+  "source_uuid": "1b98cbc2-66f2-5e38-a736-8f58122d9ab6",
+  "status": "completed",
+  "target_nouns": [
+    "cats",
+    "moon"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "two red cats in moon",
+  "target_uuid": "7b765b63-39a4-5fc7-a363-2c2239f5edb8",
+  "timing": {
+    "source_dit_forward_s": 112.05060960445553,
+    "source_probe_s": 141.6629736998584,
+    "target_dit_forward_s": 112.17048726696521,
+    "target_probe_s": 142.288442021003,
+    "total_s": 283.9514157208614
+  }
+}

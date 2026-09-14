@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 220,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.587513330961522,
+    "context_color_ciede2000": 0.19186057481937346,
+    "log_area_ratio": 0.06300360290239965,
+    "shape_one_minus_dice": 0.44525547445255476
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.587513330961522,
+    "context_color_ciede2000": 0.19186057481937346,
+    "log_area_ratio": 0.06300360290239965,
+    "shape_one_minus_dice": 0.44525547445255476
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 220,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "panda",
+    "pie"
+  ],
+  "target_only_nouns": [
+    "pie"
+  ],
+  "target_prompt": "a panda eating a pie",
+  "target_uuid": "762f9a7b-0cad-582f-b8f6-95cbfd39e8d8",
+  "timing": {
+    "source_dit_forward_s": 112.19317834591493,
+    "source_probe_s": 141.98222630587406,
+    "target_dit_forward_s": 112.20597931696102,
+    "target_probe_s": 142.1882232669741,
+    "total_s": 284.17044957284816
+  }
+}

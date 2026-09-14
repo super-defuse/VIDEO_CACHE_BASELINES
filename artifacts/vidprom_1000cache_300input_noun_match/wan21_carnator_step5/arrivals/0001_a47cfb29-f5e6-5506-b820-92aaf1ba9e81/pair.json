@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 1,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9104590023663746,
+    "context_color_ciede2000": 0.5924328523966064,
+    "log_area_ratio": 0.8394686184638226,
+    "shape_one_minus_dice": 0.6833333333333333
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9104590023663746,
+    "context_color_ciede2000": 0.5924328523966064,
+    "log_area_ratio": 0.8394686184638226,
+    "shape_one_minus_dice": 0.6833333333333333
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 1,
+  "source_nouns": [
+    "hamster",
+    "man"
+  ],
+  "source_only_nouns": [
+    "hamster"
+  ],
+  "source_prompt": "human man fighting a hamster",
+  "source_uuid": "4f8357f4-3305-51d5-95d3-30fd8067ec44",
+  "status": "completed",
+  "target_nouns": [
+    "beagle",
+    "man"
+  ],
+  "target_only_nouns": [
+    "beagle"
+  ],
+  "target_prompt": "a man walking his giant beagle",
+  "target_uuid": "a47cfb29-f5e6-5506-b820-92aaf1ba9e81",
+  "timing": {
+    "source_dit_forward_s": 112.83799627586268,
+    "source_probe_s": 148.8211528758984,
+    "target_dit_forward_s": 112.95015416340902,
+    "target_probe_s": 142.81341935694218,
+    "total_s": 291.6345722328406
+  }
+}

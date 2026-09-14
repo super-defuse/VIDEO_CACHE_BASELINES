@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 42,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7193495504094819,
+    "context_color_ciede2000": 0.6958494907752315,
+    "log_area_ratio": 0.3027718033765046,
+    "shape_one_minus_dice": 0.576271186440678
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7193495504094819,
+    "context_color_ciede2000": 0.6958494907752315,
+    "log_area_ratio": 0.3027718033765046,
+    "shape_one_minus_dice": 0.576271186440678
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 42,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "cat roaring like a lion",
+  "source_uuid": "8c72ada1-bfb4-5694-b758-7487cfb1156a",
+  "status": "completed",
+  "target_nouns": [
+    "cave",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "cave"
+  ],
+  "target_prompt": "a lion roaring in cave",
+  "target_uuid": "2570578d-0fc9-5a6f-80c0-6b0082b5d702",
+  "timing": {
+    "source_dit_forward_s": 109.72419513948262,
+    "source_probe_s": 138.83189229411073,
+    "target_dit_forward_s": 109.73013703385368,
+    "target_probe_s": 138.84359037713148,
+    "total_s": 277.6754826712422
+  }
+}

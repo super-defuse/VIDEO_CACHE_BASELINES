@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 228,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.2008557927917516,
+    "context_color_ciede2000": 0.7639346515142148,
+    "log_area_ratio": 0.04332264124508473,
+    "shape_one_minus_dice": 0.6422764227642277
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.2008557927917516,
+    "context_color_ciede2000": 0.7639346515142148,
+    "log_area_ratio": 0.04332264124508473,
+    "shape_one_minus_dice": 0.6422764227642277
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 228,
+  "source_nouns": [
+    "boy",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a young african boy running after a cat",
+  "source_uuid": "c4031101-c18b-5891-8f82-e6c6fc374cb6",
+  "status": "completed",
+  "target_nouns": [
+    "boy",
+    "sheep"
+  ],
+  "target_only_nouns": [
+    "sheep"
+  ],
+  "target_prompt": "young shepherd boy with sheep laughing",
+  "target_uuid": "1020f89e-9f29-50d5-bd5e-7722cc51378a",
+  "timing": {
+    "source_dit_forward_s": 111.41815792140551,
+    "source_probe_s": 140.87163093592972,
+    "target_dit_forward_s": 111.58774281525984,
+    "target_probe_s": 140.91261105099693,
+    "total_s": 281.78424198692665
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 3,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.2103042779227848,
+    "context_color_ciede2000": 0.3200340586704641,
+    "log_area_ratio": 0.12238068700190101,
+    "shape_one_minus_dice": 0.34306569343065696
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.2103042779227848,
+    "context_color_ciede2000": 0.3200340586704641,
+    "log_area_ratio": 0.12238068700190101,
+    "shape_one_minus_dice": 0.34306569343065696
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 3,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "kiss",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "kiss"
+  ],
+  "target_prompt": "a panda giving a kiss",
+  "target_uuid": "f113d2f1-2627-5a10-9487-9fa16228f510",
+  "timing": {
+    "source_dit_forward_s": 111.03038349887356,
+    "source_probe_s": 148.15856480319053,
+    "target_dit_forward_s": 111.39762648008764,
+    "target_probe_s": 141.17600243492052,
+    "total_s": 289.33456723811105
+  }
+}

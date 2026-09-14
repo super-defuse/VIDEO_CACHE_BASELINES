@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 124,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9990755259933993,
+    "context_color_ciede2000": 3.336106546724977,
+    "log_area_ratio": 0.45970831598746054,
+    "shape_one_minus_dice": 0.6312056737588653
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9990755259933993,
+    "context_color_ciede2000": 3.336106546724977,
+    "log_area_ratio": 0.45970831598746054,
+    "shape_one_minus_dice": 0.6312056737588653
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 124,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "horse",
+    "soldier"
+  ],
+  "target_only_nouns": [
+    "soldier"
+  ],
+  "target_prompt": "horse running after a soldier",
+  "target_uuid": "e8002e80-9118-542c-800a-47eb1768b3c1",
+  "timing": {
+    "source_dit_forward_s": 112.85639480082318,
+    "source_probe_s": 142.43772688694298,
+    "target_dit_forward_s": 112.81088379886933,
+    "target_probe_s": 142.84896653494798,
+    "total_s": 285.28669342189096
+  }
+}

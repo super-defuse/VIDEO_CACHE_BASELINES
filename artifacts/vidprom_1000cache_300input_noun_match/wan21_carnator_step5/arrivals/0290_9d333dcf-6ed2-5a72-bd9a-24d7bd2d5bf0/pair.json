@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 290,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7328943111208249,
+    "context_color_ciede2000": 0.22927751403355545,
+    "log_area_ratio": 1.1301385736398102,
+    "shape_one_minus_dice": 0.6850393700787402
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7328943111208249,
+    "context_color_ciede2000": 0.22927751403355545,
+    "log_area_ratio": 1.1301385736398102,
+    "shape_one_minus_dice": 0.6850393700787402
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 290,
+  "source_nouns": [
+    "cow",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "dog acts like a cow in the wild",
+  "source_uuid": "cb41fc98-c24c-5506-9803-9cd575c593cf",
+  "status": "completed",
+  "target_nouns": [
+    "cow",
+    "water"
+  ],
+  "target_only_nouns": [
+    "water"
+  ],
+  "target_prompt": "A cow is drinking water",
+  "target_uuid": "9d333dcf-6ed2-5a72-bd9a-24d7bd2d5bf0",
+  "timing": {
+    "source_dit_forward_s": 112.28358306828886,
+    "source_probe_s": 141.74045834201388,
+    "target_dit_forward_s": 112.26526702474803,
+    "target_probe_s": 141.92915706918575,
+    "total_s": 283.66961541119963
+  }
+}

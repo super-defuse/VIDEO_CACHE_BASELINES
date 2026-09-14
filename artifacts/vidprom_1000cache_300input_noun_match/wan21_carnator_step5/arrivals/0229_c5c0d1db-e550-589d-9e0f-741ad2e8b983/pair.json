@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 229,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.8756808696357334,
+    "context_color_ciede2000": 1.9836116686084728,
+    "log_area_ratio": 0.36486592974751103,
+    "shape_one_minus_dice": 0.564516129032258
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.8756808696357334,
+    "context_color_ciede2000": 1.9836116686084728,
+    "log_area_ratio": 0.36486592974751103,
+    "shape_one_minus_dice": 0.564516129032258
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 229,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "pond",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "pond"
+  ],
+  "target_prompt": "a tiger jumps inside a pink pond",
+  "target_uuid": "c5c0d1db-e550-589d-9e0f-741ad2e8b983",
+  "timing": {
+    "source_dit_forward_s": 113.00878847506829,
+    "source_probe_s": 142.6236275800038,
+    "target_dit_forward_s": 113.00873669283465,
+    "target_probe_s": 142.8812225810252,
+    "total_s": 285.504850161029
+  }
+}

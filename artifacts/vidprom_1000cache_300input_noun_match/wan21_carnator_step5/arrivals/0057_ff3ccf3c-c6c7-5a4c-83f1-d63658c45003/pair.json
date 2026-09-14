@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 57,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.3132802373559728,
+    "context_color_ciede2000": 0.5321499244088872,
+    "log_area_ratio": 0.2342769467708899,
+    "shape_one_minus_dice": 0.5735294117647058
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.3132802373559728,
+    "context_color_ciede2000": 0.5321499244088872,
+    "log_area_ratio": 0.2342769467708899,
+    "shape_one_minus_dice": 0.5735294117647058
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 57,
+  "source_nouns": [
+    "boat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "mouse"
+  ],
+  "source_prompt": "Mickey mouse dancing on a boat",
+  "source_uuid": "66b8b77b-c24c-5e00-bb97-145fee96f9f8",
+  "status": "completed",
+  "target_nouns": [
+    "boat",
+    "cats"
+  ],
+  "target_only_nouns": [
+    "cats"
+  ],
+  "target_prompt": "4 cats on a boat",
+  "target_uuid": "ff3ccf3c-c6c7-5a4c-83f1-d63658c45003",
+  "timing": {
+    "source_dit_forward_s": 109.70608841464855,
+    "source_probe_s": 139.16608835104853,
+    "target_dit_forward_s": 109.73249785532244,
+    "target_probe_s": 139.04597972310148,
+    "total_s": 278.21206807415
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 192,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7804117309916906,
+    "context_color_ciede2000": 0.24730545155593653,
+    "log_area_ratio": 0.5683893722571921,
+    "shape_one_minus_dice": 0.49230769230769234
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7804117309916906,
+    "context_color_ciede2000": 0.24730545155593653,
+    "log_area_ratio": 0.5683893722571921,
+    "shape_one_minus_dice": 0.49230769230769234
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 192,
+  "source_nouns": [
+    "cat",
+    "lion"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "cat roaring like a lion",
+  "source_uuid": "8c72ada1-bfb4-5694-b758-7487cfb1156a",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "mouth"
+  ],
+  "target_only_nouns": [
+    "mouth"
+  ],
+  "target_prompt": "the lion open and close open and close the mouth",
+  "target_uuid": "32365d7c-3c5e-5451-8ea8-e4a8ae308292",
+  "timing": {
+    "source_dit_forward_s": 109.85089239990339,
+    "source_probe_s": 138.96652306220494,
+    "target_dit_forward_s": 109.85384364705533,
+    "target_probe_s": 139.16689238604158,
+    "total_s": 278.1334154482465
+  }
+}

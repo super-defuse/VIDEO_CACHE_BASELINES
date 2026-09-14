@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 165,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4933870878914792,
+    "context_color_ciede2000": 0.7333582045595614,
+    "log_area_ratio": 0.01172100972525585,
+    "shape_one_minus_dice": 0.7398373983739837
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4933870878914792,
+    "context_color_ciede2000": 0.7333582045595614,
+    "log_area_ratio": 0.01172100972525585,
+    "shape_one_minus_dice": 0.7398373983739837
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 165,
+  "source_nouns": [
+    "hamster",
+    "man"
+  ],
+  "source_only_nouns": [
+    "hamster"
+  ],
+  "source_prompt": "human man fighting a hamster",
+  "source_uuid": "4f8357f4-3305-51d5-95d3-30fd8067ec44",
+  "status": "completed",
+  "target_nouns": [
+    "man",
+    "pup"
+  ],
+  "target_only_nouns": [
+    "pup"
+  ],
+  "target_prompt": "cute little man eating pup",
+  "target_uuid": "c1d3c099-3128-5317-9780-609005eded17",
+  "timing": {
+    "source_dit_forward_s": 112.09386633965187,
+    "source_probe_s": 141.76021921704523,
+    "target_dit_forward_s": 112.14687147759832,
+    "target_probe_s": 142.00759756495245,
+    "total_s": 283.7678167819977
+  }
+}

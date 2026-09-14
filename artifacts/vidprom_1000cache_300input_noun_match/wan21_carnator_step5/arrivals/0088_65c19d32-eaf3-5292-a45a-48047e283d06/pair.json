@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 88,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.6304359018865295,
+    "context_color_ciede2000": 0.7851698757386772,
+    "log_area_ratio": 1.2562225214073937,
+    "shape_one_minus_dice": 0.8848920863309353
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.6304359018865295,
+    "context_color_ciede2000": 0.7851698757386772,
+    "log_area_ratio": 1.2562225214073937,
+    "shape_one_minus_dice": 0.8848920863309353
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 88,
+  "source_nouns": [
+    "clouds",
+    "sea"
+  ],
+  "source_only_nouns": [
+    "sea"
+  ],
+  "source_prompt": "Dog running in the sea of clouds",
+  "source_uuid": "5efcde65-6b3a-54d8-9fb8-c77c1401effd",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "clouds"
+  ],
+  "target_only_nouns": [
+    "bear"
+  ],
+  "target_prompt": "dancing bear flying above clouds",
+  "target_uuid": "65c19d32-eaf3-5292-a45a-48047e283d06",
+  "timing": {
+    "source_dit_forward_s": 111.3089135249611,
+    "source_probe_s": 141.02279085409828,
+    "target_dit_forward_s": 111.36853725463152,
+    "target_probe_s": 140.6352391729597,
+    "total_s": 281.658030027058
+  }
+}

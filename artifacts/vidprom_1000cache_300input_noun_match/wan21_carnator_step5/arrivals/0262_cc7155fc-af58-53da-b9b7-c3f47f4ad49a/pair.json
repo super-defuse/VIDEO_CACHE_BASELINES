@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 262,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.651787763161293,
+    "context_color_ciede2000": 1.4061327458530128,
+    "log_area_ratio": 0.9112624091037304,
+    "shape_one_minus_dice": 0.4728682170542635
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.651787763161293,
+    "context_color_ciede2000": 1.4061327458530128,
+    "log_area_ratio": 0.9112624091037304,
+    "shape_one_minus_dice": 0.4728682170542635
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 262,
+  "source_nouns": [
+    "bear",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat give a bear hug",
+  "source_uuid": "838a7560-43ab-58c3-a110-3a62af0b8cee",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "cloud"
+  ],
+  "target_only_nouns": [
+    "cloud"
+  ],
+  "target_prompt": "bear riding a massive cloud",
+  "target_uuid": "cc7155fc-af58-53da-b9b7-c3f47f4ad49a",
+  "timing": {
+    "source_dit_forward_s": 109.90934613533318,
+    "source_probe_s": 139.0432318849489,
+    "target_dit_forward_s": 109.87771655688994,
+    "target_probe_s": 138.9753262118902,
+    "total_s": 278.0185580968391
+  }
+}

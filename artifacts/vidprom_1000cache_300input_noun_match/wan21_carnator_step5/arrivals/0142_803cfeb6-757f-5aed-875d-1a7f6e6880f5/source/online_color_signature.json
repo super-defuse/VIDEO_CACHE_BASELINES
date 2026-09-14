@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "1ab67b313a1f289e835f95047dcab1eaf13967fd9f85217358826641eafa00d1",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "f504e6f6382c7884eb03ae6f15cda991d9fd03fe1001f727edb277f25076dd53"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "eedbabd1b7eb748cffc50da40b92f8bb92c66756548d254974f8d331cbb2d7ad"
+  },
+  "objects": [
+    {
+      "area_frac": 0.2704545557498932,
+      "centroid_yx": [
+        19.54831886291504,
+        39.207984924316406
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.145599365234375,
+          -2.4901814460754395,
+          13.501524925231934
+        ],
+        "mean_rgb": [
+          110.19514465332031,
+          108.2173080444336,
+          84.83480834960938
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 243712
+      },
+      "dtype": "bool",
+      "noun": "breathing",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.22244317829608917,
+      "centroid_yx": [
+        18.545337677001953,
+        39.739463806152344
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.431846618652344,
+          -2.4938132762908936,
+          14.018914222717285
+        ],
+        "mean_rgb": [
+          108.64437866210938,
+          106.40936279296875,
+          82.18449401855469
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 200448
+      },
+      "dtype": "bool",
+      "noun": "dragon",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.21079544723033905,
+      "centroid_yx": [
+        20.362533569335938,
+        45.0970344543457
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.96397399902344,
+          -2.276655435562134,
+          15.659976959228516
+        ],
+        "mean_rgb": [
+          111.34464263916016,
+          107.47997283935547,
+          80.61642456054688
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 189952
+      },
+      "dtype": "bool",
+      "noun": "fire",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.2539772689342499,
+      "centroid_yx": [
+        20.18120765686035,
+        40.6308708190918
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.474510192871094,
+          -2.821483612060547,
+          14.745967864990234
+        ],
+        "mean_rgb": [
+          108.5660629272461,
+          106.60340118408203,
+          80.96910858154297
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 228864
+      },
+      "dtype": "bool",
+      "noun": "wings",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "dragon breathing fire after eating hot wings",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

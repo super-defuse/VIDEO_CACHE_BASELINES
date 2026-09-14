@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 72,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6331733750455002,
+    "context_color_ciede2000": 1.0936107130957076,
+    "log_area_ratio": 0.43569153776728403,
+    "shape_one_minus_dice": 0.6909090909090909
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6331733750455002,
+    "context_color_ciede2000": 1.0936107130957076,
+    "log_area_ratio": 0.43569153776728403,
+    "shape_one_minus_dice": 0.6909090909090909
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 72,
+  "source_nouns": [
+    "cat",
+    "minute",
+    "video"
+  ],
+  "source_only_nouns": [
+    "minute"
+  ],
+  "source_prompt": "make a 5 minute video on cat is walking in Maldives",
+  "source_uuid": "cafe2e9b-d51f-582e-89ae-d5f18084f608",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "mouse",
+    "video"
+  ],
+  "target_only_nouns": [
+    "mouse"
+  ],
+  "target_prompt": "the cat runs after the mouse video",
+  "target_uuid": "e45dfaaa-f6f5-5ffb-9d1e-e68385582fa6",
+  "timing": {
+    "source_dit_forward_s": 109.73432022333145,
+    "source_probe_s": 139.78653719089925,
+    "target_dit_forward_s": 109.69220597390085,
+    "target_probe_s": 139.51856832299381,
+    "total_s": 279.30510551389307
+  }
+}

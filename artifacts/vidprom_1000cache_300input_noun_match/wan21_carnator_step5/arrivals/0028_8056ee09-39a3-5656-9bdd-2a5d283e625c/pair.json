@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 28,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1380784494623724,
+    "context_color_ciede2000": 0.8256843424627633,
+    "log_area_ratio": 0.11951876370771529,
+    "shape_one_minus_dice": 0.552
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1380784494623724,
+    "context_color_ciede2000": 0.8256843424627633,
+    "log_area_ratio": 0.11951876370771529,
+    "shape_one_minus_dice": 0.552
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 28,
+  "source_nouns": [
+    "bunny",
+    "carrots"
+  ],
+  "source_only_nouns": [
+    "carrots"
+  ],
+  "source_prompt": "a bunny is eating carrots",
+  "source_uuid": "986e23ee-7cdd-59f5-8873-bb1d7724096e",
+  "status": "completed",
+  "target_nouns": [
+    "bunny",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "rabbit"
+  ],
+  "target_prompt": "a giant bunny rabbit taking over new york city",
+  "target_uuid": "8056ee09-39a3-5656-9bdd-2a5d283e625c",
+  "timing": {
+    "source_dit_forward_s": 111.40273895557038,
+    "source_probe_s": 141.3457615938969,
+    "target_dit_forward_s": 111.4090029108338,
+    "target_probe_s": 141.10763752879575,
+    "total_s": 282.45339912269264
+  }
+}

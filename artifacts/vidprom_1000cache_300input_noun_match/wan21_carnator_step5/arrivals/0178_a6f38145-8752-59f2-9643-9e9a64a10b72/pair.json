@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 178,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1321892686716346,
+    "context_color_ciede2000": 4.161449502960413,
+    "log_area_ratio": 0.6416778039449794,
+    "shape_one_minus_dice": 0.5942028985507246
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1321892686716346,
+    "context_color_ciede2000": 4.161449502960413,
+    "log_area_ratio": 0.6416778039449794,
+    "shape_one_minus_dice": 0.5942028985507246
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 178,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "grassland",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "grassland"
+  ],
+  "target_prompt": "A horse is running on the grassland.",
+  "target_uuid": "a6f38145-8752-59f2-9643-9e9a64a10b72",
+  "timing": {
+    "source_dit_forward_s": 111.36735975276679,
+    "source_probe_s": 140.66503807692789,
+    "target_dit_forward_s": 111.35980724869296,
+    "target_probe_s": 141.08999625802971,
+    "total_s": 281.7550343349576
+  }
+}

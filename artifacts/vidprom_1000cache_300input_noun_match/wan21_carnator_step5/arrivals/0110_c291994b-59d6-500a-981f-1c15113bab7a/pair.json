@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 110,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.4521400204703157,
+    "context_color_ciede2000": 0.7699283788832336,
+    "log_area_ratio": 0.7579058054079952,
+    "shape_one_minus_dice": 0.941747572815534
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.4521400204703157,
+    "context_color_ciede2000": 0.7699283788832336,
+    "log_area_ratio": 0.7579058054079952,
+    "shape_one_minus_dice": 0.941747572815534
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 110,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "tiger"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "snake"
+  ],
+  "target_only_nouns": [
+    "snake"
+  ],
+  "target_prompt": "the lion Fighting with the snake",
+  "target_uuid": "c291994b-59d6-500a-981f-1c15113bab7a",
+  "timing": {
+    "source_dit_forward_s": 112.02204825473018,
+    "source_probe_s": 141.50948217115365,
+    "target_dit_forward_s": 111.96246139379218,
+    "target_probe_s": 141.51276040892117,
+    "total_s": 283.0222425800748
+  }
+}

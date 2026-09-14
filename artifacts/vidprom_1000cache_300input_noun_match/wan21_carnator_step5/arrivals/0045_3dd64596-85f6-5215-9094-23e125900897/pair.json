@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 45,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7907929037296484,
+    "context_color_ciede2000": 0.3470617501071149,
+    "log_area_ratio": 0.1518544870050203,
+    "shape_one_minus_dice": 0.3384615384615385
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7907929037296484,
+    "context_color_ciede2000": 0.3470617501071149,
+    "log_area_ratio": 0.1518544870050203,
+    "shape_one_minus_dice": 0.3384615384615385
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 45,
+  "source_nouns": [
+    "cake",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "cutting a cat like cake",
+  "source_uuid": "7dd23b24-3f6e-5b2f-8fab-040006652890",
+  "status": "completed",
+  "target_nouns": [
+    "cake",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "mouse"
+  ],
+  "target_prompt": "a cake with a mouse",
+  "target_uuid": "3dd64596-85f6-5215-9094-23e125900897",
+  "timing": {
+    "source_dit_forward_s": 111.93461674731225,
+    "source_probe_s": 141.8297937309835,
+    "target_dit_forward_s": 111.94475911441259,
+    "target_probe_s": 141.50341781997122,
+    "total_s": 283.33321155095473
+  }
+}

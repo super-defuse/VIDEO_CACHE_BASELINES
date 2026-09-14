@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 201,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.258470968977364,
+    "context_color_ciede2000": 1.792014423950571,
+    "log_area_ratio": 0.18743279082753903,
+    "shape_one_minus_dice": 0.2941176470588235
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.258470968977364,
+    "context_color_ciede2000": 1.792014423950571,
+    "log_area_ratio": 0.18743279082753903,
+    "shape_one_minus_dice": 0.2941176470588235
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 201,
+  "source_nouns": [
+    "cat",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a monkey cat is running",
+  "source_uuid": "3521434a-b244-5080-a666-48b79ac7fee1",
+  "status": "completed",
+  "target_nouns": [
+    "desert",
+    "monkey"
+  ],
+  "target_only_nouns": [
+    "desert"
+  ],
+  "target_prompt": "a monkey running in the desert",
+  "target_uuid": "f470e89e-6b1e-5b3a-b040-9afd61697a57",
+  "timing": {
+    "source_dit_forward_s": 113.05993289873004,
+    "source_probe_s": 143.13891962799244,
+    "target_dit_forward_s": 113.07765078754164,
+    "target_probe_s": 143.53712047892623,
+    "total_s": 286.67604010691866
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 253,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.4248254860680688,
+    "context_color_ciede2000": 0.45941793927994357,
+    "log_area_ratio": 0.04284755083005414,
+    "shape_one_minus_dice": 0.2777777777777778
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.4248254860680688,
+    "context_color_ciede2000": 0.45941793927994357,
+    "log_area_ratio": 0.04284755083005414,
+    "shape_one_minus_dice": 0.2777777777777778
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 253,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "bambo",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "bambo"
+  ],
+  "target_prompt": "a naughty panda with bambo",
+  "target_uuid": "457fb229-3722-5503-b972-a0cb24fd5633",
+  "timing": {
+    "source_dit_forward_s": 111.57018199376762,
+    "source_probe_s": 141.18925725505687,
+    "target_dit_forward_s": 111.48829195974395,
+    "target_probe_s": 141.19911080319434,
+    "total_s": 282.3883680582512
+  }
+}

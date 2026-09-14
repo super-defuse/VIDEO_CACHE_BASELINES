@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 15,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.586403031450682,
+    "context_color_ciede2000": 1.4767308045028156,
+    "log_area_ratio": 0.5901424106939104,
+    "shape_one_minus_dice": 0.5537190082644627
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.586403031450682,
+    "context_color_ciede2000": 1.4767308045028156,
+    "log_area_ratio": 0.5901424106939104,
+    "shape_one_minus_dice": 0.5537190082644627
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 15,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "friend"
+  ],
+  "target_only_nouns": [
+    "friend"
+  ],
+  "target_prompt": "an elephant walking and swinging with his friend",
+  "target_uuid": "652e1d27-ad40-5726-b1e3-a218ce196e72",
+  "timing": {
+    "source_dit_forward_s": 111.92152294889092,
+    "source_probe_s": 141.51156669808552,
+    "target_dit_forward_s": 111.92441159044392,
+    "target_probe_s": 141.9420169009827,
+    "total_s": 283.4535835990682
+  }
+}

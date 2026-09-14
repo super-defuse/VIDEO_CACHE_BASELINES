@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 263,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.44319670622114476,
+    "context_color_ciede2000": 0.28215622478438207,
+    "log_area_ratio": 1.1116442335340992,
+    "shape_one_minus_dice": 0.4918032786885246
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.44319670622114476,
+    "context_color_ciede2000": 0.28215622478438207,
+    "log_area_ratio": 1.1116442335340992,
+    "shape_one_minus_dice": 0.4918032786885246
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 263,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "rabbit",
+    "tortoise"
+  ],
+  "target_only_nouns": [
+    "tortoise"
+  ],
+  "target_prompt": "A speedy rabbit and a slow but determined tortoise agreed to race",
+  "target_uuid": "9182a51c-2387-52e6-845c-7bf70e6aa495",
+  "timing": {
+    "source_dit_forward_s": 111.52558635082096,
+    "source_probe_s": 141.2843261640519,
+    "target_dit_forward_s": 111.49965187790804,
+    "target_probe_s": 141.24853798700497,
+    "total_s": 282.53286415105686
+  }
+}

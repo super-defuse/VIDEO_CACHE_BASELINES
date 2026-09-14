@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 109,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.2840281637973183,
+    "context_color_ciede2000": 0.26581799038241466,
+    "log_area_ratio": 1.9361144639166445,
+    "shape_one_minus_dice": 0.39837398373983735
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.2840281637973183,
+    "context_color_ciede2000": 0.26581799038241466,
+    "log_area_ratio": 1.9361144639166445,
+    "shape_one_minus_dice": 0.39837398373983735
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 109,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cute little cat running on the grass",
+  "source_uuid": "ae0b87e5-4a64-51a6-adb2-b7c6b200dd99",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "meadow"
+  ],
+  "target_only_nouns": [
+    "meadow"
+  ],
+  "target_prompt": "Kitten running and hopping through grass meadow",
+  "target_uuid": "64afc981-f76c-5d8f-a931-cbfe7bb07611",
+  "timing": {
+    "source_dit_forward_s": 112.85046787629835,
+    "source_probe_s": 142.83039743104018,
+    "target_dit_forward_s": 112.84816622221842,
+    "target_probe_s": 143.4294530840125,
+    "total_s": 286.2598505150527
+  }
+}

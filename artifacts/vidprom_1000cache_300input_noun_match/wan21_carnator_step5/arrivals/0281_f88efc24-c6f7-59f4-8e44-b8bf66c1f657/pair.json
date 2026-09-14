@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 281,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.573886531841471,
+    "context_color_ciede2000": 0.23750936806180703,
+    "log_area_ratio": 0.516422182088525,
+    "shape_one_minus_dice": 0.8833333333333333
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.573886531841471,
+    "context_color_ciede2000": 0.23750936806180703,
+    "log_area_ratio": 0.516422182088525,
+    "shape_one_minus_dice": 0.8833333333333333
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 281,
+  "source_nouns": [
+    "beach",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "dog running on the beach",
+  "source_uuid": "7d3510ef-003f-55bc-af1a-a1262c8cbe51",
+  "status": "completed",
+  "target_nouns": [
+    "beach",
+    "penguin"
+  ],
+  "target_only_nouns": [
+    "penguin"
+  ],
+  "target_prompt": "A pink penguin on the beach",
+  "target_uuid": "f88efc24-c6f7-59f4-8e44-b8bf66c1f657",
+  "timing": {
+    "source_dit_forward_s": 113.20730428653769,
+    "source_probe_s": 143.2467327050399,
+    "target_dit_forward_s": 113.16105293529108,
+    "target_probe_s": 143.54592145280913,
+    "total_s": 286.79265415784903
+  }
+}

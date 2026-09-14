@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 145,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6715518992623243,
+    "context_color_ciede2000": 0.42203043830476866,
+    "log_area_ratio": 0.028031514806699288,
+    "shape_one_minus_dice": 0.24285714285714288
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6715518992623243,
+    "context_color_ciede2000": 0.42203043830476866,
+    "log_area_ratio": 0.028031514806699288,
+    "shape_one_minus_dice": 0.24285714285714288
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 145,
+  "source_nouns": [
+    "cheetah",
+    "savannah"
+  ],
+  "source_only_nouns": [
+    "savannah"
+  ],
+  "source_prompt": "a cheetah running through the African savannah",
+  "source_uuid": "5a81d569-93fc-5e9e-8538-7c162c9d1992",
+  "status": "completed",
+  "target_nouns": [
+    "cheetah",
+    "desert"
+  ],
+  "target_only_nouns": [
+    "desert"
+  ],
+  "target_prompt": "A cheetah running through the desert.",
+  "target_uuid": "0a77642b-d4bc-56f7-a40f-212826de5702",
+  "timing": {
+    "source_dit_forward_s": 111.94339234288782,
+    "source_probe_s": 141.84555974393152,
+    "target_dit_forward_s": 112.03682856191881,
+    "target_probe_s": 142.0481630519498,
+    "total_s": 283.89372279588133
+  }
+}

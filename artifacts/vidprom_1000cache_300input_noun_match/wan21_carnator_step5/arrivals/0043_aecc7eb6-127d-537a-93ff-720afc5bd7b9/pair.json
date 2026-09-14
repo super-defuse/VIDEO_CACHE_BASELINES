@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 43,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9376935566798953,
+    "context_color_ciede2000": 1.12610039158695,
+    "log_area_ratio": 0.1027632632809611,
+    "shape_one_minus_dice": 0.7
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9376935566798953,
+    "context_color_ciede2000": 1.12610039158695,
+    "log_area_ratio": 0.1027632632809611,
+    "shape_one_minus_dice": 0.7
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 43,
+  "source_nouns": [
+    "bicycle",
+    "cat",
+    "moon"
+  ],
+  "source_only_nouns": [
+    "bicycle"
+  ],
+  "source_prompt": "a funny cat riding bicycle on the moon",
+  "source_uuid": "e15bb6c6-01d3-524a-ba37-b53fcdb51eb4",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "moon",
+    "motorcycle"
+  ],
+  "target_only_nouns": [
+    "motorcycle"
+  ],
+  "target_prompt": "a cat in the moon eats a motorcycle",
+  "target_uuid": "aecc7eb6-127d-537a-93ff-720afc5bd7b9",
+  "timing": {
+    "source_dit_forward_s": 111.51751205930486,
+    "source_probe_s": 141.81609452306293,
+    "target_dit_forward_s": 111.44885258399881,
+    "target_probe_s": 142.02643359289505,
+    "total_s": 283.842528115958
+  }
+}

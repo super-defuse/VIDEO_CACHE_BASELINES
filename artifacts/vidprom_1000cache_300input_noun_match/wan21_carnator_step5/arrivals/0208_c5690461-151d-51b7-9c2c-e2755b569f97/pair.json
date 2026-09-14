@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 208,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.28505834361154897,
+    "context_color_ciede2000": 0.6096232472309793,
+    "log_area_ratio": 0.07968819814661796,
+    "shape_one_minus_dice": 0.44680851063829785
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.28505834361154897,
+    "context_color_ciede2000": 0.6096232472309793,
+    "log_area_ratio": 0.07968819814661796,
+    "shape_one_minus_dice": 0.44680851063829785
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 208,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "panda",
+    "selfie"
+  ],
+  "target_only_nouns": [
+    "selfie"
+  ],
+  "target_prompt": "A panda taking a selfie.",
+  "target_uuid": "c5690461-151d-51b7-9c2c-e2755b569f97",
+  "timing": {
+    "source_dit_forward_s": 111.49501517880708,
+    "source_probe_s": 141.11058852495626,
+    "target_dit_forward_s": 111.44415421108715,
+    "target_probe_s": 141.06041527888738,
+    "total_s": 282.17100380384363
+  }
+}

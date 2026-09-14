@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 31,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6467264872117271,
+    "context_color_ciede2000": 0.2830507232854509,
+    "log_area_ratio": 1.5691347820740922,
+    "shape_one_minus_dice": 0.5970149253731343
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6467264872117271,
+    "context_color_ciede2000": 0.2830507232854509,
+    "log_area_ratio": 1.5691347820740922,
+    "shape_one_minus_dice": 0.5970149253731343
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 31,
+  "source_nouns": [
+    "cow",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "dog acts like a cow in the wild",
+  "source_uuid": "cb41fc98-c24c-5506-9803-9cd575c593cf",
+  "status": "completed",
+  "target_nouns": [
+    "cow",
+    "field"
+  ],
+  "target_only_nouns": [
+    "field"
+  ],
+  "target_prompt": "cow standing in beautiful field",
+  "target_uuid": "c8bde137-581f-56d5-9f1e-e081e98e8318",
+  "timing": {
+    "source_dit_forward_s": 113.00967813190073,
+    "source_probe_s": 142.65872152894735,
+    "target_dit_forward_s": 113.09398394287564,
+    "target_probe_s": 143.21724777901545,
+    "total_s": 285.8759693079628
+  }
+}

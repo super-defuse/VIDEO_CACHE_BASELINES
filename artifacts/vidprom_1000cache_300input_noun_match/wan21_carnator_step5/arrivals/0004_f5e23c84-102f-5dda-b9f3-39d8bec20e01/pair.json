@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 4,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1717247120747993,
+    "context_color_ciede2000": 0.49620849824762214,
+    "log_area_ratio": 0.550333321860704,
+    "shape_one_minus_dice": 0.4017094017094017
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1717247120747993,
+    "context_color_ciede2000": 0.49620849824762214,
+    "log_area_ratio": 0.550333321860704,
+    "shape_one_minus_dice": 0.4017094017094017
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 4,
+  "source_nouns": [
+    "dance",
+    "floor"
+  ],
+  "source_only_nouns": [
+    "floor"
+  ],
+  "source_prompt": "humanoid fantasy fox standing on the dance floor.",
+  "source_uuid": "0c6f9e49-8467-5f89-a950-80c5335b72cb",
+  "status": "completed",
+  "target_nouns": [
+    "cartoon",
+    "dance"
+  ],
+  "target_only_nouns": [
+    "cartoon"
+  ],
+  "target_prompt": "cartoon Bear dance in christmas",
+  "target_uuid": "f5e23c84-102f-5dda-b9f3-39d8bec20e01",
+  "timing": {
+    "source_dit_forward_s": 112.42710670689121,
+    "source_probe_s": 147.9530975560192,
+    "target_dit_forward_s": 112.72121568978764,
+    "target_probe_s": 142.54933177214116,
+    "total_s": 290.50242932816036
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 219,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.509702934181838,
+    "context_color_ciede2000": 0.769523657535656,
+    "log_area_ratio": 0.117187401868127,
+    "shape_one_minus_dice": 0.7723577235772358
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.509702934181838,
+    "context_color_ciede2000": 0.769523657535656,
+    "log_area_ratio": 0.117187401868127,
+    "shape_one_minus_dice": 0.7723577235772358
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 219,
+  "source_nouns": [
+    "hamster",
+    "man"
+  ],
+  "source_only_nouns": [
+    "hamster"
+  ],
+  "source_prompt": "human man fighting a hamster",
+  "source_uuid": "4f8357f4-3305-51d5-95d3-30fd8067ec44",
+  "status": "completed",
+  "target_nouns": [
+    "man",
+    "reindeer"
+  ],
+  "target_only_nouns": [
+    "reindeer"
+  ],
+  "target_prompt": "gingerbread man and rudolph the red nosed reindeer",
+  "target_uuid": "b7eeb209-0b35-5614-9788-edaba9e821a7",
+  "timing": {
+    "source_dit_forward_s": 113.06361112417653,
+    "source_probe_s": 142.88149119680747,
+    "target_dit_forward_s": 113.08020350569859,
+    "target_probe_s": 142.97245167917572,
+    "total_s": 285.8539428759832
+  }
+}

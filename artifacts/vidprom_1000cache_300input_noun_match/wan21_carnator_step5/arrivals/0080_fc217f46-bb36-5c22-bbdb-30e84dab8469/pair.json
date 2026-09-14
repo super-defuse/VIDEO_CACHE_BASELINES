@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 80,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.399392527216095,
+    "context_color_ciede2000": 0.6575290264760935,
+    "log_area_ratio": 0.1558009302017508,
+    "shape_one_minus_dice": 0.7723577235772358
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.399392527216095,
+    "context_color_ciede2000": 0.6575290264760935,
+    "log_area_ratio": 0.1558009302017508,
+    "shape_one_minus_dice": 0.7723577235772358
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 80,
+  "source_nouns": [
+    "chocolate",
+    "dog",
+    "owner"
+  ],
+  "source_only_nouns": [
+    "chocolate"
+  ],
+  "source_prompt": "Upset owner with chocolate and dog",
+  "source_uuid": "93285258-fd2d-5057-bf1e-6678f606eaf0",
+  "status": "completed",
+  "target_nouns": [
+    "3d",
+    "dog",
+    "owner"
+  ],
+  "target_only_nouns": [
+    "3d"
+  ],
+  "target_prompt": "brave dog trying to protect his owner 3d please",
+  "target_uuid": "fc217f46-bb36-5c22-bbdb-30e84dab8469",
+  "timing": {
+    "source_dit_forward_s": 111.97164347534999,
+    "source_probe_s": 142.26695385412313,
+    "target_dit_forward_s": 112.03459044196643,
+    "target_probe_s": 142.56283987802453,
+    "total_s": 284.82979373214766
+  }
+}

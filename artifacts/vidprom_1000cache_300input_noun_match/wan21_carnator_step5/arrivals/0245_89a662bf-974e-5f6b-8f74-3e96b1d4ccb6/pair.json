@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 245,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.24427850761046405,
+    "context_color_ciede2000": 0.7378910077802942,
+    "log_area_ratio": 0.7229350816168605,
+    "shape_one_minus_dice": 0.6290322580645161
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.24427850761046405,
+    "context_color_ciede2000": 0.7378910077802942,
+    "log_area_ratio": 0.7229350816168605,
+    "shape_one_minus_dice": 0.6290322580645161
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 245,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "ring"
+  ],
+  "target_only_nouns": [
+    "ring"
+  ],
+  "target_prompt": "cinematic dog and cat in a ring",
+  "target_uuid": "89a662bf-974e-5f6b-8f74-3e96b1d4ccb6",
+  "timing": {
+    "source_dit_forward_s": 112.16200848016888,
+    "source_probe_s": 142.50460351910442,
+    "target_dit_forward_s": 112.15648009884171,
+    "target_probe_s": 142.2141354701016,
+    "total_s": 284.71873898920603
+  }
+}

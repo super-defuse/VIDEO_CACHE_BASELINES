@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 270,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9007245017313651,
+    "context_color_ciede2000": 1.7148115298970161,
+    "log_area_ratio": 0.23786837945121983,
+    "shape_one_minus_dice": 0.5700934579439252
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9007245017313651,
+    "context_color_ciede2000": 1.7148115298970161,
+    "log_area_ratio": 0.23786837945121983,
+    "shape_one_minus_dice": 0.5700934579439252
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 270,
+  "source_nouns": [
+    "cat",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a monkey cat is running",
+  "source_uuid": "3521434a-b244-5080-a666-48b79ac7fee1",
+  "status": "completed",
+  "target_nouns": [
+    "monkey",
+    "turtle"
+  ],
+  "target_only_nouns": [
+    "turtle"
+  ],
+  "target_prompt": "a monkey and a turtle talking to each other.",
+  "target_uuid": "2fd47d65-76fc-5638-b3d2-c6c895055750",
+  "timing": {
+    "source_dit_forward_s": 112.18966483464465,
+    "source_probe_s": 142.08850415283814,
+    "target_dit_forward_s": 112.3078718832694,
+    "target_probe_s": 142.20278052496724,
+    "total_s": 284.2912846778054
+  }
+}

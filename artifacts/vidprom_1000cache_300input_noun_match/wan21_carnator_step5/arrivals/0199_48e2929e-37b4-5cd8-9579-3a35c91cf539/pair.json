@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 199,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.3276012118086011,
+    "context_color_ciede2000": 1.004580688622104,
+    "log_area_ratio": 0.5553408352945477,
+    "shape_one_minus_dice": 0.4918032786885246
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.3276012118086011,
+    "context_color_ciede2000": 1.004580688622104,
+    "log_area_ratio": 0.5553408352945477,
+    "shape_one_minus_dice": 0.4918032786885246
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 199,
+  "source_nouns": [
+    "rabbit",
+    "toilet"
+  ],
+  "source_only_nouns": [
+    "toilet"
+  ],
+  "source_prompt": "Rabbit jumping in a toilet",
+  "source_uuid": "84275522-27a8-5fb2-ae9a-89c321846e87",
+  "status": "completed",
+  "target_nouns": [
+    "rabbit",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "snow"
+  ],
+  "target_prompt": "anime white rabbit jumping in snow",
+  "target_uuid": "48e2929e-37b4-5cd8-9579-3a35c91cf539",
+  "timing": {
+    "source_dit_forward_s": 113.02956451079808,
+    "source_probe_s": 143.08099257899448,
+    "target_dit_forward_s": 112.97175008081831,
+    "target_probe_s": 143.14853447093628,
+    "total_s": 286.22952704993077
+  }
+}

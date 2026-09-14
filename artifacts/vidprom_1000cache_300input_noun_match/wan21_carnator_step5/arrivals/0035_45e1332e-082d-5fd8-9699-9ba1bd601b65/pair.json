@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 35,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.47505858315156885,
+    "context_color_ciede2000": 0.44905409915132355,
+    "log_area_ratio": 0.2070593954988559,
+    "shape_one_minus_dice": 0.6453900709219857
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.47505858315156885,
+    "context_color_ciede2000": 0.44905409915132355,
+    "log_area_ratio": 0.2070593954988559,
+    "shape_one_minus_dice": 0.6453900709219857
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 35,
+  "source_nouns": [
+    "popcorn",
+    "terrier"
+  ],
+  "source_only_nouns": [
+    "popcorn"
+  ],
+  "source_prompt": "a wetshighland white terrier that goes crazy for popcorn",
+  "source_uuid": "c2ccddf5-7172-5529-9a86-738a9bb58ccd",
+  "status": "completed",
+  "target_nouns": [
+    "dog",
+    "terrier"
+  ],
+  "target_only_nouns": [
+    "dog"
+  ],
+  "target_prompt": "dog West Highland white terrier speaking",
+  "target_uuid": "45e1332e-082d-5fd8-9699-9ba1bd601b65",
+  "timing": {
+    "source_dit_forward_s": 111.89700708980672,
+    "source_probe_s": 141.65903103910387,
+    "target_dit_forward_s": 111.98362050275318,
+    "target_probe_s": 141.69523287913762,
+    "total_s": 283.3542639182415
+  }
+}

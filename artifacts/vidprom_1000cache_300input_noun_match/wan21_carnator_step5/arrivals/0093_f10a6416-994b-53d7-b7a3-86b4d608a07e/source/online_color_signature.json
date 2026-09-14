@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "5486b974f6962e5514f03f0ec0d157eca747f87f11784710c91e94d70bb23a29",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "91d8c1155f04e17aba9eb60d9f3ebe668fd2dd40e71d272c7cd762a49fa80cbb"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "2ed9203135d14bdf083bb1b76e2fc79d44ae882033561b24b6ec0f80b61d5f79"
+  },
+  "objects": [
+    {
+      "area_frac": 0.2755681872367859,
+      "centroid_yx": [
+        27.702062606811523,
+        42.39072036743164
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          43.719932556152344,
+          -2.6856186389923096,
+          13.777883529663086
+        ],
+        "mean_rgb": [
+          106.35067749023438,
+          104.74874114990234,
+          80.91523742675781
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 248320
+      },
+      "dtype": "bool",
+      "noun": "boxing",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.2906250059604645,
+      "centroid_yx": [
+        22.086999893188477,
+        43.35483932495117
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.561946868896484,
+          -2.8381755352020264,
+          13.854443550109863
+        ],
+        "mean_rgb": [
+          108.32551574707031,
+          106.92762756347656,
+          82.77941131591797
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 261888
+      },
+      "dtype": "bool",
+      "noun": "cat",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.27784091234207153,
+      "centroid_yx": [
+        23.633947372436523,
+        41.356849670410156
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.176170349121094,
+          -2.7725186347961426,
+          14.233200073242188
+        ],
+        "mean_rgb": [
+          107.65359497070312,
+          105.86445617675781,
+          81.11772918701172
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 250368
+      },
+      "dtype": "bool",
+      "noun": "dog",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.5110795497894287,
+      "centroid_yx": [
+        18.553085327148438,
+        37.75819778442383
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.18016052246094,
+          -2.141282558441162,
+          13.13347053527832
+        ],
+        "mean_rgb": [
+          108.05494689941406,
+          105.70944213867188,
+          83.20543670654297
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 460544
+      },
+      "dtype": "bool",
+      "noun": "ring",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "cinematic, a cat and dog in a boxing ring",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

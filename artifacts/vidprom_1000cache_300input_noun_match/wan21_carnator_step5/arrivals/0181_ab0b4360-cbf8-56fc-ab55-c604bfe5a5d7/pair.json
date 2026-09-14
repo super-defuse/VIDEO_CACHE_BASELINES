@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 181,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8008617135794238,
+    "context_color_ciede2000": 0.8069926660953852,
+    "log_area_ratio": 0.22631315066624638,
+    "shape_one_minus_dice": 0.6296296296296297
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8008617135794238,
+    "context_color_ciede2000": 0.8069926660953852,
+    "log_area_ratio": 0.22631315066624638,
+    "shape_one_minus_dice": 0.6296296296296297
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 181,
+  "source_nouns": [
+    "cat",
+    "fish",
+    "robot"
+  ],
+  "source_only_nouns": [
+    "robot"
+  ],
+  "source_prompt": "a cat robot eating fish",
+  "source_uuid": "c0b57431-e46f-5bac-ba83-d3ec50c3c6c6",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "fish",
+    "mouth"
+  ],
+  "target_only_nouns": [
+    "mouth"
+  ],
+  "target_prompt": "A cat with a fish in her mouth and running",
+  "target_uuid": "ab0b4360-cbf8-56fc-ab55-c604bfe5a5d7",
+  "timing": {
+    "source_dit_forward_s": 113.12256723898463,
+    "source_probe_s": 143.40842066099867,
+    "target_dit_forward_s": 113.15224644332193,
+    "target_probe_s": 143.70918771997094,
+    "total_s": 287.1176083809696
+  }
+}

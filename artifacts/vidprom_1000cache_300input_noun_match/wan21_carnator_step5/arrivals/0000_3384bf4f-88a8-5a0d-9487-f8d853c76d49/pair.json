@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 0,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8875128727378547,
+    "context_color_ciede2000": 0.7480190079504903,
+    "log_area_ratio": 0.17241979717195688,
+    "shape_one_minus_dice": 0.7547169811320755
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8875128727378547,
+    "context_color_ciede2000": 0.7480190079504903,
+    "log_area_ratio": 0.17241979717195688,
+    "shape_one_minus_dice": 0.7547169811320755
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 0,
+  "source_nouns": [
+    "cave",
+    "dog",
+    "wolf"
+  ],
+  "source_only_nouns": [
+    "wolf"
+  ],
+  "source_prompt": "a wolf under the cave with a dog",
+  "source_uuid": "3a3813cf-bfb3-5c2a-98a2-fcfb7a6b6eea",
+  "status": "completed",
+  "target_nouns": [
+    "cave",
+    "dog",
+    "winter"
+  ],
+  "target_only_nouns": [
+    "winter"
+  ],
+  "target_prompt": "a puppy dog crying outside the cave in winter",
+  "target_uuid": "3384bf4f-88a8-5a0d-9487-f8d853c76d49",
+  "timing": {
+    "source_dit_forward_s": 111.57918820460327,
+    "source_probe_s": 146.3911969261244,
+    "target_dit_forward_s": 111.78194476501085,
+    "target_probe_s": 142.07158580212854,
+    "total_s": 288.46278272825293
+  }
+}

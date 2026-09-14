@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 187,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.41764413732617073,
+    "context_color_ciede2000": 0.8063672139870877,
+    "log_area_ratio": 0.5493902501220143,
+    "shape_one_minus_dice": 0.6124031007751938
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.41764413732617073,
+    "context_color_ciede2000": 0.8063672139870877,
+    "log_area_ratio": 0.5493902501220143,
+    "shape_one_minus_dice": 0.6124031007751938
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 187,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "bird",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "bird"
+  ],
+  "target_prompt": "big tiger combine with big bird",
+  "target_uuid": "7394839d-38e8-54c4-9aeb-f2d99e57f4bc",
+  "timing": {
+    "source_dit_forward_s": 109.77177291084081,
+    "source_probe_s": 138.68176351999864,
+    "target_dit_forward_s": 109.8465751959011,
+    "target_probe_s": 138.9539296629373,
+    "total_s": 277.63569318293594
+  }
+}

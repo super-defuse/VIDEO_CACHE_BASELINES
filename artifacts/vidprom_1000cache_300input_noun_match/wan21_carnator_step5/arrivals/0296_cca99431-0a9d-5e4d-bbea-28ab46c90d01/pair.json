@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 296,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7198973555487433,
+    "context_color_ciede2000": 1.2749194413555636,
+    "log_area_ratio": 0.8087244426776903,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7198973555487433,
+    "context_color_ciede2000": 1.2749194413555636,
+    "log_area_ratio": 0.8087244426776903,
+    "shape_one_minus_dice": 0.6363636363636364
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 296,
+  "source_nouns": [
+    "lion",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "pig"
+  ],
+  "source_prompt": "a pig is eating lion",
+  "source_uuid": "fdc8ab9e-8480-5baa-a6c4-b975eef8a40b",
+  "status": "completed",
+  "target_nouns": [
+    "cartoon",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "cartoon"
+  ],
+  "target_prompt": "full single cartoon lion is talking",
+  "target_uuid": "cca99431-0a9d-5e4d-bbea-28ab46c90d01",
+  "timing": {
+    "source_dit_forward_s": 113.17095096409321,
+    "source_probe_s": 142.8369274009019,
+    "target_dit_forward_s": 113.1716531580314,
+    "target_probe_s": 143.250757900998,
+    "total_s": 286.0876853018999
+  }
+}

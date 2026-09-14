@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 113,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8155901070258712,
+    "context_color_ciede2000": 1.1329594223359507,
+    "log_area_ratio": 0.08333047338293184,
+    "shape_one_minus_dice": 0.437037037037037
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8155901070258712,
+    "context_color_ciede2000": 1.1329594223359507,
+    "log_area_ratio": 0.08333047338293184,
+    "shape_one_minus_dice": 0.437037037037037
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 113,
+  "source_nouns": [
+    "moon",
+    "pikachu"
+  ],
+  "source_only_nouns": [
+    "pikachu"
+  ],
+  "source_prompt": "Pikachu walking on the moon",
+  "source_uuid": "068170d0-40d5-59a5-a3d0-925285d64437",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "moon"
+  ],
+  "target_only_nouns": [
+    "baby"
+  ],
+  "target_prompt": "a baby hedgehog playing on the moon",
+  "target_uuid": "fb03347d-ee69-5439-8a43-6e976a2abcd4",
+  "timing": {
+    "source_dit_forward_s": 111.32730066217482,
+    "source_probe_s": 141.11831495189108,
+    "target_dit_forward_s": 111.27300842152908,
+    "target_probe_s": 140.84269149787724,
+    "total_s": 281.9610064497683
+  }
+}

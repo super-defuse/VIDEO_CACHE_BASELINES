@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 244,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.980480233959473,
+    "context_color_ciede2000": 3.5562758380038533,
+    "log_area_ratio": 0.24619141638530173,
+    "shape_one_minus_dice": 0.6351351351351351
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.980480233959473,
+    "context_color_ciede2000": 3.5562758380038533,
+    "log_area_ratio": 0.24619141638530173,
+    "shape_one_minus_dice": 0.6351351351351351
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 244,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "horse",
+    "step"
+  ],
+  "target_only_nouns": [
+    "step"
+  ],
+  "target_prompt": "nomad siting on horse , running on step",
+  "target_uuid": "149008b0-8c06-5132-9e50-bb849ad32ad8",
+  "timing": {
+    "source_dit_forward_s": 112.96458320878446,
+    "source_probe_s": 142.59398871893063,
+    "target_dit_forward_s": 112.99495246401057,
+    "target_probe_s": 142.70615026098676,
+    "total_s": 285.3001389799174
+  }
+}

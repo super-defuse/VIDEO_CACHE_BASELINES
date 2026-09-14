@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 249,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5415873643207894,
+    "context_color_ciede2000": 0.45570866725967124,
+    "log_area_ratio": 0.20973988232652555,
+    "shape_one_minus_dice": 0.3643410852713178
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5415873643207894,
+    "context_color_ciede2000": 0.45570866725967124,
+    "log_area_ratio": 0.20973988232652555,
+    "shape_one_minus_dice": 0.3643410852713178
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 249,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "friends"
+  ],
+  "target_only_nouns": [
+    "friends"
+  ],
+  "target_prompt": "dog and cat were not best friends",
+  "target_uuid": "83a8b623-3cf5-5e77-9b77-e3ca162c340a",
+  "timing": {
+    "source_dit_forward_s": 113.00318453786895,
+    "source_probe_s": 143.47008696082048,
+    "target_dit_forward_s": 113.02029917482287,
+    "target_probe_s": 143.80828377394937,
+    "total_s": 287.27837073476985
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 283,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9356189917464866,
+    "context_color_ciede2000": 1.3051357905536236,
+    "log_area_ratio": 0.1207862073976898,
+    "shape_one_minus_dice": 0.6496350364963503
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9356189917464866,
+    "context_color_ciede2000": 1.3051357905536236,
+    "log_area_ratio": 0.1207862073976898,
+    "shape_one_minus_dice": 0.6496350364963503
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 283,
+  "source_nouns": [
+    "mouth",
+    "teeths"
+  ],
+  "source_only_nouns": [
+    "teeths"
+  ],
+  "source_prompt": "wolf biting with big scary mouth and sharp teeths.",
+  "source_uuid": "dcece7c2-7055-51fa-9b14-1e5584a8decc",
+  "status": "completed",
+  "target_nouns": [
+    "desert",
+    "mouth"
+  ],
+  "target_only_nouns": [
+    "desert"
+  ],
+  "target_prompt": "alien T-Rex screaming loudly wide mouth open in dry desert",
+  "target_uuid": "e1682c01-4314-57be-abfe-21847cf28283",
+  "timing": {
+    "source_dit_forward_s": 111.51090119383298,
+    "source_probe_s": 141.15442010201514,
+    "target_dit_forward_s": 111.60631177597679,
+    "target_probe_s": 141.1724152690731,
+    "total_s": 282.32683537108824
+  }
+}

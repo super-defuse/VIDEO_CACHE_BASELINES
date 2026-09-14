@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 141,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.29070210963888404,
+    "context_color_ciede2000": 0.26536162129523044,
+    "log_area_ratio": 0.5139360976030033,
+    "shape_one_minus_dice": 0.375
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.29070210963888404,
+    "context_color_ciede2000": 0.26536162129523044,
+    "log_area_ratio": 0.5139360976030033,
+    "shape_one_minus_dice": 0.375
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 141,
+  "source_nouns": [
+    "butterfly",
+    "nose"
+  ],
+  "source_only_nouns": [
+    "nose"
+  ],
+  "source_prompt": "there is a butterfly sitting on the cat&#39;s nose and fluttering",
+  "source_uuid": "fd6b8d71-f7e9-57ad-b1b5-d95fd1506051",
+  "status": "completed",
+  "target_nouns": [
+    "butterfly",
+    "transformation"
+  ],
+  "target_only_nouns": [
+    "transformation"
+  ],
+  "target_prompt": "Fox was amazed by this magical transformation of the butterfly",
+  "target_uuid": "61dbfdac-1467-51c0-be16-176729dee3bc",
+  "timing": {
+    "source_dit_forward_s": 113.25789363519289,
+    "source_probe_s": 143.4208747439552,
+    "target_dit_forward_s": 113.22562684305012,
+    "target_probe_s": 143.016606223071,
+    "total_s": 286.4374809670262
+  }
+}

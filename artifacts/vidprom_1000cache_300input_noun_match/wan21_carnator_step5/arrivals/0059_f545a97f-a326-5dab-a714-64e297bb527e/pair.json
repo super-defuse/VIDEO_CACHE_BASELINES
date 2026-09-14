@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 59,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.698865824785581,
+    "context_color_ciede2000": 0.21031693551752378,
+    "log_area_ratio": 1.1187551617754683,
+    "shape_one_minus_dice": 0.4545454545454546
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.698865824785581,
+    "context_color_ciede2000": 0.21031693551752378,
+    "log_area_ratio": 1.1187551617754683,
+    "shape_one_minus_dice": 0.4545454545454546
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 59,
+  "source_nouns": [
+    "dog",
+    "street"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "white dog walking on a street",
+  "source_uuid": "c6389ff8-06c1-5e49-bb7b-23b685fc98ab",
+  "status": "completed",
+  "target_nouns": [
+    "barks",
+    "street"
+  ],
+  "target_only_nouns": [
+    "barks"
+  ],
+  "target_prompt": "Black Spitz walks down the street and barks",
+  "target_uuid": "f545a97f-a326-5dab-a714-64e297bb527e",
+  "timing": {
+    "source_dit_forward_s": 112.80363972298801,
+    "source_probe_s": 142.8163528421428,
+    "target_dit_forward_s": 112.81745758233592,
+    "target_probe_s": 143.11551356408745,
+    "total_s": 285.93186640623026
+  }
+}

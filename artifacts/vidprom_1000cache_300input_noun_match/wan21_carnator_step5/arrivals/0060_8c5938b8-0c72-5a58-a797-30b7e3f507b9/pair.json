@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 60,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1814363695546863,
+    "context_color_ciede2000": 0.16948932632249827,
+    "log_area_ratio": 0.7653868294726909,
+    "shape_one_minus_dice": 0.6923076923076923
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1814363695546863,
+    "context_color_ciede2000": 0.16948932632249827,
+    "log_area_ratio": 0.7653868294726909,
+    "shape_one_minus_dice": 0.6923076923076923
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 60,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat running in a green grass",
+  "source_uuid": "816c8f1c-800a-59e7-b8a3-b0e453241608",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "rabbit"
+  ],
+  "target_prompt": "A rabbit running in the grass.",
+  "target_uuid": "8c5938b8-0c72-5a58-a797-30b7e3f507b9",
+  "timing": {
+    "source_dit_forward_s": 111.91108872671612,
+    "source_probe_s": 141.8594486990478,
+    "target_dit_forward_s": 112.02210008678958,
+    "target_probe_s": 142.17137404112145,
+    "total_s": 284.03082274016924
+  }
+}

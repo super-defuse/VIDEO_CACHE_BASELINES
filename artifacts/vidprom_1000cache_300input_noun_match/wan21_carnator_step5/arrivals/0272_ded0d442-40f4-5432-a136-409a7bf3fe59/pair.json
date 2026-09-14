@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 272,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.988866669893448,
+    "context_color_ciede2000": 1.0949586992578981,
+    "log_area_ratio": 0.5120800582502403,
+    "shape_one_minus_dice": 0.5488721804511278
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.988866669893448,
+    "context_color_ciede2000": 1.0949586992578981,
+    "log_area_ratio": 0.5120800582502403,
+    "shape_one_minus_dice": 0.5488721804511278
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 272,
+  "source_nouns": [
+    "dog",
+    "pig",
+    "run"
+  ],
+  "source_only_nouns": [
+    "pig"
+  ],
+  "source_prompt": "a pig run with a dog",
+  "source_uuid": "8ee6217c-cf20-5a0f-83e1-d4a89dfc6490",
+  "status": "completed",
+  "target_nouns": [
+    "dog",
+    "road",
+    "run"
+  ],
+  "target_only_nouns": [
+    "road"
+  ],
+  "target_prompt": "a dog run in a road.",
+  "target_uuid": "ded0d442-40f4-5432-a136-409a7bf3fe59",
+  "timing": {
+    "source_dit_forward_s": 109.8829117200803,
+    "source_probe_s": 140.15443963790312,
+    "target_dit_forward_s": 109.84393990016542,
+    "target_probe_s": 140.13376687909476,
+    "total_s": 280.2882065169979
+  }
+}

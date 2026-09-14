@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 230,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.8815540388280825,
+    "context_color_ciede2000": 1.185432944630059,
+    "log_area_ratio": 1.2907655484251364,
+    "shape_one_minus_dice": 0.8181818181818181
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.8815540388280825,
+    "context_color_ciede2000": 1.185432944630059,
+    "log_area_ratio": 1.2907655484251364,
+    "shape_one_minus_dice": 0.8181818181818181
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 230,
+  "source_nouns": [
+    "cat",
+    "rainy",
+    "street"
+  ],
+  "source_only_nouns": [
+    "rainy"
+  ],
+  "source_prompt": "empty street with rainy , there is one cat on the street",
+  "source_uuid": "86c27df0-20a4-5595-b492-529f9c1ee0e2",
+  "status": "completed",
+  "target_nouns": [
+    "camera",
+    "cat",
+    "street"
+  ],
+  "target_only_nouns": [
+    "camera"
+  ],
+  "target_prompt": "a cat drunk on the street,camera -pan,moving",
+  "target_uuid": "b41e89a7-8484-55d8-ab33-a4458afaa46a",
+  "timing": {
+    "source_dit_forward_s": 112.22598680411465,
+    "source_probe_s": 142.75768451904878,
+    "target_dit_forward_s": 112.15637174714357,
+    "target_probe_s": 142.51647683791816,
+    "total_s": 285.27416135696694
+  }
+}

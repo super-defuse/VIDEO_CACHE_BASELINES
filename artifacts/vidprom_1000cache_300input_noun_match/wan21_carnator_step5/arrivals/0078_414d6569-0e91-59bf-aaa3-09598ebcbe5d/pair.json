@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 78,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.370825822223021,
+    "context_color_ciede2000": 2.0676006181584348,
+    "log_area_ratio": 0.3090820457375262,
+    "shape_one_minus_dice": 0.5267175572519084
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.370825822223021,
+    "context_color_ciede2000": 2.0676006181584348,
+    "log_area_ratio": 0.3090820457375262,
+    "shape_one_minus_dice": 0.5267175572519084
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 78,
+  "source_nouns": [
+    "-motion",
+    "bear"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "bear being laughing -motion 4",
+  "source_uuid": "191a8155-b123-5575-8487-15bbaee6e4de",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "video"
+  ],
+  "target_only_nouns": [
+    "video"
+  ],
+  "target_prompt": "video of a flying bear",
+  "target_uuid": "414d6569-0e91-59bf-aaa3-09598ebcbe5d",
+  "timing": {
+    "source_dit_forward_s": 111.33536980813369,
+    "source_probe_s": 140.9553821370937,
+    "target_dit_forward_s": 111.34809686127119,
+    "target_probe_s": 141.20327486284077,
+    "total_s": 282.15865699993446
+  }
+}

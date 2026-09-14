@@ -1,0 +1,193 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "44851c80487c0b0eb225a85222ecf3ef42ac625f43a615222f42dbdf4dccd9f0",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "8fecd159f77948fce1447bc453bf49056420d0413ee8c16739083dc477b1c6a2"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "0017e6ce442a44964701ceaf3415707df52ad9421dc88664d5be2d6697393f0c"
+  },
+  "objects": [
+    {
+      "area_frac": 0.11818181723356247,
+      "centroid_yx": [
+        11.802885055541992,
+        37.05769348144531
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.743553161621094,
+          -3.6248955726623535,
+          14.26685905456543
+        ],
+        "mean_rgb": [
+          107.64476013183594,
+          107.80052947998047,
+          82.56625366210938
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 106496
+      },
+      "dtype": "bool",
+      "noun": "crow",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.349715918302536,
+      "centroid_yx": [
+        24.714866638183594,
+        31.16571807861328
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.519866943359375,
+          -2.515267848968506,
+          12.922953605651855
+        ],
+        "mean_rgb": [
+          108.10560607910156,
+          106.77449798583984,
+          84.37461853027344
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 315136
+      },
+      "dtype": "bool",
+      "noun": "half",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.33068183064460754,
+      "centroid_yx": [
+        25.29295539855957,
+        31.020618438720703
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.30559539794922,
+          -2.775676965713501,
+          13.100783348083496
+        ],
+        "mean_rgb": [
+          107.22430419921875,
+          106.29683685302734,
+          83.45496368408203
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 297984
+      },
+      "dtype": "bool",
+      "noun": "pot",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    },
+    {
+      "area_frac": 0.25,
+      "centroid_yx": [
+        25.987499237060547,
+        29.76590919494629
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.0986213684082,
+          -2.9587671756744385,
+          13.196946144104004
+        ],
+        "mean_rgb": [
+          108.96793365478516,
+          108.3272933959961,
+          85.22068786621094
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 225280
+      },
+      "dtype": "bool",
+      "noun": "water",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_003"
+    }
+  ],
+  "prompt": "a crow came across the half filled water pot",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

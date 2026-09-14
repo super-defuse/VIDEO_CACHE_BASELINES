@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 258,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5307345820479744,
+    "context_color_ciede2000": 0.5035364212026043,
+    "log_area_ratio": 0.44000892810422904,
+    "shape_one_minus_dice": 0.96
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5307345820479744,
+    "context_color_ciede2000": 0.5035364212026043,
+    "log_area_ratio": 0.44000892810422904,
+    "shape_one_minus_dice": 0.96
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 258,
+  "source_nouns": [
+    "beach",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "dog running on the beach",
+  "source_uuid": "7d3510ef-003f-55bc-af1a-a1262c8cbe51",
+  "status": "completed",
+  "target_nouns": [
+    "beach",
+    "elephant"
+  ],
+  "target_only_nouns": [
+    "elephant"
+  ],
+  "target_prompt": "an elephant sitting on beach",
+  "target_uuid": "0157a3dc-16e0-5875-9eeb-23296f5a8ee4",
+  "timing": {
+    "source_dit_forward_s": 111.49713911744766,
+    "source_probe_s": 141.13929042615928,
+    "target_dit_forward_s": 111.524477730738,
+    "target_probe_s": 141.5786879910156,
+    "total_s": 282.7179784171749
+  }
+}

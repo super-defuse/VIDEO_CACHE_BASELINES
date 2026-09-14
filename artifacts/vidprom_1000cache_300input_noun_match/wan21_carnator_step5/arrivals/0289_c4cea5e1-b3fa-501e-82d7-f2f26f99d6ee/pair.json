@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 289,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8182025787551928,
+    "context_color_ciede2000": 0.3317329325383412,
+    "log_area_ratio": 0.3138122096971115,
+    "shape_one_minus_dice": 0.6910569105691057
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8182025787551928,
+    "context_color_ciede2000": 0.3317329325383412,
+    "log_area_ratio": 0.3138122096971115,
+    "shape_one_minus_dice": 0.6910569105691057
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 289,
+  "source_nouns": [
+    "cat",
+    "movie"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "Venom turns into a cat, ai movie",
+  "source_uuid": "8bea67fa-e74e-5cc9-a384-cec544b5a7b2",
+  "status": "completed",
+  "target_nouns": [
+    "movie",
+    "scene"
+  ],
+  "target_only_nouns": [
+    "scene"
+  ],
+  "target_prompt": "Werewolf vs Snake Man, a real scene from the movie.",
+  "target_uuid": "c4cea5e1-b3fa-501e-82d7-f2f26f99d6ee",
+  "timing": {
+    "source_dit_forward_s": 113.11752095492557,
+    "source_probe_s": 143.05815935111605,
+    "target_dit_forward_s": 113.09089608537033,
+    "target_probe_s": 143.07447656220756,
+    "total_s": 286.1326359133236
+  }
+}

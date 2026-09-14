@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 97,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8701400409952043,
+    "context_color_ciede2000": 1.2639218011826352,
+    "log_area_ratio": 0.16415425558081803,
+    "shape_one_minus_dice": 0.5714285714285714
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8701400409952043,
+    "context_color_ciede2000": 1.2639218011826352,
+    "log_area_ratio": 0.16415425558081803,
+    "shape_one_minus_dice": 0.5714285714285714
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 97,
+  "source_nouns": [
+    "fox",
+    "mansion"
+  ],
+  "source_only_nouns": [
+    "mansion"
+  ],
+  "source_prompt": "raven and a fox walking though the mansion",
+  "source_uuid": "f574078d-edfb-594f-820c-6a8ff74b3cf3",
+  "status": "completed",
+  "target_nouns": [
+    "fox",
+    "gun"
+  ],
+  "target_only_nouns": [
+    "gun"
+  ],
+  "target_prompt": "big red fox with gun",
+  "target_uuid": "5ad79ffc-1280-5873-963e-7744c6d71d35",
+  "timing": {
+    "source_dit_forward_s": 109.73694825731218,
+    "source_probe_s": 139.090141372988,
+    "target_dit_forward_s": 109.77616349887103,
+    "target_probe_s": 138.89010831387714,
+    "total_s": 277.98024968686514
+  }
+}

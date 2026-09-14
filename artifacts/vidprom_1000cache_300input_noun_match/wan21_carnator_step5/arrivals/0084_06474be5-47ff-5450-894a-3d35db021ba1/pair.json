@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 84,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.445839097220264,
+    "context_color_ciede2000": 0.3907812241178803,
+    "log_area_ratio": 1.0021954578758008,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.445839097220264,
+    "context_color_ciede2000": 0.3907812241178803,
+    "log_area_ratio": 1.0021954578758008,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 84,
+  "source_nouns": [
+    "dancing",
+    "monkey"
+  ],
+  "source_only_nouns": [
+    "dancing"
+  ],
+  "source_prompt": "monkey dancing -ar 9:16",
+  "source_uuid": "1c909a36-1e85-5d30-b750-7a36d1f3e5fe",
+  "status": "completed",
+  "target_nouns": [
+    "background",
+    "monkey"
+  ],
+  "target_only_nouns": [
+    "background"
+  ],
+  "target_prompt": "black background, a smiling monkey, 9:16",
+  "target_uuid": "06474be5-47ff-5450-894a-3d35db021ba1",
+  "timing": {
+    "source_dit_forward_s": 112.80630739312619,
+    "source_probe_s": 142.79034369508736,
+    "target_dit_forward_s": 112.92165973386727,
+    "target_probe_s": 142.95625194790773,
+    "total_s": 285.7465956429951
+  }
+}

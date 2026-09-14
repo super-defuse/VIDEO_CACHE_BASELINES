@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 251,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9499887524149601,
+    "context_color_ciede2000": 0.3586926831737883,
+    "log_area_ratio": 0.40907880206027686,
+    "shape_one_minus_dice": 0.7419354838709677
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9499887524149601,
+    "context_color_ciede2000": 0.3586926831737883,
+    "log_area_ratio": 0.40907880206027686,
+    "shape_one_minus_dice": 0.7419354838709677
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 251,
+  "source_nouns": [
+    "bunny",
+    "carrots"
+  ],
+  "source_only_nouns": [
+    "carrots"
+  ],
+  "source_prompt": "a bunny is eating carrots",
+  "source_uuid": "986e23ee-7cdd-59f5-8873-bb1d7724096e",
+  "status": "completed",
+  "target_nouns": [
+    "bunny",
+    "man"
+  ],
+  "target_only_nouns": [
+    "man"
+  ],
+  "target_prompt": "bad bunny being hit by a big man",
+  "target_uuid": "5a0e4c66-f129-5e41-921c-9efcdaf83486",
+  "timing": {
+    "source_dit_forward_s": 113.2139807830099,
+    "source_probe_s": 143.5763692499604,
+    "target_dit_forward_s": 113.1473878447432,
+    "target_probe_s": 143.2907702201046,
+    "total_s": 286.867139470065
+  }
+}

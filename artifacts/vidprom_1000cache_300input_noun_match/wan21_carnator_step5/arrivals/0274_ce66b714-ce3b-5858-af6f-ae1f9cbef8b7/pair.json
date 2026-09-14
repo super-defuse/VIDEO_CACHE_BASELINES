@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 274,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.48476538940273034,
+    "context_color_ciede2000": 1.3091724294251024,
+    "log_area_ratio": 0.579818456399544,
+    "shape_one_minus_dice": 0.49629629629629635
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.48476538940273034,
+    "context_color_ciede2000": 1.3091724294251024,
+    "log_area_ratio": 0.579818456399544,
+    "shape_one_minus_dice": 0.49629629629629635
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 274,
+  "source_nouns": [
+    "cat",
+    "fish",
+    "robot"
+  ],
+  "source_only_nouns": [
+    "robot"
+  ],
+  "source_prompt": "a cat robot eating fish",
+  "source_uuid": "c0b57431-e46f-5bac-ba83-d3ec50c3c6c6",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "fish",
+    "river"
+  ],
+  "target_only_nouns": [
+    "river"
+  ],
+  "target_prompt": "“The cat is catching fish by the river.",
+  "target_uuid": "ce66b714-ce3b-5858-af6f-ae1f9cbef8b7",
+  "timing": {
+    "source_dit_forward_s": 113.08692023367621,
+    "source_probe_s": 143.3346887519583,
+    "target_dit_forward_s": 113.09774685977027,
+    "target_probe_s": 143.79989205789752,
+    "total_s": 287.13458080985583
+  }
+}

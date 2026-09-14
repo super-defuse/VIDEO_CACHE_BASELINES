@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 246,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7151116341411194,
+    "context_color_ciede2000": 0.8420407334021549,
+    "log_area_ratio": 0.958238764528039,
+    "shape_one_minus_dice": 0.5142857142857142
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7151116341411194,
+    "context_color_ciede2000": 0.8420407334021549,
+    "log_area_ratio": 0.958238764528039,
+    "shape_one_minus_dice": 0.5142857142857142
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 246,
+  "source_nouns": [
+    "puppy",
+    "trees"
+  ],
+  "source_only_nouns": [
+    "trees"
+  ],
+  "source_prompt": "little puppy running and climbing trees",
+  "source_uuid": "6fad46d3-c304-5363-b6ed-6f03f6ec8793",
+  "status": "completed",
+  "target_nouns": [
+    "paws",
+    "puppy"
+  ],
+  "target_only_nouns": [
+    "paws"
+  ],
+  "target_prompt": "a puppy is licking its paws",
+  "target_uuid": "8240c9c1-dbf3-58f2-8bf8-725980f978db",
+  "timing": {
+    "source_dit_forward_s": 113.1472263536416,
+    "source_probe_s": 143.5271004268434,
+    "target_dit_forward_s": 113.20840058522299,
+    "target_probe_s": 143.04094926384278,
+    "total_s": 286.56804969068617
+  }
+}

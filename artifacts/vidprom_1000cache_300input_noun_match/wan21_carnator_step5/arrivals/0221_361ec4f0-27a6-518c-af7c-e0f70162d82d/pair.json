@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 221,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.43773410770071186,
+    "context_color_ciede2000": 0.3356598254106834,
+    "log_area_ratio": 0.13227605015100136,
+    "shape_one_minus_dice": 0.7142857142857143
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.43773410770071186,
+    "context_color_ciede2000": 0.3356598254106834,
+    "log_area_ratio": 0.13227605015100136,
+    "shape_one_minus_dice": 0.7142857142857143
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 221,
+  "source_nouns": [
+    "field",
+    "raccoon"
+  ],
+  "source_only_nouns": [
+    "raccoon"
+  ],
+  "source_prompt": "little raccoon runs across the field",
+  "source_uuid": "0a811015-694c-595f-b382-ef636dbd1967",
+  "status": "completed",
+  "target_nouns": [
+    "field",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "horse running on the green field",
+  "target_uuid": "361ec4f0-27a6-518c-af7c-e0f70162d82d",
+  "timing": {
+    "source_dit_forward_s": 113.13093289779499,
+    "source_probe_s": 143.5756170921959,
+    "target_dit_forward_s": 113.0710471640341,
+    "target_probe_s": 143.52083125407808,
+    "total_s": 287.096448346274
+  }
+}

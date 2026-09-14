@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 206,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.2176061448847511,
+    "context_color_ciede2000": 0.8185191190589138,
+    "log_area_ratio": 0.274880385928425,
+    "shape_one_minus_dice": 0.5213675213675213
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.2176061448847511,
+    "context_color_ciede2000": 0.8185191190589138,
+    "log_area_ratio": 0.274880385928425,
+    "shape_one_minus_dice": 0.5213675213675213
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 206,
+  "source_nouns": [
+    "attachment",
+    "cat",
+    "tail"
+  ],
+  "source_only_nouns": [
+    "attachment"
+  ],
+  "source_prompt": "cat waving tail Message: 1 Attachment",
+  "source_uuid": "6e513e90-99a8-50d6-a8d7-0d3999289871",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "ratio",
+    "tail"
+  ],
+  "target_only_nouns": [
+    "ratio"
+  ],
+  "target_prompt": "a cute cat wagging its tail, 9:16 ratio",
+  "target_uuid": "3cd30f02-e922-54be-8f10-39c952574005",
+  "timing": {
+    "source_dit_forward_s": 113.11840121238492,
+    "source_probe_s": 144.15865785605274,
+    "target_dit_forward_s": 113.13157114107162,
+    "target_probe_s": 143.70259843207896,
+    "total_s": 287.8612562881317
+  }
+}

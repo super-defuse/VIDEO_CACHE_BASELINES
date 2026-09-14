@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 129,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.618690087259975,
+    "context_color_ciede2000": 1.7555848174981938,
+    "log_area_ratio": 0.02685512305978723,
+    "shape_one_minus_dice": 0.48299319727891155
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.618690087259975,
+    "context_color_ciede2000": 1.7555848174981938,
+    "log_area_ratio": 0.02685512305978723,
+    "shape_one_minus_dice": 0.48299319727891155
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 129,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "ocean",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "ocean"
+  ],
+  "target_prompt": "a teddy bear in the ocean transforms into a panda",
+  "target_uuid": "51e95d23-3f45-5d64-8332-2c4caaea11fa",
+  "timing": {
+    "source_dit_forward_s": 112.89364041178487,
+    "source_probe_s": 142.75707047688775,
+    "target_dit_forward_s": 112.82956549548544,
+    "target_probe_s": 142.84365109400824,
+    "total_s": 285.600721570896
+  }
+}

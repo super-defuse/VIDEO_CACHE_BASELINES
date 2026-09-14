@@ -1,0 +1,51 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000"
+  ],
+  "arrival_index": 105,
+  "comparability": "same_nouns",
+  "distances": {
+    "changed_color_ciede2000": null,
+    "context_color_ciede2000": 1.6828053226581867,
+    "log_area_ratio": null,
+    "shape_one_minus_dice": null
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.0,
+    "context_color_ciede2000": 1.6828053226581867,
+    "log_area_ratio": 0.0,
+    "shape_one_minus_dice": 0.0
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 105,
+  "source_nouns": [
+    "cat",
+    "dog"
+  ],
+  "source_only_nouns": [],
+  "source_prompt": "A dog chasing a cat.",
+  "source_uuid": "d3c0338d-b634-59d9-a64d-87259b383036",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog"
+  ],
+  "target_only_nouns": [],
+  "target_prompt": "A dog running from a cat",
+  "target_uuid": "ef890bd6-89f6-514e-a58e-d474012a5241",
+  "timing": {
+    "source_dit_forward_s": 112.03746680240147,
+    "source_probe_s": 141.45558171882294,
+    "target_dit_forward_s": 112.00887161050923,
+    "target_probe_s": 141.9954797560349,
+    "total_s": 283.45106147485785
+  }
+}

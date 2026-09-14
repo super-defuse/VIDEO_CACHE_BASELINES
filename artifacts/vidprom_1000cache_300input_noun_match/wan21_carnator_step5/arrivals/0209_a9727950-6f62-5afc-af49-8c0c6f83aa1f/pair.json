@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 209,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.17798256991878875,
+    "context_color_ciede2000": 0.8619145798729477,
+    "log_area_ratio": 0.5166907991528472,
+    "shape_one_minus_dice": 0.5614035087719298
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.17798256991878875,
+    "context_color_ciede2000": 0.8619145798729477,
+    "log_area_ratio": 0.5166907991528472,
+    "shape_one_minus_dice": 0.5614035087719298
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 209,
+  "source_nouns": [
+    "chicken",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "A dog is chasing a chicken",
+  "source_uuid": "750339ec-b554-5081-b560-11d0baa79be9",
+  "status": "completed",
+  "target_nouns": [
+    "chicken",
+    "crocodile"
+  ],
+  "target_only_nouns": [
+    "crocodile"
+  ],
+  "target_prompt": "a chicken eating a crocodile",
+  "target_uuid": "a9727950-6f62-5afc-af49-8c0c6f83aa1f",
+  "timing": {
+    "source_dit_forward_s": 112.99102344666608,
+    "source_probe_s": 142.69757993612438,
+    "target_dit_forward_s": 113.00903597474098,
+    "target_probe_s": 142.85310676204972,
+    "total_s": 285.5506866981741
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 100,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9005055044357583,
+    "context_color_ciede2000": 0.22613573786937408,
+    "log_area_ratio": 0.2037476247220846,
+    "shape_one_minus_dice": 0.5244755244755245
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9005055044357583,
+    "context_color_ciede2000": 0.22613573786937408,
+    "log_area_ratio": 0.2037476247220846,
+    "shape_one_minus_dice": 0.5244755244755245
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 100,
+  "source_nouns": [
+    "-motion",
+    "panda"
+  ],
+  "source_only_nouns": [
+    "-motion"
+  ],
+  "source_prompt": "a panda chewing -motion 3",
+  "source_uuid": "519fe1a8-a072-5f2f-82d4-bcc181511135",
+  "status": "completed",
+  "target_nouns": [
+    "cliff",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "cliff"
+  ],
+  "target_prompt": "a panda is walking on a cliff",
+  "target_uuid": "c21aad14-73e4-5cd3-a584-759bf9e06c61",
+  "timing": {
+    "source_dit_forward_s": 112.05021611810662,
+    "source_probe_s": 141.81095402990468,
+    "target_dit_forward_s": 112.05023208982311,
+    "target_probe_s": 141.64109264221042,
+    "total_s": 283.4520466721151
+  }
+}

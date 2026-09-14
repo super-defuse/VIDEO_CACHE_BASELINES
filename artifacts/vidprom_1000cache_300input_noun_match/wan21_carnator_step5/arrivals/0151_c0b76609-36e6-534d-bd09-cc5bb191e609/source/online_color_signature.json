@@ -1,0 +1,158 @@
+{
+  "cache": null,
+  "color_extraction_policy": "srgb-d65-2deg-per-pixel-lab-mean",
+  "compatibility": {
+    "cfg": 5.0,
+    "completed_step": 5,
+    "latent_shape": [
+      16,
+      31,
+      88,
+      160
+    ],
+    "latent_token_grid": [
+      31,
+      44,
+      80
+    ],
+    "mask_policy": "native-self-cross-fusion-mbase|cross_layers=15|self_layer=15|top_p=0.02000000|eps=0.20000000|gamma=1.00000000",
+    "model": "Wan2.1-T2V-1.3B",
+    "noun_extractor": "lexical-spacy",
+    "probe_seed": 20260218,
+    "scheduler": "unipc",
+    "scheduler_config": {
+      "flow_shift": 5.0,
+      "solver_order": 2,
+      "total_steps": 50
+    }
+  },
+  "feature_profile": "carnator-step5-tail-lab-ciede2000",
+  "frame": {
+    "decoded_completed_step": 5,
+    "frame_policy": "tail_frame",
+    "path": "step5_tail_frame.png",
+    "sha256": "6755ab6a0068096b8dbe4a44d837ba4a8f856854e4af297a8be48928eb1c51d8",
+    "shape": [
+      704,
+      1280,
+      3
+    ],
+    "signature_token_t": 30,
+    "step5_latent_sha256": "ef605ea36b9caa2d8dcbe4d14f7badbf754b467abca358f697c09ea9a5add89e"
+  },
+  "inference_mask_contract": "carnator-source-per-noun-mbase/v1",
+  "mbase": {
+    "path": "mbase.safetensors",
+    "sha256": "720255e92a542b327a3c60ed0dc763102434cdc90d0544462214c32544415b09"
+  },
+  "objects": [
+    {
+      "area_frac": 0.4681818187236786,
+      "centroid_yx": [
+        16.76031494140625,
+        40.58009719848633
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.648101806640625,
+          -3.010894775390625,
+          13.61937141418457
+        ],
+        "mean_rgb": [
+          108.0796127319336,
+          107.30098724365234,
+          83.45511627197266
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 421888
+      },
+      "dtype": "bool",
+      "noun": "river",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_000"
+    },
+    {
+      "area_frac": 0.229545459151268,
+      "centroid_yx": [
+        15.64480209350586,
+        29.304454803466797
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          45.65259552001953,
+          -3.003368616104126,
+          13.50051498413086
+        ],
+        "mean_rgb": [
+          110.43562316894531,
+          109.78368377685547,
+          86.03579711914062
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 206848
+      },
+      "dtype": "bool",
+      "noun": "sheep",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_001"
+    },
+    {
+      "area_frac": 0.2664772868156433,
+      "centroid_yx": [
+        32.017059326171875,
+        40.78464889526367
+      ],
+      "color_signature": {
+        "aggregation": "mean_of_per_pixel_lab",
+        "illuminant": "D65",
+        "input_space": "sRGB",
+        "mean_lab": [
+          44.3382682800293,
+          -2.170301914215088,
+          12.977999687194824
+        ],
+        "mean_rgb": [
+          108.33804321289062,
+          106.10804748535156,
+          83.80668640136719
+        ],
+        "observer": "2deg",
+        "source": "step5_decoded_tail_frame_projected_from_mbase",
+        "space": "CIELAB",
+        "valid_pixel_count": 240128
+      },
+      "dtype": "bool",
+      "noun": "water",
+      "shape": [
+        31,
+        44,
+        80
+      ],
+      "signature_token_t": 30,
+      "tensor_key": "mbase_002"
+    }
+  ],
+  "prompt": "a sheep bending down to drink water from a river",
+  "shape_normalization_policy": "shape_norm",
+  "signature_version": "carnator-online-color-signature"
+}

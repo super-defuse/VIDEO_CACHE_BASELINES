@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 61,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9975487745189946,
+    "context_color_ciede2000": 0.9747243451579628,
+    "log_area_ratio": 0.38785906684745175,
+    "shape_one_minus_dice": 0.7627118644067796
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9975487745189946,
+    "context_color_ciede2000": 0.9747243451579628,
+    "log_area_ratio": 0.38785906684745175,
+    "shape_one_minus_dice": 0.7627118644067796
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 61,
+  "source_nouns": [
+    "cat",
+    "dragon"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "dragon flying and eating a cat",
+  "source_uuid": "8e36a373-d7c2-5fab-81fc-aeedc3e43865",
+  "status": "completed",
+  "target_nouns": [
+    "dragon",
+    "fight"
+  ],
+  "target_only_nouns": [
+    "fight"
+  ],
+  "target_prompt": "alien winning a fight with a dragon",
+  "target_uuid": "83f54c5b-80d2-5d58-ab6c-a5b2535b3258",
+  "timing": {
+    "source_dit_forward_s": 113.09335749200545,
+    "source_probe_s": 142.96748904604465,
+    "target_dit_forward_s": 113.07696992415003,
+    "target_probe_s": 143.17975896783173,
+    "total_s": 286.1472480138764
+  }
+}

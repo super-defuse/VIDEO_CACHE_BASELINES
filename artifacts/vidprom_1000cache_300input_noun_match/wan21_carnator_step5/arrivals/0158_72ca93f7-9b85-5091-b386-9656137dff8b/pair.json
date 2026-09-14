@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 158,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.862664052725883,
+    "context_color_ciede2000": 0.3252640534147799,
+    "log_area_ratio": 0.5822683618512059,
+    "shape_one_minus_dice": 0.7637795275590551
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.862664052725883,
+    "context_color_ciede2000": 0.3252640534147799,
+    "log_area_ratio": 0.5822683618512059,
+    "shape_one_minus_dice": 0.7637795275590551
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 158,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "man"
+  ],
+  "target_only_nouns": [
+    "man"
+  ],
+  "target_prompt": "a man is sitting beside an elephant",
+  "target_uuid": "72ca93f7-9b85-5091-b386-9656137dff8b",
+  "timing": {
+    "source_dit_forward_s": 111.47665115189739,
+    "source_probe_s": 141.03205854585394,
+    "target_dit_forward_s": 111.45771468360908,
+    "target_probe_s": 140.8887779978104,
+    "total_s": 281.92083654366434
+  }
+}

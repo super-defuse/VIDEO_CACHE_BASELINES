@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 81,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6590653391232615,
+    "context_color_ciede2000": 0.598316848932941,
+    "log_area_ratio": 0.03248542351145623,
+    "shape_one_minus_dice": 0.6296296296296297
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6590653391232615,
+    "context_color_ciede2000": 0.598316848932941,
+    "log_area_ratio": 0.03248542351145623,
+    "shape_one_minus_dice": 0.6296296296296297
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 81,
+  "source_nouns": [
+    "border",
+    "collie",
+    "pizza"
+  ],
+  "source_only_nouns": [
+    "pizza"
+  ],
+  "source_prompt": "a border collie eating pizza",
+  "source_uuid": "f0abea0e-496f-5d30-b9d6-6fa98c9580f1",
+  "status": "completed",
+  "target_nouns": [
+    "border",
+    "collie",
+    "kitten"
+  ],
+  "target_only_nouns": [
+    "kitten"
+  ],
+  "target_prompt": "A border collie talking to an orange kitten",
+  "target_uuid": "998498e0-f548-5d75-b61f-5ac03019d270",
+  "timing": {
+    "source_dit_forward_s": 113.1426603270229,
+    "source_probe_s": 143.7097455430776,
+    "target_dit_forward_s": 113.03168438794091,
+    "target_probe_s": 143.32377947191708,
+    "total_s": 287.03352501499467
+  }
+}

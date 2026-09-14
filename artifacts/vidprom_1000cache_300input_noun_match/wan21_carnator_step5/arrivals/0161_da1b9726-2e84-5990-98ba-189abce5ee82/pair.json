@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 161,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8601353982434312,
+    "context_color_ciede2000": 1.3181694929162902,
+    "log_area_ratio": 0.20695978400388676,
+    "shape_one_minus_dice": 0.5683453237410072
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8601353982434312,
+    "context_color_ciede2000": 1.3181694929162902,
+    "log_area_ratio": 0.20695978400388676,
+    "shape_one_minus_dice": 0.5683453237410072
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 161,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "dolphin",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "dolphin"
+  ],
+  "target_prompt": "A dolphin slapping a horse",
+  "target_uuid": "da1b9726-2e84-5990-98ba-189abce5ee82",
+  "timing": {
+    "source_dit_forward_s": 113.1820276051294,
+    "source_probe_s": 142.90473289391957,
+    "target_dit_forward_s": 113.24927774001844,
+    "target_probe_s": 143.13805297599174,
+    "total_s": 286.0427858699113
+  }
+}

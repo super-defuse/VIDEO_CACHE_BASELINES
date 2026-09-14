@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 127,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.318524295817069,
+    "context_color_ciede2000": 1.2703641121740952,
+    "log_area_ratio": 0.006635741537402273,
+    "shape_one_minus_dice": 0.19999999999999996
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.318524295817069,
+    "context_color_ciede2000": 1.2703641121740952,
+    "log_area_ratio": 0.006635741537402273,
+    "shape_one_minus_dice": 0.19999999999999996
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 127,
+  "source_nouns": [
+    "cat",
+    "club",
+    "night"
+  ],
+  "source_only_nouns": [
+    "club"
+  ],
+  "source_prompt": "cat is dancing in night club",
+  "source_uuid": "2dae88e1-9414-5443-9c32-ddb68ff97189",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "night",
+    "sky"
+  ],
+  "target_only_nouns": [
+    "sky"
+  ],
+  "target_prompt": "cat looking in the sky at night",
+  "target_uuid": "80d8ee06-a935-5bbc-915b-27e481b77565",
+  "timing": {
+    "source_dit_forward_s": 109.76136058731936,
+    "source_probe_s": 140.1367513500154,
+    "target_dit_forward_s": 109.74716793815605,
+    "target_probe_s": 139.9661402530037,
+    "total_s": 280.1028916030191
+  }
+}

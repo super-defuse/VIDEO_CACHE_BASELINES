@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 227,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.2110846074803947,
+    "context_color_ciede2000": 0.19226139834596978,
+    "log_area_ratio": 0.20218178023652,
+    "shape_one_minus_dice": 0.4956521739130435
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.2110846074803947,
+    "context_color_ciede2000": 0.19226139834596978,
+    "log_area_ratio": 0.20218178023652,
+    "shape_one_minus_dice": 0.4956521739130435
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 227,
+  "source_nouns": [
+    "field",
+    "raccoon"
+  ],
+  "source_only_nouns": [
+    "raccoon"
+  ],
+  "source_prompt": "little raccoon runs across the field",
+  "source_uuid": "0a811015-694c-595f-b382-ef636dbd1967",
+  "status": "completed",
+  "target_nouns": [
+    "field",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "An alien horse running across a field.",
+  "target_uuid": "f9831292-eedd-5712-8222-2b8850ef6a9d",
+  "timing": {
+    "source_dit_forward_s": 109.79183050896972,
+    "source_probe_s": 139.37974343891256,
+    "target_dit_forward_s": 109.79106638091616,
+    "target_probe_s": 139.23424399993382,
+    "total_s": 278.6139874388464
+  }
+}

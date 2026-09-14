@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 135,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6575627983742519,
+    "context_color_ciede2000": 1.501936245333704,
+    "log_area_ratio": 0.11802160933746546,
+    "shape_one_minus_dice": 0.65625
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6575627983742519,
+    "context_color_ciede2000": 1.501936245333704,
+    "log_area_ratio": 0.11802160933746546,
+    "shape_one_minus_dice": 0.65625
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 135,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "head"
+  ],
+  "target_only_nouns": [
+    "head"
+  ],
+  "target_prompt": "a cat with a dog head",
+  "target_uuid": "fb8ef000-a8e6-54ef-8563-04bd8dd05519",
+  "timing": {
+    "source_dit_forward_s": 112.01207760325633,
+    "source_probe_s": 142.34789766394533,
+    "target_dit_forward_s": 112.08595687500201,
+    "target_probe_s": 142.43954305304214,
+    "total_s": 284.7874407169875
+  }
+}

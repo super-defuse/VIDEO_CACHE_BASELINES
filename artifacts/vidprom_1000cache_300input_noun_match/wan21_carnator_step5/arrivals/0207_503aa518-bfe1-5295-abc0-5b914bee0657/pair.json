@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 207,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.6559729804360928,
+    "context_color_ciede2000": 1.3704935778292946,
+    "log_area_ratio": 0.5920510430218756,
+    "shape_one_minus_dice": 0.6153846153846154
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.6559729804360928,
+    "context_color_ciede2000": 1.3704935778292946,
+    "log_area_ratio": 0.5920510430218756,
+    "shape_one_minus_dice": 0.6153846153846154
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 207,
+  "source_nouns": [
+    "chair",
+    "eyes",
+    "puppet"
+  ],
+  "source_only_nouns": [
+    "chair"
+  ],
+  "source_prompt": "a creepy puppet sitting in a rocking chair with its eyes moving",
+  "source_uuid": "d2e6777c-eda3-5f65-b17d-fcaba4d4c86d",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "eyes",
+    "puppet"
+  ],
+  "target_only_nouns": [
+    "baby"
+  ],
+  "target_prompt": "baby puppet with yellow eyes",
+  "target_uuid": "503aa518-bfe1-5295-abc0-5b914bee0657",
+  "timing": {
+    "source_dit_forward_s": 109.83864121814258,
+    "source_probe_s": 139.98526235600002,
+    "target_dit_forward_s": 109.80166278756224,
+    "target_probe_s": 139.87958053895272,
+    "total_s": 279.86484289495274
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 26,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.47466133428274615,
+    "context_color_ciede2000": 1.1277289927144063,
+    "log_area_ratio": 0.6480492339040033,
+    "shape_one_minus_dice": 0.6831683168316831
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.47466133428274615,
+    "context_color_ciede2000": 1.1277289927144063,
+    "log_area_ratio": 0.6480492339040033,
+    "shape_one_minus_dice": 0.6831683168316831
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 26,
+  "source_nouns": [
+    "bone",
+    "bride",
+    "dog",
+    "mouth"
+  ],
+  "source_only_nouns": [
+    "bride"
+  ],
+  "source_prompt": "a dog running across the bride with a bone in his mouth",
+  "source_uuid": "f0ff003b-0ad3-54a7-817f-6ac2f7e55148",
+  "status": "completed",
+  "target_nouns": [
+    "bone",
+    "dog",
+    "hill",
+    "mouth"
+  ],
+  "target_only_nouns": [
+    "hill"
+  ],
+  "target_prompt": "dog running up a hill with a bone in its mouth",
+  "target_uuid": "683c6aa6-a0ae-5418-9c4c-841cefb3bc57",
+  "timing": {
+    "source_dit_forward_s": 112.98482944001444,
+    "source_probe_s": 144.21094161295332,
+    "target_dit_forward_s": 113.03475657547824,
+    "target_probe_s": 144.45385466399603,
+    "total_s": 288.66479627694935
+  }
+}

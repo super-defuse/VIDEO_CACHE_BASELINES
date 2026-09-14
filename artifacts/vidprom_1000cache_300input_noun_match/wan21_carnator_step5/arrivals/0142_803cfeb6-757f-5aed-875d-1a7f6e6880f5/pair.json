@@ -1,0 +1,62 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 142,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1863048411153336,
+    "context_color_ciede2000": 1.2674450532390802,
+    "log_area_ratio": 0.10859712502274055,
+    "shape_one_minus_dice": 0.8064516129032258
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1863048411153336,
+    "context_color_ciede2000": 1.2674450532390802,
+    "log_area_ratio": 0.10859712502274055,
+    "shape_one_minus_dice": 0.8064516129032258
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 142,
+  "source_nouns": [
+    "breathing",
+    "dragon",
+    "fire",
+    "wings"
+  ],
+  "source_only_nouns": [
+    "wings"
+  ],
+  "source_prompt": "dragon breathing fire after eating hot wings",
+  "source_uuid": "6a40667f-59ab-51cf-964c-c920b23bccae",
+  "status": "completed",
+  "target_nouns": [
+    "breathing",
+    "dragon",
+    "fire",
+    "kingdom"
+  ],
+  "target_only_nouns": [
+    "kingdom"
+  ],
+  "target_prompt": "fantasy powerful gold dragon breathing fire on a medieval kingdom",
+  "target_uuid": "803cfeb6-757f-5aed-875d-1a7f6e6880f5",
+  "timing": {
+    "source_dit_forward_s": 109.76071857404895,
+    "source_probe_s": 140.0532578791026,
+    "target_dit_forward_s": 109.77914613252506,
+    "target_probe_s": 140.27901352895424,
+    "total_s": 280.33227140805684
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 280,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0615847014338173,
+    "context_color_ciede2000": 1.0648603182245495,
+    "log_area_ratio": 0.06899287148695143,
+    "shape_one_minus_dice": 0.78125
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0615847014338173,
+    "context_color_ciede2000": 1.0648603182245495,
+    "log_area_ratio": 0.06899287148695143,
+    "shape_one_minus_dice": 0.78125
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 280,
+  "source_nouns": [
+    "cat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat chasing a mouse",
+  "source_uuid": "733dfd62-bf59-5a86-b814-7853651919a6",
+  "status": "completed",
+  "target_nouns": [
+    "mouse",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "tiger"
+  ],
+  "target_prompt": "a tiger running from a mouse",
+  "target_uuid": "d69211d2-7a65-5fdc-b28e-04c0ca9641e4",
+  "timing": {
+    "source_dit_forward_s": 112.15815711510368,
+    "source_probe_s": 141.84398412704468,
+    "target_dit_forward_s": 112.23171679815277,
+    "target_probe_s": 142.01647511683404,
+    "total_s": 283.8604592438787
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 233,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.576535310641676,
+    "context_color_ciede2000": 0.8913682549107773,
+    "log_area_ratio": 0.558941733498338,
+    "shape_one_minus_dice": 0.7068965517241379
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.576535310641676,
+    "context_color_ciede2000": 0.8913682549107773,
+    "log_area_ratio": 0.558941733498338,
+    "shape_one_minus_dice": 0.7068965517241379
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 233,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "ants",
+    "elephant"
+  ],
+  "target_only_nouns": [
+    "ants"
+  ],
+  "target_prompt": "an elephant and ants fighting each other",
+  "target_uuid": "327b4b58-b4f4-5810-802a-c4d3ce937d14",
+  "timing": {
+    "source_dit_forward_s": 111.53472194867209,
+    "source_probe_s": 140.98642974416725,
+    "target_dit_forward_s": 111.44595420453697,
+    "target_probe_s": 141.29091054899618,
+    "total_s": 282.27734029316343
+  }
+}

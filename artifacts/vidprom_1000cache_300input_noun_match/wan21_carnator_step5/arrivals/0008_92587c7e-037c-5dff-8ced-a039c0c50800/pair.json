@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 8,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9605503808056404,
+    "context_color_ciede2000": 0.5219356948787311,
+    "log_area_ratio": 0.6801128991320822,
+    "shape_one_minus_dice": 0.59375
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9605503808056404,
+    "context_color_ciede2000": 0.5219356948787311,
+    "log_area_ratio": 0.6801128991320822,
+    "shape_one_minus_dice": 0.59375
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 8,
+  "source_nouns": [
+    "jungle",
+    "tigers"
+  ],
+  "source_only_nouns": [
+    "tigers"
+  ],
+  "source_prompt": "two tigers fighting in a jungle",
+  "source_uuid": "571e610e-b968-56e4-96aa-18ca051fb9e5",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "jungle"
+  ],
+  "target_only_nouns": [
+    "elephant"
+  ],
+  "target_prompt": "a tiny elephant dancing in the jungle",
+  "target_uuid": "92587c7e-037c-5dff-8ced-a039c0c50800",
+  "timing": {
+    "source_dit_forward_s": 111.43456212081946,
+    "source_probe_s": 140.9411417110823,
+    "target_dit_forward_s": 111.4287967341952,
+    "target_probe_s": 141.45927164005116,
+    "total_s": 282.40041335113347
+  }
+}

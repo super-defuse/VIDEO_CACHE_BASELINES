@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 273,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.4257502395135244,
+    "context_color_ciede2000": 0.6879416748466599,
+    "log_area_ratio": 0.7501751807549776,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.4257502395135244,
+    "context_color_ciede2000": 0.6879416748466599,
+    "log_area_ratio": 0.7501751807549776,
+    "shape_one_minus_dice": 0.5555555555555556
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 273,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "tiger"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "lion",
+    "panda"
+  ],
+  "target_only_nouns": [
+    "panda"
+  ],
+  "target_prompt": "a lion with a panda",
+  "target_uuid": "c527d145-7dcc-5715-8b8e-a3323523437f",
+  "timing": {
+    "source_dit_forward_s": 111.44644014188088,
+    "source_probe_s": 140.78601503302343,
+    "target_dit_forward_s": 111.551437018672,
+    "target_probe_s": 140.98790690815076,
+    "total_s": 281.7739219411742
+  }
+}

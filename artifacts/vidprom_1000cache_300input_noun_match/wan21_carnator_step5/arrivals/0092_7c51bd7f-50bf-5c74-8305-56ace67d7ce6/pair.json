@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 92,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6071528296774682,
+    "context_color_ciede2000": 0.4985598461004465,
+    "log_area_ratio": 0.06230388543155633,
+    "shape_one_minus_dice": 0.564516129032258
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6071528296774682,
+    "context_color_ciede2000": 0.4985598461004465,
+    "log_area_ratio": 0.06230388543155633,
+    "shape_one_minus_dice": 0.564516129032258
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 92,
+  "source_nouns": [
+    "baby",
+    "dog"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a dog holding another dog as a baby",
+  "source_uuid": "bce6c6f3-952b-5151-8610-e86a2a60870d",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "metacarpus"
+  ],
+  "target_only_nouns": [
+    "metacarpus"
+  ],
+  "target_prompt": "baby galago sitting in a human metacarpus",
+  "target_uuid": "7c51bd7f-50bf-5c74-8305-56ace67d7ce6",
+  "timing": {
+    "source_dit_forward_s": 109.7641282249242,
+    "source_probe_s": 138.58817953593098,
+    "target_dit_forward_s": 109.72179760434665,
+    "target_probe_s": 138.67038708389737,
+    "total_s": 277.25856661982834
+  }
+}

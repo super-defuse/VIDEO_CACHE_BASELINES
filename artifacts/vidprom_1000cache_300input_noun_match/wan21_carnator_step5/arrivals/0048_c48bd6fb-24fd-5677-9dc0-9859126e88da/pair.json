@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 48,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8959603773435496,
+    "context_color_ciede2000": 0.9763829607803413,
+    "log_area_ratio": 0.16924365387860651,
+    "shape_one_minus_dice": 0.43089430894308944
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8959603773435496,
+    "context_color_ciede2000": 0.9763829607803413,
+    "log_area_ratio": 0.16924365387860651,
+    "shape_one_minus_dice": 0.43089430894308944
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 48,
+  "source_nouns": [
+    "puppy",
+    "trees"
+  ],
+  "source_only_nouns": [
+    "trees"
+  ],
+  "source_prompt": "little puppy running and climbing trees",
+  "source_uuid": "6fad46d3-c304-5363-b6ed-6f03f6ec8793",
+  "status": "completed",
+  "target_nouns": [
+    "puppy",
+    "warping"
+  ],
+  "target_only_nouns": [
+    "warping"
+  ],
+  "target_prompt": "cute golden retriever puppy running -neg warping, morphing",
+  "target_uuid": "c48bd6fb-24fd-5677-9dc0-9859126e88da",
+  "timing": {
+    "source_dit_forward_s": 111.45063421316445,
+    "source_probe_s": 141.43557375995442,
+    "target_dit_forward_s": 111.46855988143943,
+    "target_probe_s": 141.31800178415142,
+    "total_s": 282.75357554410584
+  }
+}

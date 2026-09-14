@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 175,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0552905913824029,
+    "context_color_ciede2000": 1.6850322299899145,
+    "log_area_ratio": 0.23665826223467598,
+    "shape_one_minus_dice": 0.4893617021276596
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0552905913824029,
+    "context_color_ciede2000": 1.6850322299899145,
+    "log_area_ratio": 0.23665826223467598,
+    "shape_one_minus_dice": 0.4893617021276596
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 175,
+  "source_nouns": [
+    "bufalo",
+    "bull"
+  ],
+  "source_only_nouns": [
+    "bufalo"
+  ],
+  "source_prompt": "create and Amazing bufalo riding a bull",
+  "source_uuid": "1ce1103d-dd8c-5cb9-a143-542feea8b921",
+  "status": "completed",
+  "target_nouns": [
+    "bull",
+    "man"
+  ],
+  "target_only_nouns": [
+    "man"
+  ],
+  "target_prompt": "cartoon gingerbread man riding a bull",
+  "target_uuid": "64699238-0ed9-5c4f-8417-3b05abc55dff",
+  "timing": {
+    "source_dit_forward_s": 112.07500134920701,
+    "source_probe_s": 141.8074253781233,
+    "target_dit_forward_s": 112.12981174653396,
+    "target_probe_s": 141.84628143697046,
+    "total_s": 283.65370681509376
+  }
+}

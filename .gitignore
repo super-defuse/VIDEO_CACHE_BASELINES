@@ -227,3 +227,16 @@ artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_3req_test_*/*/vbench
 # mandatory for CogVideoX runs, so that path is closed off; the overlay carries
 # exactly the missing packages and nothing that could shadow the environment.
 .cogvideo_overlay/
+
+# Wan2.1 Carnator step-5 Early Signature dataset.  The published payload is the
+# compact, re-scorable record the offline threshold sweep consumes:
+# run_manifest.json, quality/ (the pair distance tables and the sweep),
+# signatures.jsonl, and per arrival the pair.json plus the two
+# online_color_signature.json files.  Everything else the probe writes is a
+# local regenerable diagnostic: the 600 decoded tail frames are ~856MB of media,
+# the mbase tensors are already covered by *.safetensors, and the per-stage mask
+# diagnostics, status markers and worker logs carry no signature content.
+artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/logs/
+artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/arrivals/*/*/step5_tail_frame.png
+artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/arrivals/*/*/mask_diagnostics.json
+artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/arrivals/*/*/status.json

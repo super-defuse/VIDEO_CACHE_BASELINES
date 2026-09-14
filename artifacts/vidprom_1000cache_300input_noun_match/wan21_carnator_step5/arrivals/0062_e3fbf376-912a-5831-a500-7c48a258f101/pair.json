@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 62,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.642747076735929,
+    "context_color_ciede2000": 0.16608738345466015,
+    "log_area_ratio": 0.5090819640638117,
+    "shape_one_minus_dice": 0.5433070866141732
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.642747076735929,
+    "context_color_ciede2000": 0.16608738345466015,
+    "log_area_ratio": 0.5090819640638117,
+    "shape_one_minus_dice": 0.5433070866141732
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 62,
+  "source_nouns": [
+    "cat",
+    "grass"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat running in a green grass",
+  "source_uuid": "816c8f1c-800a-59e7-b8a3-b0e453241608",
+  "status": "completed",
+  "target_nouns": [
+    "grass",
+    "rabbit"
+  ],
+  "target_only_nouns": [
+    "rabbit"
+  ],
+  "target_prompt": "A rabbit is eating grass",
+  "target_uuid": "e3fbf376-912a-5831-a500-7c48a258f101",
+  "timing": {
+    "source_dit_forward_s": 109.70529388310388,
+    "source_probe_s": 139.08569107716903,
+    "target_dit_forward_s": 109.75505312695168,
+    "target_probe_s": 139.09086405485868,
+    "total_s": 278.1765551320277
+  }
+}

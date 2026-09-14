@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 91,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.4014983927350446,
+    "context_color_ciede2000": 0.44495295342591334,
+    "log_area_ratio": 1.5591760867981332,
+    "shape_one_minus_dice": 0.7345132743362832
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.4014983927350446,
+    "context_color_ciede2000": 0.44495295342591334,
+    "log_area_ratio": 1.5591760867981332,
+    "shape_one_minus_dice": 0.7345132743362832
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 91,
+  "source_nouns": [
+    "dog",
+    "tree"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "a crazy dog is eating the tree",
+  "source_uuid": "ff3cdfdb-6094-500d-ba2e-5b09a5f5e616",
+  "status": "completed",
+  "target_nouns": [
+    "tiger",
+    "tree"
+  ],
+  "target_only_nouns": [
+    "tiger"
+  ],
+  "target_prompt": "a tiger is trying to climba tree",
+  "target_uuid": "c8ea3457-bb10-5d8c-ba7a-bef79e671373",
+  "timing": {
+    "source_dit_forward_s": 113.15023772628047,
+    "source_probe_s": 143.17235496104695,
+    "target_dit_forward_s": 113.17055718391202,
+    "target_probe_s": 143.2291384730488,
+    "total_s": 286.40149343409576
+  }
+}

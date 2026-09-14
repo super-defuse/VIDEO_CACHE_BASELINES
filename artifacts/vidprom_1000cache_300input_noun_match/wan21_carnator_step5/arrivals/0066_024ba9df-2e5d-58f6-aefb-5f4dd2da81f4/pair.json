@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 66,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.592947555444976,
+    "context_color_ciede2000": 1.6827359175162677,
+    "log_area_ratio": 0.1366171536768697,
+    "shape_one_minus_dice": 0.504424778761062
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.592947555444976,
+    "context_color_ciede2000": 1.6827359175162677,
+    "log_area_ratio": 0.1366171536768697,
+    "shape_one_minus_dice": 0.504424778761062
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 66,
+  "source_nouns": [
+    "human",
+    "shark"
+  ],
+  "source_only_nouns": [
+    "human"
+  ],
+  "source_prompt": "a shark running after a human",
+  "source_uuid": "74305ada-2808-5871-aee5-f5683aec00fe",
+  "status": "completed",
+  "target_nouns": [
+    "baby",
+    "shark"
+  ],
+  "target_only_nouns": [
+    "baby"
+  ],
+  "target_prompt": "baby play with baby shark pink",
+  "target_uuid": "024ba9df-2e5d-58f6-aefb-5f4dd2da81f4",
+  "timing": {
+    "source_dit_forward_s": 113.03423327836208,
+    "source_probe_s": 143.21374720614403,
+    "target_dit_forward_s": 113.13617731886916,
+    "target_probe_s": 143.2516730639618,
+    "total_s": 286.4654202701058
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 247,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.1111658723505855,
+    "context_color_ciede2000": 1.7815227599850643,
+    "log_area_ratio": 0.5248349187601382,
+    "shape_one_minus_dice": 0.6111111111111112
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.1111658723505855,
+    "context_color_ciede2000": 1.7815227599850643,
+    "log_area_ratio": 0.5248349187601382,
+    "shape_one_minus_dice": 0.6111111111111112
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 247,
+  "source_nouns": [
+    "fox",
+    "mansion"
+  ],
+  "source_only_nouns": [
+    "mansion"
+  ],
+  "source_prompt": "raven and a fox walking though the mansion",
+  "source_uuid": "f574078d-edfb-594f-820c-6a8ff74b3cf3",
+  "status": "completed",
+  "target_nouns": [
+    "books",
+    "fox"
+  ],
+  "target_only_nouns": [
+    "books"
+  ],
+  "target_prompt": "2D cartoon, clever fox named Freddie. Freddie loved to read books,",
+  "target_uuid": "2b1a5c15-3f05-5f28-9f29-21a9d0a569d5",
+  "timing": {
+    "source_dit_forward_s": 109.81900341180153,
+    "source_probe_s": 139.20499193505384,
+    "target_dit_forward_s": 109.87180802621879,
+    "target_probe_s": 138.73159572295845,
+    "total_s": 277.9365876580123
+  }
+}

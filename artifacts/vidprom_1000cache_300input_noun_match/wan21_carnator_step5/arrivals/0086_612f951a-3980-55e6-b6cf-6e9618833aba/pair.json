@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 86,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.5360052610842834,
+    "context_color_ciede2000": 0.43516827978588296,
+    "log_area_ratio": 0.6412964862147225,
+    "shape_one_minus_dice": 0.5934959349593496
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.5360052610842834,
+    "context_color_ciede2000": 0.43516827978588296,
+    "log_area_ratio": 0.6412964862147225,
+    "shape_one_minus_dice": 0.5934959349593496
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 86,
+  "source_nouns": [
+    "farm",
+    "grass",
+    "sheep"
+  ],
+  "source_only_nouns": [
+    "farm"
+  ],
+  "source_prompt": "a sheep eating grass at the farm",
+  "source_uuid": "969a6b89-676a-570b-9e21-65119b7fc43a",
+  "status": "completed",
+  "target_nouns": [
+    "cows",
+    "grass",
+    "sheep"
+  ],
+  "target_only_nouns": [
+    "cows"
+  ],
+  "target_prompt": "Cows and sheep are visible in windblown grass",
+  "target_uuid": "612f951a-3980-55e6-b6cf-6e9618833aba",
+  "timing": {
+    "source_dit_forward_s": 113.15945367654786,
+    "source_probe_s": 144.0379050851334,
+    "target_dit_forward_s": 113.18389404728077,
+    "target_probe_s": 144.425362033071,
+    "total_s": 288.4632671182044
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 89,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.7628237923494867,
+    "context_color_ciede2000": 1.4486785701298175,
+    "log_area_ratio": 0.05450767769306629,
+    "shape_one_minus_dice": 0.6097560975609756
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.7628237923494867,
+    "context_color_ciede2000": 1.4486785701298175,
+    "log_area_ratio": 0.05450767769306629,
+    "shape_one_minus_dice": 0.6097560975609756
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 89,
+  "source_nouns": [
+    "bird",
+    "hat"
+  ],
+  "source_only_nouns": [
+    "bird"
+  ],
+  "source_prompt": "Bird with a hat walking forward",
+  "source_uuid": "1deed875-1a68-5955-bafe-71a103bc7e3d",
+  "status": "completed",
+  "target_nouns": [
+    "hat",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "horse"
+  ],
+  "target_prompt": "A horse dancing with a hat",
+  "target_uuid": "e7212341-4052-5e86-9280-398d24226001",
+  "timing": {
+    "source_dit_forward_s": 112.85560413193889,
+    "source_probe_s": 142.8141376369167,
+    "target_dit_forward_s": 112.8500347409863,
+    "target_probe_s": 142.93629150185734,
+    "total_s": 285.75042913877405
+  }
+}

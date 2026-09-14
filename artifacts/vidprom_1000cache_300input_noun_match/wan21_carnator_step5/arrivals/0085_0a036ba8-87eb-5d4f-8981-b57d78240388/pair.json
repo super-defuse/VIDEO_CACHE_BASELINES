@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 85,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.417038421694354,
+    "context_color_ciede2000": 0.6718207083187479,
+    "log_area_ratio": 0.5940774478186099,
+    "shape_one_minus_dice": 0.9245283018867925
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.417038421694354,
+    "context_color_ciede2000": 0.6718207083187479,
+    "log_area_ratio": 0.5940774478186099,
+    "shape_one_minus_dice": 0.9245283018867925
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 85,
+  "source_nouns": [
+    "bicycle",
+    "giraffe"
+  ],
+  "source_only_nouns": [
+    "bicycle"
+  ],
+  "source_prompt": "A giraffe riding a bicycle",
+  "source_uuid": "46504c1b-69cd-51b2-81f1-d8ee80ccc38e",
+  "status": "completed",
+  "target_nouns": [
+    "fullbody",
+    "giraffe"
+  ],
+  "target_only_nouns": [
+    "fullbody"
+  ],
+  "target_prompt": "a fullbody clown morphing to a giraffe",
+  "target_uuid": "0a036ba8-87eb-5d4f-8981-b57d78240388",
+  "timing": {
+    "source_dit_forward_s": 111.93253649608232,
+    "source_probe_s": 141.8429309290368,
+    "target_dit_forward_s": 112.03170837042853,
+    "target_probe_s": 141.38463573693298,
+    "total_s": 283.2275666659698
+  }
+}

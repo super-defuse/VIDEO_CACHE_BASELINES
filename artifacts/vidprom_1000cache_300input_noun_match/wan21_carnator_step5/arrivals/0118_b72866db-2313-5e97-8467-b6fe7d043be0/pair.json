@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 118,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.3240426483026813,
+    "context_color_ciede2000": 1.2211936030527255,
+    "log_area_ratio": 0.08089097000352435,
+    "shape_one_minus_dice": 0.6376811594202898
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.3240426483026813,
+    "context_color_ciede2000": 1.2211936030527255,
+    "log_area_ratio": 0.08089097000352435,
+    "shape_one_minus_dice": 0.6376811594202898
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 118,
+  "source_nouns": [
+    "lion",
+    "tiger"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "A tiger and a lion are fighting",
+  "source_uuid": "e9b92745-1872-59b5-9de5-c839a0196d1b",
+  "status": "completed",
+  "target_nouns": [
+    "albino",
+    "tiger"
+  ],
+  "target_only_nouns": [
+    "albino"
+  ],
+  "target_prompt": "Animate white albino tiger walking graciously",
+  "target_uuid": "b72866db-2313-5e97-8467-b6fe7d043be0",
+  "timing": {
+    "source_dit_forward_s": 111.33235731418245,
+    "source_probe_s": 140.65166281396523,
+    "target_dit_forward_s": 111.34787132893689,
+    "target_probe_s": 140.86735853389837,
+    "total_s": 281.5190213478636
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 285,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.45383196781304597,
+    "context_color_ciede2000": 0.25340850882393723,
+    "log_area_ratio": 0.015929524846675175,
+    "shape_one_minus_dice": 0.679245283018868
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.45383196781304597,
+    "context_color_ciede2000": 0.25340850882393723,
+    "log_area_ratio": 0.015929524846675175,
+    "shape_one_minus_dice": 0.679245283018868
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 285,
+  "source_nouns": [
+    "cat",
+    "riverside"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "dancing cat on the riverside",
+  "source_uuid": "a5c0094a-d3ef-5a1b-8496-8d5389254d4f",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "riverside"
+  ],
+  "target_only_nouns": [
+    "bear"
+  ],
+  "target_prompt": "a bear running at the riverside",
+  "target_uuid": "324591d9-7ac3-57f6-b16f-d709314f6a36",
+  "timing": {
+    "source_dit_forward_s": 112.22114134812728,
+    "source_probe_s": 142.24020210211165,
+    "target_dit_forward_s": 112.26063327747397,
+    "target_probe_s": 142.45491080195643,
+    "total_s": 284.6951129040681
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 150,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5031648607475212,
+    "context_color_ciede2000": 0.0763517414322255,
+    "log_area_ratio": 1.087922782268554,
+    "shape_one_minus_dice": 0.4029850746268657
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5031648607475212,
+    "context_color_ciede2000": 0.0763517414322255,
+    "log_area_ratio": 1.087922782268554,
+    "shape_one_minus_dice": 0.4029850746268657
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 150,
+  "source_nouns": [
+    "cat",
+    "mouse"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "angry scary cat chasing little mouse",
+  "source_uuid": "bae21b94-dae5-5940-a726-a2d33f0ae4fb",
+  "status": "completed",
+  "target_nouns": [
+    "godzilla",
+    "mouse"
+  ],
+  "target_only_nouns": [
+    "godzilla"
+  ],
+  "target_prompt": "Godzilla getting scared by a mouse",
+  "target_uuid": "11cf4c78-e9dc-5c4e-bcd2-87f355337854",
+  "timing": {
+    "source_dit_forward_s": 112.03497277223505,
+    "source_probe_s": 141.5224596040789,
+    "target_dit_forward_s": 112.14150461507961,
+    "target_probe_s": 142.08350262604654,
+    "total_s": 283.60596223012544
+  }
+}

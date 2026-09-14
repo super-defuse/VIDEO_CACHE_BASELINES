@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 242,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9052034883967767,
+    "context_color_ciede2000": 0.8220743491938037,
+    "log_area_ratio": 0.19660018844935206,
+    "shape_one_minus_dice": 0.38842975206611574
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9052034883967767,
+    "context_color_ciede2000": 0.8220743491938037,
+    "log_area_ratio": 0.19660018844935206,
+    "shape_one_minus_dice": 0.38842975206611574
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 242,
+  "source_nouns": [
+    "lion",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "lion"
+  ],
+  "source_prompt": "a pig is eating lion",
+  "source_uuid": "fdc8ab9e-8480-5baa-a6c4-b975eef8a40b",
+  "status": "completed",
+  "target_nouns": [
+    "pig",
+    "top"
+  ],
+  "target_only_nouns": [
+    "top"
+  ],
+  "target_prompt": "one pig is sitting on the top of the Forbidden City",
+  "target_uuid": "7a871031-0bb9-582e-9533-18ea70a62b3d",
+  "timing": {
+    "source_dit_forward_s": 109.80811779107898,
+    "source_probe_s": 138.64503101306036,
+    "target_dit_forward_s": 109.87769607407972,
+    "target_probe_s": 139.00316194212064,
+    "total_s": 277.648192955181
+  }
+}

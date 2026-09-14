@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 153,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.0300208238538937,
+    "context_color_ciede2000": 0.8132727056651201,
+    "log_area_ratio": 0.046662873754760754,
+    "shape_one_minus_dice": 0.5692307692307692
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.0300208238538937,
+    "context_color_ciede2000": 0.8132727056651201,
+    "log_area_ratio": 0.046662873754760754,
+    "shape_one_minus_dice": 0.5692307692307692
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 153,
+  "source_nouns": [
+    "bridge",
+    "cat"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "a cat is running on the bridge",
+  "source_uuid": "69ceb3f4-2b7d-5f5a-ad5e-1698bfda560d",
+  "status": "completed",
+  "target_nouns": [
+    "bridge",
+    "camera"
+  ],
+  "target_only_nouns": [
+    "camera"
+  ],
+  "target_prompt": "white goat walking across a bridge towards the camera",
+  "target_uuid": "4827be7c-db81-5f3c-b703-51367c351fc0",
+  "timing": {
+    "source_dit_forward_s": 111.34024185710587,
+    "source_probe_s": 141.0556639651768,
+    "target_dit_forward_s": 111.43455181200989,
+    "target_probe_s": 141.40678487508558,
+    "total_s": 282.46244884026237
+  }
+}

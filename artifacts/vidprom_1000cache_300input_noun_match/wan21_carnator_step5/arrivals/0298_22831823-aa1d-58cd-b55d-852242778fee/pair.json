@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 298,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8504244815858096,
+    "context_color_ciede2000": 0.8950055935493338,
+    "log_area_ratio": 0.24921586439325136,
+    "shape_one_minus_dice": 0.38983050847457623
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8504244815858096,
+    "context_color_ciede2000": 0.8950055935493338,
+    "log_area_ratio": 0.24921586439325136,
+    "shape_one_minus_dice": 0.38983050847457623
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 298,
+  "source_nouns": [
+    "hand",
+    "teddybear"
+  ],
+  "source_only_nouns": [
+    "teddybear"
+  ],
+  "source_prompt": "fluppy teddybear shakes it&#39;s hand.",
+  "source_uuid": "027c7cc1-c363-53be-9642-1a89167854fa",
+  "status": "completed",
+  "target_nouns": [
+    "hand",
+    "unicorn"
+  ],
+  "target_only_nouns": [
+    "unicorn"
+  ],
+  "target_prompt": "tiny unicorn in a hand",
+  "target_uuid": "22831823-aa1d-58cd-b55d-852242778fee",
+  "timing": {
+    "source_dit_forward_s": 111.64909104909748,
+    "source_probe_s": 141.46761336107738,
+    "target_dit_forward_s": 111.63530979887582,
+    "target_probe_s": 141.3763277491089,
+    "total_s": 282.8439411101863
+  }
+}

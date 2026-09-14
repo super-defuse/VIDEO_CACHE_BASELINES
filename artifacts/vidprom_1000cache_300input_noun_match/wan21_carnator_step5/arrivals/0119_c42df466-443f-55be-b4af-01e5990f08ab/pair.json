@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 119,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.7983395383116204,
+    "context_color_ciede2000": 3.8321826553349245,
+    "log_area_ratio": 0.10016307329486775,
+    "shape_one_minus_dice": 0.6312056737588653
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.7983395383116204,
+    "context_color_ciede2000": 3.8321826553349245,
+    "log_area_ratio": 0.10016307329486775,
+    "shape_one_minus_dice": 0.6312056737588653
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 119,
+  "source_nouns": [
+    "horse",
+    "riding"
+  ],
+  "source_only_nouns": [
+    "riding"
+  ],
+  "source_prompt": "SPIDERMAN SIT RIDING A HORSE",
+  "source_uuid": "2ab3b687-8f21-5c5e-abe5-48a9418ca765",
+  "status": "completed",
+  "target_nouns": [
+    "chess",
+    "horse"
+  ],
+  "target_only_nouns": [
+    "chess"
+  ],
+  "target_prompt": "a white horse from chess spinning itself",
+  "target_uuid": "c42df466-443f-55be-b4af-01e5990f08ab",
+  "timing": {
+    "source_dit_forward_s": 112.86991808377206,
+    "source_probe_s": 142.4592278948985,
+    "target_dit_forward_s": 112.91735387616791,
+    "target_probe_s": 142.90934093203396,
+    "total_s": 285.36856882693246
+  }
+}

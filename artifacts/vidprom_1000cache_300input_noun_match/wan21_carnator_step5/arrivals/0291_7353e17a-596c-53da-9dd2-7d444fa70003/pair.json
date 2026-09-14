@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 291,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.8447022772531434,
+    "context_color_ciede2000": 0.2555619202208329,
+    "log_area_ratio": 0.10836805277680008,
+    "shape_one_minus_dice": 0.4
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.8447022772531434,
+    "context_color_ciede2000": 0.2555619202208329,
+    "log_area_ratio": 0.10836805277680008,
+    "shape_one_minus_dice": 0.4
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 291,
+  "source_nouns": [
+    "cat",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "cat"
+  ],
+  "source_prompt": "A cat turned into a pig",
+  "source_uuid": "96181a69-7c89-5549-92f6-1eb3e020b51f",
+  "status": "completed",
+  "target_nouns": [
+    "juice",
+    "pig"
+  ],
+  "target_only_nouns": [
+    "juice"
+  ],
+  "target_prompt": "A small pig is making juice",
+  "target_uuid": "7353e17a-596c-53da-9dd2-7d444fa70003",
+  "timing": {
+    "source_dit_forward_s": 113.19495579088107,
+    "source_probe_s": 143.029698374914,
+    "target_dit_forward_s": 113.16579459398054,
+    "target_probe_s": 143.0504692159593,
+    "total_s": 286.0801675908733
+  }
+}

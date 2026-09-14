@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 279,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 1.8264875739777726,
+    "context_color_ciede2000": 0.5915836611044671,
+    "log_area_ratio": 0.4513213788736156,
+    "shape_one_minus_dice": 0.633587786259542
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 1.8264875739777726,
+    "context_color_ciede2000": 0.5915836611044671,
+    "log_area_ratio": 0.4513213788736156,
+    "shape_one_minus_dice": 0.633587786259542
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 279,
+  "source_nouns": [
+    "pool",
+    "swimming"
+  ],
+  "source_only_nouns": [
+    "swimming"
+  ],
+  "source_prompt": "hello kitty swimming in a pool",
+  "source_uuid": "a510424a-ce2f-5ab8-8b73-703f34e23cd5",
+  "status": "completed",
+  "target_nouns": [
+    "monkey",
+    "pool"
+  ],
+  "target_only_nouns": [
+    "monkey"
+  ],
+  "target_prompt": "monkey playing in the pool",
+  "target_uuid": "800dd395-f9ba-52d4-ae24-82bf6c3861ae",
+  "timing": {
+    "source_dit_forward_s": 113.07895391527563,
+    "source_probe_s": 143.2919460569974,
+    "target_dit_forward_s": 113.05959234572947,
+    "target_probe_s": 143.4771986710839,
+    "total_s": 286.7691447280813
+  }
+}

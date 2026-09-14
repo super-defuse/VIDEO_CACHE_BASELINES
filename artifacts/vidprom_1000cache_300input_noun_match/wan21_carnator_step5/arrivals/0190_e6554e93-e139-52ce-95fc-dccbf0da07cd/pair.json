@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 190,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.5324408638422776,
+    "context_color_ciede2000": 1.7632956461938092,
+    "log_area_ratio": 0.06353689393702598,
+    "shape_one_minus_dice": 0.6911764705882353
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.5324408638422776,
+    "context_color_ciede2000": 1.7632956461938092,
+    "log_area_ratio": 0.06353689393702598,
+    "shape_one_minus_dice": 0.6911764705882353
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 190,
+  "source_nouns": [
+    "cat",
+    "dog",
+    "left"
+  ],
+  "source_only_nouns": [
+    "left"
+  ],
+  "source_prompt": "A cat on the left of a dog.",
+  "source_uuid": "37c619cd-c8aa-53f0-92d6-539d3b8649c0",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "dog",
+    "road"
+  ],
+  "target_only_nouns": [
+    "road"
+  ],
+  "target_prompt": "a cat with a dog running on the road",
+  "target_uuid": "e6554e93-e139-52ce-95fc-dccbf0da07cd",
+  "timing": {
+    "source_dit_forward_s": 112.08376360870898,
+    "source_probe_s": 142.42831762414426,
+    "target_dit_forward_s": 112.09370405599475,
+    "target_probe_s": 142.7278125300072,
+    "total_s": 285.15613015415147
+  }
+}

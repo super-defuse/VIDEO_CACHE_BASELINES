@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 147,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.9571155228356768,
+    "context_color_ciede2000": 0.5258537612669251,
+    "log_area_ratio": 0.1845904005786211,
+    "shape_one_minus_dice": 0.3538461538461538
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.9571155228356768,
+    "context_color_ciede2000": 0.5258537612669251,
+    "log_area_ratio": 0.1845904005786211,
+    "shape_one_minus_dice": 0.3538461538461538
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 147,
+  "source_nouns": [
+    "lion",
+    "pig"
+  ],
+  "source_only_nouns": [
+    "pig"
+  ],
+  "source_prompt": "a pig is eating lion",
+  "source_uuid": "fdc8ab9e-8480-5baa-a6c4-b975eef8a40b",
+  "status": "completed",
+  "target_nouns": [
+    "hole",
+    "lion"
+  ],
+  "target_only_nouns": [
+    "hole"
+  ],
+  "target_prompt": "mouse jumping a round sleeping lion in his hole",
+  "target_uuid": "8c01a6be-d700-5f94-a6d3-c3289fafd5f1",
+  "timing": {
+    "source_dit_forward_s": 109.78753508091904,
+    "source_probe_s": 138.62195228110068,
+    "target_dit_forward_s": 109.76838218607008,
+    "target_probe_s": 138.73879684717394,
+    "total_s": 277.3607491282746
+  }
+}

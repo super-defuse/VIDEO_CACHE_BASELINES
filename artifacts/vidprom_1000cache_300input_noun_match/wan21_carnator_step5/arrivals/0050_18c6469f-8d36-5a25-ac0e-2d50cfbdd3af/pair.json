@@ -1,0 +1,60 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 50,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6300488317875534,
+    "context_color_ciede2000": 1.0553647194139402,
+    "log_area_ratio": 0.07772380383417528,
+    "shape_one_minus_dice": 0.5766423357664234
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6300488317875534,
+    "context_color_ciede2000": 1.0553647194139402,
+    "log_area_ratio": 0.07772380383417528,
+    "shape_one_minus_dice": 0.5766423357664234
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 50,
+  "source_nouns": [
+    "--ar",
+    "cat",
+    "window"
+  ],
+  "source_only_nouns": [
+    "--ar"
+  ],
+  "source_prompt": "a cat sleeping next to a sunny window --ar 2:3",
+  "source_uuid": "81657cc3-c466-5e3e-a39c-0f6a8c759ae4",
+  "status": "completed",
+  "target_nouns": [
+    "cat",
+    "sky",
+    "window"
+  ],
+  "target_only_nouns": [
+    "sky"
+  ],
+  "target_prompt": "a cat staying in a window and mesmerized by the colorful sky",
+  "target_uuid": "18c6469f-8d36-5a25-ac0e-2d50cfbdd3af",
+  "timing": {
+    "source_dit_forward_s": 111.97901923418976,
+    "source_probe_s": 142.40195999504067,
+    "target_dit_forward_s": 111.9988009231165,
+    "target_probe_s": 142.7271830008831,
+    "total_s": 285.12914299592376
+  }
+}

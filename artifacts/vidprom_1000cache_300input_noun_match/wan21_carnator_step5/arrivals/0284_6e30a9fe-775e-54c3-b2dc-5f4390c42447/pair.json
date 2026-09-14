@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 284,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 0.6234644011366127,
+    "context_color_ciede2000": 1.3480534168916276,
+    "log_area_ratio": 0.5013469261134919,
+    "shape_one_minus_dice": 0.625
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 0.6234644011366127,
+    "context_color_ciede2000": 1.3480534168916276,
+    "log_area_ratio": 0.5013469261134919,
+    "shape_one_minus_dice": 0.625
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 284,
+  "source_nouns": [
+    "elephant",
+    "trump"
+  ],
+  "source_only_nouns": [
+    "trump"
+  ],
+  "source_prompt": "centaur top donald trump bottom elephant",
+  "source_uuid": "351a0d22-d729-5138-9842-c378d22e9906",
+  "status": "completed",
+  "target_nouns": [
+    "elephant",
+    "rope"
+  ],
+  "target_only_nouns": [
+    "rope"
+  ],
+  "target_prompt": "young elephant trying to escape from a rope",
+  "target_uuid": "6e30a9fe-775e-54c3-b2dc-5f4390c42447",
+  "timing": {
+    "source_dit_forward_s": 113.11433116486296,
+    "source_probe_s": 142.87049803207628,
+    "target_dit_forward_s": 113.10715340613388,
+    "target_probe_s": 143.39012330793776,
+    "total_s": 286.26062134001404
+  }
+}

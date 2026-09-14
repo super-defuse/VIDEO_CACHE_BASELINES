@@ -1,0 +1,58 @@
+{
+  "applicable_gates": [
+    "context_color_ciede2000",
+    "log_area_ratio",
+    "shape_one_minus_dice",
+    "changed_color_ciede2000"
+  ],
+  "arrival_index": 213,
+  "comparability": "one_noun_substitution",
+  "distances": {
+    "changed_color_ciede2000": 2.9294814120377963,
+    "context_color_ciede2000": 0.9061649620469945,
+    "log_area_ratio": 0.40050724438885393,
+    "shape_one_minus_dice": 0.6779661016949152
+  },
+  "error": null,
+  "gate_distances": {
+    "changed_color_ciede2000": 2.9294814120377963,
+    "context_color_ciede2000": 0.9061649620469945,
+    "log_area_ratio": 0.40050724438885393,
+    "shape_one_minus_dice": 0.6779661016949152
+  },
+  "legacy_status": "ok",
+  "metadata_compatible": true,
+  "phase": "all",
+  "probe_completed_step": 5,
+  "probe_seed": 20260218,
+  "probe_total_steps": 50,
+  "reason": "missing_step10_artifacts",
+  "replay_decision": "hit",
+  "request_index": 213,
+  "source_nouns": [
+    "dog",
+    "snow"
+  ],
+  "source_only_nouns": [
+    "dog"
+  ],
+  "source_prompt": "Husky dog ​​running in the snow",
+  "source_uuid": "cdde511d-3c17-5ba7-af0e-048246d6b9aa",
+  "status": "completed",
+  "target_nouns": [
+    "bear",
+    "snow"
+  ],
+  "target_only_nouns": [
+    "bear"
+  ],
+  "target_prompt": "A polar bear walking in the arctic snow, approaching, growling",
+  "target_uuid": "214789b7-12f5-5e45-95a7-7fb68e7ff7d0",
+  "timing": {
+    "source_dit_forward_s": 111.4703098104801,
+    "source_probe_s": 141.26579651096836,
+    "target_dit_forward_s": 111.45737339323387,
+    "target_probe_s": 140.84986431500874,
+    "total_s": 282.1156608259771
+  }
+}
