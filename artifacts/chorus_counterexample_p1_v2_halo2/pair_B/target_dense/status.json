@@ -1,0 +1,20 @@
+{
+  "stage": "target_dense",
+  "status": "completed",
+  "method": "baseline",
+  "result": {
+    "executed_steps": 50,
+    "timing": {
+      "cache_load_s": 5.22984191775322e-06,
+      "generation_s": 288.20040495088324,
+      "save_video_s": 2.4108924390748143,
+      "cache_save_s": 8.239876478910446e-06,
+      "hash_s": 0.0055344910360872746,
+      "preprocess_breakdown_s": 0.0,
+      "excluded_cache_prepare_s": 0.0,
+      "excluded_preprocess_s": 0.0,
+      "reported_latency_s": 288.2005265317857
+    }
+  },
+  "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_counterexample_p1_v2_halo2/pair_B/target_dense/videos/0001_p1B-target-football-gym-floor.mp4"
+}

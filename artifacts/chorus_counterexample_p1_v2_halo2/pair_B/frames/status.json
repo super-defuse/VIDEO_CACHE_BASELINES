@@ -1,0 +1,43 @@
+{
+  "stage": "frames",
+  "status": "completed",
+  "frame_indices": [
+    0,
+    30,
+    60,
+    90,
+    120
+  ],
+  "videos": {
+    "source": {
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_counterexample_p1_v2_halo2/pair_B/source_dense/videos/0000_p1B-source-barbell-gym-floor.mp4",
+      "frames": [
+        "source_000.png",
+        "source_030.png",
+        "source_060.png",
+        "source_090.png",
+        "source_120.png"
+      ]
+    },
+    "dense": {
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_counterexample_p1_v2_halo2/pair_B/target_dense/videos/0001_p1B-target-football-gym-floor.mp4",
+      "frames": [
+        "dense_000.png",
+        "dense_030.png",
+        "dense_060.png",
+        "dense_090.png",
+        "dense_120.png"
+      ]
+    },
+    "chorus": {
+      "video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_counterexample_p1_v2_halo2/pair_B/chorus_medit/videos/0001_p1B-target-football-gym-floor.mp4",
+      "frames": [
+        "chorus_000.png",
+        "chorus_030.png",
+        "chorus_060.png",
+        "chorus_090.png",
+        "chorus_120.png"
+      ]
+    }
+  }
+}

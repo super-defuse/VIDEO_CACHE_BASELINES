@@ -1,0 +1,12 @@
+{
+  "stage": "clip_score",
+  "status": "completed",
+  "embedder": "clip:openai/clip-vit-large-patch14",
+  "source_prompt": "a barbell on a gym floor, camera focus on the barbell",
+  "target_prompt": "a football on a gym floor, camera focus on the football",
+  "cosine_similarity": 0.7302866210184978,
+  "chorus_threshold": 0.65,
+  "passes_threshold": true,
+  "policy": "audit only; forced cache reuse does not consult this score",
+  "physical_gpu": 4
+}

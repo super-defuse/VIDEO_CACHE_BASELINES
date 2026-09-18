@@ -1,0 +1,23 @@
+{
+  "pair": "A",
+  "role": "validity",
+  "source_prompt": "a red apple rolling down a snow mountain, camera focus on the apple",
+  "target_prompt": "a red apple rolling down a mountain, camera focus on the apple",
+  "expected_sam_phrase": "red apple",
+  "seed": 20260218,
+  "target_schedule": {
+    "stage2_medit": [
+      5,
+      30
+    ],
+    "stage3_dense": [
+      30,
+      50
+    ]
+  },
+  "retrieval_policy": "forced_source_cache; CLIP gate bypassed",
+  "prompt_diff": "manual",
+  "with_dense": true,
+  "mask_dilation_edit_override": 2,
+  "physical_gpu": 3
+}

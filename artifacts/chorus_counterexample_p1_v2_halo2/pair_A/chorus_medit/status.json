@@ -1,0 +1,123 @@
+{
+  "stage": "chorus_medit",
+  "status": "completed",
+  "method": "chorus",
+  "result": {
+    "chorus_stage": "target_reuse",
+    "chorus_stages": {
+      "steps": 50,
+      "k1": 5,
+      "k2": 30,
+      "stage1": [
+        0,
+        5
+      ],
+      "stage2": [
+        5,
+        30
+      ],
+      "stage3": [
+        30,
+        50
+      ]
+    },
+    "executed_steps": 45,
+    "dit_forward_s": 150.6721934224479,
+    "chorus_llm": {
+      "source_entities": [
+        "red apple"
+      ],
+      "target_entities": [
+        "red apple"
+      ],
+      "removed_tokens": [
+        "snow"
+      ],
+      "added_tokens": [],
+      "edit_summary": "remove the snow from the historical mountain background",
+      "backend": "manual_override",
+      "latency_s": 0.0
+    },
+    "chorus_mask": {
+      "backend": "grounded_sam2",
+      "release": "v1.0",
+      "commit": "dd4c514",
+      "sam_checkpoint": "sam2.1_hiera_large.pt",
+      "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+      "phrase": "red apple",
+      "boxes": 1,
+      "box_confidence_max": 0.9741,
+      "pixel_edit_fraction": 0.0375,
+      "grid": [
+        31,
+        22,
+        40
+      ],
+      "base_fraction": 0.0359,
+      "base_token_fraction": 0.0428,
+      "edit_fraction": 0.0779,
+      "see_fraction": 0.4111,
+      "dilation": {
+        "edit": 2,
+        "see": 14
+      },
+      "pooling": "max",
+      "update_mask": "Medit"
+    },
+    "chorus_preprocess_s": 26.020988878794014,
+    "chorus_llm_s": 7.81891867518425e-06,
+    "chorus_sam_s": 26.02098105987534,
+    "excluded_latency_s": 26.020988878794014,
+    "chorus_tgaa": {
+      "enabled": true,
+      "gamma_k": 1.5,
+      "gamma_o": 1.5,
+      "schedule": "linear_step_decay_approximation",
+      "paper_exact_schedule": "not specified",
+      "scope": "stage2",
+      "blocks": "all",
+      "calls": 1500
+    },
+    "chorus_scheduler": {
+      "stage3_history_reset": true,
+      "stage3_history_reset_step": 30,
+      "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+    },
+    "chorus_cache": {
+      "source_trajectory_steps": 50,
+      "format": "per_step_manifest",
+      "stage2_latent_fusion": true,
+      "latent_fusion_update_mask": "Medit",
+      "latent_fusion_from_step": 5,
+      "latent_fusion_through_step": 29,
+      "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+      "srd": {
+        "enabled": true,
+        "update_mask": "Medit",
+        "edit_fraction": 0.0779,
+        "see_fraction": 0.4111,
+        "self_attention": "Medit queries / Msee keys-values",
+        "cross_attention": "Medit queries",
+        "ffn": "Medit tokens"
+      }
+    },
+    "timing": {
+      "cache_load_s": 0.0004113628529012203,
+      "generation_s": 197.1282006301917,
+      "save_video_s": 2.561062578111887,
+      "cache_save_s": 3.3916905522346497e-05,
+      "hash_s": 0.006046443711966276,
+      "preprocess_breakdown_s": 26.020988878794014,
+      "excluded_cache_prepare_s": 0.0,
+      "excluded_preprocess_s": 0.0,
+      "reported_latency_s": 198.85057110805064
+    }
+  },
+  "cache_match": {
+    "hit": true,
+    "kind": "source_prompt",
+    "score": 1.0000000563461195,
+    "source_uuid": "p1A-source-apple-snow-mountain"
+  },
+  "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/chorus_counterexample_p1_v2_halo2/pair_A/chorus_medit/videos/0001_p1A-target-apple-mountain.mp4"
+}
