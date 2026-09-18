@@ -1,0 +1,19 @@
+Command: /data/shared/miniconda/bin/conda run --no-capture-output -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=/home/tangxuebin/project/VIDEO_CACHE_BASELINES VCB_CARNATOR_SPARSE_LAYERS=6-25 VCB_CARNATOR_OUTER_SPARSE_LAYERS=0-5,26-29 python /home/tangxuebin/project/VIDEO_CACHE_BASELINES/scripts/benchmark/run_vidprom_300_experiment.py --method carnator_boundary_b5 --gpu 6 --limit 300 --request-indices 16 --early-signature-disabled --allow-gpu-remap --output-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/l20/out --overwrite --skip-quality
+GPU: 6
+Started: 2026-09-17T14:27:13.490926
+================================================================================
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 14.06it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 14.05it/s]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+Warning: Sage2++ NOT enabled
+{"status": "completed", "method": "carnator_boundary_b5", "gpu": 6, "requests": 1, "ok": 1, "cache_miss": 0, "errors": 0, "resumed": 0, "results": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/l20/out/carnator_boundary_b5/requests.jsonl", "clip_t": null, "vbench_q": null}
+
+================================================================================
+Exit code: 0

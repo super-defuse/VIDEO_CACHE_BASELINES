@@ -1,0 +1,17 @@
+Command: /data/shared/miniconda/bin/conda run --no-capture-output -n wan env PYTHONNOUSERSITE=1 PYTHONPATH=/home/tangxuebin/project/VIDEO_CACHE_BASELINES CARNATOR_ENV_READY=1 python -m carnator.adapters.wan_ti2v_5b --no-env-setup --model-dir /home/tangxuebin/models/Wan2.2-TI2V-5B --device cuda:3 --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/dense/artifacts --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/dense/results --run-id run --target-prompt A cute little lion and a wobbly penguin appear --seed 20260234 --height 704 --width 1280 --frames 121 --fps 24 --steps 50 --scheduler unipc --flow-shift 5.0 --guidance-scale 5.0 --target-dense-only --outer-attn-backend dense --ffn-backend fp --skip-w8a8-dense-diagnostic --disable-progress
+Started: 2026-09-17T14:21:19.527294
+================================================================================
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 87.90it/s]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/dense/results/run/summary.json
+report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/dense/results/run/report.md
+speedup_reference=target_dense
+denoising_speedup=None
+end_to_end_speedup=None
+
+
+================================================================================
+Exit code: 0
+Elapsed: 353.96s

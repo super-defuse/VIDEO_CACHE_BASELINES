@@ -1241,6 +1241,22 @@ class NativeWanWorker:
         self._closed = True
 
 
+def carnator_layer_window_argv() -> list[str]:
+    """Extra Carnator argv for a layer-window ablation run.
+
+    Unset (the default, and what every recorded 300-request run used) leaves the
+    native defaults ``--sparse-layers 10-20`` / ``--outer-sparse-layers
+    0-9,21-29`` untouched.  ``VCB_CARNATOR_SPARSE_LAYERS`` plus
+    ``VCB_CARNATOR_OUTER_SPARSE_LAYERS`` override them so a layer sweep reuses
+    this harness -- and therefore its exact timing accounting -- unchanged.
+    """
+    sparse = os.environ.get("VCB_CARNATOR_SPARSE_LAYERS")
+    if sparse is None:
+        return []
+    outer = os.environ.get("VCB_CARNATOR_OUTER_SPARSE_LAYERS", "")
+    return ["--sparse-layers", sparse, "--outer-sparse-layers", outer]
+
+
 def native_dense_argv(
     args: argparse.Namespace,
     config: dict[str, Any],
@@ -1559,6 +1575,7 @@ def native_run(args: argparse.Namespace, rows: list[dict[str, Any]], view: Path,
                            "--source-run-dir", str(entry / "carnator"), "--target-dense-manifest", str(fake_manifest),
                            "--source-mask-dir", selected_mask["mask_bundle_dir"],
                            "--outer-attn-backend", "sparge-sage2", "--ffn-backend", "w8a8", "--skip-w8a8-dense-diagnostic"]
+                command.extend(carnator_layer_window_argv())
             summary_path = req_root / "results" / "run" / "summary.json"
             reusable_summary = False
             if summary_path.is_file():
@@ -1807,6 +1824,10 @@ def main() -> int:
                                                                      "source_prompt": WARMUP_SOURCE_PROMPT,
                                                                      "target_prompt": WARMUP_TARGET_PROMPT},
                                                           "native_worker_policy": "one_resident_worker_per_gpu" if args.method in {"chorus2", "carnator_boundary_b5"} else None,
+                                                          "carnator_layer_window": {
+                                                              "sparse_layers": os.environ.get("VCB_CARNATOR_SPARSE_LAYERS"),
+                                                              "outer_sparse_layers": os.environ.get("VCB_CARNATOR_OUTER_SPARSE_LAYERS"),
+                                                          },
                                                           "dense_c0": {"version": DENSE_C0_VERSION, "steps": 50},
                                                           "denoising_timing": "cuda_synchronized_dit_forward; Carnator adds B5 probe",
                                                           "native_artifact_policy": (

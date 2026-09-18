@@ -1,0 +1,100 @@
+[
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4"
+        ]
+    },
+    {
+        "prompt_en": "A cute little lion and a wobbly penguin appear",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4"
+        ]
+    }
+]

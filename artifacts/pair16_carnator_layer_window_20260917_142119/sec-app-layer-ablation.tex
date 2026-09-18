@@ -1,0 +1,85 @@
+\section{Layer-Window Ablation}
+\label{sec:app-layer-window}
+
+\textsc{Carnator} applies region-restricted latent updates within a window of middle Transformer
+layers and leaves the remaining layers to historical sparse-connectivity reuse. We ablate the width
+of that window on Wan2.2-TI2V-5B, whose 30 layers are split into a $10$--$20$ region-update window
+(11 layers) and an outer $0$--$9,21$--$29$ complement in every recorded 300-request run.
+
+To make the window the only variable, we fix a single accepted request--cache pair and vary nothing
+else: the target prompt (\emph{A cute little lion and a wobbly penguin appear}, seed 20260234) and
+its source (\emph{A tiger and a lion are fighting}) are held constant, the Early Signature gate is
+disabled so that every arm reuses the same accepted cache, and all arms run through the same harness
+as the 300-request table. The pair is the one whose \textsc{Carnator} CLIP-T and VBench-Q sit closest
+to the 300-request means, and it exercises the one-noun-substitution case (\emph{lion} shared,
+\emph{penguin} for \emph{tiger}). Windows are nested around layer~15, the centre of the deployed
+window, with the extra layer of an even count taken on the higher-index side. Because the
+region-update and outer sparse-connectivity families both rewrite \texttt{block.forward}, the two
+sets must remain disjoint, so widening the window necessarily shrinks outer sparse-connectivity
+coverage; the sweep therefore measures the partition between the two reuse mechanisms rather than the
+window in isolation. As a control, the 11-layer arm reproduces the recorded arrival-16 row within
+$1.4$~s of latency and exactly on quality (CLIP-T $0.2676$, VBench-Q $0.6415$), which validates the
+harness accounting and bounds run-to-run variation at the $\sim1$~s level.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4.5pt}
+\caption{\textbf{Layer-window ablation on Wan2.2-TI2V-5B.} All arms reuse the same accepted cache
+for the same target request and differ only in the region-update window; the complement of each
+window carries historical sparse-connectivity reuse. DiT latency counts every forward a request
+executes, including the 5-step dense probe, and E2E latency is request wall time, both following the
+accounting of the 300-request table. Speedups are relative to the dense 50-step reference, which
+executes all 50 denoising steps where the reuse arms execute 40.}
+\label{tab:app-layer-window}
+\begin{tabular}{l c cc cc cc}
+\toprule
+& & \multicolumn{2}{c}{DiT latency (s)} & \multicolumn{2}{c}{E2E latency (s)} & & \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Region-update layers & Window & Total$\downarrow$ & Speedup$\uparrow$ & Total$\downarrow$ & Speedup$\uparrow$ & CLIP-T$\uparrow$ & VBench-Q$\uparrow$ \\
+\midrule
+None (dense)      & ---      & 273.61 & 1.00$\times$ & 296.99 & 1.00$\times$ & 0.3330 & 0.6699 \\
+\midrule
+5                 & 13--17   & 160.67 & 1.70$\times$ & 206.27 & 1.44$\times$ & 0.2681 & 0.6447 \\
+11 (deployed)     & 10--20   & 156.67 & 1.75$\times$ & 200.54 & 1.48$\times$ & 0.2676 & 0.6415 \\
+15                & 8--22    & 150.58 & 1.82$\times$ & 193.62 & 1.53$\times$ & 0.2700 & 0.6440 \\
+20                & 6--25    & 150.97 & 1.81$\times$ & 196.74 & 1.51$\times$ & 0.2803 & 0.6497 \\
+25                & 3--27    & 148.97 & 1.84$\times$ & 194.32 & 1.53$\times$ & 0.2749 & 0.6268 \\
+30                & 0--29    & 145.09 & 1.89$\times$ & 189.85 & 1.56$\times$ & 0.2617 & 0.6092 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Latency decreases with window width throughout the sweep. Five layers already suffice to recover
+most of the available saving ($1.70\times$ DiT, $1.44\times$ E2E), and the full 30-layer window
+reaches $1.89\times$ and $1.56\times$.\footnote{The all-layers arm exercises a code path that
+narrower windows never reach: layer~0 receives half-precision input from the patch embedding, so the
+region-update path must promote the block output dtype before writing it back. The promotion is a
+dtype fix only and changes no arithmetic.} The entire sweep spans $15.6$~s of DiT latency and
+$16.4$~s of E2E latency, i.e.\ about $5\%$ of the dense reference, so the window is a second-order
+knob: the dominant saving comes from reuse itself, and the partition only decides how the remaining
+layers are spent. Per-layer gains are uneven --- isolated to the reuse stage (40 steps, probe
+excluded) the arms range from $133.18$~s to $117.92$~s, yet the 15-to-20-layer step shrinks the reuse
+stage by only $0.3$~s, and the E2E differences among the 15-, 20- and 25-layer arms are not ordered
+by window width and span $3.1$~s, of the same order as the $1.4$~s by which the 11-layer arm
+reproduces the recorded arrival-16 latency. The trend is monotone at the two ends of the sweep, but
+single-request granularity does not resolve its interior.
+
+Quality is flat for windows up to 20 layers and degrades beyond. CLIP-T stays within
+$0.2617$--$0.2803$, at or above the 300-request mean of $0.2616$, and VBench-Q stays within
+$0.6092$--$0.6497$ around its mean of $0.6401$. On this pair the 20-layer arm is the best-quality arm
+in the sweep while also being faster than the deployed 11-layer configuration. Past 20 layers the
+scores fall, driven by aesthetic quality ($0.5798$ at 20 layers, then $0.5002$ and $0.4237$ at 25
+and 30) and subject consistency ($0.8493$, then $0.7986$ and $0.7539$), whereas imaging quality does
+not degrade ($0.7487$, $0.7552$, $0.7744$). The widest window thus makes the reuse-induced losses
+visible in exactly the dimensions that depend on the appearance of the generated objects, consistent
+with too few tokens being updated according to the target request.
+
+Taken together, the sweep indicates that the deployed 11-layer window is conservative: it sits where
+quality is flat and most of the speedup is already realized, and a wider window of roughly 20 layers
+is both slightly faster and slightly better on this pair. We retain the default because this evidence
+rests on a single request--cache pair and a single seed, and because VBench dynamic degree is
+constant at $1.0$ across all arms and therefore carries no signal in a single-video evaluation. Since
+the region-update window and outer sparse connectivity share one partition of the backbone, the two
+mechanisms should be re-tuned jointly on the request level rather than in isolation; we leave this to
+future work.

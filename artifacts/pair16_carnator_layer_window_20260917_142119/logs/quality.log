@@ -1,0 +1,39 @@
+Command: /data/shared/miniconda/bin/conda run --no-capture-output -n vbench python /home/tangxuebin/project/VIDEO_CACHE_BASELINES/scripts/benchmark/quality.py /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality --dimension subject_consistency background_consistency motion_smoothness dynamic_degree aesthetic_quality imaging_quality
+Started: 2026-09-17T16:45:43.961992
+================================================================================
+
+2026-09-17 16:46:05,139 - vbench.utils - INFO - [32m[Local Mode][0m Working in local mode, please make sure that the pre-trained model has been fully downloaded.
+2026-09-17 16:46:06,437 - vbench.subject_consistency - INFO - Initialize DINO success
+Evaluation meta data saved to /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+  0%|          | 0/7 [00:00<?, ?it/s] 14%|█▍        | 1/7 [00:01<00:09,  1.53s/it] 29%|██▊       | 2/7 [00:03<00:07,  1.52s/it] 43%|████▎     | 3/7 [00:04<00:06,  1.50s/it] 57%|█████▋    | 4/7 [00:06<00:04,  1.53s/it] 71%|███████▏  | 5/7 [00:07<00:02,  1.46s/it] 86%|████████▌ | 6/7 [00:08<00:01,  1.49s/it]100%|██████████| 7/7 [00:10<00:00,  1.49s/it]100%|██████████| 7/7 [00:10<00:00,  1.49s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+  0%|          | 0/7 [00:00<?, ?it/s] 14%|█▍        | 1/7 [00:00<00:04,  1.30it/s] 29%|██▊       | 2/7 [00:01<00:03,  1.27it/s] 43%|████▎     | 3/7 [00:02<00:03,  1.31it/s] 57%|█████▋    | 4/7 [00:03<00:02,  1.27it/s] 71%|███████▏  | 5/7 [00:03<00:01,  1.38it/s] 86%|████████▌ | 6/7 [00:04<00:00,  1.36it/s]100%|██████████| 7/7 [00:05<00:00,  1.35it/s]100%|██████████| 7/7 [00:05<00:00,  1.33it/s]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+Loading [networks.AMT-S.Model] from [/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/amt_model/amt-s.pth]...
+  0%|          | 0/7 [00:00<?, ?it/s] 14%|█▍        | 1/7 [00:03<00:20,  3.38s/it] 29%|██▊       | 2/7 [00:06<00:16,  3.37s/it] 43%|████▎     | 3/7 [00:10<00:13,  3.40s/it] 57%|█████▋    | 4/7 [00:13<00:10,  3.37s/it] 71%|███████▏  | 5/7 [00:16<00:06,  3.29s/it] 86%|████████▌ | 6/7 [00:19<00:03,  3.29s/it]100%|██████████| 7/7 [00:23<00:00,  3.32s/it]100%|██████████| 7/7 [00:23<00:00,  3.33s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+  0%|          | 0/7 [00:00<?, ?it/s]/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:110: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:121: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/data/shared/conda_envs/vbench/lib/python3.10/site-packages/torch/functional.py:554: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:4322.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:138: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+ 14%|█▍        | 1/7 [00:03<00:21,  3.51s/it] 29%|██▊       | 2/7 [00:06<00:17,  3.50s/it] 43%|████▎     | 3/7 [00:10<00:14,  3.52s/it] 57%|█████▋    | 4/7 [00:14<00:10,  3.51s/it] 71%|███████▏  | 5/7 [00:17<00:06,  3.49s/it] 86%|████████▌ | 6/7 [00:20<00:03,  3.47s/it]100%|██████████| 7/7 [00:24<00:00,  3.47s/it]100%|██████████| 7/7 [00:24<00:00,  3.48s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+  0%|          | 0/7 [00:00<?, ?it/s] 14%|█▍        | 1/7 [00:00<00:03,  1.50it/s] 29%|██▊       | 2/7 [00:01<00:03,  1.44it/s] 43%|████▎     | 3/7 [00:02<00:02,  1.43it/s] 57%|█████▋    | 4/7 [00:02<00:02,  1.37it/s] 71%|███████▏  | 5/7 [00:03<00:01,  1.49it/s] 86%|████████▌ | 6/7 [00:04<00:00,  1.47it/s]100%|██████████| 7/7 [00:04<00:00,  1.44it/s]100%|██████████| 7/7 [00:04<00:00,  1.44it/s]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_full_info.json
+Loading pretrained model MUSIQ from /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/pyiqa_model/musiq_spaq_ckpt-358bb6af.pth
+  0%|          | 0/7 [00:00<?, ?it/s]/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/imaging_quality.py:57: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  acc_score_video += float(score)
+ 14%|█▍        | 1/7 [00:01<00:11,  1.91s/it] 29%|██▊       | 2/7 [00:03<00:09,  1.97s/it] 43%|████▎     | 3/7 [00:05<00:07,  1.88s/it] 57%|█████▋    | 4/7 [00:07<00:05,  1.95s/it] 71%|███████▏  | 5/7 [00:09<00:03,  1.90s/it] 86%|████████▌ | 6/7 [00:11<00:01,  1.87s/it]100%|██████████| 7/7 [00:13<00:00,  1.89s/it]100%|██████████| 7/7 [00:13<00:00,  1.90s/it]
+Evaluation results saved to /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/custom_vidprom_eval_results.json
+conda run --no-capture-output -n vbench env PYTHONPATH=/home/tangxuebin/project/VIDEO_CACHE_BASELINES:/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench VBENCH_CACHE_DIR=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache python -m scripts.benchmark.quality_runner --results /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/quality_input.jsonl --clip-weights /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/clip_model/ViT-B-32.pt --vbench-dimensions subject_consistency background_consistency motion_smoothness dynamic_degree aesthetic_quality imaging_quality
+
+
+================================================================================
+Exit code: 0
+Elapsed: 112.03s

@@ -214,3 +214,32 @@ E2E: 155.85s
 每个变体产物目录包含 `ablation/videos/target_dense.mp4` 与（reuse 变体）
 `ablation/videos/target_latent_reuse.mp4`。大体积视频与 cache 为本地可复现产物，
 不入库，见 [.gitignore](../.gitignore)。
+
+## 7. Layer-window 消融（论文附录）
+
+上面四变体固定了 `--sparse-layers 10-20`；这一轮把复用窗口本身当作变量，在同一个 pair 上
+扫 `--sparse-layers` 的层数（0/5/11/15/20/25/30 层，窗口始终居中、层数越大窗口越宽），
+回答「sparse attention 该覆盖多少层」。脚本是
+[scripts/ablation/carnator_layer_window_ablation.py](../scripts/ablation/carnator_layer_window_ablation.py)，
+论文附录小节在产物目录内的 `sec-app-layer-ablation.tex`。
+
+结果（pair = arrival 16；完整表、逐臂 `results.jsonl` 和聚合见
+`artifacts/pair16_carnator_layer_window_20260917_142119/` 的 `layer_window_ablation.csv`、
+`layer_window_ablation.json` 和 `report.md`）：
+
+| 窗口 | Denoising 加速 | E2E 加速 | CLIP-T | VBench-Q |
+| ---: | ---: | ---: | ---: | ---: |
+| Dense（50 步对照） | 1.00x | 1.00x | 0.3330 | 0.6699 |
+| 5 层 | 1.70x | 1.44x | 0.2681 | 0.6447 |
+| 11 层（当前默认） | 1.75x | 1.48x | 0.2676 | 0.6415 |
+| 15 层 | 1.82x | 1.53x | 0.2700 | 0.6440 |
+| 20 层 | 1.81x | 1.51x | 0.2803 | 0.6497 |
+| 25 层 | 1.84x | 1.53x | 0.2749 | 0.6268 |
+| 30 层（全层） | 1.89x | 1.56x | 0.2617 | 0.6092 |
+
+5 层相对 11 层已经拿到大部分收益，再扩到 30 层只多换来约 0.12x 的 E2E 加速
+（1.44x → 1.56x），而两个质量指标都是到 20 层为止持平、30 层全层反而最差。当前默认
+`10-20`（11 层）因此落在加速与质量的折中段，不是随手取的。
+
+这只是单个 pair 的一轮扫描，逐臂差异里有一部分是这一对 prompt 的运气——和
+[ACCEPTANCE.md](ACCEPTANCE.md) 多 pair 均值表的告诫一样，这里只能读出趋势，读不出显著性。

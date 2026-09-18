@@ -1,0 +1,214 @@
+{
+    "subject_consistency": [
+        0.8317076482765732,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": 0.8266098439693451
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": 0.7985754124820232
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": 0.849348625044028
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": 0.7538825585196416
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": 0.9516198528309663
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": 0.8146780868371327
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": 0.827239158252875
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9370503743489583,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": 0.9360514322916667,
+                "video_sim": 112.326171875,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": 0.91961669921875,
+                "video_sim": 110.35400390625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": 0.92724609375,
+                "video_sim": 111.26953125,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": 0.9199788411458333,
+                "video_sim": 110.3974609375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": 0.9744466145833334,
+                "video_sim": 116.93359375,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": 0.9375325520833333,
+                "video_sim": 112.50390625,
+                "cnt_per_video": 120
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": 0.9444803873697917,
+                "video_sim": 113.337646484375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9722136978336355,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": 0.9710371191425592
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": 0.9680039950525862
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": 0.9722699500703651
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": 0.9644770531506084
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": 0.9888794982027691
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": 0.9706355343850964
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": 0.9701927348314642
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": true
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5315791113036019,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": 0.5651249885559082
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": 0.5001804232597351
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": 0.5798496007919312
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": 0.4236988425254822
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": 0.5334457159042358
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": 0.5612264275550842
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": 0.5575277805328369
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7432746334143484,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0003_l15.mp4",
+                "video_results": 74.26133362320829
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0005_l25.mp4",
+                "video_results": 75.52081273606986
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0004_l20.mp4",
+                "video_results": 74.86566792637849
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0006_l30.mp4",
+                "video_results": 77.4433187689663
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0000_dense.mp4",
+                "video_results": 69.2900424043009
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0002_l11.mp4",
+                "video_results": 74.28640129152409
+            },
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair16_carnator_layer_window_20260917_142119/quality/vbench/input_videos_6770747ff0ecd2f5/0001_l05.mp4",
+                "video_results": 74.62466663959597
+            }
+        ]
+    ]
+}

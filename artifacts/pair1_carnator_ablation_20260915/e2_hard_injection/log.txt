@@ -1,0 +1,11 @@
+command=/data/shared/conda_envs/wan/bin/python -m carnator.adapters.wan_ti2v_5b --no-env-setup --model-dir /home/tangxuebin/models/Wan2.2-TI2V-5B --device cuda:0 --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair1_carnator_ablation_20260915/e2_hard_injection/artifacts --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair1_carnator_ablation_20260915/e2_hard_injection/results --run-id run --source-prompt a red bus driving through a city --target-prompt a red car driving through a city --seed 20260219 --height 704 --width 1280 --frames 121 --steps 50 --scheduler unipc --flow-shift 5.0 --guidance-scale 5.0 --model-dtype fp16 --mask-probe-step 5 --reuse-start-step 10 --mask-layers 15 --latent-injection-mode hard --boundary-alpha-function smoothstep --outer-attn-backend sparge-sage2 --outer-sparse-layers 0-9,21-29 --ffn-backend w8a8 --skip-w8a8-dense-diagnostic --disable-progress --source-positive bus --source-run-dir /home/tangxuebin/project/CHAI/artifacts/runs/pair1-wan-carnator/carnator/artifacts/source --target-dense-manifest /home/tangxuebin/project/CHAI/artifacts/runs/pair1-wan-carnator/carnator/target_dense_manifest.json
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:00<00:00, 18.15it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 22.19it/s]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+Warning: Sage2++ NOT enabled
+summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair1_carnator_ablation_20260915/e2_hard_injection/results/run/summary.json
+report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/pair1_carnator_ablation_20260915/e2_hard_injection/results/run/report.md
+speedup_reference=target_dense
+denoising_speedup=None
+end_to_end_speedup=1.6370649866746116
