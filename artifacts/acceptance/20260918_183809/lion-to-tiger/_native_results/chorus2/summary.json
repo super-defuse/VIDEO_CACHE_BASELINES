@@ -1,0 +1,189 @@
+{
+  "method": "chorus2",
+  "status": "completed",
+  "config": {
+    "model": "Wan2.2-TI2V-5B",
+    "source_prompt": "a lion is walking through tall grass, focus on the lion",
+    "target_prompt": "a tiger is walking through tall grass, focus on the tiger",
+    "seed": 20260218,
+    "steps": 50,
+    "guidance_scale": 5.0,
+    "source_mask_cache": {
+      "mode": "external",
+      "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2/cache/source_dense/outer_block_masks"
+    },
+    "source_latent_cache": {
+      "mode": "not_used",
+      "path": null
+    },
+    "sparse_attention": {
+      "backend": "sparge-sage2",
+      "layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "start_step": 11,
+      "q_block_size": 64,
+      "k_block_size": 128,
+      "top_p": 0.95,
+      "min_top_k": 0.1,
+      "layer_refresh_size": 8
+    },
+    "latent_reuse": false,
+    "reuse_start_step": 0,
+    "target_denoising_steps": 50,
+    "speedup_reference": {
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/dense_baseline/cache/target_dense/manifest.json",
+      "end_to_end_seconds": 302.3979787752032
+    }
+  },
+  "paths": {
+    "artifact_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2",
+    "result_run": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_native_results/chorus2",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/videos/source.mp4",
+    "target_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/videos/target.mp4",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/cache/source",
+    "target_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/cache/target",
+    "mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/cache/source/block_masks"
+  },
+  "runs": {
+    "target": {
+      "output": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/videos/target.mp4",
+      "manifest_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/cache/target/manifest.json",
+      "denoising_seconds": 201.55673111230135,
+      "dit_forward_seconds": 201.4609590563923,
+      "end_to_end_seconds": 238.32503730105236,
+      "completed_steps": 50,
+      "outer_sparse": {
+        "backend": "sparge-sage2",
+        "execution_dtype": "torch.float16",
+        "source_mask_cache_id": "_sources/chorus2",
+        "source_mask_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2/cache/source_dense/outer_block_masks",
+        "quantization": "QK INT8 and PV FP8",
+        "runs": 2400,
+        "cache_hits": 2400,
+        "cache_misses": 0,
+        "planned_masks": 0,
+        "plan_seconds": 0.0,
+        "mask_load_seconds": 0.0,
+        "routing_time_ms": 0.0,
+        "avg_runtime_density": 0.3510315172812913,
+        "avg_source_per_head_density": 0.3216894976546367,
+        "avg_source_gt_coverage": 0.9607663169999917,
+        "avg_head_density_min": 0.10720354298440118,
+        "avg_head_density_max": 0.8114078642055392,
+        "avg_head_density_cv": 0.7110297869021693,
+        "flashinfer_plan_cache": null,
+        "flashinfer_wrapper_policy": null,
+        "flashinfer_execution_modes": [],
+        "layer_refresh_size": 8,
+        "refresh_events": 320,
+        "refresh_added_blocks": 154437988,
+        "use_fp16_qk_reduction": null,
+        "sparge_smooth_k": true,
+        "sparge_pvthreshd": 50.0,
+        "enabled": true,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ],
+        "dense_fallback_count": 0
+      },
+      "resume": {
+        "resume_latent_path": null,
+        "resume_start_step": 0,
+        "resume_region_override": null,
+        "stop_after_step": null
+      },
+      "masked_injection": {
+        "enabled": false,
+        "mode": null,
+        "alpha_function": null,
+        "formula": null,
+        "calls": 0,
+        "total_seconds": 0.0,
+        "avg_ms": 0.0,
+        "mask_source_completed_step": null,
+        "mask_statistics": {}
+      },
+      "cache_prepare": {
+        "entries": 2400,
+        "decoded_entries": 2400,
+        "file_bytes": 5267354400,
+        "device": "cuda:0",
+        "elapsed_seconds": 2.7660098946653306
+      },
+      "peak_gpu_memory_gib": {
+        "allocated": 49.321269512176514,
+        "reserved": 58.380859375
+      },
+      "hardware": {
+        "device": "cuda:0",
+        "gpu_name": "NVIDIA H100 PCIe",
+        "visible_device": "6",
+        "gpu_uuid": "GPU-7d00509f-e0bf-bcf5-38c3-77d52e5e2308",
+        "pci_bus_id": "00000000:9D:00.0"
+      }
+    }
+  },
+  "speedups": {
+    "reference": "shared_target_c0_end_to_end",
+    "end_to_end_vs_reference": 1.268846874838475
+  }
+}

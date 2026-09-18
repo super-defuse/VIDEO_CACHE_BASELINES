@@ -1,0 +1,174 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-18T18:38:09.130485+08:00",
+  "root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809",
+  "layout": "per-baseline-source-v1",
+  "pairs": [
+    {
+      "pair_id": "horse-to-zebra",
+      "source_prompt": "a horse is galloping across a dusty plain, focus on the horse",
+      "target_prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "seed": 20260218,
+      "source_positive": "horse"
+    },
+    {
+      "pair_id": "lion-to-tiger",
+      "source_prompt": "a lion is walking through tall grass, focus on the lion",
+      "target_prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "seed": 20260218,
+      "source_positive": "lion"
+    },
+    {
+      "pair_id": "duck-to-swan",
+      "source_prompt": "a duck is swimming on a calm lake, focus on the duck",
+      "target_prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "seed": 20260218,
+      "source_positive": "duck"
+    },
+    {
+      "pair_id": "bear-to-panda",
+      "source_prompt": "a bear is standing in a snowy forest, focus on the bear",
+      "target_prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "seed": 20260218,
+      "source_positive": "bear"
+    },
+    {
+      "pair_id": "apple-to-orange",
+      "source_prompt": "an apple is resting on a wooden table, focus on the apple",
+      "target_prompt": "an orange is resting on a wooden table, focus on the orange",
+      "seed": 20260218,
+      "source_positive": "apple"
+    }
+  ],
+  "baselines": [
+    "dense_baseline",
+    "nirvana_vid",
+    "chorus",
+    "chorus2",
+    "carnator_boundary_b5"
+  ],
+  "gpu_by_method": {
+    "dense_baseline": 3,
+    "nirvana_vid": 4,
+    "chorus": 5,
+    "chorus2": 6,
+    "carnator_boundary_b5": 7
+  },
+  "quality_gpu": "per-baseline",
+  "cuda_policy": "CUDA_VISIBLE_DEVICES restricted to physical GPUs 3,4,5,6,7",
+  "source_mode": "one independent source run per cache-consuming baseline, pruned after its target",
+  "cache_pruning": true,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16",
+  "source_positive": "<per-pair>",
+  "source_positive_by_pair": {
+    "horse-to-zebra": "horse",
+    "lion-to-tiger": "lion",
+    "duck-to-swan": "duck",
+    "bear-to-panda": "bear",
+    "apple-to-orange": "apple"
+  },
+  "carnator": {
+    "mode": "boundary-blend",
+    "baseline": "B5",
+    "alpha_function": "smoothstep"
+  },
+  "chorus": {
+    "k1": 10,
+    "k2": 30,
+    "gamma_k": 1.5,
+    "gamma_o": 1.5
+  },
+  "cache_manifests": {
+    "horse-to-zebra": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid/manifest.json",
+        "sha256": "ea755fe42c912bc1811e5cf55fd46324d4f434a20bbfa087fa4e06174d145282"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus/manifest.json",
+        "sha256": "9a1a912bb3a6f60bd8a292dd50a0e2ca98c617e9ad474fa73c5d6e5768316e4a"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus2/manifest.json",
+        "sha256": "77b0af45f85dd588aa702f0978c233ba106579005d073f28e7afe0e45c04517f"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "7cc7b8cc0d0ff945b82c4149ef7425c0f88c552400148f66ed1b648a422f6787"
+      }
+    },
+    "lion-to-tiger": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/nirvana_vid/manifest.json",
+        "sha256": "3d9c87ed9c5c16267a3d335c6493cfa0338e66c75165b34de14e5221cf26f7e6"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/manifest.json",
+        "sha256": "bc043b987171075f240ae9d5be90b3607c29ee700c8586f421e3f84b034b9aea"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2/manifest.json",
+        "sha256": "4c9760d52f6741da8738cebab9eef0ae3631f6245449d91b3f726060253c6398"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "af2094fc1c15fda3e5b18a8fdc2e7b09bba6eb3a43cfec130f511151e666a738"
+      }
+    },
+    "duck-to-swan": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/manifest.json",
+        "sha256": "5f26b7f7dc6fb7e42d428f270b68a713e5fe4dc4be7a763ddce81409260533fc"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus/manifest.json",
+        "sha256": "bc46d6491eaf13f8336fde4944da765f3b54930136b14998cc8f86791367fb6c"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus2/manifest.json",
+        "sha256": "1961b2e0fdb534ede8df48cdf582b790e06a17f834739612f5501c212cfa1bea"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "f88ac6da0b4aa7c68ac341d02d6b353211c7e1afa56ee09f65454c43f1ff3d4d"
+      }
+    },
+    "bear-to-panda": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/manifest.json",
+        "sha256": "bcd4bba58721a3bf23e0f466979c4d2e659875bd7b6eda2ae968538af06480f3"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus/manifest.json",
+        "sha256": "c54e3bb96932b5fd03cee138714e5dd8bc5a816aaf643b68c026cf0863b734ef"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus2/manifest.json",
+        "sha256": "0cfbf83ca65aaadc7b9575ed4c29dd56075a1b2721337bd62fb61abea821c574"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "fbf9f436fda3c4e209c1c91ece3c98911d95bf105f9684a4c2a0aa71362bbea7"
+      }
+    },
+    "apple-to-orange": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/manifest.json",
+        "sha256": "a8ba444856b7e32764804860036e1802e3255420acc047888fb9d8dfc082cf65"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus/manifest.json",
+        "sha256": "46528025faceebff1385ba180a8fad599df6e3654c179ca490e81332e5f144a3"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus2/manifest.json",
+        "sha256": "868e4aa295d3a2248cb40a5102f4cfd070a2c2648db0feaf6c50b06bbf4d7255"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "355920c3f0050e0e256542f3a936daac1c76b20a0ebc376e369446ca67f82a3e"
+      }
+    }
+  }
+}

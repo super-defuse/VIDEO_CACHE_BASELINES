@@ -1,0 +1,5 @@
+{"pair_id": "horse-to-zebra", "source_prompt": "a horse is galloping across a dusty plain, focus on the horse", "target_prompt": "a zebra is galloping across a dusty plain, focus on the zebra", "seed": 20260218, "source_positive": "horse"}
+{"pair_id": "lion-to-tiger", "source_prompt": "a lion is walking through tall grass, focus on the lion", "target_prompt": "a tiger is walking through tall grass, focus on the tiger", "seed": 20260218, "source_positive": "lion"}
+{"pair_id": "duck-to-swan", "source_prompt": "a duck is swimming on a calm lake, focus on the duck", "target_prompt": "a swan is swimming on a calm lake, focus on the swan", "seed": 20260218, "source_positive": "duck"}
+{"pair_id": "bear-to-panda", "source_prompt": "a bear is standing in a snowy forest, focus on the bear", "target_prompt": "a panda is standing in a snowy forest, focus on the panda", "seed": 20260218, "source_positive": "bear"}
+{"pair_id": "apple-to-orange", "source_prompt": "an apple is resting on a wooden table, focus on the apple", "target_prompt": "an orange is resting on a wooden table, focus on the orange", "seed": 20260218, "source_positive": "apple"}

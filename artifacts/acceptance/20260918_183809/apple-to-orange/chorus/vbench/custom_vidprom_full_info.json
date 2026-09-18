@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "an orange is resting on a wooden table, focus on the orange",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4"
+        ]
+    }
+]

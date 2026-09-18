@@ -1,0 +1,1880 @@
+{
+  "status": "completed",
+  "rows": [
+    {
+      "request_index": 0,
+      "uuid": "horse-to-zebra-target-000",
+      "pair_id": "horse-to-zebra",
+      "prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 304.55517424317077,
+      "end_to_end_seconds": 304.55517424317077,
+      "denoising_seconds": 275.6058587161824,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.34765625,
+      "vbench_q": 0.6664080224285109,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9598015738030274,
+        "background_consistency": 0.9707763671875,
+        "motion_smoothness": 0.971862190353868,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6188328862190247,
+        "imaging_quality": 0.6371602747263002,
+        "vbench_q": 0.6664080224285109
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 243.54339732276276,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/nirvana_vid/videos/target.mp4",
+      "output_hash": "87fbb9de3b21873e60eb910526747155677164948a7acf769e775efeb65e9cd2",
+      "cache_bytes": 12345498,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 214.12111084442586,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00042547518387436867,
+          "cache_load_s": 0.011722143739461899,
+          "generation_s": 240.8262865920551,
+          "save_video_s": 2.695076283067465,
+          "hash_s": 0.009881519246846437,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 243.54339732276276
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "horse-to-zebra",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 243.54339732276276,
+      "denoising_seconds": 240.8262865920551,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287591,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "8dc2bfc8c4f1819aa7f2048bb918d8ead137029eab9e6fa690814ddae6791d8a",
+        "cache/source_dense/latents_step_049.pt": "1ab4322ac219147bf31024c2209ba7c032a882278c2783347fe1952a6e742f3e",
+        "cache/source_dense/fusion_masks/masks.pt": "ebdbacb5a24d718d746a839ef119f4de645ed58f409b04e71dc5b027b543d930",
+        "cache/source_dense/outer_block_masks/metadata.json": "d13aaec46ca91aed51ff58042de7fa39ec6153093496c03af6694959c3a50fab",
+        "videos/source_dense.mp4": "0cb08606406e3f694e8e9f27c3fdab447eeb15e91dc28b9588a9b6a228695f08"
+      },
+      "speedup_vs_dense": 1.1444176739021923,
+      "speedup_end_to_end_vs_dense": 1.2505170642731507,
+      "clip_t": 0.25537109375,
+      "vbench_q": 0.6638629046377438,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9398112493256728,
+        "background_consistency": 0.9709004720052083,
+        "motion_smoothness": 0.9749036244607534,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.584330677986145,
+        "imaging_quality": 0.6671672344995925,
+        "vbench_q": 0.6638629046377438
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 259.27944345911965,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/videos/target.mp4",
+      "output_hash": "0d0b7871677c9b81adfd31639d102dd43c4697dbcc43ecc2d3649708941c9b1a",
+      "cache_bytes": 13417866,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 162.0896704834886,
+        "chorus_llm": {
+          "source_entities": [
+            "horse",
+            "horse"
+          ],
+          "target_entities": [
+            "zebra",
+            "zebra"
+          ],
+          "removed_tokens": [
+            "horse",
+            "horse"
+          ],
+          "added_tokens": [
+            "zebra",
+            "zebra"
+          ],
+          "edit_summary": "replace horse, horse with zebra, zebra",
+          "backend": "lexical_fallback",
+          "error": "TimeoutError: The read operation timed out",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 45.237
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "horse",
+          "boxes": 1,
+          "box_confidence_max": 0.9612,
+          "pixel_edit_fraction": 0.0658,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.0645,
+          "base_token_fraction": 0.0914,
+          "edit_fraction": 0.423,
+          "see_fraction": 0.6598,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 70.6491342545487,
+        "chorus_llm_s": 45.239065401256084,
+        "chorus_sam_s": 25.410068853292614,
+        "excluded_latency_s": 70.6491342545487,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.423,
+            "see_fraction": 0.6598,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0003689592704176903,
+          "cache_load_s": 0.0010935799218714237,
+          "generation_s": 256.54295794386417,
+          "save_video_s": 2.7217105659656227,
+          "hash_s": 0.013303827960044146,
+          "preprocess_breakdown_s": 70.6491342545487,
+          "excluded_preprocess_s": 70.6491342545487,
+          "reported_latency_s": 259.27944345911965
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "horse-to-zebra",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 259.27944345911965,
+      "denoising_seconds": 185.89382368931547,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287227,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "8dc2bfc8c4f1819aa7f2048bb918d8ead137029eab9e6fa690814ddae6791d8a",
+        "cache/source_dense/latents_step_049.pt": "1ab4322ac219147bf31024c2209ba7c032a882278c2783347fe1952a6e742f3e",
+        "cache/source_dense/fusion_masks/masks.pt": "ebdbacb5a24d718d746a839ef119f4de645ed58f409b04e71dc5b027b543d930",
+        "cache/source_dense/outer_block_masks/metadata.json": "d13aaec46ca91aed51ff58042de7fa39ec6153093496c03af6694959c3a50fab",
+        "videos/source_dense.mp4": "0cb08606406e3f694e8e9f27c3fdab447eeb15e91dc28b9588a9b6a228695f08"
+      },
+      "speedup_vs_dense": 1.482598255533238,
+      "speedup_end_to_end_vs_dense": 1.174621366738585,
+      "clip_t": 0.30615234375,
+      "vbench_q": 0.6545570179612431,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9480099101861318,
+        "background_consistency": 0.9630228678385416,
+        "motion_smoothness": 0.9754487489400747,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5625048875808716,
+        "imaging_quality": 0.6243689844430971,
+        "vbench_q": 0.6545570179612431
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra"
+    },
+    {
+      "request_index": 0,
+      "uuid": "horse-to-zebra-target-000",
+      "pair_id": "horse-to-zebra",
+      "prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 235.69399704691023,
+      "end_to_end_seconds": 235.69399704691023,
+      "denoising_seconds": 200.35149045893922,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287295,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "8dc2bfc8c4f1819aa7f2048bb918d8ead137029eab9e6fa690814ddae6791d8a",
+        "cache/source_dense/latents_step_049.pt": "1ab4322ac219147bf31024c2209ba7c032a882278c2783347fe1952a6e742f3e",
+        "cache/source_dense/fusion_masks/masks.pt": "ebdbacb5a24d718d746a839ef119f4de645ed58f409b04e71dc5b027b543d930",
+        "cache/source_dense/outer_block_masks/metadata.json": "d13aaec46ca91aed51ff58042de7fa39ec6153093496c03af6694959c3a50fab",
+        "videos/source_dense.mp4": "0cb08606406e3f694e8e9f27c3fdab447eeb15e91dc28b9588a9b6a228695f08"
+      },
+      "speedup_vs_dense": 1.375611721604168,
+      "speedup_end_to_end_vs_dense": 1.292163474925308,
+      "clip_t": 0.345947265625,
+      "vbench_q": 0.6628322068511407,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9616257737080256,
+        "background_consistency": 0.9652852376302083,
+        "motion_smoothness": 0.9711038514211121,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.616366446018219,
+        "imaging_quality": 0.6231254908664168,
+        "vbench_q": 0.6628322068511407
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra"
+    },
+    {
+      "request_index": 0,
+      "uuid": "horse-to-zebra-target-000",
+      "pair_id": "horse-to-zebra",
+      "prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 164.93003003392369,
+      "end_to_end_seconds": 164.93003003392369,
+      "denoising_seconds": 134.77370017021894,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288245,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "8dc2bfc8c4f1819aa7f2048bb918d8ead137029eab9e6fa690814ddae6791d8a",
+        "cache/source_dense/latents_step_049.pt": "1ab4322ac219147bf31024c2209ba7c032a882278c2783347fe1952a6e742f3e",
+        "cache/source_dense/fusion_masks/masks.pt": "ebdbacb5a24d718d746a839ef119f4de645ed58f409b04e71dc5b027b543d930",
+        "cache/source_dense/outer_block_masks/metadata.json": "d13aaec46ca91aed51ff58042de7fa39ec6153093496c03af6694959c3a50fab",
+        "videos/source_dense.mp4": "0cb08606406e3f694e8e9f27c3fdab447eeb15e91dc28b9588a9b6a228695f08"
+      },
+      "speedup_vs_dense": 2.0449528236450636,
+      "speedup_end_to_end_vs_dense": 1.846571992865873,
+      "clip_t": 0.2451171875,
+      "vbench_q": 0.6600969710577858,
+      "vbench_dimensions": {
+        "subject_consistency": 0.939676588277022,
+        "background_consistency": 0.9716796875,
+        "motion_smoothness": 0.9750235564998174,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5737581849098206,
+        "imaging_quality": 0.6505405851632111,
+        "vbench_q": 0.6600969710577858
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lion-to-tiger-target-000",
+      "pair_id": "lion-to-tiger",
+      "prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 302.3979787752032,
+      "end_to_end_seconds": 302.3979787752032,
+      "denoising_seconds": 276.1097853980027,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.3232421875,
+      "vbench_q": 0.672980752595073,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9515006783107917,
+        "background_consistency": 0.9673543294270833,
+        "motion_smoothness": 0.963781912574156,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6185200214385986,
+        "imaging_quality": 0.7247794480757279,
+        "vbench_q": 0.672980752595073
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 244.1059255329892,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/videos/target.mp4",
+      "output_hash": "995bdc4f3dea30e18159aee0597379860707f36a71665e1c264a629d871d37a3",
+      "cache_bytes": 24108629,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 213.82629985455424,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00014192890375852585,
+          "cache_load_s": 0.00812245113775134,
+          "generation_s": 241.0400061858818,
+          "save_video_s": 3.0347390812821686,
+          "hash_s": 0.02291057165712118,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 244.1059255329892
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "lion-to-tiger",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 244.1059255329892,
+      "denoising_seconds": 241.0400061858818,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287348,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3c9702650518c5f56383ebfc0cb7abf050b122c3da58432c254535781e2ec86a",
+        "cache/source_dense/latents_step_049.pt": "246688609980a40a0a156f73445903dd19b20d2681c73fc9dd898563e69ea6ec",
+        "cache/source_dense/fusion_masks/masks.pt": "a35ec77a21e7ff4a4a9c71132ac2dee98fb616cdf79b8c15e3b3b6e2603d06a2",
+        "cache/source_dense/outer_block_masks/metadata.json": "af1b5dc0360bd4dd9f97e80ae5afeb50d4fbc3f69a19bc90bf0ee54333455430",
+        "videos/source_dense.mp4": "e6944a17e3870d0a0d3781cc68e08f38787be872e00b14541c2b1f4d0a67f4ec"
+      },
+      "speedup_vs_dense": 1.1454936040164068,
+      "speedup_end_to_end_vs_dense": 1.2387981902321181,
+      "clip_t": 0.317138671875,
+      "vbench_q": 0.6754494415653769,
+      "vbench_dimensions": {
+        "subject_consistency": 0.956705495963494,
+        "background_consistency": 0.9779378255208333,
+        "motion_smoothness": 0.9671827597116616,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6407608389854431,
+        "imaging_quality": 0.6875248535408461,
+        "vbench_q": 0.6754494415653769
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 249.3621480949223,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus/videos/target.mp4",
+      "output_hash": "493f66ea271d160046eb5c0263285e79c05be880c285bf912c8b4cef291ed133",
+      "cache_bytes": 26794904,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 159.3232013070956,
+        "chorus_llm": {
+          "source_entities": [
+            "lion"
+          ],
+          "target_entities": [
+            "tiger"
+          ],
+          "removed_tokens": [
+            "lion"
+          ],
+          "added_tokens": [
+            "tiger"
+          ],
+          "edit_summary": "Replaced 'lion' with 'tiger' in both the subject and focus description.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 33.776
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "lion",
+          "boxes": 1,
+          "box_confidence_max": 0.906,
+          "pixel_edit_fraction": 0.1162,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1142,
+          "base_token_fraction": 0.1312,
+          "edit_fraction": 0.4084,
+          "see_fraction": 0.5845,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 59.16171505302191,
+        "chorus_llm_s": 33.77688249805942,
+        "chorus_sam_s": 25.384832554962486,
+        "excluded_latency_s": 59.16171505302191,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.4084,
+            "see_fraction": 0.5845,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00012714415788650513,
+          "cache_load_s": 0.0007450790144503117,
+          "generation_s": 246.30746166501194,
+          "save_video_s": 3.0310282483696938,
+          "hash_s": 0.022778133396059275,
+          "preprocess_breakdown_s": 59.16171505302191,
+          "excluded_preprocess_s": 59.16171505302191,
+          "reported_latency_s": 249.3621480949223
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "lion-to-tiger",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 249.3621480949223,
+      "denoising_seconds": 187.14574661199003,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286986,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3c9702650518c5f56383ebfc0cb7abf050b122c3da58432c254535781e2ec86a",
+        "cache/source_dense/latents_step_049.pt": "246688609980a40a0a156f73445903dd19b20d2681c73fc9dd898563e69ea6ec",
+        "cache/source_dense/fusion_masks/masks.pt": "a35ec77a21e7ff4a4a9c71132ac2dee98fb616cdf79b8c15e3b3b6e2603d06a2",
+        "cache/source_dense/outer_block_masks/metadata.json": "af1b5dc0360bd4dd9f97e80ae5afeb50d4fbc3f69a19bc90bf0ee54333455430",
+        "videos/source_dense.mp4": "e6944a17e3870d0a0d3781cc68e08f38787be872e00b14541c2b1f4d0a67f4ec"
+      },
+      "speedup_vs_dense": 1.475373020207946,
+      "speedup_end_to_end_vs_dense": 1.212685971329106,
+      "clip_t": 0.33447265625,
+      "vbench_q": 0.6774039776676809,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9686920866370201,
+        "background_consistency": 0.9775858561197917,
+        "motion_smoothness": 0.9688261427657395,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6193481683731079,
+        "imaging_quality": 0.7032704421114331,
+        "vbench_q": 0.6774039776676809
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lion-to-tiger-target-000",
+      "pair_id": "lion-to-tiger",
+      "prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 238.32503730105236,
+      "end_to_end_seconds": 238.32503730105236,
+      "denoising_seconds": 201.55673111230135,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287055,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3c9702650518c5f56383ebfc0cb7abf050b122c3da58432c254535781e2ec86a",
+        "cache/source_dense/latents_step_049.pt": "246688609980a40a0a156f73445903dd19b20d2681c73fc9dd898563e69ea6ec",
+        "cache/source_dense/fusion_masks/masks.pt": "a35ec77a21e7ff4a4a9c71132ac2dee98fb616cdf79b8c15e3b3b6e2603d06a2",
+        "cache/source_dense/outer_block_masks/metadata.json": "af1b5dc0360bd4dd9f97e80ae5afeb50d4fbc3f69a19bc90bf0ee54333455430",
+        "videos/source_dense.mp4": "e6944a17e3870d0a0d3781cc68e08f38787be872e00b14541c2b1f4d0a67f4ec"
+      },
+      "speedup_vs_dense": 1.369886204614832,
+      "speedup_end_to_end_vs_dense": 1.268846874838475,
+      "clip_t": 0.323486328125,
+      "vbench_q": 0.6689048774232276,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9486148950954278,
+        "background_consistency": 0.9587422688802083,
+        "motion_smoothness": 0.9630327084368114,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6160706877708435,
+        "imaging_quality": 0.7171150749774019,
+        "vbench_q": 0.6689048774232276
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lion-to-tiger-target-000",
+      "pair_id": "lion-to-tiger",
+      "prompt": "a tiger is walking through tall grass, focus on the tiger",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 176.73253530776128,
+      "end_to_end_seconds": 176.73253530776128,
+      "denoising_seconds": 148.4126105629839,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288004,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3c9702650518c5f56383ebfc0cb7abf050b122c3da58432c254535781e2ec86a",
+        "cache/source_dense/latents_step_049.pt": "246688609980a40a0a156f73445903dd19b20d2681c73fc9dd898563e69ea6ec",
+        "cache/source_dense/fusion_masks/masks.pt": "a35ec77a21e7ff4a4a9c71132ac2dee98fb616cdf79b8c15e3b3b6e2603d06a2",
+        "cache/source_dense/outer_block_masks/metadata.json": "af1b5dc0360bd4dd9f97e80ae5afeb50d4fbc3f69a19bc90bf0ee54333455430",
+        "videos/source_dense.mp4": "e6944a17e3870d0a0d3781cc68e08f38787be872e00b14541c2b1f4d0a67f4ec"
+      },
+      "speedup_vs_dense": 1.860419976109956,
+      "speedup_end_to_end_vs_dense": 1.7110487225717024,
+      "clip_t": 0.304443359375,
+      "vbench_q": 0.6734560760574073,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9499607592821121,
+        "background_consistency": 0.979510498046875,
+        "motion_smoothness": 0.9697383376552364,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6467356085777283,
+        "imaging_quality": 0.664968618597866,
+        "vbench_q": 0.6734560760574073
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger"
+    },
+    {
+      "request_index": 0,
+      "uuid": "duck-to-swan-target-000",
+      "pair_id": "duck-to-swan",
+      "prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 302.93505759723485,
+      "end_to_end_seconds": 302.93505759723485,
+      "denoising_seconds": 274.26352490019053,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.343994140625,
+      "vbench_q": 0.6080249463645451,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9696369998157024,
+        "background_consistency": 0.98614501953125,
+        "motion_smoothness": 0.9824370623698303,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6125184297561646,
+        "imaging_quality": 0.6739075236675168,
+        "vbench_q": 0.6080249463645451
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 236.2870692149736,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/nirvana_vid/videos/target.mp4",
+      "output_hash": "443036b1c18b91845c3f46f6baaea27e4b6045a97fe64cad31a4234a452a7854",
+      "cache_bytes": 11057915,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 212.78773890435696,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00013799220323562622,
+          "cache_load_s": 0.005374502390623093,
+          "generation_s": 233.59622073592618,
+          "save_video_s": 2.674612727947533,
+          "hash_s": 0.010718385223299265,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 236.2870692149736
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "duck-to-swan",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 236.2870692149736,
+      "denoising_seconds": 233.59622073592618,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286387,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "2ea1ff817fbb05c2e98d162a86d5c18c05d468eabecdc1fadc4e6584b9b64f29",
+        "cache/source_dense/latents_step_049.pt": "293d38c3497ad4fde693aacbfe81f71577407e9d0f6ebd6a01a3c452c5e5b9e6",
+        "cache/source_dense/fusion_masks/masks.pt": "832367a07ba73221cbbd519af4e173308ff0549668a37fe1f0d739041a193f4f",
+        "cache/source_dense/outer_block_masks/metadata.json": "fc33f7186709da61c57c0ff238d98c778c1c899728e7f0ea0356961416511ae4",
+        "videos/source_dense.mp4": "986227e42c47cd4a136a2057cde8fa6b2b0fda078c8261e55af4b31caa2f09d3"
+      },
+      "speedup_vs_dense": 1.1740923035319033,
+      "speedup_end_to_end_vs_dense": 1.282063629650529,
+      "clip_t": 0.30908203125,
+      "vbench_q": 0.6730615451441238,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9297346211969852,
+        "background_consistency": 0.97039794921875,
+        "motion_smoothness": 0.9770920288545304,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6088993549346924,
+        "imaging_quality": 0.7108444964196071,
+        "vbench_q": 0.6730615451441238
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 231.3611479420215,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus/videos/target.mp4",
+      "output_hash": "d65a0e593578638b8116fb9cde25077c7c73584d9462441d87e8fd55c2ab9959",
+      "cache_bytes": 11644436,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 148.61023894278333,
+        "chorus_llm": {
+          "source_entities": [
+            "duck"
+          ],
+          "target_entities": [
+            "swan"
+          ],
+          "removed_tokens": [
+            "duck"
+          ],
+          "added_tokens": [
+            "swan"
+          ],
+          "edit_summary": "Replaced the subject 'duck' with 'swan' and updated the focus accordingly.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 36.716
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "duck",
+          "boxes": 1,
+          "box_confidence_max": 0.8417,
+          "pixel_edit_fraction": 0.0323,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.0319,
+          "base_token_fraction": 0.0406,
+          "edit_fraction": 0.2496,
+          "see_fraction": 0.501,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 61.46711945487186,
+        "chorus_llm_s": 36.716890615876764,
+        "chorus_sam_s": 24.7502288389951,
+        "excluded_latency_s": 61.46711945487186,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.2496,
+            "see_fraction": 0.501,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00014265207573771477,
+          "cache_load_s": 0.0006652558222413063,
+          "generation_s": 228.7108256048523,
+          "save_video_s": 2.6360741103999317,
+          "hash_s": 0.013430119026452303,
+          "preprocess_breakdown_s": 61.46711945487186,
+          "excluded_preprocess_s": 61.46711945487186,
+          "reported_latency_s": 231.3611479420215
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "duck-to-swan",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 231.3611479420215,
+      "denoising_seconds": 167.24370614998043,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286028,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "2ea1ff817fbb05c2e98d162a86d5c18c05d468eabecdc1fadc4e6584b9b64f29",
+        "cache/source_dense/latents_step_049.pt": "293d38c3497ad4fde693aacbfe81f71577407e9d0f6ebd6a01a3c452c5e5b9e6",
+        "cache/source_dense/fusion_masks/masks.pt": "832367a07ba73221cbbd519af4e173308ff0549668a37fe1f0d739041a193f4f",
+        "cache/source_dense/outer_block_masks/metadata.json": "fc33f7186709da61c57c0ff238d98c778c1c899728e7f0ea0356961416511ae4",
+        "videos/source_dense.mp4": "986227e42c47cd4a136a2057cde8fa6b2b0fda078c8261e55af4b31caa2f09d3"
+      },
+      "speedup_vs_dense": 1.6399034152845018,
+      "speedup_end_to_end_vs_dense": 1.3093601077444066,
+      "clip_t": 0.31103515625,
+      "vbench_q": 0.6712975161600491,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9292866595089435,
+        "background_consistency": 0.9625732421875,
+        "motion_smoothness": 0.9785449674972381,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.6129460334777832,
+        "imaging_quality": 0.7009445348061806,
+        "vbench_q": 0.6712975161600491
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan"
+    },
+    {
+      "request_index": 0,
+      "uuid": "duck-to-swan-target-000",
+      "pair_id": "duck-to-swan",
+      "prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 232.7465164680034,
+      "end_to_end_seconds": 232.7465164680034,
+      "denoising_seconds": 199.8019199310802,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286102,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "2ea1ff817fbb05c2e98d162a86d5c18c05d468eabecdc1fadc4e6584b9b64f29",
+        "cache/source_dense/latents_step_049.pt": "293d38c3497ad4fde693aacbfe81f71577407e9d0f6ebd6a01a3c452c5e5b9e6",
+        "cache/source_dense/fusion_masks/masks.pt": "832367a07ba73221cbbd519af4e173308ff0549668a37fe1f0d739041a193f4f",
+        "cache/source_dense/outer_block_masks/metadata.json": "fc33f7186709da61c57c0ff238d98c778c1c899728e7f0ea0356961416511ae4",
+        "videos/source_dense.mp4": "986227e42c47cd4a136a2057cde8fa6b2b0fda078c8261e55af4b31caa2f09d3"
+      },
+      "speedup_vs_dense": 1.3726771243979796,
+      "speedup_end_to_end_vs_dense": 1.3015664517534489,
+      "clip_t": 0.34521484375,
+      "vbench_q": 0.6073993716203694,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9670543432235718,
+        "background_consistency": 0.9837748209635416,
+        "motion_smoothness": 0.9817820146258077,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6067134737968445,
+        "imaging_quality": 0.6834977239813687,
+        "vbench_q": 0.6073993716203694
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan"
+    },
+    {
+      "request_index": 0,
+      "uuid": "duck-to-swan-target-000",
+      "pair_id": "duck-to-swan",
+      "prompt": "a swan is swimming on a calm lake, focus on the swan",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 189.18794929375872,
+      "end_to_end_seconds": 189.18794929375872,
+      "denoising_seconds": 164.08165507670492,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287047,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "2ea1ff817fbb05c2e98d162a86d5c18c05d468eabecdc1fadc4e6584b9b64f29",
+        "cache/source_dense/latents_step_049.pt": "293d38c3497ad4fde693aacbfe81f71577407e9d0f6ebd6a01a3c452c5e5b9e6",
+        "cache/source_dense/fusion_masks/masks.pt": "832367a07ba73221cbbd519af4e173308ff0549668a37fe1f0d739041a193f4f",
+        "cache/source_dense/outer_block_masks/metadata.json": "fc33f7186709da61c57c0ff238d98c778c1c899728e7f0ea0356961416511ae4",
+        "videos/source_dense.mp4": "986227e42c47cd4a136a2057cde8fa6b2b0fda078c8261e55af4b31caa2f09d3"
+      },
+      "speedup_vs_dense": 1.6715063287969503,
+      "speedup_end_to_end_vs_dense": 1.6012386556759861,
+      "clip_t": 0.306884765625,
+      "vbench_q": 0.6665886456138366,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9183153308928013,
+        "background_consistency": 0.9580485026041666,
+        "motion_smoothness": 0.9765100258675913,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5948636531829834,
+        "imaging_quality": 0.7124536630929994,
+        "vbench_q": 0.6665886456138366
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan"
+    },
+    {
+      "request_index": 0,
+      "uuid": "bear-to-panda-target-000",
+      "pair_id": "bear-to-panda",
+      "prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 303.3674801182933,
+      "end_to_end_seconds": 303.3674801182933,
+      "denoising_seconds": 273.89004397718236,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.332763671875,
+      "vbench_q": 0.6218256094445478,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9845883006850878,
+        "background_consistency": 0.9854715983072917,
+        "motion_smoothness": 0.987074699584695,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6327452659606934,
+        "imaging_quality": 0.7156733949519386,
+        "vbench_q": 0.6218256094445478
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 241.24301534611732,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/videos/target.mp4",
+      "output_hash": "00c83cc4c1d3aa89c7cbdb80ee1d5af259292cc53ba8fd258c30a1d0a19203d7",
+      "cache_bytes": 10581146,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 212.94986209552735,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.0001774802803993225,
+          "cache_load_s": 0.006235943175852299,
+          "generation_s": 238.66772101307288,
+          "save_video_s": 2.5600667227990925,
+          "hash_s": 0.008809977676719427,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 241.24301534611732
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "bear-to-panda",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 241.24301534611732,
+      "denoising_seconds": 238.66772101307288,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287135,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "4e7d4ee1a10c0e238989da430abf18f0df5cbc8283d90ff06dac5a903aa6b9ee",
+        "cache/source_dense/latents_step_049.pt": "be7cd2190c5184f8d27cd126be1c154d3d27288a80e3c416164d4e2ccf0f0392",
+        "cache/source_dense/fusion_masks/masks.pt": "e79682be0c8654e06b20cc92b9aabb3fe38614c8ff33650b7123171ab081bf6d",
+        "cache/source_dense/outer_block_masks/metadata.json": "ccf9514cc169256fe1ea838798174fe3884ec564d56f7052296e996ef0eeedcc",
+        "videos/source_dense.mp4": "d51ed640572c918b0ce95062b1d3b4f2b7749f36263d01fbff81c0f0a219a349"
+      },
+      "speedup_vs_dense": 1.1475789135397165,
+      "speedup_end_to_end_vs_dense": 1.257518190456393,
+      "clip_t": 0.297119140625,
+      "vbench_q": 0.627320294809391,
+      "vbench_dimensions": {
+        "subject_consistency": 0.979717435191075,
+        "background_consistency": 0.9879292805989583,
+        "motion_smoothness": 0.9912322171189143,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6887151002883911,
+        "imaging_quality": 0.6859239499431011,
+        "vbench_q": 0.627320294809391
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 234.02349783387035,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus/videos/target.mp4",
+      "output_hash": "a8b05c0692e5959de2d36acdfad638e6d483f8a44dc6d126a1418ec34995fc98",
+      "cache_bytes": 11067039,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 158.68980546621606,
+        "chorus_llm": {
+          "source_entities": [
+            "bear"
+          ],
+          "target_entities": [
+            "panda"
+          ],
+          "removed_tokens": [
+            "bear"
+          ],
+          "added_tokens": [
+            "panda"
+          ],
+          "edit_summary": "Replaced 'bear' with 'panda' in the subject and focus description.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 25.078
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "bear",
+          "boxes": 1,
+          "box_confidence_max": 0.9773,
+          "pixel_edit_fraction": 0.099,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.099,
+          "base_token_fraction": 0.1125,
+          "edit_fraction": 0.3946,
+          "see_fraction": 0.6156,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 50.94803133327514,
+        "chorus_llm_s": 25.078520114999264,
+        "chorus_sam_s": 25.869511218275875,
+        "excluded_latency_s": 50.94803133327514,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.3946,
+            "see_fraction": 0.6156,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0001735687255859375,
+          "cache_load_s": 0.0008289199322462082,
+          "generation_s": 231.4561004349962,
+          "save_video_s": 2.5548084559850395,
+          "hash_s": 0.011578820180147886,
+          "preprocess_breakdown_s": 50.94803133327514,
+          "excluded_preprocess_s": 50.94803133327514,
+          "reported_latency_s": 234.02349783387035
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "bear-to-panda",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 234.02349783387035,
+      "denoising_seconds": 180.50806910172105,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286779,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "4e7d4ee1a10c0e238989da430abf18f0df5cbc8283d90ff06dac5a903aa6b9ee",
+        "cache/source_dense/latents_step_049.pt": "be7cd2190c5184f8d27cd126be1c154d3d27288a80e3c416164d4e2ccf0f0392",
+        "cache/source_dense/fusion_masks/masks.pt": "e79682be0c8654e06b20cc92b9aabb3fe38614c8ff33650b7123171ab081bf6d",
+        "cache/source_dense/outer_block_masks/metadata.json": "ccf9514cc169256fe1ea838798174fe3884ec564d56f7052296e996ef0eeedcc",
+        "videos/source_dense.mp4": "d51ed640572c918b0ce95062b1d3b4f2b7749f36263d01fbff81c0f0a219a349"
+      },
+      "speedup_vs_dense": 1.5173285346199017,
+      "speedup_end_to_end_vs_dense": 1.296312049543201,
+      "clip_t": 0.322998046875,
+      "vbench_q": 0.6235427637495514,
+      "vbench_dimensions": {
+        "subject_consistency": 0.986020344744126,
+        "background_consistency": 0.9878336588541666,
+        "motion_smoothness": 0.9913775752750004,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6634535193443298,
+        "imaging_quality": 0.67722364189211,
+        "vbench_q": 0.6235427637495514
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda"
+    },
+    {
+      "request_index": 0,
+      "uuid": "bear-to-panda-target-000",
+      "pair_id": "bear-to-panda",
+      "prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 234.61681171692908,
+      "end_to_end_seconds": 234.61681171692908,
+      "denoising_seconds": 200.99373882170767,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286847,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "4e7d4ee1a10c0e238989da430abf18f0df5cbc8283d90ff06dac5a903aa6b9ee",
+        "cache/source_dense/latents_step_049.pt": "be7cd2190c5184f8d27cd126be1c154d3d27288a80e3c416164d4e2ccf0f0392",
+        "cache/source_dense/fusion_masks/masks.pt": "e79682be0c8654e06b20cc92b9aabb3fe38614c8ff33650b7123171ab081bf6d",
+        "cache/source_dense/outer_block_masks/metadata.json": "ccf9514cc169256fe1ea838798174fe3884ec564d56f7052296e996ef0eeedcc",
+        "videos/source_dense.mp4": "d51ed640572c918b0ce95062b1d3b4f2b7749f36263d01fbff81c0f0a219a349"
+      },
+      "speedup_vs_dense": 1.3626794823700337,
+      "speedup_end_to_end_vs_dense": 1.2930338533638996,
+      "clip_t": 0.33056640625,
+      "vbench_q": 0.6177598621124546,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9827528441945712,
+        "background_consistency": 0.97626953125,
+        "motion_smoothness": 0.9869224913716671,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.624204695224762,
+        "imaging_quality": 0.711489269792541,
+        "vbench_q": 0.6177598621124546
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda"
+    },
+    {
+      "request_index": 0,
+      "uuid": "bear-to-panda-target-000",
+      "pair_id": "bear-to-panda",
+      "prompt": "a panda is standing in a snowy forest, focus on the panda",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 177.00647828681394,
+      "end_to_end_seconds": 177.00647828681394,
+      "denoising_seconds": 143.51408965000883,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287798,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "4e7d4ee1a10c0e238989da430abf18f0df5cbc8283d90ff06dac5a903aa6b9ee",
+        "cache/source_dense/latents_step_049.pt": "be7cd2190c5184f8d27cd126be1c154d3d27288a80e3c416164d4e2ccf0f0392",
+        "cache/source_dense/fusion_masks/masks.pt": "e79682be0c8654e06b20cc92b9aabb3fe38614c8ff33650b7123171ab081bf6d",
+        "cache/source_dense/outer_block_masks/metadata.json": "ccf9514cc169256fe1ea838798174fe3884ec564d56f7052296e996ef0eeedcc",
+        "videos/source_dense.mp4": "d51ed640572c918b0ce95062b1d3b4f2b7749f36263d01fbff81c0f0a219a349"
+      },
+      "speedup_vs_dense": 1.9084540385207085,
+      "speedup_end_to_end_vs_dense": 1.7138778368706329,
+      "clip_t": 0.284912109375,
+      "vbench_q": 0.6253879384474221,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9803695484995842,
+        "background_consistency": 0.987164306640625,
+        "motion_smoothness": 0.9913142427356438,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6852054595947266,
+        "imaging_quality": 0.6758735073499443,
+        "vbench_q": 0.6253879384474221
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda"
+    },
+    {
+      "request_index": 0,
+      "uuid": "apple-to-orange-target-000",
+      "pair_id": "apple-to-orange",
+      "prompt": "an orange is resting on a wooden table, focus on the orange",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 304.7382927830331,
+      "end_to_end_seconds": 304.7382927830331,
+      "denoising_seconds": 273.2738521490246,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.3447265625,
+      "vbench_q": 0.6437126606424164,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9992028524478277,
+        "background_consistency": 0.9940388997395834,
+        "motion_smoothness": 0.9976938767171563,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7327045798301697,
+        "imaging_quality": 0.7012013011333371,
+        "vbench_q": 0.6437126606424164
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "an orange is resting on a wooden table, focus on the orange",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 238.28475803975016,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/videos/target.mp4",
+      "output_hash": "20105f2319b199d396c956f039506f36db4a9c92d58a39006befb999bf6e2baf",
+      "cache_bytes": 4233413,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 212.6193819246255,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00013939430937170982,
+          "cache_load_s": 0.006261834874749184,
+          "generation_s": 235.76632861280814,
+          "save_video_s": 2.5083286953158677,
+          "hash_s": 0.003695047926157713,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 238.28475803975016
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "apple-to-orange",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 238.28475803975016,
+      "denoising_seconds": 235.76632861280814,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287248,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "313665a2f3aab2dd52ee92b690a264fced232d353ee14f1ff2269239ccb4e318",
+        "cache/source_dense/latents_step_049.pt": "83f1db5d69e3ecbe90b661365ce1dde26a9a81c4fcbc37c25e8b6c9466a44c2d",
+        "cache/source_dense/fusion_masks/masks.pt": "5deeadac3a5487487871714e1705e1c5807feaabc079c0ad594b81f5f2721401",
+        "cache/source_dense/outer_block_masks/metadata.json": "a71db188c832b66ee798bfef600c6d31fb766c06178fe32a96ffe4c4d65e79db",
+        "videos/source_dense.mp4": "7c6e562fa99244906c4c2c3704a1d8b2bf263e393c5f218f7d4a25e46b3826da"
+      },
+      "speedup_vs_dense": 1.1590877024590476,
+      "speedup_end_to_end_vs_dense": 1.2788828596925923,
+      "clip_t": 0.3154296875,
+      "vbench_q": 0.6458000067296783,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9994776840011279,
+        "background_consistency": 0.99652099609375,
+        "motion_smoothness": 0.9974924002587147,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7668073773384094,
+        "imaging_quality": 0.6783536207971494,
+        "vbench_q": 0.6458000067296783
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "an orange is resting on a wooden table, focus on the orange",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 270.99888493772596,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/videos/target.mp4",
+      "output_hash": "a06611372412310e15cedafb236c530bba26e739da3d2f75b1d10c3feee9094b",
+      "cache_bytes": 5011331,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 174.23681630240753,
+        "chorus_llm": {
+          "source_entities": [
+            "apple",
+            "apple"
+          ],
+          "target_entities": [
+            "orange",
+            "orange"
+          ],
+          "removed_tokens": [
+            "apple",
+            "apple"
+          ],
+          "added_tokens": [
+            "orange",
+            "orange"
+          ],
+          "edit_summary": "replace apple, apple with orange, orange",
+          "backend": "lexical_fallback",
+          "error": "TimeoutError: The read operation timed out",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 45.149
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "apple",
+          "boxes": 1,
+          "box_confidence_max": 0.9691,
+          "pixel_edit_fraction": 0.2334,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.2342,
+          "base_token_fraction": 0.2533,
+          "edit_fraction": 0.5805,
+          "see_fraction": 0.7682,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 71.50280894525349,
+        "chorus_llm_s": 45.152565501164645,
+        "chorus_sam_s": 26.350243444088846,
+        "excluded_latency_s": 71.50280894525349,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.5805,
+            "see_fraction": 0.7682,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00031913816928863525,
+          "cache_load_s": 0.0010481057688593864,
+          "generation_s": 268.56044836435467,
+          "save_video_s": 2.4307809872552752,
+          "hash_s": 0.006280597764998674,
+          "preprocess_breakdown_s": 71.50280894525349,
+          "excluded_preprocess_s": 71.50280894525349,
+          "reported_latency_s": 270.99888493772596
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "apple-to-orange",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 270.99888493772596,
+      "denoising_seconds": 197.05763941910118,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286881,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "313665a2f3aab2dd52ee92b690a264fced232d353ee14f1ff2269239ccb4e318",
+        "cache/source_dense/latents_step_049.pt": "83f1db5d69e3ecbe90b661365ce1dde26a9a81c4fcbc37c25e8b6c9466a44c2d",
+        "cache/source_dense/fusion_masks/masks.pt": "5deeadac3a5487487871714e1705e1c5807feaabc079c0ad594b81f5f2721401",
+        "cache/source_dense/outer_block_masks/metadata.json": "a71db188c832b66ee798bfef600c6d31fb766c06178fe32a96ffe4c4d65e79db",
+        "videos/source_dense.mp4": "7c6e562fa99244906c4c2c3704a1d8b2bf263e393c5f218f7d4a25e46b3826da"
+      },
+      "speedup_vs_dense": 1.386771164795226,
+      "speedup_end_to_end_vs_dense": 1.1245001722167982,
+      "clip_t": 0.322998046875,
+      "vbench_q": 0.638212335057569,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9992181944350401,
+        "background_consistency": 0.9962910970052083,
+        "motion_smoothness": 0.9973743345971201,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.743787944316864,
+        "imaging_quality": 0.650183193427472,
+        "vbench_q": 0.638212335057569
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange"
+    },
+    {
+      "request_index": 0,
+      "uuid": "apple-to-orange-target-000",
+      "pair_id": "apple-to-orange",
+      "prompt": "an orange is resting on a wooden table, focus on the orange",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 230.0480227782391,
+      "end_to_end_seconds": 230.0480227782391,
+      "denoising_seconds": 204.661184405908,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286955,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "313665a2f3aab2dd52ee92b690a264fced232d353ee14f1ff2269239ccb4e318",
+        "cache/source_dense/latents_step_049.pt": "83f1db5d69e3ecbe90b661365ce1dde26a9a81c4fcbc37c25e8b6c9466a44c2d",
+        "cache/source_dense/fusion_masks/masks.pt": "5deeadac3a5487487871714e1705e1c5807feaabc079c0ad594b81f5f2721401",
+        "cache/source_dense/outer_block_masks/metadata.json": "a71db188c832b66ee798bfef600c6d31fb766c06178fe32a96ffe4c4d65e79db",
+        "videos/source_dense.mp4": "7c6e562fa99244906c4c2c3704a1d8b2bf263e393c5f218f7d4a25e46b3826da"
+      },
+      "speedup_vs_dense": 1.335250027709387,
+      "speedup_end_to_end_vs_dense": 1.3246725144723095,
+      "clip_t": 0.345703125,
+      "vbench_q": 0.6410515829424355,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9991351174811522,
+        "background_consistency": 0.9843343098958334,
+        "motion_smoothness": 0.9975959435181704,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7277812957763672,
+        "imaging_quality": 0.7013766883030411,
+        "vbench_q": 0.6410515829424355
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange"
+    },
+    {
+      "request_index": 0,
+      "uuid": "apple-to-orange-target-000",
+      "pair_id": "apple-to-orange",
+      "prompt": "an orange is resting on a wooden table, focus on the orange",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 158.68827002774924,
+      "end_to_end_seconds": 158.68827002774924,
+      "denoising_seconds": 129.10067543014884,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287899,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "313665a2f3aab2dd52ee92b690a264fced232d353ee14f1ff2269239ccb4e318",
+        "cache/source_dense/latents_step_049.pt": "83f1db5d69e3ecbe90b661365ce1dde26a9a81c4fcbc37c25e8b6c9466a44c2d",
+        "cache/source_dense/fusion_masks/masks.pt": "5deeadac3a5487487871714e1705e1c5807feaabc079c0ad594b81f5f2721401",
+        "cache/source_dense/outer_block_masks/metadata.json": "a71db188c832b66ee798bfef600c6d31fb766c06178fe32a96ffe4c4d65e79db",
+        "videos/source_dense.mp4": "7c6e562fa99244906c4c2c3704a1d8b2bf263e393c5f218f7d4a25e46b3826da"
+      },
+      "speedup_vs_dense": 2.116749980110538,
+      "speedup_end_to_end_vs_dense": 1.9203580247597671,
+      "clip_t": 0.31884765625,
+      "vbench_q": 0.6414832718833469,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9991327208777269,
+        "background_consistency": 0.9970479329427083,
+        "motion_smoothness": 0.997320563700346,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7438358068466187,
+        "imaging_quality": 0.6722459329652392,
+        "vbench_q": 0.6414832718833469
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange"
+    }
+  ]
+}

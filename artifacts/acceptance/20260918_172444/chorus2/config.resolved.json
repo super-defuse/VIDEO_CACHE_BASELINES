@@ -1,0 +1,9 @@
+{
+  "method": "chorus2",
+  "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+  "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "source_mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/_sources/chorus2/cache/source_dense/outer_block_masks",
+  "speedup_reference_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/dense_baseline/cache/target_dense/manifest.json"
+}

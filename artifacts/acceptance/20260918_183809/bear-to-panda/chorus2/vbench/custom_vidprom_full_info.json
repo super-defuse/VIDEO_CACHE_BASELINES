@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a panda is standing in a snowy forest, focus on the panda",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4"
+        ]
+    }
+]

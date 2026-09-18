@@ -53,3 +53,47 @@ artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/
   results/                              # summaries/reports
   quality/                              # CLIP-T/VBench-Q
 ```
+
+## 多 Prompt 验收（2026-09-18）
+
+[`scripts/run/run_acceptance_experiment.py`](../scripts/run/run_acceptance_experiment.py) 的
+五基线多 prompt 验收在本轮跑通，协议和目录布局见
+[ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md](ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md)。上表的
+CHAI / TeaCache 和 carnator 的 Hard/Boundary matrix 不在本轮范围内，本轮固定为
+`dense_baseline` / `nirvana_vid` / `chorus` / `chorus2` / `carnator_boundary_b5`。
+
+| 运行 | Prompt 对 | 产物 |
+| --- | ---: | --- |
+| `20260918_172444` | 1（dog→cat） | 单 pair 冒烟，同时校验编排器和旧参考表的对齐 |
+| `20260918_183809` | 5 | horse→zebra、lion→tiger、duck→swan、bear→panda、apple→orange |
+
+五个 pair 的均值（`20260918_183809` 的 `## Mean across pairs`，去噪计时不含模型加载、
+source 准备和质量评测）：
+
+| 基线 | 均值去噪 (s) | 均值加速比 | 均值 CLIP-T | CLIP-T 极差 | 均值 VBench-Q | VBench-Q 极差 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Dense | 274.63 | 1.00x | 0.3385 | 0.3232 - 0.3477 | 0.6426 | 0.6080 - 0.6730 |
+| NIRVANA-VID | 237.98 | 1.15x | 0.2988 | 0.2554 - 0.3171 | 0.6571 | 0.6273 - 0.6754 |
+| Chorus | 183.57 | 1.50x | 0.3195 | 0.3062 - 0.3345 | 0.6530 | 0.6235 - 0.6774 |
+| Chorus2 | 201.47 | 1.36x | 0.3382 | 0.3235 - 0.3459 | 0.6396 | 0.6074 - 0.6689 |
+| Carnator Boundary B5 | 143.98 | 1.92x | 0.2920 | 0.2451 - 0.3188 | 0.6534 | 0.6254 - 0.6735 |
+
+五对 prompt 上 4 条走缓存的基线各自的 source 轨迹逐字节一致（`## Source consistency`
+全部 PASS）。CLIP-T 的极差说明单 pair 结果（含上表的 dog→cat）分不开基线和 prompt 运气，
+均值才看得出趋势：NIRVANA-VID 和 Carnator B5 的 VBench-Q 略高于 Dense，但 CLIP-T 明显更低。
+
+### Carnator target 前缀变体
+
+两轮都附带了 `carnator_boundary_b5_targetresume`，由
+[`scripts/run/run_carnator_target_latent_resume.py`](../scripts/run/run_carnator_target_latent_resume.py)
+在已有验收根目录上补跑（它复用验收 runner 的 `source_stage`，只写
+`*.carnator_boundary_b5_targetresume.json` / `.md` 兄弟文件，不改写被接受的 summary）。
+对应 adapter 开关 `--target-resume-from-target-prefix`：先让 target prompt 自己跑
+`reuse_start_step` 步 dense，再从该前缀的 latent 恢复复用阶段，只有被掩码区域的 source
+注入从缓存继承。五对均值
+Δ CLIP-T `+0.0409`、Δ VBench-Q `-0.0161`，比被接受的 B5 高；但 dog→cat 单对 Δ CLIP-T
+为 `-0.0122`，方向不一致。
+
+代价是这个变体必须真跑一段 dense 前缀（均值 `62.6s`），所以诚实的端到端加速比是
+`1.35x`（`Speedup (variant)`），而不是只算复用阶段的 `1.88x`。相对被接受的 B5 的 `1.76x`
+是净损失，因此该开关保持实验性、默认关闭。

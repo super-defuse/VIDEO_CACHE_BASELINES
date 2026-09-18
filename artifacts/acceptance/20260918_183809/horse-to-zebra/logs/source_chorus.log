@@ -1,0 +1,12 @@
+gpu=5
+command=/data/shared/conda_envs/wan/bin/python -m carnator.adapters.wan_ti2v_5b --no-env-setup --model-dir /home/tangxuebin/models/Wan2.2-TI2V-5B --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_native_results --run-id _sources/chorus --source-prompt "a horse is galloping across a dusty plain, focus on the horse" --target-prompt "a zebra is galloping across a dusty plain, focus on the zebra" --seed 20260218 --device cuda:0 --source-only --prepare-shared-dense-cache --model-dtype fp16 --clean --source-positive horse
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 74.15it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_native_results/_sources/chorus/summary.json
+report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_native_results/_sources/chorus/report.md
+speedup_reference=target_dense
+denoising_speedup=None
+end_to_end_speedup=None

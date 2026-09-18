@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "an apple is resting on a wooden table, focus on the apple",
+  "target_prompt": "an orange is resting on a wooden table, focus on the orange",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

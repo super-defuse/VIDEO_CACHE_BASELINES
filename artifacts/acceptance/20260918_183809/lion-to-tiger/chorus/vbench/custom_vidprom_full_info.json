@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a tiger is walking through tall grass, focus on the tiger",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus/vbench/input_videos_c68ac84efb2aa003/0000_target-000.mp4"
+        ]
+    }
+]

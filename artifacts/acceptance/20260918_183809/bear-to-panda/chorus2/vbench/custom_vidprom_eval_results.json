@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9827528441945712,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": 0.9827528441945712
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.97626953125,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": 0.97626953125,
+                "video_sim": 117.15234375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9869224913716671,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": 0.9869224913716671
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.624204695224762,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": 0.624204695224762
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.711489269792541,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/chorus2/vbench/input_videos_ea6324e4022b7616/0000_bear-to-panda-target-000.mp4",
+                "video_results": 71.1489269792541
+            }
+        ]
+    ]
+}

@@ -1,179 +1,277 @@
-# 六基线多 Prompt 验收脚本规划
+# 五基线多 Prompt 验收脚本说明
 
 ## 目标
 
-提供一个统一编排脚本：输入 `source_prompt`、`target_prompt` 和可选的 seed，先在 GPU0 生成一次 source 及跨请求缓存，再在 GPU0--2 以单卡方式运行六个 target 基线，最后统一评测并汇总结果。
+`scripts/run/run_acceptance_experiment.py` 是唯一的编排入口：输入一组或多组
+source→target prompt pair，让五条基线各自在 GPU3--7 上完成「准备自己的 source → 跑
+target → 删掉自己的 source 缓存」，最后统一做质量评测并保留每个视频产物的三帧图。
 
-六个基线固定为：
+五个基线固定为，各自独占一张物理卡：
 
-`Dense Baseline`、`NIRVANA-VID`、`TeaCache`、`Chorus`、`Chorus2`、`Carnator`。
+| 基线 | GPU | target runner | source 输入 |
+| --- | ---: | --- | --- |
+| `dense_baseline` | 3 | `carnator.adapters.wan_ti2v_5b`（target-only 50-step） | **不跑 source**，不读任何缓存 |
+| `nirvana_vid` | 4 | `scripts/run/shared_cache_wan_baseline.py --method nirvana_vid` | 自己的 `shared_dense` manifest，从 step-10 latent 重启 |
+| `chorus` | 5 | `scripts/run/shared_cache_wan_baseline.py --method chorus` | 自己的 `shared_dense` manifest（K1/K2 默认 10/30） |
+| `chorus2` | 6 | `scripts/run/chorus2_wan.py` | 自己的 `outer_block_masks`（50-step sparse-mask 协议） |
+| `carnator_boundary_b5` | 7 | `scripts/run/carnator_baseline.py --baseline B5` | 自己的 `source_dense`（boundary-blend + smoothstep） |
 
-Carnator 默认配置为 `boundary-blend B5`（`smoothstep`），同时允许命令行显式覆盖。
+`dense_baseline` 是 target-only（`cache_match` 标 `not_applicable`），但它同时充当其余四条
+基线的 50-step 加速比分母，所以仍然每 pair 跑一次。
 
-## 入口设计
+GPU 映射沿用仓库既有约定（`scripts/benchmark/run_vidprom_300_experiment.py` 的
+`WAN21_GPU_BY_METHOD`），GPU0--2 不在本实验的可见范围内。
 
-编排入口为 `scripts/run/run_acceptance_experiment.py`，只负责参数校验、目录管理、子进程调度和汇总，不复制各 baseline 的推理实现。
-
-实际参数：
+## 入口参数
 
 ```text
---source-prompt TEXT       必填
---target-prompt TEXT       必填
+--source-prompt TEXT       单 pair 的 source prompt
+--target-prompt TEXT       单 pair 的 target prompt
 --seed INT                 默认 20260218
---model-path PATH          默认 Wan2.2-TI2V-5B 配置
---gpus 0,1,2               target 调度设备，默认 0,1,2
---boundary-alpha-function smoothstep
---pairs PATH               可选，多组 prompt 的 CSV/JSONL
---run-root PATH            默认 artifacts/acceptance
+--pairs PATH               多 pair 的 CSV/JSONL，含 pair_id / source_prompt / target_prompt /
+                           seed / source_positive
+--source-positive TEXT     覆盖所有 pair 的 Carnator source mask 短语；不传则逐 pair 取值
+--gpus 3,4,5,6,7           物理卡集合，仅允许 3--7
+--allow-gpu-remap          按 --gpus 顺序重新分配，而不是用固定的 3--7 计划
+--quality-gpu INT          显式指定则把所有质量评测压在这一张卡上串行；默认每条基线各用自己那张
 --quality-env vbench       质量评测环境
---source-positive TEXT     可选，覆盖 Carnator source mask 的正向短语（默认整个 source prompt）
---chorus-k1 INT            Chorus Stage-1 边界，默认 10
---chorus-k2 INT            Chorus Stage-2 边界，默认 30
---dry-run                  只构造命令和目录，不加载模型
---skip-quality             跳过 CLIP-T/VBench-Q 评测
+--keep-source-cache        不删 source 缓存（默认只在 target 失败时保留）
+--skip-quality             跳过 CLIP-T / VBench-Q
+--boundary-alpha-function smoothstep | cosine
+--chorus-k1 / --chorus-k2  Chorus 边界，默认 10 / 30
+--reference-root PATH      参考产物目录，默认 artifacts/acceptance/wan22-ti2v-5b-dog-to-cat
+--model-path / --run-root / --model-dtype / --dry-run / --validate-reference
 ```
 
-单组 prompt 直接使用两个 prompt 参数；多组实验使用 `pairs`，每行至少包含 `pair_id`、`source_prompt`、`target_prompt`，并可覆盖 seed。
+`--source-positive` 语义很重要，见下文「source-positive 与区域掩码」。
 
 ## 执行流程
 
-1. 创建 `artifacts/acceptance/<timestamp>/`，写入不可变的 `run_manifest.json`（prompt、seed、模型指纹、采样参数、代码版本、GPU 分配和 cache fingerprint）。时间戳使用 `YYYYMMDD_HHMMSS`，冲突时追加序号。
-2. GPU0 启动 source worker。source 只运行一次 50-step dense Wan2.2 推理，生成统一的 canonical cache 和 `shared_cache_manifest.json`。target 阶段只读该 manifest，不重新检索、不复制方法私有 cache。
-3. 依次启动六个 target 子进程。每个进程设置独立的 `CUDA_VISIBLE_DEVICES`，只占一张卡；同一 GPU 上不并发，计时前完成 CUDA 同步和必要 warm-up。
-4. 跨请求基线直接注入已匹配的 source cache，强制记录 `cache_match.hit=true`，不执行检索：NIRVANA-VID、Chorus、Chorus2、Carnator。Dense 和 TeaCache 不伪造跨请求命中。
-5. 每个 target 完成后立即校验视频、`results.jsonl` 和 denoising 计时字段，再提取 target 首帧。
-6. 六个 target 都成功后，在独立质量阶段调用现有 `scripts/benchmark/quality.py`/`quality_runner.py`，只保留 `CLIP-T` 和 `VBench-Q` 两个汇总指标。
-7. 生成顶层 `summary.json`、`summary.csv` 和 `report.md`；失败的 baseline 写入错误、命令和日志路径，不能阻止其他 baseline 的可复现结果落盘。
+每个 pair 是一个完整的批次，多个 pair **串行**执行（一个 pair 正好占满 5 张卡，没有并行的
+空间）。每个 pair 内部分三个阶段：
 
-## 现有实现的复用边界
+```
+阶段 1（5 个 worker，一卡一个，并发）
+  GPU3  dense_baseline      跑 target-only 的 50-step 控制组
+  GPU4  source(nirvana_vid) 跑自己的 50-step source，导出 shared_dense
+  GPU5  source(chorus)      同上
+  GPU6  source(chorus2)     同上
+  GPU7  source(carnator)    同上
 
-编排器通过 subprocess 或明确的 Python API 调用现有入口：
+阶段 2（4 个 worker，一卡一个，并发）
+  GPU4  nirvana_vid target
+  GPU5  chorus     target
+  GPU6  chorus2    target
+  GPU7  carnator   target
 
-| 基线 | target runner | source/cache 输入 |
-| --- | --- | --- |
-| Dense Baseline | 现有 Wan2.2 C0/dense runner | 不读取跨请求 cache |
-| NIRVANA-VID | `scripts/run/shared_cache_wan_baseline.py --method nirvana_vid` | `latents_step_009.pt` |
-| TeaCache | `scripts/run/shared_cache_wan_baseline.py --method teacache` | target-only，无 source cache |
-| Chorus | `scripts/run/shared_cache_wan_baseline.py --method chorus` | 完整 source trajectory + source video |
-| Chorus2 | `scripts/run/chorus2_wan.py` | `outer_block_masks`（完整 50-step target，不做 source latent restart） |
-| Carnator | `scripts/run/carnator_baseline.py`（Wan2.2 TI2V-5B） | source trajectory、mask 和 B5 boundary 配置 |
-
-Source worker 应复用当前 Carnator/Wan2.2 的 source preparation 能力，统一导出 NIRVANA-VID、Chorus、Chorus2、Carnator 所需的 payload；不能让四个 target runner 各自重新生成 source。
-
-## GPU 调度
-
-```text
-阶段 A：GPU0
-  source preparation -> canonical cache
-
-阶段 B：GPU0、GPU1、GPU2
-  dense       -> 任一空闲 GPU
-  nirvana     -> 任一空闲 GPU
-  teacache    -> 任一空闲 GPU
-  chorus      -> 任一空闲 GPU
-  chorus2     -> 任一空闲 GPU
-  carnator B5 -> 任一空闲 GPU
+阶段 3（5 个 worker，一卡一个，并发）
+  GPU3  quality(dense_baseline)
+  GPU4  quality(nirvana_vid)
+  …
+  GPU7  quality(carnator_boundary_b5)
 ```
 
-调度器维护 GPU 锁和子进程表；最多同时运行三个 target。GPU0 的 source 进程必须退出并释放显存后才能接收 target。单个 target 的 denoising 计时不包含模型加载、source cache preparation、质量评测和文件复制。
+两阶段而非一起跑，是因为 chorus2 和 carnator 需要
+`dense_baseline/cache/target_dense/manifest.json` 作为加速比参照
+（`--speedup-reference-manifest` / `--target-dense-manifest`）。如果五个 worker 同时起跑，
+chorus2 / carnator 启动时这份 manifest 还不存在，两者就会各自重新跑一遍 50-step dense
+控制组（`carnator/adapters/wan_ti2v_5b.py` 里约 4.5 分钟）。
+
+阶段 3 开始时所有 target 进程都已退出，3--7 整段是空的，所以质量评测按基线各占一张卡并发
+跑（实测单条基线完整跑一遍 VBench 六个维度约 29 秒），而不是全部压在 GPU3 上串行。只有
+`--quality-gpu` 显式指定时才会退回「一张卡串行跑五条」的旧行为。
+
+质量阶段唯一被共享的资源是 `artifacts/vbench-cache/`（`VBENCH_CACHE_DIR`），里面是预下载的
+六个模型权重目录，只读；每个基线自己的视频暂存目录 `input_videos_<fingerprint>/` 和结果文件
+都写在各自的 `<baseline>/vbench/` 下，互不干扰。
 
 ## 目录结构
 
 ```text
 artifacts/acceptance/<timestamp>/
-  run_manifest.json
+  run_manifest.json                # GPU 计划、逐 pair 的 source_positive、cache manifest 摘要
   prompts.jsonl
-  shared_cache/
-    source.mp4
-    source_first_frame.png
-    cache/                       # canonical source payload，target 只读
-    manifest.json
-  dense_baseline/
-    videos/target.mp4
-    frames/target_first_frame.png
-    results.jsonl
-    config.resolved.json
-  nirvana_vid/
-    videos/target.mp4
-    frames/target_first_frame.png
-    results.jsonl
-    config.resolved.json
-  teacache/
-    ...
-  chorus/
-    ...
-  chorus2/
-    ...
-  carnator_boundary_b5/
-    videos/target.mp4
-    frames/target_first_frame.png
-    results.jsonl
-    config.resolved.json
-  quality/
-    results.jsonl
-    raw/                         # 可选，保留评测原始维度
+  summary.json  summary.csv  report.md
   logs/
-    source.log
-    dense_baseline.log
-    nirvana_vid.log
-    teacache.log
-    chorus.log
-    chorus2.log
-    carnator_boundary_b5.log
-    quality_<baseline>.log
-  summary.json
-  summary.csv
-  report.md
+    source_<baseline>.log  <baseline>.log  quality_<baseline>.log
+  _native_results/
+    _sources/<baseline>/summary.json       # source 阶段的原生 summary
+    <baseline>/summary.json                # target 阶段
+    ti2v-5b/carnator_boundary_b5/B5/summary.json
+  _sources/<baseline>/                     # 仅 4 条读缓存的基线有
+    cache/                                 # ← target 成功后整棵删除
+    videos/source_dense.mp4                # 保留
+    manifest.json                          # 保留（shared_dense manifest 的副本）
+    source_frame_{000,060,120}.png         # 保留（三帧）
+  <baseline>/
+    videos/target.mp4
+    frames/target_frame_{000,060,120}.png  # 保留（三帧）
+    results.jsonl  config.resolved.json  quality_input.jsonl  vbench/
 ```
 
-每个 baseline 子目录只保存自己的 target 产物；共享 source 视频和 cache 不复制到各子目录。所有路径写绝对路径或相对于本次 timestamp 根目录的规范化路径，避免汇总时发生路径串接错误。
+多 pair 时每个 pair 再套一层 `run_root/<pair_id>/`，`pair_id` 经 `slug()` 规整。
+单 pair 直接落在 `run_root/` 下（与历史产物同构）。
+
+单挑出 source 的 run-id 是 `<baseline>/source` 放在 `_sources/` 这个**兄弟树**里，而不是
+`<baseline>/source/`：`shared_cache_wan_baseline.py` 建产物目录用的是不带 `exist_ok` 的
+`artifact_run.mkdir(parents=True)`，把 source 放在 target 目录里面会让 target 一启动就
+`FileExistsError`。
+
+## 视频截帧
+
+每个视频产物在生成后立刻抽三帧存成 PNG，用第 0 / 60 / 120 帧（视频共 121 帧，即首、中、末）：
+
+```text
+<baseline>/frames/target_frame_{000,060,120}.png      target 视频
+_sources/<baseline>/source_frame_{000,060,120}.png    source 视频
+```
+
+口径统一由 `sample_frames()` 负责，target 与 source 两条路径共用。它顺序读满 121 帧而不
+用 `CAP_PROP_POS_FRAMES` 跳帧——H.264 上 seek 不可靠，顺序解码 121 帧不到一秒。
+
+这些 PNG 只是给人看的旁证：不进 `summary.csv`，不被质量评测或加速比读取。四条读缓存基线
+的 source 视频逐字节相同，所以同一 pair 下 4 组 `source_frame_*` 也是同一画面，看一组即可。
+
+## source 缓存清理
+
+- target 成功 → 删 `_sources/<baseline>/cache/`（单份实测 6.0 GB，其中
+  `outer_block_masks/` 占 5.0 GB）。
+- target 失败 → **保留**该 basline 的 source 缓存，在 `run_manifest.json` 的
+  `retained_source_caches` 里登记，并在 `report.md` 列出，方便直接重试 target 而不用重跑
+  source。
+- `--keep-source-cache` 可全局关闭清理。
+
+source 视频、三帧图和 manifest 副本不在 `cache/` 下，清理后仍然保留。
+
+## source 一致性校验
+
+每条读缓存的基线都会独立跑一遍 source。删缓存之前，编排器对这六个文件取指纹写进
+对应 row 和 `run_manifest.json`：
+
+```
+cache/source_dense/latents_initial.pt
+cache/source_dense/latents_step_009.pt
+cache/source_dense/latents_step_049.pt
+cache/source_dense/fusion_masks/masks.pt
+cache/source_dense/outer_block_masks/metadata.json
+videos/source_dense.mp4
+```
+
+`report.md` 的 `## Source consistency` 逐 pair 给出 PASS / WARN；不一致时列出具体文件和各
+基线的摘要值。不一致意味着跨基线对比带上了 source 漂移，必须当成混淆处理。
+
+两个实现细节：
+
+- **不要**直接哈希 `manifest.json`（无论 `shared_dense` 还是 `source_dense`）。它们内嵌
+  `cache_dir`、`source_video` 这类绝对路径，每条基线的路径必然不同，比出来的差异是假的。
+- `outer_block_masks/metadata.json` 内嵌 `source_run_id`（值是 `_sources/nirvana_vid` 这类
+  run id），所以它走 `normalized_json_digest()`：剥掉 `source_run_id`、`created_at` 和绝对
+  路径字符串后再哈希，保留每个 mask 的 `density` / `coverage` / `head_density_*` 字段。
+
+实测（2026-09-18，GPU3--7 各跑一份 dog→cat source）：四个文件的指纹与 2026-09-02 旧
+`shared_cache` 逐字节相同，跨卡、跨 16 天完全可复现。
+
+## source-positive 与区域掩码
+
+`--source-positive` 是 Carnator 的 source mask 探针短语，必须是 source prompt 的子串
+（大小写和空白归一化后匹配，取**第一次**出现的位置；匹配不到会抛 `ValueError`）。
+
+它**只影响 fusion mask，不影响 source 轨迹**：dog→cat 在 `dog` 和空串两种取值下，
+`latents_*.pt` 和 `source_dense.mp4` 逐字节相同，只有
+`cache/source_dense/fusion_masks/masks.pt` 变了（`2264c5ac3b…` vs `60b980201a…`）。
+
+后果不小：空串等于「全部 source token」→ 区域覆盖整帧 → target 被整帧拉向 source，
+Carnator B5 的 CLIP-T 从 `0.3547` 掉到 `0.2866`，去噪从 122.78s 涨到 165.22s。其余四条
+基线质量指标逐位不变（它们读的是 `outer_block_masks`，不是 fusion mask）。
+
+所以**每对 prompt 都要显式给出主体词**。`--pairs` 文件里的 `source_positive` 字段是逐 pair
+的取值；命令行 `--source-positive` 则覆盖所有 pair。
+
+`--pairs` 里缺 `source_positive` 或留空会直接报错，而不是悄悄退化成整帧区域——想真的走
+「全部 token」必须显式写 `--source-positive ""`。这个默认值曾经让 Carnator 的 CLIP-T 掉
+0.07 而整个 run 依旧报 `completed`，所以这里选择让它响。
+
+## prompt pair 配置
+
+现成的一份在 `configs/experiments/acceptance_prompt_pairs.jsonl`，五对同场景换主体：
+
+| pair_id | source | target | source_positive |
+| --- | --- | --- | --- |
+| `horse-to-zebra` | a horse is galloping across a dusty plain, focus on the horse | a zebra is galloping across a dusty plain, focus on the zebra | `horse` |
+| `lion-to-tiger` | a lion is walking through tall grass, focus on the lion | a tiger is walking through tall grass, focus on the tiger | `lion` |
+| `duck-to-swan` | a duck is swimming on a calm lake, focus on the duck | a swan is swimming on a calm lake, focus on the swan | `duck` |
+| `bear-to-panda` | a bear is standing in a snowy forest, focus on the bear | a panda is standing in a snowy forest, focus on the panda | `bear` |
+| `apple-to-orange` | an apple is resting on a wooden table, focus on the apple | an orange is resting on a wooden table, focus on the orange | `apple` |
+
+选取原则：source 和 target 只换主体、场景和姿态保持不变，这样跨请求缓存才有意义，也
+才落在 Carnator 热启动（target 从 source 的 step-(reuse_start_step-1) latent 起步，不是
+从噪声起步）能覆盖的范围内——形状差异过大的替换做不出来。
 
 ## 结果协议
 
-每个 baseline 的 `results.jsonl` 至少记录：`pair_id`、prompt、seed、method、cache hit/mode、output path、`denoising_seconds`、`clip_t`、`vbench_q`、status、error 和运行命令。顶层汇总每个 prompt/baseline 一行，只展示：
+`summary.csv` 每 pair/baseline 一行：`pair_id`、`method`、`status`、`actual_gpu`、
+`denoising_seconds`、`end_to_end_seconds`、`speedup_vs_dense`、`clip_t`、`vbench_q`、
+`output_path`、`quality_input_path`、`error`、`log_path`、`quality_error`、`quality_log_path`。
 
-`denoising_seconds`、`CLIP-T`、`VBench-Q`。
+加速比由编排器自己算：分母取本 pair 的 `dense_baseline` 行，`speedup_vs_dense` 用去噪
+时长，`speedup_end_to_end_vs_dense` 用子进程上报的 `reported_latency_s`。不依赖 target
+子进程里的 `speedup` 字段，因为各基线的取值位置不同。
 
-`report.md` 额外列出 cache manifest fingerprint、实际 GPU、Carnator 配置、视频和首帧路径，便于审计；不把 source preparation 或 quality 时间混入 denoising 指标。
+`report.md` 单 pair 时是一张 9 列的基线表；多 pair 时表格多一列 `Pair`，并追加一节
+`## Mean across pairs`，给出每条基线在全部 pair 上的均值与 CLIP-T / VBench-Q 的极差——
+单个 prompt 分不开基线质量和这条 prompt 的运气，均值才看得出趋势。
 
-## 猫狗反向验证
+denoising 计时不含模型加载、source cache 准备、质量评测和文件复制。
 
-脚本完成后先用现有验收协议运行一组：
+## 参考锚定
 
-```text
-seed   = 20260218
-source = a dog is sleeping on a grassland, focus on the dog
-target = a cat is sleeping on a grassland, focus on the cat
-Carnator = boundary-blend B5, smoothstep
-```
+`--validate-reference` 把结果与 `docs/ACCEPTANCE.md` 的冻结表和
+`artifacts/acceptance/wan22-ti2v-5b-dog-to-cat/` 逐项比较，输出 reference / actual / delta
+和协议状态。该参考表只对应 dog→cat，因此多 pair 时这个开关会直接报错，避免把其它 pair
+误判成漂移。
 
-验证脚本从 `docs/ACCEPTANCE.md` 及其对应 `results/*/summary.json` 读取参考值，与新 timestamp 目录逐项比较：
+Chorus2 当前是完整 50-step sparse-mask 协议，而旧验收目录是 40-step latent-restart
+协议，报告会标 `protocol_changed` 而不把差异当成回归。
 
-- 六个 baseline 都有成功视频、首帧和结果记录；
-- NIRVANA-VID、Chorus、Chorus2、Carnator 的 cache 命中和 payload 路径符合 shared manifest；TeaCache 明确为 target-only；
-- denoising 时间、CLIP-T、VBench-Q 使用同一字段和同一评测环境；
-- 结果在可配置容差内接近 `wan22-ti2v-5b-dog-to-cat`，差异记录为环境/硬件差异，不手工改写结果；Chorus2 当前为完整 50-step sparse-mask 协议，而旧验收目录为 40-step latent-restart 协议，报告会标为 `protocol_changed`，不将数值差异误判为回归；
-- `report.md` 输出逐 baseline 的 reference、actual、delta 和协议状态。
+## 失败处理
 
-该验证只用于反向确认编排、缓存注入、计时和质量汇总正确；不改变原验收目录，也不覆盖已有产物。
-
-## 断点与失败处理
-
-每个阶段的状态、错误和日志路径都会写入 baseline `results.jsonl` 与顶层汇总；target 失败不会覆盖其他 baseline 的产物。source manifest 缺失或 prompt/seed 不匹配时，target 不会启动，并将原因写入六个 baseline 的错误记录。
+- 单个 target 失败 → 该基线的 row 记 `status: error` 和错误文本，其余基线照常落盘，整轮
+  `status: partial`；source 缓存保留。
+- source 阶段失败 → 该基线的 target 不会启动，同样记 error row。
+- 质量评测失败 → 记 `quality_error` 和 `quality_log_path`，不影响已经生成的视频。
+- 编排器整体崩溃（还没轮到任何 worker 上报）→ 五条基线各写一条 error row。
 
 ## 当前命令
 
-实现中的 runner 明确拒绝 GPU3--7；子进程均以 `CUDA_VISIBLE_DEVICES` 绑定到一个物理 GPU，且调度按三卡分批，避免同一张卡同时运行两个 target。
+单 pair（dog→cat，锚定参考表）：
 
 ```bash
-conda run --no-capture-output -n wan python scripts/run/run_acceptance_experiment.py \
+/data/shared/conda_envs/wan/bin/python scripts/run/run_acceptance_experiment.py \
   --source-prompt "a dog is sleeping on a grassland, focus on the dog" \
   --target-prompt "a cat is sleeping on a grassland, focus on the cat" \
   --source-positive dog \
-  --seed 20260218 \
-  --gpus 0,1,2 \
-  --source-gpu 0 \
   --validate-reference
 ```
 
-使用 `--dry-run --skip-quality` 只验证目录、命令构造和 GPU 隔离，不加载模型。多 prompt 使用 `--pairs <csv-or-jsonl>`，输入含 `pair_id`、`source_prompt`、`target_prompt`，可选 `seed`。
+五个新 pair：
+
+```bash
+/data/shared/conda_envs/wan/bin/python scripts/run/run_acceptance_experiment.py \
+  --pairs configs/experiments/acceptance_prompt_pairs.jsonl
+```
+
+必须先 `--dry-run` 一次，确认 GPU 计划、命令构造、逐 pair 的 `source_positive` 和目录布局，
+不加载模型。dry-run 写入的 `status` 是 `dry_run`，产物可以随便删。
+
+时间量级（20260918_172444 的 dog→cat 实测）：单 pair **16.5 分钟**——阶段 1 约 8.5 分钟、
+阶段 2 约 5 分钟、质量评测约 2 分钟（改成五卡并发后约 0.5 分钟）。五个 pair 串行约 1.5 小时。
+峰值磁盘：4 份并发 source 缓存约 24 GB，清理前短暂存在；跑完每个 pair 的净产物约 170 MB
+（对比保留共享缓存的旧布局 6.1 GB）。
+
+时间几乎全花在 source 上：四条基线各自跑一遍完全相同的 50 步推理（约 8.5 分钟/次），
+产出的 latent 和视频逐字节相同——这正是 source 一致性校验要证明的东西。每对 prompt 约有
+34 GPU·分钟花在这份重复计算上，是这套「各基线独立 source、用完即删」设计的固有代价。
+
+解释器必须用 `/data/shared/conda_envs/wan/bin/python`：系统 `python3` 缺 FlashAttention-2，
+`external/wan2.2/wan/modules/attention.py` 会直接 `assert FLASH_ATTN_2_AVAILABLE` 失败，
+五条基线会一起报错——这个失败模式看起来像脚本坏了，其实是解释器选错。

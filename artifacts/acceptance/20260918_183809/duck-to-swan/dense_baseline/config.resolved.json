@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a duck is swimming on a calm lake, focus on the duck",
+  "target_prompt": "a swan is swimming on a calm lake, focus on the swan",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

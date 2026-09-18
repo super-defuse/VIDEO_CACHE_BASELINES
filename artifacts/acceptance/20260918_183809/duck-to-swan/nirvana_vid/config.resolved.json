@@ -1,0 +1,11 @@
+{
+  "method": "nirvana_vid",
+  "source_prompt": "a duck is swimming on a calm lake, focus on the duck",
+  "target_prompt": "a swan is swimming on a calm lake, focus on the swan",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "chorus_k1": null,
+  "chorus_k2": null,
+  "chorus_gamma_k": null,
+  "chorus_gamma_o": null
+}

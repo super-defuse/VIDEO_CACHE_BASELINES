@@ -1,0 +1,7 @@
+{"root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809", "method": "carnator_boundary_b5_targetresume", "pairs": {"horse-to-zebra": 3, "lion-to-tiger": 4, "duck-to-swan": 5, "bear-to-panda": 6, "apple-to-orange": 7}, "started_at": "2026-09-18T20:56:23.187293+08:00"}
+[apple-to-orange] ok denoise=129.08362999930978 variant_e2e=209.94445506995544 clip_t=0.354248046875 vbench_q=0.6318323377541794
+[bear-to-panda] ok denoise=142.9859149926342 variant_e2e=227.45137427700683 clip_t=0.3271484375 vbench_q=0.6209506611466116
+[duck-to-swan] ok denoise=160.86626170901582 variant_e2e=239.507859359961 clip_t=0.3408203125 vbench_q=0.610766954558758
+[horse-to-zebra] ok denoise=134.68148134369403 variant_e2e=213.90165615687147 clip_t=0.319091796875 vbench_q=0.6548187452040574
+[lion-to-tiger] ok denoise=148.20262051792815 variant_e2e=234.21471716929227 clip_t=0.3232421875 vbench_q=0.6682691784670716
+{"root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809", "status": "completed", "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/summary.carnator_boundary_b5_targetresume.json", "report": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/report.carnator_boundary_b5_targetresume.md"}

@@ -1,0 +1,11 @@
+{
+  "method": "chorus",
+  "source_prompt": "a lion is walking through tall grass, focus on the lion",
+  "target_prompt": "a tiger is walking through tall grass, focus on the tiger",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus/cache/shared_dense/manifest.json",
+  "chorus_k1": 10,
+  "chorus_k2": 30,
+  "chorus_gamma_k": 1.5,
+  "chorus_gamma_o": 1.5
+}

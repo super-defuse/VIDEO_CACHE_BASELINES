@@ -1,0 +1,33 @@
+gpu=3
+command=/data/shared/conda_envs/wan/bin/python scripts/benchmark/quality.py /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus --quality-env vbench
+
+2026-09-18 17:39:55,252 - vbench.utils - INFO - [32m[Local Mode][0m Working in local mode, please make sure that the pre-trained model has been fully downloaded.
+2026-09-18 17:39:56,456 - vbench.subject_consistency - INFO - Initialize DINO success
+Evaluation meta data saved to /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.47s/it]100%|██████████| 1/1 [00:01<00:00,  1.47s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.35it/s]100%|██████████| 1/1 [00:00<00:00,  1.35it/s]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+Loading [networks.AMT-S.Model] from [/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/amt_model/amt-s.pth]...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:03<00:00,  3.57s/it]100%|██████████| 1/1 [00:03<00:00,  3.57s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+  0%|          | 0/1 [00:00<?, ?it/s]/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:110: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:121: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/data/shared/conda_envs/vbench/lib/python3.10/site-packages/torch/functional.py:554: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:4322.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/third_party/RAFT/core/raft.py:138: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+100%|██████████| 1/1 [00:03<00:00,  3.60s/it]100%|██████████| 1/1 [00:03<00:00,  3.60s/it]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.52it/s]100%|██████████| 1/1 [00:00<00:00,  1.52it/s]
+cur_full_info_path: /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_full_info.json
+Loading pretrained model MUSIQ from /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/pyiqa_model/musiq_spaq_ckpt-358bb6af.pth
+  0%|          | 0/1 [00:00<?, ?it/s]/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench/vbench/imaging_quality.py:57: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  acc_score_video += float(score)
+100%|██████████| 1/1 [00:01<00:00,  1.87s/it]100%|██████████| 1/1 [00:01<00:00,  1.87s/it]
+Evaluation results saved to /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/vbench/custom_vidprom_eval_results.json
+conda run --no-capture-output -n vbench env PYTHONPATH=/home/tangxuebin/project/VIDEO_CACHE_BASELINES:/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/vbench VBENCH_CACHE_DIR=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache python -m scripts.benchmark.quality_runner --results /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus/quality_input.jsonl --clip-weights /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/vbench-cache/clip_model/ViT-B-32.pt --vbench-dimensions subject_consistency background_consistency motion_smoothness dynamic_degree aesthetic_quality imaging_quality

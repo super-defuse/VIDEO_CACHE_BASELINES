@@ -1,0 +1,74 @@
+{
+  "method": "nirvana_vid",
+  "status": "completed",
+  "config": {
+    "source_prompt": "an apple is resting on a wooden table, focus on the apple",
+    "target_prompt": "an orange is resting on a wooden table, focus on the orange",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "completed_step": 10,
+    "reuse_start_step": 10
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "an orange is resting on a wooden table, focus on the orange",
+    "model": "Wan2.2",
+    "method": "nirvana_vid",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 40,
+    "latency_s": 238.28475803975016,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/videos/target.mp4",
+    "output_hash": "20105f2319b199d396c956f039506f36db4a9c92d58a39006befb999bf6e2baf",
+    "cache_bytes": 4233413,
+    "extra": {
+      "executed_steps": 40,
+      "restart_step": 10,
+      "source_trajectory": true,
+      "cache_steps": [
+        10
+      ],
+      "dit_forward_s": 212.6193819246255,
+      "dense_c0": null,
+      "timing": {
+        "cache_lookup_s": 0.00013939430937170982,
+        "cache_load_s": 0.006261834874749184,
+        "generation_s": 235.76632861280814,
+        "save_video_s": 2.5083286953158677,
+        "hash_s": 0.003695047926157713,
+        "preprocess_breakdown_s": 0.0,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 238.28475803975016
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "completed_step": 10,
+        "reuse_start_step": 10
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "4",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

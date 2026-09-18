@@ -1,0 +1,11 @@
+{
+  "method": "nirvana_vid",
+  "source_prompt": "a horse is galloping across a dusty plain, focus on the horse",
+  "target_prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "chorus_k1": null,
+  "chorus_k2": null,
+  "chorus_gamma_k": null,
+  "chorus_gamma_o": null
+}

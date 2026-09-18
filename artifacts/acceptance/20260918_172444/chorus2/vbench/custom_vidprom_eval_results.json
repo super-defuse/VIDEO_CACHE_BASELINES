@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9827655181288719,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": 0.9827655181288719
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9907633463541666,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": 0.9907633463541666,
+                "video_sim": 118.8916015625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9898969025425827,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": 0.9898969025425827
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6577820777893066,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": 0.6577820777893066
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7112775074351917,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/chorus2/vbench/input_videos_e936fc92f6effc13/0000_pair-000-target-000.mp4",
+                "video_results": 71.12775074351917
+            }
+        ]
+    ]
+}

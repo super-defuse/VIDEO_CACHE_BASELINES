@@ -1,0 +1,13 @@
+{
+  "method": "carnator_boundary_b5_targetresume",
+  "source_prompt": "a bear is standing in a snowy forest, focus on the bear",
+  "target_prompt": "a panda is standing in a snowy forest, focus on the panda",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "latent_injection_mode": "boundary-blend",
+  "baseline": "B5",
+  "boundary_alpha_function": "smoothstep",
+  "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/carnator_boundary_b5_targetresume",
+  "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/dense_baseline/cache/target_dense/manifest.json",
+  "target_resume_from_target_prefix": true
+}

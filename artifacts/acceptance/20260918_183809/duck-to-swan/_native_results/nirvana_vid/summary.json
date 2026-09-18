@@ -1,0 +1,74 @@
+{
+  "method": "nirvana_vid",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a duck is swimming on a calm lake, focus on the duck",
+    "target_prompt": "a swan is swimming on a calm lake, focus on the swan",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "completed_step": 10,
+    "reuse_start_step": 10
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a swan is swimming on a calm lake, focus on the swan",
+    "model": "Wan2.2",
+    "method": "nirvana_vid",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 40,
+    "latency_s": 236.2870692149736,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/nirvana_vid/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/nirvana_vid/videos/target.mp4",
+    "output_hash": "443036b1c18b91845c3f46f6baaea27e4b6045a97fe64cad31a4234a452a7854",
+    "cache_bytes": 11057915,
+    "extra": {
+      "executed_steps": 40,
+      "restart_step": 10,
+      "source_trajectory": true,
+      "cache_steps": [
+        10
+      ],
+      "dit_forward_s": 212.78773890435696,
+      "dense_c0": null,
+      "timing": {
+        "cache_lookup_s": 0.00013799220323562622,
+        "cache_load_s": 0.005374502390623093,
+        "generation_s": 233.59622073592618,
+        "save_video_s": 2.674612727947533,
+        "hash_s": 0.010718385223299265,
+        "preprocess_breakdown_s": 0.0,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 236.2870692149736
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "completed_step": 10,
+        "reuse_start_step": 10
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/nirvana_vid/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "4",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a bear is standing in a snowy forest, focus on the bear",
+  "target_prompt": "a panda is standing in a snowy forest, focus on the panda",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

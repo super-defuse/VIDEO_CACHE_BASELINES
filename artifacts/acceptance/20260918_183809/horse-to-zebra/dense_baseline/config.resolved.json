@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a horse is galloping across a dusty plain, focus on the horse",
+  "target_prompt": "a zebra is galloping across a dusty plain, focus on the zebra",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

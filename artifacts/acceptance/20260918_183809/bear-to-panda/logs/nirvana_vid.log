@@ -1,0 +1,16 @@
+gpu=4
+command=/data/shared/conda_envs/wan/bin/python scripts/run/shared_cache_wan_baseline.py --method nirvana_vid --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_native_results --run-id nirvana_vid --shared-cache-manifest /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/cache/shared_dense/manifest.json --source-prompt "a bear is standing in a snowy forest, focus on the bear" --target-prompt "a panda is standing in a snowy forest, focus on the panda" --seed 20260218 --device cuda:0
+
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/motioner.py:30: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/motioner.py:41: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/model_s2v.py:61: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/s2v/model_s2v.py:79: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  @amp.autocast(enabled=False)
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:00,  2.42it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00,  6.33it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+{"status": "completed", "summary": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_native_results/nirvana_vid/summary.json"}

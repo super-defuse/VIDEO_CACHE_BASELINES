@@ -1,0 +1,9 @@
+{
+  "method": "chorus2",
+  "source_prompt": "a lion is walking through tall grass, focus on the lion",
+  "target_prompt": "a tiger is walking through tall grass, focus on the tiger",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "source_mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/_sources/chorus2/cache/source_dense/outer_block_masks",
+  "speedup_reference_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/dense_baseline/cache/target_dense/manifest.json"
+}

@@ -1,0 +1,13 @@
+gpu=7
+command=/data/shared/conda_envs/wan/bin/python scripts/run/carnator_baseline.py --profile ti2v-5b --baseline B5 --source-prompt "a duck is swimming on a calm lake, focus on the duck" --target-prompt "a swan is swimming on a calm lake, focus on the swan" --seed 20260218 --checkpoint /home/tangxuebin/models/Wan2.2-TI2V-5B --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_native_results --run-id carnator_boundary_b5 --latent-injection-mode boundary-blend --boundary-alpha-function smoothstep --source-run-dir /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_sources/carnator_boundary_b5 --skip-w8a8-dense-diagnostic --runtime-python /data/shared/conda_envs/wan/bin/python --target-dense-manifest /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/dense_baseline/cache/target_dense/manifest.json --source-positive duck
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 97.36it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+Warning: Sage2++ NOT enabled
+summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_native_results/ti2v-5b/carnator_boundary_b5/B5/summary.json
+report=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/_native_results/ti2v-5b/carnator_boundary_b5/B5/report.md
+speedup_reference=target_dense
+denoising_speedup=1.6715063287969503
+end_to_end_speedup=1.6012386556759861

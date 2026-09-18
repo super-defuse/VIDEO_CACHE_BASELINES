@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a swan is swimming on a calm lake, focus on the swan",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4"
+        ]
+    }
+]

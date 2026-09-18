@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a zebra is galloping across a dusty plain, focus on the zebra",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus2/vbench/input_videos_71f7ffbe44c8c1b4/0000_horse-to-zebra-target-000.mp4"
+        ]
+    }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a cat is sleeping on a grassland, focus on the cat",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/carnator_boundary_b5_targetresume/vbench/input_videos_e04af26521ddb833/0000_pair-000-target-000.mp4"
+        ]
+    }
+]

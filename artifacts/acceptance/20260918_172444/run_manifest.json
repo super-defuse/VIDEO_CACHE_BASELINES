@@ -1,0 +1,70 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-18T17:24:44.919529+08:00",
+  "root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444",
+  "layout": "per-baseline-source-v1",
+  "pairs": [
+    {
+      "pair_id": "pair-000",
+      "source_prompt": "a dog is sleeping on a grassland, focus on the dog",
+      "target_prompt": "a cat is sleeping on a grassland, focus on the cat",
+      "seed": 20260218,
+      "source_positive": "dog"
+    }
+  ],
+  "baselines": [
+    "dense_baseline",
+    "nirvana_vid",
+    "chorus",
+    "chorus2",
+    "carnator_boundary_b5"
+  ],
+  "gpu_by_method": {
+    "dense_baseline": 3,
+    "nirvana_vid": 4,
+    "chorus": 5,
+    "chorus2": 6,
+    "carnator_boundary_b5": 7
+  },
+  "quality_gpu": 3,
+  "cuda_policy": "CUDA_VISIBLE_DEVICES restricted to physical GPUs 3,4,5,6,7",
+  "source_mode": "one independent source run per cache-consuming baseline, pruned after its target",
+  "cache_pruning": true,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16",
+  "source_positive": "dog",
+  "source_positive_by_pair": {
+    "pair-000": "dog"
+  },
+  "carnator": {
+    "mode": "boundary-blend",
+    "baseline": "B5",
+    "alpha_function": "smoothstep"
+  },
+  "chorus": {
+    "k1": 10,
+    "k2": 30,
+    "gamma_k": 1.5,
+    "gamma_o": 1.5
+  },
+  "cache_manifests": {
+    "pair-000": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/_sources/nirvana_vid/manifest.json",
+        "sha256": "7c92e08c296d0080b33b7d4a8955802de6ef682910ff7fceee3e58ba91b7f060"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/_sources/chorus/manifest.json",
+        "sha256": "0a66e8176b40e224e862677071ceb0c081ca9d77cc7037ce0db186ff57a187ca"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/_sources/chorus2/manifest.json",
+        "sha256": "34437465dfdd23c3bd4ce0672a07a290167c3aee6746a4e80d3761cfd82c97d7"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_172444/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "9636ea6642b9429499880e6226b2452d50533ffb6064ea07962a1c4fee7e6fcb"
+      }
+    }
+  }
+}

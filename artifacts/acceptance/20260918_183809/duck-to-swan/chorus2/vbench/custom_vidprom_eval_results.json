@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9670543432235718,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": 0.9670543432235718
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9837748209635416,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": 0.9837748209635416,
+                "video_sim": 118.052978515625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9817820146258077,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": 0.9817820146258077
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6067134737968445,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": 0.6067134737968445
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6834977239813687,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/duck-to-swan/chorus2/vbench/input_videos_6fb2dac147867673/0000_duck-to-swan-target-000.mp4",
+                "video_results": 68.34977239813686
+            }
+        ]
+    ]
+}

@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.979717435191075,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": 0.979717435191075
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9879292805989583,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": 0.9879292805989583,
+                "video_sim": 118.551513671875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9912322171189143,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": 0.9912322171189143
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6887151002883911,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": 0.6887151002883911
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6859239499431011,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/nirvana_vid/vbench/input_videos_089723fa3cfbf0b7/0000_target-000.mp4",
+                "video_results": 68.59239499431011
+            }
+        ]
+    ]
+}

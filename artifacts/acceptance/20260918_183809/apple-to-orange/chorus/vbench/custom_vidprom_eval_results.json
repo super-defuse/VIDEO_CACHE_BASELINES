@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9992181944350401,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": 0.9992181944350401
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9962910970052083,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": 0.9962910970052083,
+                "video_sim": 119.554931640625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9973743345971201,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": 0.9973743345971201
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.743787944316864,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": 0.743787944316864
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.650183193427472,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/chorus/vbench/input_videos_81f4176e4fc3748c/0000_target-000.mp4",
+                "video_results": 65.0183193427472
+            }
+        ]
+    ]
+}

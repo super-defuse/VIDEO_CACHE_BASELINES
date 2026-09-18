@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9994776840011279,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": 0.9994776840011279
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.99652099609375,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": 0.99652099609375,
+                "video_sim": 119.58251953125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9974924002587147,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": 0.9974924002587147
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.7668073773384094,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": 0.7668073773384094
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6783536207971494,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/nirvana_vid/vbench/input_videos_78045b4262f1d7d2/0000_target-000.mp4",
+                "video_results": 67.83536207971494
+            }
+        ]
+    ]
+}

@@ -1,0 +1,11 @@
+{
+  "method": "nirvana_vid",
+  "source_prompt": "an apple is resting on a wooden table, focus on the apple",
+  "target_prompt": "an orange is resting on a wooden table, focus on the orange",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "chorus_k1": null,
+  "chorus_k2": null,
+  "chorus_gamma_k": null,
+  "chorus_gamma_o": null
+}

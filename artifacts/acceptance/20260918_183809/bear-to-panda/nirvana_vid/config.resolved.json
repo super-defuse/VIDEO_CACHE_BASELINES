@@ -1,0 +1,11 @@
+{
+  "method": "nirvana_vid",
+  "source_prompt": "a bear is standing in a snowy forest, focus on the bear",
+  "target_prompt": "a panda is standing in a snowy forest, focus on the panda",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/bear-to-panda/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "chorus_k1": null,
+  "chorus_k2": null,
+  "chorus_gamma_k": null,
+  "chorus_gamma_o": null
+}

@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9486148950954278,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": 0.9486148950954278
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9587422688802083,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": 0.9587422688802083,
+                "video_sim": 115.049072265625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9630327084368114,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": 0.9630327084368114
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6160706877708435,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": 0.6160706877708435
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7171150749774019,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/chorus2/vbench/input_videos_3b17c39c3848d481/0000_lion-to-tiger-target-000.mp4",
+                "video_results": 71.71150749774019
+            }
+        ]
+    ]
+}

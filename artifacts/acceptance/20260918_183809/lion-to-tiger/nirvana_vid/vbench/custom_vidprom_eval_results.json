@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.956705495963494,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": 0.956705495963494
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9779378255208333,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": 0.9779378255208333,
+                "video_sim": 117.3525390625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9671827597116616,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": 0.9671827597116616
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6407608389854431,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": 0.6407608389854431
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6875248535408461,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/lion-to-tiger/nirvana_vid/vbench/input_videos_73e5faf2bc6c41fc/0000_target-000.mp4",
+                "video_results": 68.75248535408461
+            }
+        ]
+    ]
+}

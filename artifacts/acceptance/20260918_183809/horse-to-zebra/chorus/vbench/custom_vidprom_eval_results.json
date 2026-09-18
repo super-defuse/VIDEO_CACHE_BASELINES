@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9480099101861318,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": 0.9480099101861318
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9630228678385416,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": 0.9630228678385416,
+                "video_sim": 115.562744140625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9754487489400747,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": 0.9754487489400747
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5625048875808716,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": 0.5625048875808716
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6243689844430971,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/horse-to-zebra/chorus/vbench/input_videos_ae2a2c64618eea44/0000_target-000.mp4",
+                "video_results": 62.436898444309705
+            }
+        ]
+    ]
+}

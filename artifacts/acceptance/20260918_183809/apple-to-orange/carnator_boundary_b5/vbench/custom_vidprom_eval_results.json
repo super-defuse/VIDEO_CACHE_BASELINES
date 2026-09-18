@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9991327208777269,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": 0.9991327208777269
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9970479329427083,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": 0.9970479329427083,
+                "video_sim": 119.645751953125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.997320563700346,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": 0.997320563700346
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.7438358068466187,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": 0.7438358068466187
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6722459329652392,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260918_183809/apple-to-orange/carnator_boundary_b5/vbench/input_videos_2e46cbb18b63f886/0000_apple-to-orange-target-000.mp4",
+                "video_results": 67.22459329652392
+            }
+        ]
+    ]
+}
