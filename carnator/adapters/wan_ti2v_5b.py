@@ -172,6 +172,33 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Use this request-private canonical Mbase bundle instead of the source run's shared fusion masks.",
     )
+    parser.add_argument(
+        "--target-resume-region-from-target-prefix",
+        action="store_true",
+        help=(
+            "Experimental (off by default): first run the target prompt on its own for "
+            "reuse_start_step dense steps, then resume the normal reuse stage from a starting "
+            "latent that keeps the source trajectory outside the mask but takes the Mbase region "
+            "from that target prefix instead of from the source.  The object is therefore seeded "
+            "by the target's own trajectory rather than inherited from the source object.  "
+            "Everything else -- injection formula, sparse attention, FFN, scheduler -- is "
+            "unchanged.  Requires --source-run-dir."
+        ),
+    )
+    parser.add_argument(
+        "--target-resume-from-target-prefix",
+        action="store_true",
+        help=(
+            "Experimental (off by default): first run the target prompt on its own for "
+            "reuse_start_step dense steps, then resume the normal reuse stage from that "
+            "target prefix's latent at step reuse_start_step-1 -- the whole latent, not just "
+            "the Mbase region -- instead of from the source trajectory's latent.  The target "
+            "object is therefore seeded by the target's own trajectory, and only the masked "
+            "source injection from step reuse_start_step onward is inherited from the source "
+            "cache.  Everything else -- injection formula, sparse attention, FFN, scheduler -- "
+            "is unchanged.  Requires --source-run-dir."
+        ),
+    )
     parser.add_argument("--source-only", action="store_true", help="Prepare only the shared source dense trajectory and masks.")
     parser.add_argument(
         "--prepare-shared-dense-cache",
@@ -1382,6 +1409,14 @@ def native_sparse_block_forward(block, x, e, seq_lens, grid_sizes, freqs, contex
         q_hidden = q_hidden + y * c_gate_msa.index_select(1, query_idx)
 
     out = x.clone()
+    if out.dtype != q_hidden.dtype:
+        # ``q_hidden`` always lands in fp32 here (fp32 autocast around the residual
+        # adds, and fp32 modulation/gates).  The stock block returns
+        # ``x + y * e[2]`` under the same autocast, so every layer above 0 already
+        # hands the next block fp32 -- which is why the recorded 10-20 window never
+        # saw this.  Layer 0 is fed half by ``patch_embedding``, so an all-layers
+        # window has to promote here to keep the stock dtype flow.
+        out = out.to(torch.promote_types(out.dtype, q_hidden.dtype))
     out.index_copy_(1, query_idx, q_hidden)
     return out
 
@@ -1718,6 +1753,8 @@ def stage_paths(args: argparse.Namespace) -> dict[str, Path]:
         "target_dense_cache": artifact_run / "cache" / "target_dense",
         "target_dense_w8a8_cache": artifact_run / "cache" / "target_dense_w8a8",
         "target_reuse_cache": artifact_run / "cache" / "target_latent_reuse",
+        "target_prefix_video": artifact_run / "videos" / "target_prefix.mp4",
+        "target_prefix_cache": artifact_run / "cache" / "target_prefix",
         "shared_cache": artifact_run / "cache" / "shared_dense",
         "cross_seed_dir": artifact_run / "cache" / "source_dense" / "cross_seed_scores",
         "self_mask_dir": artifact_run / "cache" / "source_dense" / "self_contrast_masks",
@@ -1875,6 +1912,8 @@ def run_native_t2v_stage(
     trajectory_start_step: int = 0,
     resume_latent_path: Path | None = None,
     resume_start_step: int = 0,
+    resume_region_override: tuple[Any, Path] | None = None,
+    stop_after_step: int | None = None,
     source_trajectory: dict[int, Path] | None = None,
     mask_bundle: dict[str, Any] | None = None,
     sparse_state: NativeSparseState | None = None,
@@ -1901,6 +1940,30 @@ def run_native_t2v_stage(
     else:
         latent = load_latent(resume_latent_path, runtime.device, torch.float32)
         generator = torch.Generator(device=runtime.device).manual_seed(args.seed)
+        if resume_region_override is not None:
+            # Experimental opt-in: the starting latent keeps the source
+            # trajectory everywhere except inside the given region, which takes
+            # the target prefix's own latent instead.  The object is thereby
+            # seeded by the target trajectory rather than inherited from the
+            # source object.  Scheduler, injection formula and every other
+            # stage are untouched.
+            from carnator.masks import token_mask_to_latent_mask
+
+            region_token_mask, region_path = resume_region_override
+            region = token_mask_to_latent_mask(region_token_mask, latent.unsqueeze(0))[0]
+            if not bool(region.any()):
+                raise ValueError("resume region override is empty; refusing to run")
+            override = load_latent(region_path, runtime.device, latent.dtype)
+            if tuple(override.shape) != tuple(latent.shape):
+                raise ValueError(
+                    f"region override shape {tuple(override.shape)} != resume latent {tuple(latent.shape)}"
+                )
+            latent = latent.clone()
+            latent[region] = override[region]
+            print(
+                "resume-region-override: region_fraction=%.4f from=%s"
+                % (float(region.float().mean().item()), region_path)
+            )
     seq_len = seq_len_for(runtime, latent)
     token_grid = token_grid_for(latent, pipe.patch_size)
     expected_token_grid = getattr(runtime, "expected_token_grid", EXPECTED_TOKEN_GRID)
@@ -1948,6 +2011,10 @@ def run_native_t2v_stage(
         for step_index, timestep in enumerate(scheduler.timesteps):
             if step_index < resume_start_step:
                 continue
+            if stop_after_step is not None and step_index > stop_after_step:
+                # Prefix-only run: the schedule still has args.steps entries, so
+                # the timesteps seen so far match a full run exactly.
+                break
             if probe is not None:
                 probe.enabled = (step_index + 1) == args.mask_probe_step
                 probe.current_step_index = step_index
@@ -2089,6 +2156,12 @@ def run_native_t2v_stage(
         "resume": {
             "resume_latent_path": str(resume_latent_path) if resume_latent_path else None,
             "resume_start_step": resume_start_step,
+            "resume_region_override": (
+                {"region": "Mbase", "path": str(resume_region_override[1])}
+                if resume_region_override is not None
+                else None
+            ),
+            "stop_after_step": stop_after_step,
         },
         "masked_injection": {
             "enabled": source_trajectory is not None and mask_bundle is not None and not getattr(args, 'no_latent_injection', False),
@@ -2903,6 +2976,51 @@ def run_experiment(args: argparse.Namespace, *, runtime: NativeRuntime | None = 
             verify_middle_attention_mask_coverage(args, source_cache)
             source_block_mask_cache = source_cache
         mask_bundle = load_mask_bundle(source_mask_dir, None)
+
+        target_prefix_resume = None
+        resume_region_from_prefix = getattr(args, "target_resume_region_from_target_prefix", False)
+        resume_whole_from_prefix = getattr(args, "target_resume_from_target_prefix", False)
+        if resume_region_from_prefix or resume_whole_from_prefix:
+            # Stage 1: generate the target on its own -- dense, no injection, no
+            # sparse hooks -- and stop right where the reuse stage resumes, so
+            # the prefix sees exactly the timesteps a full run would.  This
+            # mirrors how the source trajectory itself was produced.
+            if args.reuse_start_step <= 0:
+                raise ValueError(
+                    "--target-resume-region-from-target-prefix and --target-resume-from-target-prefix "
+                    "require --reuse-start-step > 0"
+                )
+            target_prefix = run_native_t2v_stage(
+                runtime,
+                args,
+                label="target_prefix",
+                prompt=args.target_prompt,
+                out_video=paths["target_prefix_video"],
+                cache_dir=paths["target_prefix_cache"],
+                save_trajectory=True,
+                trajectory_start_step=0,
+                stop_after_step=args.reuse_start_step - 1,
+                decode_video=False,
+            )
+            target_prefix_resume = Path(target_prefix["cache_dir"]) / (
+                f"latents_step_{args.reuse_start_step - 1:03d}.pt"
+            )
+            if not target_prefix_resume.is_file():
+                raise FileNotFoundError(
+                    f"target prefix did not produce {target_prefix_resume}"
+                )
+            if resume_whole_from_prefix:
+                # Whole-frame variant: the reuse stage starts from the target
+                # prefix's own latent instead of the source trajectory's, so the
+                # object is seeded by the target rather than inherited from the
+                # source.  From step reuse_start_step on, the masked injection
+                # below still pulls the source cache in exactly as before, and
+                # the region override is deliberately left unset -- it would be
+                # a no-op over an already-target latent.
+                resume_latent_path = target_prefix_resume
+                print(f"target-prefix: resume latent will use {target_prefix_resume}", flush=True)
+            else:
+                print(f"target-prefix: resume region will use {target_prefix_resume}", flush=True)
         sparse_state = NativeSparseState(
             model_module=runtime.wan["model_module"],
             mask_bundle=mask_bundle,
@@ -2957,6 +3075,11 @@ def run_experiment(args: argparse.Namespace, *, runtime: NativeRuntime | None = 
                 cache_dir=paths["target_reuse_cache"],
                 resume_latent_path=resume_latent_path,
                 resume_start_step=args.reuse_start_step,
+                resume_region_override=(
+                    (mask_bundle["Mbase"], target_prefix_resume)
+                    if resume_region_from_prefix and target_prefix_resume is not None and mask_bundle is not None
+                    else None
+                ),
                 source_trajectory=source_trajectory,
                 mask_bundle=mask_bundle,
                 sparse_state=sparse_state,

@@ -49,7 +49,21 @@ def parser() -> argparse.ArgumentParser:
         help="Apply source block-mask selection to Medit/Msee in native Wan middle layers.",
     )
     value.add_argument("--source-run-dir", type=Path, help="Required by B0--B5 when source assets were prepared separately.")
+    value.add_argument(
+        "--target-resume-from-target-prefix",
+        action="store_true",
+        help=(
+            "Variant: seed the reuse stage from the target prefix's own latent at "
+            "reuse_start_step-1 instead of the source trajectory's, leaving every other "
+            "Carnator stage unchanged."
+        ),
+    )
     value.add_argument("--target-dense-manifest", type=Path, help="Optional matched C0 manifest for B0--B5 timing references.")
+    value.add_argument(
+        "--clean",
+        action="store_true",
+        help="Delete this run id's previous artifact/result directories before starting, so a retry is not blocked by leftovers.",
+    )
     value.add_argument("--check-only", action="store_true")
     value.add_argument("--cpu-offload", action="store_true", help="Allowed for C0 only on 14B; hooks need resident denoisers.")
     value.add_argument("--dtype", choices=("bf16", "fp16"), default="bf16")
@@ -105,6 +119,8 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
         command.extend(("--guidance-scale", str(args.guidance_scale)))
     if args.skip_w8a8_dense_diagnostic:
         command.append("--skip-w8a8-dense-diagnostic")
+    if args.clean:
+        command.append("--clean")
     if args.check_only:
         return [*command, "--check-only"]
     if spec.identifier == "C0":
@@ -115,6 +131,8 @@ def native_5b_command(args: argparse.Namespace, checkpoint: Path, spec: Any) -> 
             command.append("--skip-w8a8-dense-diagnostic")
         if args.target_dense_manifest is not None:
             command.extend(("--target-dense-manifest", str(args.target_dense_manifest)))
+        if args.target_resume_from_target_prefix:
+            command.append("--target-resume-from-target-prefix")
     return command
 
 
