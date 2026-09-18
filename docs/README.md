@@ -13,6 +13,7 @@
 | [CHORUS2.md](CHORUS2.md) | Chorus2 的 SpargeAttn 稀疏 attention 基线与运行入口。 |
 | [CHORUS_REPRODUCTION_PLAN.md](CHORUS_REPRODUCTION_PLAN.md) | Chorus 的实现范围、固定依赖和复现约束。 |
 | [CHORUS_MBASE_FAILURE_CASE.md](CHORUS_MBASE_FAILURE_CASE.md) | 独立的苹果/桃子背景错配失败案例实验和运行产物约定。 |
+| [CHORUS_COUNTEREXAMPLE_P1.md](CHORUS_COUNTEREXAMPLE_P1.md) | 强制复用下 Chorus 的两对反例 prompt（validity / scope）、实验流程与四行对比图规格。 |
 | [EVALUATION.md](EVALUATION.md) | 结果记录和性能/质量评测口径。 |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | 已完成运行的验收结果、产物索引及定性分析。 |
 | [ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md](ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md) | 六基线多 Prompt 统一编排验收脚本的规划。 |
@@ -22,6 +23,7 @@
 | [LTXVIDEO.md](LTXVIDEO.md) | LTX-Video 0.9.7-dev 上五个基线的适配规划、与 Wan2.1 的第二轮对齐修正，以及验证结果。 |
 | [CARNATOR_ABLATION_STUDY.md](CARNATOR_ABLATION_STUDY.md) | Carnator 消融实验（论文 Table 3）：设计、结果与分析。 |
 | [cogvideox/](cogvideox/README.md) | CogVideoX1.5 适配：实验计划、工作流、验证状态与 fusion mask 重构。 |
+| [../制图/insight图/CARNATOR_INSIGHT_FIGURES_PLAN.md](../制图/insight图/CARNATOR_INSIGHT_FIGURES_PLAN.md) | 论文插图工作区：框架图素材，以及 insight 图的生成计划、脚本和实验产物。 |
 
 `Chorus.pdf` 和 `CHAI.pdf` 是参考论文，不是本仓库的规范性说明。新文档应更新对应的
 单一职责文件，避免重复记录实现细节或实跑结果。
