@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a tulip is swaying in a garden, focus on the tulip",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/nirvana_vid/vbench/input_videos_0650a8c9f350cf35/0000_target-000.mp4"
+        ]
+    }
+]

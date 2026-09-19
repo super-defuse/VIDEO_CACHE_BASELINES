@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9858841980497043,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": 0.9858841980497043
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9765299479166667,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": 0.9765299479166667,
+                "video_sim": 117.18359375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9910592941130051,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": 0.9910592941130051
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6428484320640564,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": 0.6428484320640564
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7217335428285204,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/vbench/input_videos_2dc2e0f12a64def8/0000_sunflower-to-tulip-target-000.mp4",
+                "video_results": 72.17335428285205
+            }
+        ]
+    ]
+}

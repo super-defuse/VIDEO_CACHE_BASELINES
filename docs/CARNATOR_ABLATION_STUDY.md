@@ -74,7 +74,8 @@
 ## 2. 配置修正记录
 
 首轮实验（`artifacts/ablation_req16_20260909_040000/`）存在三处配置错误，导致结论反常
-（Joint 反而最慢，1.40x）：
+（Joint 反而最慢，1.40x）。该目录已随错误配置一起删除，只保留修正后的
+`ablation_req16_20260909_100759/`；下面的数字是当时记录下来的：
 
 1. ❌ 所有变体 FFN 都用 `fp` —— 应除 Full Computation 外都用 `w8a8`
 2. ❌ 所有变体 outer sparse 都是 `false` —— Attention Only 和 Joint 应启用 `sparge-sage2`
@@ -173,7 +174,7 @@
 
 ## 5. 时间对比：为什么修正后更快？
 
-对比首轮错误配置（`ablation_req16_20260909_040000`）与修正后（`..._100759`）：
+对比首轮错误配置（`ablation_req16_20260909_040000`，已删除）与修正后（`..._100759`）：
 
 | Variant | 错误配置 E2E | 修正后 E2E | 差异 |
 |---------|-------------|-----------|------|
@@ -209,7 +210,12 @@ E2E: 155.85s
 | 进度检查 | [scripts/ablation/check_progress.sh](../scripts/ablation/check_progress.sh) |
 | 质量评测 | [scripts/ablation/evaluate_ablation_quality.py](../scripts/ablation/evaluate_ablation_quality.py) |
 | Artifacts | `artifacts/ablation_req16_20260909_100759/{full_computation,latent_only,attention_only,joint}/` |
-| Results | `results/ti2v_5b/ablation/`（report.md, summary.json, frames/） |
+| Results | `_archive/root-results/ti2v_5b/ablation/`（report.md, summary.json, frames/；已随仓库根目录 `results/` 脚手架移入本地归档） |
+
+`ablation_index43_corrected.py` 里的 `SOURCE_CACHE_DIR` 仍指向
+`artifacts/ablation_req16_20260909_032326/source_gen/source_gen`，该路径已不存在；
+对应的 source cache 现存于 `_archive/root-results/ti2v_5b/source_gen`。重跑前需要把常量
+改成该归档路径。它的文件名沿用了更早的 "index43" 实验，但实际跑的是 request 16。
 
 每个变体产物目录包含 `ablation/videos/target_dense.mp4` 与（reuse 变体）
 `ablation/videos/target_latent_reuse.mp4`。大体积视频与 cache 为本地可复现产物，

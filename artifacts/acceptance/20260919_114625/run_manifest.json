@@ -1,0 +1,174 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-19T11:46:25.030432+08:00",
+  "root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625",
+  "layout": "per-baseline-source-v1",
+  "pairs": [
+    {
+      "pair_id": "car-to-truck",
+      "source_prompt": "a car is driving along a coastal highway, focus on the car",
+      "target_prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "seed": 20260218,
+      "source_positive": "car"
+    },
+    {
+      "pair_id": "airplane-to-helicopter",
+      "source_prompt": "an airplane is flying through a clear blue sky, focus on the airplane",
+      "target_prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "seed": 20260218,
+      "source_positive": "airplane"
+    },
+    {
+      "pair_id": "hamburger-to-pizza",
+      "source_prompt": "a hamburger is resting on a white plate, focus on the hamburger",
+      "target_prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "seed": 20260218,
+      "source_positive": "hamburger"
+    },
+    {
+      "pair_id": "lighthouse-to-windmill",
+      "source_prompt": "a lighthouse is standing on a rocky coast, focus on the lighthouse",
+      "target_prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "seed": 20260218,
+      "source_positive": "lighthouse"
+    },
+    {
+      "pair_id": "sunflower-to-tulip",
+      "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+      "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "seed": 20260218,
+      "source_positive": "sunflower"
+    }
+  ],
+  "baselines": [
+    "dense_baseline",
+    "nirvana_vid",
+    "chorus",
+    "chorus2",
+    "carnator_boundary_b5"
+  ],
+  "gpu_by_method": {
+    "dense_baseline": 3,
+    "nirvana_vid": 4,
+    "chorus": 5,
+    "chorus2": 6,
+    "carnator_boundary_b5": 7
+  },
+  "quality_gpu": "per-baseline",
+  "cuda_policy": "CUDA_VISIBLE_DEVICES restricted to physical GPUs 3,4,5,6,7",
+  "source_mode": "one independent source run per cache-consuming baseline, pruned after its target",
+  "cache_pruning": true,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16",
+  "source_positive": "<per-pair>",
+  "source_positive_by_pair": {
+    "car-to-truck": "car",
+    "airplane-to-helicopter": "airplane",
+    "hamburger-to-pizza": "hamburger",
+    "lighthouse-to-windmill": "lighthouse",
+    "sunflower-to-tulip": "sunflower"
+  },
+  "carnator": {
+    "mode": "boundary-blend",
+    "baseline": "B5",
+    "alpha_function": "smoothstep"
+  },
+  "chorus": {
+    "k1": 10,
+    "k2": 30,
+    "gamma_k": 1.5,
+    "gamma_o": 1.5
+  },
+  "cache_manifests": {
+    "car-to-truck": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/nirvana_vid/manifest.json",
+        "sha256": "03f48db010db7aeadae33a2eb660de2ab4ff95826a5ab23c42e3a7fa2157d80f"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus/manifest.json",
+        "sha256": "36e8f9cc144eb4113a9a18c8df4a519129265cf7f477ff04f886d3a74bd183fc"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus2/manifest.json",
+        "sha256": "210d7d6046ad8ad2e2f6e084b176186987f6bd820375cfb1589cf8d1537253e5"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "66f4b8b5eb8302f59f274e54339849e17e7cea54c791f35378156ffa912e37aa"
+      }
+    },
+    "airplane-to-helicopter": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/nirvana_vid/manifest.json",
+        "sha256": "6b7b8094d63313575455bb37f56c1597a28940698c9f877f3ed042d6612f3a8a"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus/manifest.json",
+        "sha256": "0e0518f16b1bc3f05c5c5f50014b88b105a58f711b6e15a6945f61cf13081771"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus2/manifest.json",
+        "sha256": "944299469a5c42f7a6100676b108d14fb8c4b0a3f9b1702c85bac6ff82c958e0"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "e2fbe89addeaa840cc3a226b1e384e8db24cfec3c8dace981a9886097f38c479"
+      }
+    },
+    "hamburger-to-pizza": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/nirvana_vid/manifest.json",
+        "sha256": "6ec0095a862e57706526da4ac3b3252873c1ed4b64cca49305936c249501bafb"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus/manifest.json",
+        "sha256": "69131b6df1bb018476c71deefaa65967efe5fffb9ea9cb35bb9a247d3508d4dc"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus2/manifest.json",
+        "sha256": "2b1610383f4bf241a3cf3d6b31f82790422139ab4ceb7980b6780c1a576e5061"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "e495616cfd02ab2793fbee5fe3a4852da17b875131baed4d3fa9e240a3683d05"
+      }
+    },
+    "lighthouse-to-windmill": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/nirvana_vid/manifest.json",
+        "sha256": "3e73d338853995b4e84a521cb25fb9fd642f7accccf5d9e8126b76c26dec0b2e"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/manifest.json",
+        "sha256": "78900dcda1b59afcbdbf94b55278733e5a05c3e88ee23a1220c70e94c5fc2c6e"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus2/manifest.json",
+        "sha256": "8b39b853a08d5080f96c3e3cd71c6ba77ebcaba5e96d96acdb9c7d4650f8c70c"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "2d5a87bc2d0c1b0c2bd712995520b0b774d582e186bd65109a82bead47969231"
+      }
+    },
+    "sunflower-to-tulip": {
+      "nirvana_vid": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/manifest.json",
+        "sha256": "819ed6e8fa37eba94ff6ca823345b92d1c88b0d5cf78df7bdddcc87dea5c212e"
+      },
+      "chorus": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/manifest.json",
+        "sha256": "f2832f245267bfeb2f308cf8f09457fc1fcf6d2ccbf580d1a6c84d5f90cae6d9"
+      },
+      "chorus2": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus2/manifest.json",
+        "sha256": "0f0b73df85ea658260dde8b2b0a59d24b953a5488106972460834465a3dc293b"
+      },
+      "carnator_boundary_b5": {
+        "path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/carnator_boundary_b5/manifest.json",
+        "sha256": "731e8e72999484b5dd73f67fb074b96bcb74d22e44199a3ba0d57407d1e4878d"
+      }
+    }
+  }
+}

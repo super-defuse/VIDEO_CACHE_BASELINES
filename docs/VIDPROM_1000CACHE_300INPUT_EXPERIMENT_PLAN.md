@@ -5,7 +5,7 @@
 Early Signature -> CLIP top-1），并以 source per-noun Mbase 进行复用。
 
 本轮实验固定使用 Wan2.2-TI2V-5B、50-step、`1280x704`、121 帧和同一 seed/config。
-输入缓存源是 `datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv` 中的 1000 条请求；新请求是 `cluster_02_2170_random300_input.csv`，按 CSV 顺序到达。GPU0--2 保留不用，五个基线各占一张 GPU：
+输入缓存源是 `/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv`（机器本地数据集，不入库；脚本默认值即该绝对路径）中的 1000 条请求；新请求是 `cluster_02_2170_random300_input.csv`，按 CSV 顺序到达。GPU0--2 保留不用，五个基线各占一张 GPU：
 
 | GPU | 基线 | 说明 |
 | ---: | --- | --- |
@@ -22,8 +22,10 @@ step-5 cross-attention seed 与 self-attention contrast 的融合结果，不能
 
 实验固定使用与 shared cache `run_manifest.config.seed` 相同的 `seed=20260218`。Carnator
 Early Signature 四个 gate 阈值（依次为 context color、log area、shape、changed color）固定为
-`2.5460641772840114`、`1.6755377126043391`、`1.0`、`2.2003341853972085`；该代表组在 300 个
-可比 pair 中通过 270 个。其余满足 90% 覆盖的组合保存在 `quality/forced_scan_qualified.json`。
+`2.5460641772840114`、`1.6755377126043391`、`1.0`、`2.2003341853972085`；按该元组重算 300 条
+step-5 signature 可比 pair，通过 272 条（coverage `0.9067`）。该元组不在 20736 组扫描网格内，
+标定原始输出未随 artifact 保留；阈值来源、跨模型口径与统计规则见
+[CARNATOR_EARLY_SIGNATURE_CALIBRATION.md](CARNATOR_EARLY_SIGNATURE_CALIBRATION.md)。
 
 ## 1. 缓存与数据边界
 

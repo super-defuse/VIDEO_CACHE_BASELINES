@@ -63,6 +63,8 @@ chorus:
     k2: 30
   gamma_k: 1.5
   gamma_o: 1.5
+  # joint_gamma_* are historical labels, not the gamma values: joint_gamma_1_6
+  # runs 1.30 and joint_gamma_2_1 runs 1.6. Read the values, not the key names.
   joint_gamma_1_6:
     gamma_k: 1.30
     gamma_o: 1.30

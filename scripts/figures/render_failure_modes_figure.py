@@ -35,7 +35,7 @@ import torch
 from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MODEL_DIR = Path(
     os.environ.get("CARNATOR_TI2V_5B_MODEL_DIR", str(ROOT / "models" / "Wan2.2-TI2V-5B"))
 )

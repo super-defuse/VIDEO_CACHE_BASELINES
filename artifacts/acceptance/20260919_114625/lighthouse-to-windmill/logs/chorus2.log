@@ -1,0 +1,9 @@
+gpu=6
+command=/data/shared/conda_envs/wan/bin/python scripts/run/chorus2_wan.py --model-dir /home/tangxuebin/models/Wan2.2-TI2V-5B --artifact-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill --results-root /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_native_results --run-id chorus2 --source-mask-cache /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus2/cache/source_dense/outer_block_masks --speedup-reference-manifest /home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/dense_baseline/cache/target_dense/manifest.json --source-prompt "a lighthouse is standing on a rocky coast, focus on the lighthouse" --target-prompt "a windmill is standing on a rocky coast, focus on the windmill" --seed 20260218 --device cuda:0 --model-dtype fp16
+
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 99.97it/s]
+There are modules in WanModel that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+/home/tangxuebin/project/VIDEO_CACHE_BASELINES/external/wan2.2/wan/modules/vae2_2.py:1042: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(dtype=self.dtype):
+Warning: Sage2++ NOT enabled
+summary=/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_native_results/chorus2/summary.json

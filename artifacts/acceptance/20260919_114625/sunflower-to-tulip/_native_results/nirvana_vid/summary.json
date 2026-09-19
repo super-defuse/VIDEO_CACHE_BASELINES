@@ -1,0 +1,74 @@
+{
+  "method": "nirvana_vid",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+    "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+    "completed_step": 10,
+    "reuse_start_step": 10
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a tulip is swaying in a garden, focus on the tulip",
+    "model": "Wan2.2",
+    "method": "nirvana_vid",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 40,
+    "latency_s": 240.4349148850888,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/nirvana_vid/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/nirvana_vid/videos/target.mp4",
+    "output_hash": "61014ae0c9ff3b915890c10433cb9b8cdc443c4683e3963e4ce7da91d3287266",
+    "cache_bytes": 9955013,
+    "extra": {
+      "executed_steps": 40,
+      "restart_step": 10,
+      "source_trajectory": true,
+      "cache_steps": [
+        10
+      ],
+      "dit_forward_s": 214.06982894521207,
+      "dense_c0": null,
+      "timing": {
+        "cache_lookup_s": 0.00028529437258839607,
+        "cache_load_s": 0.0068171401508152485,
+        "generation_s": 237.7796481139958,
+        "save_video_s": 2.640668038278818,
+        "hash_s": 0.007492527831345797,
+        "preprocess_breakdown_s": 0.0,
+        "excluded_preprocess_s": 0.0,
+        "reported_latency_s": 240.4349148850888
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+        "completed_step": 10,
+        "reuse_start_step": 10
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "4",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

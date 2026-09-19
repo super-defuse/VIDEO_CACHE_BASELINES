@@ -1,0 +1,9 @@
+{
+  "method": "chorus2",
+  "source_prompt": "a car is driving along a coastal highway, focus on the car",
+  "target_prompt": "a truck is driving along a coastal highway, focus on the truck",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "source_mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus2/cache/source_dense/outer_block_masks",
+  "speedup_reference_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/dense_baseline/cache/target_dense/manifest.json"
+}

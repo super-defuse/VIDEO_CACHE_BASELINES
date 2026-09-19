@@ -1,6 +1,6 @@
 # VidProM 前 1000 条共享缓存准备
 
-当前缓存使用 `datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv` 的 1000 条预置请求。
+当前缓存使用 `/home/tangxuebin/datasets/1000cache_300input_noun_match/cluster_02_2170_first1000_cached.csv`（机器本地数据集，不入库）的 1000 条预置请求。
 确认清理旧缓存后，由 `scripts/benchmark/prepare_vidprom_cluster_cross_request_cache.py` 进行可断点的 v4 rebuild。
 每条请求只运行一次 50-step Wan source 去噪，不执行 retrieval 或 target 生成；产物供
 NIRVANA-VID、Chorus、Chorus2、Carnator 共同只读。共享 cache 不写入方法私有 namespace。

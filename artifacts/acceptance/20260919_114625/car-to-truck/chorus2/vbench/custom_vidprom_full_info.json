@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a truck is driving along a coastal highway, focus on the truck",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4"
+        ]
+    }
+]

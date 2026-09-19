@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.8662931742767493,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": 0.8662931742767493
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9471455891927083,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": 0.9471455891927083,
+                "video_sim": 113.657470703125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9941099486023299,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": 0.9941099486023299
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.518744945526123,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": 0.518744945526123
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6535623175250598,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/vbench/input_videos_95b4ea9b2d7f65ad/0000_airplane-to-helicopter-target-000.mp4",
+                "video_results": 65.35623175250598
+            }
+        ]
+    ]
+}

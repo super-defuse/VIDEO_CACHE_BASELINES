@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a red apple rolling down a mountain, camera focus on the apple",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/chorus_medit/vbench/input_videos_53d74198335c59f8/0001_p1A-target-apple-mountain.mp4"
+        ]
+    }
+]

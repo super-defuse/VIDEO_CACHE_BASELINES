@@ -75,7 +75,8 @@ docs/LTXVIDEO.md                                # 本文件
 （聚合器按设计拒绝 dry-run 结果）；GPU 固定校验能按 `LTX_GPU_BY_METHOD` 正确报错。
 GPU 上的真实请求分三轮：首轮排障（§8，五个基线全挂）→ 修复后 10 请求（§10.1）→
 第二轮对齐修正（§9）后重跑受影响的两个方法。10 请求结果见 §10.1，回归测试见 §11。
-P7 的 300 请求正式实验于 2026-09-12 在 GPU 3–7 启动，写入 `results_ltxvideo/`。
+P7 的 300 请求正式实验已于 2026-09-12/13 在 GPU 3–7 跑完，写入 `results_ltxvideo/`，
+结果见 §10.3（Chorus 有 7 条 Grounding-DINO fail-closed 终止错误，其余四个方法完整）。
 
 **回放真值不变**：命中/未命中决策仍复用
 `artifacts/vidprom_1000cache_300input_noun_match/cogvideox15_replay/{method}.jsonl`，
@@ -210,27 +211,33 @@ carnator 的 target 时间**变大**是预期的：修正 B 之前它没有跑�
 
 单独微基准（`[1, 32, 6144, 128]` fp16，H100，均值 60 次）：dense SDPA 2.658 ms/次，sparge-sage2 在密度 0.60 时 1.120 ms/次（**2.37x**），密度 0.95 时 1.639 ms/次（1.62x）。`attn1` 一步 48 层 × 2 分支约 255 ms，而整步约 1550 ms，即 **attn1 只占单步 16 %**——所以即便 kernel 快 2.37x、且只在 40/50 步生效，chorus2 target 的结构性上限也只有约 1.07x。实测 1.055x（10 请求）已接近该上限，剩余差距来自真实掩码（top_p=0.95 的散乱分布）比微基准里的连续块掩码更难跑满。
 
-### 10.3 300 请求正式实验的墙钟预估
+### 10.3 300 请求正式实验的结果
 
-正式跑不是 10 请求结果的简单 ×30：每个**命中**请求在 target 复用之前还有一次源捕获
-（`source_prepare_s`，写进 `source_prepare/events.jsonl`，按定义不计入 E2E 与去噪列，但占用墙钟）。
-10 请求实测的 `source_prepare_s` 均值：nirvana 80.7 s、chorus 79.5 s、chorus2 95.9 s、carnator 93.6 s；
-baseline 是 dense，每个 arrival 都生成，没有源捕获。
+正式实验于 2026-09-12 在 GPU 3–7 一方法一卡并行跑完，产物在
+`artifacts/vidprom_1000cache_300input_noun_match/results_ltxvideo/`，聚合表由该目录的
+`summary.csv` 与 `VIDPROM_1000CACHE_300INPUT_RESULTS_TABLE.md` 生成：
 
-命中数取自固定回放真值 `cogvideox15_replay/{method}.jsonl`：nirvana / chorus / chorus2 均为 **242/300**，
-carnator **300/300**（58 个 miss 按 `miss_policy` 跳过生成，`latency_s = 0`）。据此
-`每请求墙钟 ≈ source_prepare_s + 10 请求 E2E`：
+| 方法 | Requests | Completed | Errors | Hits | Hit rate | E2E s/req | E2E 加速 | 去噪 s/req | 去噪加速 | CLIP-T | VBench-Q |
+|------|---------:|----------:|-------:|-----:|---------:|----------:|---------:|-----------:|---------:|-------:|---------:|
+| Dense Baseline | 300 | 300 | 0 | N/A | N/A | 80.37 | N/A | 78.46 | N/A | 0.2650 | 0.5782 |
+| NIRVANA-VID | 300 | 300 | 0 | 242 | 0.807 | 72.43 | 1.110x | 70.56 | 1.112x | 0.2636 | 0.6020 |
+| Chorus | 300 | 293 | **7** | 235 | 0.802 | 132.68 | **0.606x** | 69.05 | 1.136x | 0.2637 | 0.5926 |
+| Chorus2 | 300 | 300 | 0 | 242 | 0.807 | 78.11 | 1.029x | 75.71 | 1.036x | 0.2860 | 0.6117 |
+| Carnator Boundary B5 | 300 | 300 | 0 | 300 | 1.000 | 67.75 | 1.186x | 62.16 | 1.262x | 0.2500 | 0.5890 |
 
-| 方法 | 生成次数 | 每请求墙钟 | 预计耗时 |
-|------|---------:|-----------:|---------:|
-| baseline | 300 | 81.4 s | 6.8 h |
-| nirvana_vid | 242 | 80.7 + 72.8 s | 10.3 h |
-| chorus2 | 242 | 95.9 + 77.7 s | 11.7 h |
-| carnator_boundary_b5 | 300 | 93.6 + 68.2 s | 13.5 h |
-| chorus | 242 | 79.5 + 136.2 s（含 63.9 s LLM+SAM2） | **14.5 h** |
+两点需要注意：
 
-五个 worker 在 GPU 3–7 一方法一卡并行，各自收尾还要对本方法的命中视频跑一次 VBench
-质量评估（242–300 条，约 1–1.5 h），因此**整体约 16 h，由 chorus 决定**。
+1. **Chorus 有 7 条终止错误**（`completed=293`）。全部来自 mask 后端 fail-closed：
+   `RuntimeError: Grounding DINO found no object for phrase: '...'`（如 `'dog running in the'`、
+   `'and'`），即 Grounding DINO 在该请求的 source 首帧上没找到框。按协议这些记作终止审计记录，
+   不计入 hit-rate 分母、也不参与质量评分，因此 Chorus 的 235 是「235 ok / 58 miss / 7 error」。
+   它的 E2E 加速 0.606x 也是真实的：Chorus 的 LLM prompt diff + Grounded-SAM2
+   （`external_s` 均值 61.75 s）全额计入 E2E，抵消了去噪侧的 1.136x。
+2. **命中数与回放真值一致**：nirvana / chorus / chorus2 均为 242/300 的命中集合
+   （chorus 因上述 7 条错误只完成 235 条），carnator 300/300。
+
+原先按 10 请求外推的墙钟预估（baseline 6.8 h、chorus 14.5 h、整体约 16 h）与实测吻合到小时量级，
+其中 baseline 的预估值 6.8 h 对实测 300 × 80.37 s ≈ 6.7 h。
 
 ## 11. 回归测试
 

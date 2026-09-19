@@ -194,8 +194,10 @@ Wan 仍按原协议运行；CogVideoX1.5 接入 TeaCache、NIRVANA-VID、Chorus�
 后三者使用独立 CogVideo backend，不调用 Wan adapter；依赖或 schema 不满足时 fail-closed。
 
 该实验及 `artifacts/vidprom_1000cache_300input_noun_match/` 的结果固定基于
-`datasets/1000cache_300input_noun_match/`，Carnator 使用 v2（noun -> Early
-Signature -> CLIP top-1）。共享缓存与实验结果必须使用同一数据集边界。
+`/home/tangxuebin/datasets/1000cache_300input_noun_match/`（机器本地数据集，不入库；
+仓库内的 `datasets/` 只有四个 prompt/noun CSV）。脚本里的默认值即该绝对路径，
+Carnator 使用 v2（noun -> Early Signature -> CLIP top-1）。共享缓存与实验结果必须
+使用同一数据集边界。
 
 ```bash
 # 每个基线先执行一次 --check-only，再在独立终端运行 --limit 300

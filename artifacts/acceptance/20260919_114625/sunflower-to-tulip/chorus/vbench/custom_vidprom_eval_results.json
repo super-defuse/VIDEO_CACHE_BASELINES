@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9852070537706216,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": 0.9852070537706216
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9693990071614583,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": 0.9693990071614583,
+                "video_sim": 116.327880859375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9921967604197613,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": 0.9921967604197613
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6403824687004089,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": 0.6403824687004089
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7288164381547407,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/vbench/input_videos_901fc23413fc9f6e/0000_target-000.mp4",
+                "video_results": 72.88164381547408
+            }
+        ]
+    ]
+}

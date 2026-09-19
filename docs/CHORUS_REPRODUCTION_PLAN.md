@@ -5,7 +5,7 @@
 将 Chorus 的三阶段逻辑适配到本仓库现有模型：
 
 - **优先实现：Wan2.2-TI2V-5B**（原生 hook 和完整验收）。
-- **CogVideoX1.5：暂标 `N/A`**，待 Wan2.2 路径稳定后再评估适配成本。
+- **CogVideoX1.5**：`methods/chorus/cogvideo.py` 已实现同名的 source-trajectory backend，本轮不产出验收产物。
 - 不实现 CLIP/Chroma 语义检索；直接使用现有 source/target prompt 测试协议：
   `a dog is sleeping on a grassland, focus on the dog` ->
   `a cat is sleeping on a grassland, focus on the cat`，seed `20260218`。
@@ -27,7 +27,7 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
 
 1. 使用锁定的 `external/grounded-sam2` v1.0（commit `dd4c514`）及与当前 PyTorch ABI 匹配的 GroundingDINO CUDA 扩展；加载器优先使用这份 checkout，不使用工作站上其他可编辑源码。固定使用 `sam2.1_hiera_large.pt`、Grounding DINO `groundingdino_swint_ogc.pth`，不使用其他 mask 方法。
 2. source 原生运行 50 步并缓存完整 latent trajectory；target 固定读取 source，不经过向量检索。LLM 使用 DMXAPI `qwen3.5-plus-2026-02-15` 提取实体差分。
-3. target 使用三阶段 50-step schedule：`K1=10`、`K2=40`（工程取值，论文未披露数值）。Stage 1 从 source 完成第 10 步的 latent 恢复，Stage 2 在 10--39 步执行真正的 SRD（`Medit` token 重算，`Msee` token 提供 self-attention K/V，cross-attention/FFN 仅处理 `Medit`），同时启用 TGAA 和 Stage-2 latent fusion；Stage 2 保留 native Wan head 的 dense 输出，避免非编辑 token 的 scheduler derivative 被置零。Stage 3 在 40--49 步执行 dense full computation，关闭 TGAA、SRD 和 latent reuse，并在 step 40 清空 UniPC derivative history、保留全局 timestep index，以修复区域复用产生的 discontinuity。论文未公开 `F_k(t,m)`/`F_o(t,m)` 的具体形式，当前保留 step-only linear decay，并在运行元数据中标记为 approximation；TGAA 配置覆盖全部 Wan blocks。差异 token 无法映射时直接报错，不使用 token-prefix fallback。
+3. target 使用三阶段 50-step schedule：`K1=10`、`K2=30`（验收 run 取值，来源为 `scripts/run/run_acceptance_experiment.py` 的 CLI 默认值；论文未披露数值，`configs/methods/default.yaml` 与 300 请求实验用 `5/30`）。Stage 1 从 source 完成第 10 步的 latent 恢复，Stage 2 在 10--29 步执行真正的 SRD（`Medit` token 重算，`Msee` token 提供 self-attention K/V，cross-attention/FFN 仅处理 `Medit`），同时启用 TGAA 和 Stage-2 latent fusion；Stage 2 保留 native Wan head 的 dense 输出，避免非编辑 token 的 scheduler derivative 被置零。Stage 3 在 30--49 步执行 dense full computation，关闭 TGAA、SRD 和 latent reuse，并在 step 30 清空 UniPC derivative history、保留全局 timestep index，以修复区域复用产生的 discontinuity。论文未公开 `F_k(t,m)`/`F_o(t,m)` 的具体形式，当前保留 step-only linear decay，并在运行元数据中标记为 approximation；TGAA 配置覆盖全部 Wan blocks。差异 token 无法映射时直接报错，不使用 token-prefix fallback。
 
    ```text
    Stage 1: 复用 source 的早期 latent
@@ -40,7 +40,7 @@ Grounded-SAM-2 选择 Hiera-Large 是为了使用官方 v1.0 视频 tracking 示
    ```
 
    阶段边界、mask 膨胀半径和 token 计算比例放入 YAML；先以少量固定值跑通，再做消融。所有 hook 必须在 `finally` 中清理，关闭 Chorus 时回退到同一 Wan2.2 dense adapter。
-4. 已将 `chorus` 注册到 CLI 和方法矩阵：`wan22: supported`；`cogvideox15: N/A`。LLM 模型、SAM 版本配置和实际 mask 后端写入运行配置/结果。
+4. 已将 `chorus` 注册到 CLI 和方法矩阵：Wan2.2 走 source-target 矩阵，`cogvideox15: supported`（`methods/chorus/cogvideo.py`）。LLM 模型、SAM 版本配置和实际 mask 后端写入运行配置/结果。
 
 ## 验收
 

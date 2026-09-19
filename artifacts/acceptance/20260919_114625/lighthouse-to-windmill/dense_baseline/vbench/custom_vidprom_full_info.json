@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a windmill is standing on a rocky coast, focus on the windmill",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/dense_baseline/vbench/input_videos_24bfe8a48483b0d2/0000_lighthouse-to-windmill-target-000.mp4"
+        ]
+    }
+]

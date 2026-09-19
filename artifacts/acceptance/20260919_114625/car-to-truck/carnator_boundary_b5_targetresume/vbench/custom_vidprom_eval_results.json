@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9488295296827952,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.9488295296827952
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9613382975260417,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.9613382975260417,
+                "video_sim": 115.360595703125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9792902191337394,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.9792902191337394
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5462204217910767,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.5462204217910767
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7225364476984197,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5_targetresume/vbench/input_videos_bad6768ee5701911/0000_car-to-truck-target-000.mp4",
+                "video_results": 72.25364476984197
+            }
+        ]
+    ]
+}

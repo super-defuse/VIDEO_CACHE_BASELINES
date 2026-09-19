@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a pizza is resting on a white plate, focus on the pizza",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/chorus/vbench/input_videos_9957e506e52abaf9/0000_target-000.mp4"
+        ]
+    }
+]

@@ -7,7 +7,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]
 
 def visualize_dog_cat_masks():
     """Visualize the dog-to-cat fusion masks."""

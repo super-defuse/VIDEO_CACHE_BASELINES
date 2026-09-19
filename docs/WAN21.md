@@ -87,24 +87,19 @@ baseline 自身作为加速比参照，其 speedup 列恒为 N/A；`cache_miss` 
 
 ## Step-5 Early Signature 数据集（gate 阈值离线扫描）
 
-正式 300 请求实验里每次命中都要重跑整个 Carnator source（50 步轨迹、融合掩码模板、
-外层路由掩码、source 视频），约需 10 天；但拟合四个 Early Signature gate 只需要第 5 步的
-signature。该数据集因此对每条 arrival 只跑两个 5 步 dense prefix——回放选中的 source prompt
-和 arrival 的 target prompt——并用与正式 source/target 完全相同的
-`wan21_native.run_wan21_target_probe` 采集，因此写出的 signature 与正式实验逐位一致。
+拟合四个 Early Signature gate 只需要第 5 步 signature，不必重跑 50 步 source 与 target 复用。
+该数据集对每条 arrival 只跑两个 5 步 dense prefix——回放选中的 source prompt 和 arrival 的
+target prompt——并用与正式 source/target 相同的
+`carnator.adapters.wan21_native.run_wan21_target_probe` 采集，故 signature 与正式实验一致。
 
 ```bash
 # 300 条，GPU 3-7 分片，跑完自动 --summarize；可中断续跑
 bash scripts/benchmark/run_wan21_carnator_step5_signatures.sh
 ```
 
-产物在 `artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/`：每个
-`arrivals/<arrival>_<uuid>/pair.json` 记录四条 gate 距离与名词替换情况，`quality/` 汇总为
-`step5_pair_distances.{csv,jsonl}` 和 `step5_hit_rate_sweep.csv`。
-
-口径边界：该数据集没有复用 latent、也不产出视频，`cache_ready` 恒为 false，**不能报告真实
-cache hit**；命中/未命中真值仍只由回放文件提供。它给出的是任意阈值元组下的 gate 接受率，
-足以离线重算命中率而不重新生成——这也是它相对 60 对强制复用标定的价值所在。
+产物在 `artifacts/vidprom_1000cache_300input_noun_match/wan21_carnator_step5/`。协议、实测结果与
+「不产出视频、`cache_ready` 恒为 false、不能报告真实 cache hit」这一口径边界见
+[CARNATOR_EARLY_SIGNATURE_CALIBRATION.md](CARNATOR_EARLY_SIGNATURE_CALIBRATION.md)。
 
 ## 文件结构
 

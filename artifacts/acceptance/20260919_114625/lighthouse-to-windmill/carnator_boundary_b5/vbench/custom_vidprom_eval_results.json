@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9949733744064967,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": 0.9949733744064967
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.993255615234375,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": 0.993255615234375,
+                "video_sim": 119.190673828125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9938259788448208,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": 0.9938259788448208
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6114029884338379,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": 0.6114029884338379
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.786107503717596,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/vbench/input_videos_044766b7d01c65b2/0000_lighthouse-to-windmill-target-000.mp4",
+                "video_results": 78.6107503717596
+            }
+        ]
+    ]
+}

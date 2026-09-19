@@ -11,7 +11,7 @@ import torch
 from PIL import Image, ImageDraw, ImageFont
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_IMAGE = ROOT / "artifacts/static-prompt-defaults-results/ceramic-mug/frames/four_images/start_original.png"
 DEFAULT_MASK = ROOT / "artifacts/static-prompt-defaults/ceramic-mug/cache/source_dense/fusion_masks/masks.pt"
 DEFAULT_OUTPUT = ROOT / "artifacts/static-prompt-defaults-results/ceramic-mug/boundary_blend_principle.png"

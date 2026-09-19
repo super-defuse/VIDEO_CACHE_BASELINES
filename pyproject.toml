@@ -18,4 +18,4 @@ vcb-prepare-shared-cache = "scripts.benchmark.prepare_vidprom_cluster_cross_requ
 py-modules = []
 
 [tool.setuptools.packages.find]
-include = ["core*", "adapters*", "methods*", "carnator*", "scripts*"]
+include = ["core*", "adapters*", "methods*", "carnator*", "chorus2*", "scripts*"]

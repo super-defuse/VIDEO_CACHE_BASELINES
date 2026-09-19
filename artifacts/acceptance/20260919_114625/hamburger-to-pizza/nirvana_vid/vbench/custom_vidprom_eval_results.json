@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9995990884800752,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": 0.9995990884800752
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.996612548828125,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": 0.996612548828125,
+                "video_sim": 119.593505859375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9971093586804395,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": 0.9971093586804395
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.7128931283950806,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": 0.7128931283950806
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7427394066172198,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/vbench/input_videos_06c5e82874915aea/0000_target-000.mp4",
+                "video_results": 74.27394066172198
+            }
+        ]
+    ]
+}

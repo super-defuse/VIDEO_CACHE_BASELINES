@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "an airplane is flying through a clear blue sky, focus on the airplane",
+  "target_prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.957111049691836,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": 0.957111049691836
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9640909830729166,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": 0.9640909830729166,
+                "video_sim": 115.69091796875,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9811593576553294,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": 0.9811593576553294
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5179725885391235,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": 0.5179725885391235
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7405977658989016,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/vbench/input_videos_aeb046f24d8dd9a8/0000_target-000.mp4",
+                "video_results": 74.05977658989016
+            }
+        ]
+    ]
+}

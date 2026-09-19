@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+  "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

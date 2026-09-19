@@ -139,26 +139,37 @@ artifacts/acceptance/*/*/vbench/input_videos_*/
 artifacts/acceptance/*/shared_cache/source.mp4
 artifacts/acceptance/*/ti2v-5b/*/*/videos/
 
-# The 2026-09-18 multi-prompt acceptance runs narrow that boundary: they publish
-# the compact records only -- results.jsonl, quality_input.jsonl,
-# config.resolved.json, the VBench score JSONs, the driver logs and the
-# _native_results reports. With five prompt pairs the representative frames and
-# the per-request source payloads add up to ~1.2GB of media the reports already
-# summarise, so both stay local. These runs also nest one level deeper than the
-# single-pair run above (run/pair/method), which the rules there do not reach.
-artifacts/acceptance/20260918_*/**/videos/
-artifacts/acceptance/20260918_*/**/frames/
-artifacts/acceptance/20260918_*/**/_sources/
-artifacts/acceptance/20260918_*/**/cache/
-artifacts/acceptance/20260918_*/**/vbench/input_videos_*/
+# The dated multi-prompt acceptance runs made from 2026-09-18 on narrow that
+# boundary: they publish the compact records only -- results.jsonl,
+# quality_input.jsonl, config.resolved.json, the VBench score JSONs, the driver
+# logs and the _native_results reports. With five prompt pairs the representative
+# frames and the per-request source payloads add up to ~1.2GB of media the
+# reports already summarise, so both stay local. These runs also nest one level
+# deeper than the single-pair run above (run/pair/method), which the rules there
+# do not reach.
+#
+# The rule keys on the run's date directory instead of a literal run name, so a
+# new dated run is covered without another edit -- hardcoding 20260918_* silently
+# missed 20260919_114625's 1.9GB. The named wan22-ti2v-5b-dog-to-cat run above
+# does not match and keeps its tracked videos. 20260902_174245 does match and
+# deliberately tracks its first-frame PNGs, so frames/ is re-included for it.
+artifacts/acceptance/20[0-9]*_*/**/videos/
+artifacts/acceptance/20[0-9]*_*/**/frames/
+artifacts/acceptance/20[0-9]*_*/**/_sources/
+artifacts/acceptance/20[0-9]*_*/**/cache/
+artifacts/acceptance/20[0-9]*_*/**/vbench/input_videos_*/
+!artifacts/acceptance/20260902_174245/**/frames/
 
 # Diagnostic VBench input videos merely link to the retained 300-request run.
 artifacts/vidprom_1000cache_300input_noun_match/early_signature_disabled_20260903_100305/diagnostics/*/vbench/input_videos_*/
 
 # Chorus P1 counterexample, halo2 rerun. Publish the two pair reports, the CLIP
 # similarity tables, the rendered four-row figure and the representative frames;
-# the six generated videos are reproducible from the recorded configs.
+# the six generated videos are reproducible from the recorded configs. The
+# per-method quality pass added quality_input.jsonl and the VBench score JSONs,
+# which are published, plus an input_videos_* link farm per method, which is not.
 artifacts/chorus_counterexample_p1_v2_halo2/*/*/videos/
+artifacts/chorus_counterexample_p1_v2_halo2/*/*/vbench/input_videos_*/
 
 # Carnator pair-1 single-request ablation: same boundary as the ablation_req16_*
 # runs below -- keep FINDINGS.md, run_all.sh, the per-variant results and frames,

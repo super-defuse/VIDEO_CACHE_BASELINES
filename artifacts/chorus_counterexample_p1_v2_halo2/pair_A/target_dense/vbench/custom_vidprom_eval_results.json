@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9261721310516199,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": 0.9261721310516199
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9436299641927083,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": 0.9436299641927083,
+                "video_sim": 113.235595703125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9878685606157315,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": 0.9878685606157315
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6793141961097717,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": 0.6793141961097717
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7407411714033647,
+        [
+            {
+                "video_path": "artifacts/chorus_counterexample_p1_v2_halo2/pair_A/target_dense/vbench/input_videos_a35fe9b9305b81b4/0001_p1A-target-apple-mountain.mp4",
+                "video_results": 74.07411714033647
+            }
+        ]
+    ]
+}

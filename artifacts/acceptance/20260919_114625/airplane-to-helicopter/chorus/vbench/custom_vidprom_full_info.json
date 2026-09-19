@@ -1,0 +1,16 @@
+[
+    {
+        "prompt_en": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+        "dimension": [
+            "subject_consistency",
+            "background_consistency",
+            "motion_smoothness",
+            "dynamic_degree",
+            "aesthetic_quality",
+            "imaging_quality"
+        ],
+        "video_list": [
+            "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus/vbench/input_videos_5ee2e7010dbe3500/0000_target-000.mp4"
+        ]
+    }
+]

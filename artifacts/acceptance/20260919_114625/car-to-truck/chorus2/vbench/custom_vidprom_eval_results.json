@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9755382026235263,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.9755382026235263
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.977630615234375,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.977630615234375,
+                "video_sim": 117.315673828125,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9833234848291432,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.9833234848291432
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5686122179031372,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": 0.5686122179031372
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7168950422933278,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/vbench/input_videos_3abd53877e0f2f7b/0000_car-to-truck-target-000.mp4",
+                "video_results": 71.68950422933278
+            }
+        ]
+    ]
+}

@@ -1,0 +1,9 @@
+{
+  "method": "chorus2",
+  "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+  "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "source_mask_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus2/cache/source_dense/outer_block_masks",
+  "speedup_reference_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/dense_baseline/cache/target_dense/manifest.json"
+}

@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a lighthouse is standing on a rocky coast, focus on the lighthouse",
+  "target_prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

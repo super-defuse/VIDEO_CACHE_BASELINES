@@ -81,7 +81,7 @@ probe 必须沿用完整 50-step scheduler，只在第 5 个 completed step 采�
 线上入口只在 Stage 1 有合格候选时采集一次 target sidecar。必须显式配置
 `max_context_color_distance`；单 noun substitution 还要求 `max_log_area_ratio`、
 `max_shape_distance` 和 `max_changed_color_distance`，缺失任一阈值即 `No Reuse`。正式阈值
-选择流程见 [Carnator Early Signature 标定与统计流程](CARNATOR_EARLY_SIGNATURE_CALIBRATION_PLAN.md)。
+选择流程见 [Carnator Early Signature gate 标定](CARNATOR_EARLY_SIGNATURE_CALIBRATION.md)。
 
 ### Gate 与 artifact 校验
 

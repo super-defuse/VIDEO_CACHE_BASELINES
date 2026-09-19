@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9513069026172161,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": 0.9513069026172161
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.961212158203125,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": 0.961212158203125,
+                "video_sim": 115.345458984375,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.9966020986277837,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": 0.9966020986277837
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        1.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": true
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.5230153799057007,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": 0.5230153799057007
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.6711592243919688,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/vbench/input_videos_7162aec249881ab5/0000_target-000.mp4",
+                "video_results": 67.11592243919688
+            }
+        ]
+    ]
+}

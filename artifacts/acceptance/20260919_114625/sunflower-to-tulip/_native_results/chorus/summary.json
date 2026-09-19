@@ -1,0 +1,167 @@
+{
+  "method": "chorus",
+  "status": "completed",
+  "config": {
+    "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+    "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+    "seed": 20260218
+  },
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/shared_dense/manifest.json",
+  "cache_input": {
+    "mode": "shared_dense",
+    "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+    "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+    "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/videos/source_dense.mp4"
+  },
+  "target": {
+    "request_index": 0,
+    "uuid": "target-000",
+    "prompt": "a tulip is swaying in a garden, focus on the tulip",
+    "model": "Wan2.2",
+    "method": "chorus",
+    "seed": 20260218,
+    "cache_match": {
+      "hit": true,
+      "kind": "shared_dense"
+    },
+    "executed_steps": 40,
+    "latency_s": 232.48173689702526,
+    "status": "ok",
+    "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/videos/target.mp4",
+    "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/videos/target.mp4",
+    "output_hash": "d539768d6fe8ef8d3d224011a6f483d3f4630f4d8a48bf946ce5835fea6c928a",
+    "cache_bytes": 9397291,
+    "extra": {
+      "chorus_stage": "target_reuse",
+      "chorus_stages": {
+        "steps": 50,
+        "k1": 10,
+        "k2": 30,
+        "stage1": [
+          0,
+          10
+        ],
+        "stage2": [
+          10,
+          30
+        ],
+        "stage3": [
+          30,
+          50
+        ]
+      },
+      "executed_steps": 40,
+      "dit_forward_s": 158.30796895502135,
+      "chorus_llm": {
+        "source_entities": [
+          "sunflower",
+          "garden"
+        ],
+        "target_entities": [
+          "tulip",
+          "garden"
+        ],
+        "removed_tokens": [
+          "sunflower"
+        ],
+        "added_tokens": [
+          "tulip"
+        ],
+        "edit_summary": "Replaced the flower type from sunflower to tulip while keeping the garden setting and swaying motion.",
+        "backend": "dmxapi",
+        "model": "qwen3.5-plus-2026-02-15",
+        "latency_s": 22.27
+      },
+      "chorus_mask": {
+        "backend": "grounded_sam2",
+        "release": "v1.0",
+        "commit": "dd4c514",
+        "sam_checkpoint": "sam2.1_hiera_large.pt",
+        "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+        "phrase": "sunflower garden",
+        "boxes": 1,
+        "box_confidence_max": 0.8702,
+        "pixel_edit_fraction": 0.0861,
+        "grid": [
+          31,
+          22,
+          40
+        ],
+        "base_fraction": 0.0866,
+        "base_token_fraction": 0.1036,
+        "edit_fraction": 0.3811,
+        "see_fraction": 0.6094,
+        "dilation": {
+          "edit": 8,
+          "see": 14
+        },
+        "pooling": "max",
+        "update_mask": "Medit"
+      },
+      "chorus_preprocess_s": 47.45968945976347,
+      "chorus_llm_s": 22.27058372972533,
+      "chorus_sam_s": 25.189105730038136,
+      "excluded_latency_s": 47.45968945976347,
+      "chorus_tgaa": {
+        "enabled": true,
+        "gamma_k": 1.5,
+        "gamma_o": 1.5,
+        "schedule": "linear_step_decay_approximation",
+        "paper_exact_schedule": "not specified",
+        "scope": "stage2",
+        "blocks": "all",
+        "calls": 1200
+      },
+      "chorus_scheduler": {
+        "stage3_history_reset": true,
+        "stage3_history_reset_step": 30,
+        "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+      },
+      "chorus_cache": {
+        "source_trajectory_steps": 50,
+        "format": "per_step_manifest",
+        "stage2_latent_fusion": true,
+        "latent_fusion_update_mask": "Medit",
+        "latent_fusion_from_step": 10,
+        "latent_fusion_through_step": 29,
+        "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+        "srd": {
+          "enabled": true,
+          "update_mask": "Medit",
+          "edit_fraction": 0.3811,
+          "see_fraction": 0.6094,
+          "self_attention": "Medit queries / Msee keys-values",
+          "cross_attention": "Medit queries",
+          "ffn": "Medit tokens"
+        }
+      },
+      "timing": {
+        "cache_lookup_s": 0.0003547598607838154,
+        "cache_load_s": 0.0012491517700254917,
+        "generation_s": 229.95830315724015,
+        "save_video_s": 2.5119336913339794,
+        "hash_s": 0.009887075051665306,
+        "preprocess_breakdown_s": 47.45968945976347,
+        "excluded_preprocess_s": 47.45968945976347,
+        "reported_latency_s": 232.48173689702526
+      },
+      "shared_cache": {
+        "mode": "shared_dense",
+        "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+        "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+        "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/videos/source_dense.mp4"
+      }
+    }
+  },
+  "speedup_reference": {
+    "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/target_dense/manifest.json",
+    "target_dense_end_to_end_s": null,
+    "speedup": null
+  },
+  "hardware": {
+    "device": "cuda:0",
+    "visible_device": "5",
+    "gpu_name": "NVIDIA H100 PCIe",
+    "total_memory_gib": 79.171
+  }
+}

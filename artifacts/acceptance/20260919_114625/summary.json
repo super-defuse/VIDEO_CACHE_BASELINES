@@ -1,0 +1,1876 @@
+{
+  "status": "completed",
+  "rows": [
+    {
+      "request_index": 0,
+      "uuid": "car-to-truck-target-000",
+      "pair_id": "car-to-truck",
+      "prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 304.59752543084323,
+      "end_to_end_seconds": 304.59752543084323,
+      "denoising_seconds": 274.65742627577856,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.2783203125,
+      "vbench_q": 0.6843308615131051,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9756857119500637,
+        "background_consistency": 0.9814717610677083,
+        "motion_smoothness": 0.9833240485913826,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5866191983222961,
+        "imaging_quality": 0.7204054052179509,
+        "vbench_q": 0.6843308615131051
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 239.46535902982578,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/nirvana_vid/videos/target.mp4",
+      "output_hash": "8fe3783f61b5e0003e3e18dc85d1d5f0daec5b1487e4a57b14ba1ac048728ae3",
+      "cache_bytes": 12880640,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 213.7628116644919,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.0001274431124329567,
+          "cache_load_s": 0.005858635995537043,
+          "generation_s": 236.84246364375576,
+          "save_video_s": 2.606253552250564,
+          "hash_s": 0.01065001031383872,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 239.46535902982578
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "car-to-truck",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 239.46535902982578,
+      "denoising_seconds": 236.84246364375576,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286983,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3439ff72f6e59b9821cf23fadc02f5e8b3c19ddfbee0c44c9e65eec3311b424d",
+        "cache/source_dense/latents_step_049.pt": "c145d2b0a1dc7ba1bceaf7b1edfa9ed37db2bd623a7c46e8744787c5d3c443a3",
+        "cache/source_dense/fusion_masks/masks.pt": "98e66c56e6ff24e8dd3b4fdc40d36f648badfe9de702b9f732642285b1f7700a",
+        "cache/source_dense/outer_block_masks/metadata.json": "5cb68a71bf679d0a5c2efab7139ea20800efedd570fc1e0f398974378b06dc24",
+        "videos/source_dense.mp4": "e837a3af6b41b93bb17555f01e415b0f56e5af71b8e8020acf7b584fa4d2fab3"
+      },
+      "speedup_vs_dense": 1.1596629339614615,
+      "speedup_end_to_end_vs_dense": 1.2719899306726246,
+      "clip_t": 0.29931640625,
+      "vbench_q": 0.6696471741185286,
+      "vbench_dimensions": {
+        "subject_consistency": 0.957111049691836,
+        "background_consistency": 0.9640909830729166,
+        "motion_smoothness": 0.9811593576553294,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5179725885391235,
+        "imaging_quality": 0.7405977658989016,
+        "vbench_q": 0.6696471741185286
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 232.18217475200072,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus/videos/target.mp4",
+      "output_hash": "46510aa43656e6a50afda7d0903e2548ed1dd5ee3cc6e943a5e35809abffa570",
+      "cache_bytes": 13081011,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 146.26131482888013,
+        "chorus_llm": {
+          "source_entities": [
+            "car"
+          ],
+          "target_entities": [
+            "truck"
+          ],
+          "removed_tokens": [
+            "car"
+          ],
+          "added_tokens": [
+            "truck"
+          ],
+          "edit_summary": "Replaced 'car' with 'truck' in both the subject and focus instructions.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 37.548
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "car",
+          "boxes": 1,
+          "box_confidence_max": 0.8344,
+          "pixel_edit_fraction": 0.0267,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.0271,
+          "base_token_fraction": 0.0341,
+          "edit_fraction": 0.2206,
+          "see_fraction": 0.4084,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 63.91493831621483,
+        "chorus_llm_s": 37.54861206142232,
+        "chorus_sam_s": 26.36632625479251,
+        "excluded_latency_s": 63.91493831621483,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.2206,
+            "see_fraction": 0.4084,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0001482851803302765,
+          "cache_load_s": 0.0006957133300602436,
+          "generation_s": 229.68335430696607,
+          "save_video_s": 2.485740526113659,
+          "hash_s": 0.012227979954332113,
+          "preprocess_breakdown_s": 63.91493831621483,
+          "excluded_preprocess_s": 63.91493831621483,
+          "reported_latency_s": 232.18217475200072
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "car-to-truck",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 232.18217475200072,
+      "denoising_seconds": 165.76841599075124,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286618,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3439ff72f6e59b9821cf23fadc02f5e8b3c19ddfbee0c44c9e65eec3311b424d",
+        "cache/source_dense/latents_step_049.pt": "c145d2b0a1dc7ba1bceaf7b1edfa9ed37db2bd623a7c46e8744787c5d3c443a3",
+        "cache/source_dense/fusion_masks/masks.pt": "98e66c56e6ff24e8dd3b4fdc40d36f648badfe9de702b9f732642285b1f7700a",
+        "cache/source_dense/outer_block_masks/metadata.json": "5cb68a71bf679d0a5c2efab7139ea20800efedd570fc1e0f398974378b06dc24",
+        "videos/source_dense.mp4": "e837a3af6b41b93bb17555f01e415b0f56e5af71b8e8020acf7b584fa4d2fab3"
+      },
+      "speedup_vs_dense": 1.6568742883511816,
+      "speedup_end_to_end_vs_dense": 1.3118902248038251,
+      "clip_t": 0.330322265625,
+      "vbench_q": 0.672302374211788,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9448477906485399,
+        "background_consistency": 0.9603617350260417,
+        "motion_smoothness": 0.9809071173060646,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5406343936920166,
+        "imaging_quality": 0.756679294680761,
+        "vbench_q": 0.672302374211788
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck"
+    },
+    {
+      "request_index": 0,
+      "uuid": "car-to-truck-target-000",
+      "pair_id": "car-to-truck",
+      "prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 224.64777601929381,
+      "end_to_end_seconds": 224.64777601929381,
+      "denoising_seconds": 201.19801948731765,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338286692,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3439ff72f6e59b9821cf23fadc02f5e8b3c19ddfbee0c44c9e65eec3311b424d",
+        "cache/source_dense/latents_step_049.pt": "c145d2b0a1dc7ba1bceaf7b1edfa9ed37db2bd623a7c46e8744787c5d3c443a3",
+        "cache/source_dense/fusion_masks/masks.pt": "98e66c56e6ff24e8dd3b4fdc40d36f648badfe9de702b9f732642285b1f7700a",
+        "cache/source_dense/outer_block_masks/metadata.json": "5cb68a71bf679d0a5c2efab7139ea20800efedd570fc1e0f398974378b06dc24",
+        "videos/source_dense.mp4": "e837a3af6b41b93bb17555f01e415b0f56e5af71b8e8020acf7b584fa4d2fab3"
+      },
+      "speedup_vs_dense": 1.3651099895299483,
+      "speedup_end_to_end_vs_dense": 1.355889342989458,
+      "clip_t": 0.2802734375,
+      "vbench_q": 0.6804013746992215,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9755382026235263,
+        "background_consistency": 0.977630615234375,
+        "motion_smoothness": 0.9833234848291432,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5686122179031372,
+        "imaging_quality": 0.7168950422933278,
+        "vbench_q": 0.6804013746992215
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck"
+    },
+    {
+      "request_index": 0,
+      "uuid": "car-to-truck-target-000",
+      "pair_id": "car-to-truck",
+      "prompt": "a truck is driving along a coastal highway, focus on the truck",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 167.95176904601976,
+      "end_to_end_seconds": 167.95176904601976,
+      "denoising_seconds": 142.87570944381878,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287639,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "3439ff72f6e59b9821cf23fadc02f5e8b3c19ddfbee0c44c9e65eec3311b424d",
+        "cache/source_dense/latents_step_049.pt": "c145d2b0a1dc7ba1bceaf7b1edfa9ed37db2bd623a7c46e8744787c5d3c443a3",
+        "cache/source_dense/fusion_masks/masks.pt": "98e66c56e6ff24e8dd3b4fdc40d36f648badfe9de702b9f732642285b1f7700a",
+        "cache/source_dense/outer_block_masks/metadata.json": "5cb68a71bf679d0a5c2efab7139ea20800efedd570fc1e0f398974378b06dc24",
+        "videos/source_dense.mp4": "e837a3af6b41b93bb17555f01e415b0f56e5af71b8e8020acf7b584fa4d2fab3"
+      },
+      "speedup_vs_dense": 1.9223521433066175,
+      "speedup_end_to_end_vs_dense": 1.813601173485596,
+      "clip_t": 0.2939453125,
+      "vbench_q": 0.6715572623866465,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9489322657386462,
+        "background_consistency": 0.96605224609375,
+        "motion_smoothness": 0.9807903468614996,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.538321316242218,
+        "imaging_quality": 0.7416526989897421,
+        "vbench_q": 0.6715572623866465
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/car-to-truck"
+    },
+    {
+      "request_index": 0,
+      "uuid": "airplane-to-helicopter-target-000",
+      "pair_id": "airplane-to-helicopter",
+      "prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 304.30230251234025,
+      "end_to_end_seconds": 304.30230251234025,
+      "denoising_seconds": 274.2864376180805,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.33349609375,
+      "vbench_q": 0.6414930137878259,
+      "vbench_dimensions": {
+        "subject_consistency": 0.8722406101723512,
+        "background_consistency": 0.9375081380208333,
+        "motion_smoothness": 0.9941691507697223,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.501879096031189,
+        "imaging_quality": 0.6539656268663643,
+        "vbench_q": 0.6414930137878259
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 239.46640285896137,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/nirvana_vid/videos/target.mp4",
+      "output_hash": "35a054a93dd9e2d86cece3c6cdcff88c95d6aa36f9355a4b2114b21861e40ac3",
+      "cache_bytes": 5455549,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 212.80848765466362,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.0003854031674563885,
+          "cache_load_s": 0.016850761137902737,
+          "generation_s": 236.92332851607352,
+          "save_video_s": 2.521048972848803,
+          "hash_s": 0.004782756324857473,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 239.46640285896137
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "airplane-to-helicopter",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 239.46640285896137,
+      "denoising_seconds": 236.92332851607352,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287925,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "9fb8b059605a7e46a608374b4e0b134b9850c2e9abbcc73ff84ac1d14f2eea5f",
+        "cache/source_dense/latents_step_049.pt": "3b4489188b70861ef3d007e008e854b24e3391c8521a7372feb2f9490b723304",
+        "cache/source_dense/fusion_masks/masks.pt": "4a16ed01e1c757560964459e0d5badbe334a52e9cd9b8d063c65216252a0cabe",
+        "cache/source_dense/outer_block_masks/metadata.json": "4aa48afa859b6d87ebd28e21821c6b062657a0df2228f4ec9dad580883a1d7e5",
+        "videos/source_dense.mp4": "f49dbcd12d41b6ae35ac5caf18ec71635f1749fc66f11bd61a14c4936114a6e8"
+      },
+      "speedup_vs_dense": 1.1577012670555664,
+      "speedup_end_to_end_vs_dense": 1.270751549609092,
+      "clip_t": 0.34228515625,
+      "vbench_q": 0.6664050141011061,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9513069026172161,
+        "background_consistency": 0.961212158203125,
+        "motion_smoothness": 0.9966020986277837,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5230153799057007,
+        "imaging_quality": 0.6711592243919688,
+        "vbench_q": 0.6664050141011061
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 218.4392504747957,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus/videos/target.mp4",
+      "output_hash": "dff073501ca1262d145e8de4e7ba2ffcc4f6b8ccf8d28c26bf5a309f859b7f6b",
+      "cache_bytes": 5446620,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 142.4602387426421,
+        "chorus_llm": {
+          "source_entities": [
+            "airplane"
+          ],
+          "target_entities": [
+            "helicopter"
+          ],
+          "removed_tokens": [
+            "airplane"
+          ],
+          "added_tokens": [
+            "helicopter"
+          ],
+          "edit_summary": "Replaced 'airplane' with 'helicopter' as the main subject while keeping the background and focus instruction consistent.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 25.36
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "airplane",
+          "boxes": 1,
+          "box_confidence_max": 0.9554,
+          "pixel_edit_fraction": 0.0055,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.0053,
+          "base_token_fraction": 0.0106,
+          "edit_fraction": 0.1633,
+          "see_fraction": 0.3729,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 50.751790224108845,
+        "chorus_llm_s": 25.361095586791635,
+        "chorus_sam_s": 25.39069463731721,
+        "excluded_latency_s": 50.751790224108845,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.1633,
+            "see_fraction": 0.3729,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0009744809940457344,
+          "cache_load_s": 0.001632138155400753,
+          "generation_s": 216.03353260690346,
+          "save_video_s": 2.3958211978897452,
+          "hash_s": 0.0072818659245967865,
+          "preprocess_breakdown_s": 50.751790224108845,
+          "excluded_preprocess_s": 50.751790224108845,
+          "reported_latency_s": 218.4392504747957
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "airplane-to-helicopter",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 218.4392504747957,
+      "denoising_seconds": 165.28174238279462,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287563,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "9fb8b059605a7e46a608374b4e0b134b9850c2e9abbcc73ff84ac1d14f2eea5f",
+        "cache/source_dense/latents_step_049.pt": "3b4489188b70861ef3d007e008e854b24e3391c8521a7372feb2f9490b723304",
+        "cache/source_dense/fusion_masks/masks.pt": "4a16ed01e1c757560964459e0d5badbe334a52e9cd9b8d063c65216252a0cabe",
+        "cache/source_dense/outer_block_masks/metadata.json": "4aa48afa859b6d87ebd28e21821c6b062657a0df2228f4ec9dad580883a1d7e5",
+        "videos/source_dense.mp4": "f49dbcd12d41b6ae35ac5caf18ec71635f1749fc66f11bd61a14c4936114a6e8"
+      },
+      "speedup_vs_dense": 1.6595083864909268,
+      "speedup_end_to_end_vs_dense": 1.393075199859522,
+      "clip_t": 0.31982421875,
+      "vbench_q": 0.6070446408101151,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9115871099134286,
+        "background_consistency": 0.9371297200520833,
+        "motion_smoothness": 0.9969165476910264,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.4208725690841675,
+        "imaging_quality": 0.44334994954511153,
+        "vbench_q": 0.6070446408101151
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter"
+    },
+    {
+      "request_index": 0,
+      "uuid": "airplane-to-helicopter-target-000",
+      "pair_id": "airplane-to-helicopter",
+      "prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 231.57363493787125,
+      "end_to_end_seconds": 231.57363493787125,
+      "denoising_seconds": 203.26596552878618,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287631,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "9fb8b059605a7e46a608374b4e0b134b9850c2e9abbcc73ff84ac1d14f2eea5f",
+        "cache/source_dense/latents_step_049.pt": "3b4489188b70861ef3d007e008e854b24e3391c8521a7372feb2f9490b723304",
+        "cache/source_dense/fusion_masks/masks.pt": "4a16ed01e1c757560964459e0d5badbe334a52e9cd9b8d063c65216252a0cabe",
+        "cache/source_dense/outer_block_masks/metadata.json": "4aa48afa859b6d87ebd28e21821c6b062657a0df2228f4ec9dad580883a1d7e5",
+        "videos/source_dense.mp4": "f49dbcd12d41b6ae35ac5caf18ec71635f1749fc66f11bd61a14c4936114a6e8"
+      },
+      "speedup_vs_dense": 1.3493967713903219,
+      "speedup_end_to_end_vs_dense": 1.3140628145945084,
+      "clip_t": 0.33056640625,
+      "vbench_q": 0.6447142481645448,
+      "vbench_dimensions": {
+        "subject_consistency": 0.8662931742767493,
+        "background_consistency": 0.9471455891927083,
+        "motion_smoothness": 0.9941099486023299,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.518744945526123,
+        "imaging_quality": 0.6535623175250598,
+        "vbench_q": 0.6447142481645448
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter"
+    },
+    {
+      "request_index": 0,
+      "uuid": "airplane-to-helicopter-target-000",
+      "pair_id": "airplane-to-helicopter",
+      "prompt": "a helicopter is flying through a clear blue sky, focus on the helicopter",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 155.67631724709645,
+      "end_to_end_seconds": 155.67631724709645,
+      "denoising_seconds": 129.0716783744283,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288582,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "9fb8b059605a7e46a608374b4e0b134b9850c2e9abbcc73ff84ac1d14f2eea5f",
+        "cache/source_dense/latents_step_049.pt": "3b4489188b70861ef3d007e008e854b24e3391c8521a7372feb2f9490b723304",
+        "cache/source_dense/fusion_masks/masks.pt": "4a16ed01e1c757560964459e0d5badbe334a52e9cd9b8d063c65216252a0cabe",
+        "cache/source_dense/outer_block_masks/metadata.json": "4aa48afa859b6d87ebd28e21821c6b062657a0df2228f4ec9dad580883a1d7e5",
+        "videos/source_dense.mp4": "f49dbcd12d41b6ae35ac5caf18ec71635f1749fc66f11bd61a14c4936114a6e8"
+      },
+      "speedup_vs_dense": 2.1250706667220514,
+      "speedup_end_to_end_vs_dense": 1.954711595787161,
+      "clip_t": 0.3486328125,
+      "vbench_q": 0.663494614707442,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9455356893440088,
+        "background_consistency": 0.9593404134114584,
+        "motion_smoothness": 0.9964698407510693,
+        "dynamic_degree": 1.0,
+        "aesthetic_quality": 0.5101595520973206,
+        "imaging_quality": 0.6736614378621755,
+        "vbench_q": 0.663494614707442
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/airplane-to-helicopter"
+    },
+    {
+      "request_index": 0,
+      "uuid": "hamburger-to-pizza-target-000",
+      "pair_id": "hamburger-to-pizza",
+      "prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 306.64090080186725,
+      "end_to_end_seconds": 306.64090080186725,
+      "denoising_seconds": 274.782369278837,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.296142578125,
+      "vbench_q": 0.6415934044680813,
+      "vbench_dimensions": {
+        "subject_consistency": 0.989890086154143,
+        "background_consistency": 0.989630126953125,
+        "motion_smoothness": 0.995118197837946,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6844561696052551,
+        "imaging_quality": 0.7606190515943796,
+        "vbench_q": 0.6415934044680813
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 240.44589283224195,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/nirvana_vid/videos/target.mp4",
+      "output_hash": "5dfcb35820364a0067df931241fb7ffad8a798389841a3171c736a4f305d9e55",
+      "cache_bytes": 4030862,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 213.66748668439686,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00011642090976238251,
+          "cache_load_s": 0.005135293584316969,
+          "generation_s": 237.92574199475348,
+          "save_video_s": 2.5104260621592402,
+          "hash_s": 0.0044688391499221325,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 240.44589283224195
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "hamburger-to-pizza",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 240.44589283224195,
+      "denoising_seconds": 237.92574199475348,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287728,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "5ae91e39c93019a7d5d207680cbb5d71462f0622de02cdab2ad72a70567156d1",
+        "cache/source_dense/latents_step_049.pt": "9f93deaf93960fe74555668fc5998a36f7530fab17b34928af3b3e823cfaa2a7",
+        "cache/source_dense/fusion_masks/masks.pt": "cef4a4253f0a9b90abee5782cbc8731884f7e71f6b278683b28d713dfee2ef29",
+        "cache/source_dense/outer_block_masks/metadata.json": "d34611e6f9dab9355503942ab2c5db3461e15f7ea8e715313c6643a7a47070e3",
+        "videos/source_dense.mp4": "0e15299bf952091ad8e811ae7ee522d1957157835a99b4ea852679fc0750aea9"
+      },
+      "speedup_vs_dense": 1.154908111140392,
+      "speedup_end_to_end_vs_dense": 1.2753010550103647,
+      "clip_t": 0.1923828125,
+      "vbench_q": 0.647149871510657,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9995990884800752,
+        "background_consistency": 0.996612548828125,
+        "motion_smoothness": 0.9971093586804395,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7128931283950806,
+        "imaging_quality": 0.7427394066172198,
+        "vbench_q": 0.647149871510657
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 280.21373109100387,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/chorus/videos/target.mp4",
+      "output_hash": "3bdcf2ef3e2b933d49b48456190ed8735cb1567c3c9de644a3ab03ab498f9cfb",
+      "cache_bytes": 4585931,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 200.8867499101907,
+        "chorus_llm": {
+          "source_entities": [
+            "hamburger",
+            "white plate"
+          ],
+          "target_entities": [
+            "pizza",
+            "white plate"
+          ],
+          "removed_tokens": [
+            "hamburger"
+          ],
+          "added_tokens": [
+            "pizza"
+          ],
+          "edit_summary": "Replaced 'hamburger' with 'pizza' in both the subject and focus instructions.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 21.078
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "hamburger white plate",
+          "boxes": 3,
+          "box_confidence_max": 0.625,
+          "pixel_edit_fraction": 0.5182,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.5167,
+          "base_token_fraction": 0.5477,
+          "edit_fraction": 0.8545,
+          "see_fraction": 0.9682,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 53.399741236586124,
+        "chorus_llm_s": 21.08016261085868,
+        "chorus_sam_s": 32.319578625727445,
+        "excluded_latency_s": 53.399741236586124,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.8545,
+            "see_fraction": 0.9682,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.000120517797768116,
+          "cache_load_s": 0.0007334896363317966,
+          "generation_s": 277.8919675750658,
+          "save_video_s": 2.3155062440782785,
+          "hash_s": 0.005395888350903988,
+          "preprocess_breakdown_s": 53.399741236586124,
+          "excluded_preprocess_s": 53.399741236586124,
+          "reported_latency_s": 280.21373109100387
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "hamburger-to-pizza",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 280.21373109100387,
+      "denoising_seconds": 224.49222633847967,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287366,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "5ae91e39c93019a7d5d207680cbb5d71462f0622de02cdab2ad72a70567156d1",
+        "cache/source_dense/latents_step_049.pt": "9f93deaf93960fe74555668fc5998a36f7530fab17b34928af3b3e823cfaa2a7",
+        "cache/source_dense/fusion_masks/masks.pt": "cef4a4253f0a9b90abee5782cbc8731884f7e71f6b278683b28d713dfee2ef29",
+        "cache/source_dense/outer_block_masks/metadata.json": "d34611e6f9dab9355503942ab2c5db3461e15f7ea8e715313c6643a7a47070e3",
+        "videos/source_dense.mp4": "0e15299bf952091ad8e811ae7ee522d1957157835a99b4ea852679fc0750aea9"
+      },
+      "speedup_vs_dense": 1.22401730233871,
+      "speedup_end_to_end_vs_dense": 1.0943107591764685,
+      "clip_t": 0.235107421875,
+      "vbench_q": 0.6407352988959386,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9991763758162657,
+        "background_consistency": 0.9930196126302083,
+        "motion_smoothness": 0.9971872112283993,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6622778177261353,
+        "imaging_quality": 0.7542311518645484,
+        "vbench_q": 0.6407352988959386
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza"
+    },
+    {
+      "request_index": 0,
+      "uuid": "hamburger-to-pizza-target-000",
+      "pair_id": "hamburger-to-pizza",
+      "prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 240.58988125389442,
+      "end_to_end_seconds": 240.58988125389442,
+      "denoising_seconds": 204.69088330306113,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287438,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "5ae91e39c93019a7d5d207680cbb5d71462f0622de02cdab2ad72a70567156d1",
+        "cache/source_dense/latents_step_049.pt": "9f93deaf93960fe74555668fc5998a36f7530fab17b34928af3b3e823cfaa2a7",
+        "cache/source_dense/fusion_masks/masks.pt": "cef4a4253f0a9b90abee5782cbc8731884f7e71f6b278683b28d713dfee2ef29",
+        "cache/source_dense/outer_block_masks/metadata.json": "d34611e6f9dab9355503942ab2c5db3461e15f7ea8e715313c6643a7a47070e3",
+        "videos/source_dense.mp4": "0e15299bf952091ad8e811ae7ee522d1957157835a99b4ea852679fc0750aea9"
+      },
+      "speedup_vs_dense": 1.3424260272109914,
+      "speedup_end_to_end_vs_dense": 1.2745378118303705,
+      "clip_t": 0.306396484375,
+      "vbench_q": 0.6394992896583619,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9892712334791819,
+        "background_consistency": 0.987646484375,
+        "motion_smoothness": 0.9949460784071954,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6688038110733032,
+        "imaging_quality": 0.7660080113686806,
+        "vbench_q": 0.6394992896583619
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza"
+    },
+    {
+      "request_index": 0,
+      "uuid": "hamburger-to-pizza-target-000",
+      "pair_id": "hamburger-to-pizza",
+      "prompt": "a pizza is resting on a white plate, focus on the pizza",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 164.7725635659881,
+      "end_to_end_seconds": 164.7725635659881,
+      "denoising_seconds": 137.25844777328894,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288390,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "5ae91e39c93019a7d5d207680cbb5d71462f0622de02cdab2ad72a70567156d1",
+        "cache/source_dense/latents_step_049.pt": "9f93deaf93960fe74555668fc5998a36f7530fab17b34928af3b3e823cfaa2a7",
+        "cache/source_dense/fusion_masks/masks.pt": "cef4a4253f0a9b90abee5782cbc8731884f7e71f6b278683b28d713dfee2ef29",
+        "cache/source_dense/outer_block_masks/metadata.json": "d34611e6f9dab9355503942ab2c5db3461e15f7ea8e715313c6643a7a47070e3",
+        "videos/source_dense.mp4": "0e15299bf952091ad8e811ae7ee522d1957157835a99b4ea852679fc0750aea9"
+      },
+      "speedup_vs_dense": 2.001934115798086,
+      "speedup_end_to_end_vs_dense": 1.8609949020976646,
+      "clip_t": 0.1943359375,
+      "vbench_q": 0.6431210571983172,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9995164168377717,
+        "background_consistency": 0.9926615397135417,
+        "motion_smoothness": 0.9971377156212864,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.7043089866638184,
+        "imaging_quality": 0.728969151520532,
+        "vbench_q": 0.6431210571983172
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/hamburger-to-pizza"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lighthouse-to-windmill-target-000",
+      "pair_id": "lighthouse-to-windmill",
+      "prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 307.3967931927182,
+      "end_to_end_seconds": 307.3967931927182,
+      "denoising_seconds": 274.60597922001034,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.32861328125,
+      "vbench_q": 0.6325871161989048,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9825347306827704,
+        "background_consistency": 0.9861735026041667,
+        "motion_smoothness": 0.9929124413027719,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6074737310409546,
+        "imaging_quality": 0.7964958518792775,
+        "vbench_q": 0.6325871161989048
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 240.51850271085277,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/videos/target.mp4",
+      "output_hash": "fd5a7293340471bea612d432ee1111c6e92dbcb7ec4f96bea3f581256d126f87",
+      "cache_bytes": 13421298,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 213.39931548479944,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.0005612662062048912,
+          "cache_load_s": 0.021710663102567196,
+          "generation_s": 237.84918052097782,
+          "save_video_s": 2.637304868083447,
+          "hash_s": 0.009739322122186422,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 240.51850271085277
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "lighthouse-to-windmill",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 240.51850271085277,
+      "denoising_seconds": 237.84918052097782,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288111,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "010ffc11d694f22f226ccaa939c56c899c650432c760062e4ca30a55f4c38e9b",
+        "cache/source_dense/latents_step_049.pt": "80c270ff73535bf83eeed52fa08cdd9f69f1d734505b2ac2d3fe7f3f20653d38",
+        "cache/source_dense/fusion_masks/masks.pt": "a7b44293b6bc36ab134266e023d946ec9b6ee77bdb3372add83b4fd4fd070e43",
+        "cache/source_dense/outer_block_masks/metadata.json": "203dd05f5a41bd203e4ab3f873368bea3e26d37b9a74889353277dbcfcf93896",
+        "videos/source_dense.mp4": "647978eda00e80fb650cb611a358fc874e8e28f1642c020da8359cc5e4c73e9c"
+      },
+      "speedup_vs_dense": 1.154538260836222,
+      "speedup_end_to_end_vs_dense": 1.2780588176297827,
+      "clip_t": 0.26611328125,
+      "vbench_q": 0.6362539268531497,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9955742135643959,
+        "background_consistency": 0.9931986490885417,
+        "motion_smoothness": 0.993817679441667,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6170057654380798,
+        "imaging_quality": 0.7843128116071716,
+        "vbench_q": 0.6362539268531497
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 251.95664035202935,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/chorus/videos/target.mp4",
+      "output_hash": "400057f2fd52a5c3a05d084b651a348400680dbf2b5871ac68bac75a2e37b212",
+      "cache_bytes": 13158787,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 180.46420113742352,
+        "chorus_llm": {
+          "source_entities": [
+            "lighthouse",
+            "rocky coast"
+          ],
+          "target_entities": [
+            "windmill",
+            "rocky coast"
+          ],
+          "removed_tokens": [
+            "lighthouse"
+          ],
+          "added_tokens": [
+            "windmill"
+          ],
+          "edit_summary": "Replaced 'lighthouse' with 'windmill' while keeping the 'rocky coast' setting and focus instruction.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 16.422
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "lighthouse rocky coast",
+          "boxes": 2,
+          "box_confidence_max": 0.6477,
+          "pixel_edit_fraction": 0.1882,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.1862,
+          "base_token_fraction": 0.2266,
+          "edit_fraction": 0.6653,
+          "see_fraction": 0.8071,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 45.52869267901406,
+        "chorus_llm_s": 16.424876199103892,
+        "chorus_sam_s": 29.103816479910165,
+        "excluded_latency_s": 45.52869267901406,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.6653,
+            "see_fraction": 0.8071,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.00011571589857339859,
+          "cache_load_s": 0.0006396463140845299,
+          "generation_s": 249.37955736508593,
+          "save_video_s": 2.560524667147547,
+          "hash_s": 0.01579878805205226,
+          "preprocess_breakdown_s": 45.52869267901406,
+          "excluded_preprocess_s": 45.52869267901406,
+          "reported_latency_s": 251.95664035202935
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "lighthouse-to-windmill",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 251.95664035202935,
+      "denoising_seconds": 203.85086468607187,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287740,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "010ffc11d694f22f226ccaa939c56c899c650432c760062e4ca30a55f4c38e9b",
+        "cache/source_dense/latents_step_049.pt": "80c270ff73535bf83eeed52fa08cdd9f69f1d734505b2ac2d3fe7f3f20653d38",
+        "cache/source_dense/fusion_masks/masks.pt": "a7b44293b6bc36ab134266e023d946ec9b6ee77bdb3372add83b4fd4fd070e43",
+        "cache/source_dense/outer_block_masks/metadata.json": "203dd05f5a41bd203e4ab3f873368bea3e26d37b9a74889353277dbcfcf93896",
+        "videos/source_dense.mp4": "647978eda00e80fb650cb611a358fc874e8e28f1642c020da8359cc5e4c73e9c"
+      },
+      "speedup_vs_dense": 1.3470925406320968,
+      "speedup_end_to_end_vs_dense": 1.2200384667902733,
+      "clip_t": 0.258056640625,
+      "vbench_q": 0.6294182352725523,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9932407759130001,
+        "background_consistency": 0.988641357421875,
+        "motion_smoothness": 0.9945624160086619,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.568251371383667,
+        "imaging_quality": 0.792287022614282,
+        "vbench_q": 0.6294182352725523
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lighthouse-to-windmill-target-000",
+      "pair_id": "lighthouse-to-windmill",
+      "prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 229.04358323803172,
+      "end_to_end_seconds": 229.04358323803172,
+      "denoising_seconds": 201.5512380967848,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287818,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "010ffc11d694f22f226ccaa939c56c899c650432c760062e4ca30a55f4c38e9b",
+        "cache/source_dense/latents_step_049.pt": "80c270ff73535bf83eeed52fa08cdd9f69f1d734505b2ac2d3fe7f3f20653d38",
+        "cache/source_dense/fusion_masks/masks.pt": "a7b44293b6bc36ab134266e023d946ec9b6ee77bdb3372add83b4fd4fd070e43",
+        "cache/source_dense/outer_block_masks/metadata.json": "203dd05f5a41bd203e4ab3f873368bea3e26d37b9a74889353277dbcfcf93896",
+        "videos/source_dense.mp4": "647978eda00e80fb650cb611a358fc874e8e28f1642c020da8359cc5e4c73e9c"
+      },
+      "speedup_vs_dense": 1.3624623783662628,
+      "speedup_end_to_end_vs_dense": 1.3420886490116535,
+      "clip_t": 0.328369140625,
+      "vbench_q": 0.6320647340064443,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9844079566498597,
+        "background_consistency": 0.987005615234375,
+        "motion_smoothness": 0.9929091671153941,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6014111638069153,
+        "imaging_quality": 0.7956700607173698,
+        "vbench_q": 0.6320647340064443
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill"
+    },
+    {
+      "request_index": 0,
+      "uuid": "lighthouse-to-windmill-target-000",
+      "pair_id": "lighthouse-to-windmill",
+      "prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 174.33624473633245,
+      "end_to_end_seconds": 174.33624473633245,
+      "denoising_seconds": 145.09522080933675,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288770,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "010ffc11d694f22f226ccaa939c56c899c650432c760062e4ca30a55f4c38e9b",
+        "cache/source_dense/latents_step_049.pt": "80c270ff73535bf83eeed52fa08cdd9f69f1d734505b2ac2d3fe7f3f20653d38",
+        "cache/source_dense/fusion_masks/masks.pt": "a7b44293b6bc36ab134266e023d946ec9b6ee77bdb3372add83b4fd4fd070e43",
+        "cache/source_dense/outer_block_masks/metadata.json": "203dd05f5a41bd203e4ab3f873368bea3e26d37b9a74889353277dbcfcf93896",
+        "videos/source_dense.mp4": "647978eda00e80fb650cb611a358fc874e8e28f1642c020da8359cc5e4c73e9c"
+      },
+      "speedup_vs_dense": 1.8925914836358255,
+      "speedup_end_to_end_vs_dense": 1.7632408777510815,
+      "clip_t": 0.264404296875,
+      "vbench_q": 0.6356186786968439,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9949733744064967,
+        "background_consistency": 0.993255615234375,
+        "motion_smoothness": 0.9938259788448208,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6114029884338379,
+        "imaging_quality": 0.786107503717596,
+        "vbench_q": 0.6356186786968439
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill"
+    },
+    {
+      "request_index": 0,
+      "uuid": "sunflower-to-tulip-target-000",
+      "pair_id": "sunflower-to-tulip",
+      "prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "model": "Wan2.2",
+      "method": "dense_baseline",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": false,
+        "kind": "not_applicable"
+      },
+      "executed_steps": 50,
+      "latency_s": 307.2338346131146,
+      "end_to_end_seconds": 307.2338346131146,
+      "denoising_seconds": 275.44697225792333,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/dense_baseline/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/dense_baseline/videos/target.mp4",
+      "actual_gpu": 3,
+      "speedup_vs_dense": 1.0,
+      "speedup_end_to_end_vs_dense": 1.0,
+      "clip_t": 0.313232421875,
+      "vbench_q": 0.6299940974861944,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9910219274461269,
+        "background_consistency": 0.9941975911458333,
+        "motion_smoothness": 0.9923529919484365,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6965187788009644,
+        "imaging_quality": 0.6705725743947936,
+        "vbench_q": 0.6299940974861944
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "model": "Wan2.2",
+      "method": "nirvana_vid",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 240.4349148850888,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/nirvana_vid/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/nirvana_vid/videos/target.mp4",
+      "output_hash": "61014ae0c9ff3b915890c10433cb9b8cdc443c4683e3963e4ce7da91d3287266",
+      "cache_bytes": 9955013,
+      "extra": {
+        "executed_steps": 40,
+        "restart_step": 10,
+        "source_trajectory": true,
+        "cache_steps": [
+          10
+        ],
+        "dit_forward_s": 214.06982894521207,
+        "dense_c0": null,
+        "timing": {
+          "cache_lookup_s": 0.00028529437258839607,
+          "cache_load_s": 0.0068171401508152485,
+          "generation_s": 237.7796481139958,
+          "save_video_s": 2.640668038278818,
+          "hash_s": 0.007492527831345797,
+          "preprocess_breakdown_s": 0.0,
+          "excluded_preprocess_s": 0.0,
+          "reported_latency_s": 240.4349148850888
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "latent": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache/source_dense/latents_step_009.pt",
+          "completed_step": 10,
+          "reuse_start_step": 10
+        }
+      },
+      "pair_id": "sunflower-to-tulip",
+      "actual_gpu": 4,
+      "end_to_end_seconds": 240.4349148850888,
+      "denoising_seconds": 237.7796481139958,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287490,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/nirvana_vid",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "33b3e1da4b624671aeb422f4bfe3d62d6021eee743cf6a7b33726b1c435668e5",
+        "cache/source_dense/latents_step_049.pt": "1316610201235f0310e762193cc0bb421a0c9136e4265189c908365abd65979a",
+        "cache/source_dense/fusion_masks/masks.pt": "4b27b15c7dc2a7d5586db301b58a87444bfe321e1790ea7be4ed724146772f94",
+        "cache/source_dense/outer_block_masks/metadata.json": "74159d578b477c41b012f75a65084205ee3182f5bb57082768138294b37b1ee9",
+        "videos/source_dense.mp4": "39c5612cae095ca4dff4ee20163d657804e80cc65cb75fc78825c1f82c874a1c"
+      },
+      "speedup_vs_dense": 1.1584127339858337,
+      "speedup_end_to_end_vs_dense": 1.277825372242426,
+      "clip_t": 0.2237548828125,
+      "vbench_q": 0.6279816635720563,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9869168892502784,
+        "background_consistency": 0.976239013671875,
+        "motion_smoothness": 0.9910993602297097,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6483975052833557,
+        "imaging_quality": 0.7384968396651843,
+        "vbench_q": 0.6279816635720563
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip"
+    },
+    {
+      "request_index": 0,
+      "uuid": "target-000",
+      "prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "model": "Wan2.2",
+      "method": "chorus",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 232.48173689702526,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus/videos/target.mp4",
+      "output_hash": "d539768d6fe8ef8d3d224011a6f483d3f4630f4d8a48bf946ce5835fea6c928a",
+      "cache_bytes": 9397291,
+      "extra": {
+        "chorus_stage": "target_reuse",
+        "chorus_stages": {
+          "steps": 50,
+          "k1": 10,
+          "k2": 30,
+          "stage1": [
+            0,
+            10
+          ],
+          "stage2": [
+            10,
+            30
+          ],
+          "stage3": [
+            30,
+            50
+          ]
+        },
+        "executed_steps": 40,
+        "dit_forward_s": 158.30796895502135,
+        "chorus_llm": {
+          "source_entities": [
+            "sunflower",
+            "garden"
+          ],
+          "target_entities": [
+            "tulip",
+            "garden"
+          ],
+          "removed_tokens": [
+            "sunflower"
+          ],
+          "added_tokens": [
+            "tulip"
+          ],
+          "edit_summary": "Replaced the flower type from sunflower to tulip while keeping the garden setting and swaying motion.",
+          "backend": "dmxapi",
+          "model": "qwen3.5-plus-2026-02-15",
+          "latency_s": 22.27
+        },
+        "chorus_mask": {
+          "backend": "grounded_sam2",
+          "release": "v1.0",
+          "commit": "dd4c514",
+          "sam_checkpoint": "sam2.1_hiera_large.pt",
+          "groundingdino_checkpoint": "groundingdino_swint_ogc.pth",
+          "phrase": "sunflower garden",
+          "boxes": 1,
+          "box_confidence_max": 0.8702,
+          "pixel_edit_fraction": 0.0861,
+          "grid": [
+            31,
+            22,
+            40
+          ],
+          "base_fraction": 0.0866,
+          "base_token_fraction": 0.1036,
+          "edit_fraction": 0.3811,
+          "see_fraction": 0.6094,
+          "dilation": {
+            "edit": 8,
+            "see": 14
+          },
+          "pooling": "max",
+          "update_mask": "Medit"
+        },
+        "chorus_preprocess_s": 47.45968945976347,
+        "chorus_llm_s": 22.27058372972533,
+        "chorus_sam_s": 25.189105730038136,
+        "excluded_latency_s": 47.45968945976347,
+        "chorus_tgaa": {
+          "enabled": true,
+          "gamma_k": 1.5,
+          "gamma_o": 1.5,
+          "schedule": "linear_step_decay_approximation",
+          "paper_exact_schedule": "not specified",
+          "scope": "stage2",
+          "blocks": "all",
+          "calls": 1200
+        },
+        "chorus_scheduler": {
+          "stage3_history_reset": true,
+          "stage3_history_reset_step": 30,
+          "stage3_history_reset_semantics": "clear UniPC derivative history while preserving the global timestep index"
+        },
+        "chorus_cache": {
+          "source_trajectory_steps": 50,
+          "format": "per_step_manifest",
+          "stage2_latent_fusion": true,
+          "latent_fusion_update_mask": "Medit",
+          "latent_fusion_from_step": 10,
+          "latent_fusion_through_step": 29,
+          "latent_fusion_semantics": "source latent fused only during Stage 2; Stage 3 disables latent reuse",
+          "srd": {
+            "enabled": true,
+            "update_mask": "Medit",
+            "edit_fraction": 0.3811,
+            "see_fraction": 0.6094,
+            "self_attention": "Medit queries / Msee keys-values",
+            "cross_attention": "Medit queries",
+            "ffn": "Medit tokens"
+          }
+        },
+        "timing": {
+          "cache_lookup_s": 0.0003547598607838154,
+          "cache_load_s": 0.0012491517700254917,
+          "generation_s": 229.95830315724015,
+          "save_video_s": 2.5119336913339794,
+          "hash_s": 0.009887075051665306,
+          "preprocess_breakdown_s": 47.45968945976347,
+          "excluded_preprocess_s": 47.45968945976347,
+          "reported_latency_s": 232.48173689702526
+        },
+        "shared_cache": {
+          "mode": "shared_dense",
+          "payload": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+          "source_cache": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache/source_dense",
+          "source_video": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/videos/source_dense.mp4"
+        }
+      },
+      "pair_id": "sunflower-to-tulip",
+      "actual_gpu": 5,
+      "end_to_end_seconds": 232.48173689702526,
+      "denoising_seconds": 182.49861369747669,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287124,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "33b3e1da4b624671aeb422f4bfe3d62d6021eee743cf6a7b33726b1c435668e5",
+        "cache/source_dense/latents_step_049.pt": "1316610201235f0310e762193cc0bb421a0c9136e4265189c908365abd65979a",
+        "cache/source_dense/fusion_masks/masks.pt": "4b27b15c7dc2a7d5586db301b58a87444bfe321e1790ea7be4ed724146772f94",
+        "cache/source_dense/outer_block_masks/metadata.json": "74159d578b477c41b012f75a65084205ee3182f5bb57082768138294b37b1ee9",
+        "videos/source_dense.mp4": "39c5612cae095ca4dff4ee20163d657804e80cc65cb75fc78825c1f82c874a1c"
+      },
+      "speedup_vs_dense": 1.5093099431129093,
+      "speedup_end_to_end_vs_dense": 1.3215396560341417,
+      "clip_t": 0.260498046875,
+      "vbench_q": 0.6243270646673437,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9852070537706216,
+        "background_consistency": 0.9693990071614583,
+        "motion_smoothness": 0.9921967604197613,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6403824687004089,
+        "imaging_quality": 0.7288164381547407,
+        "vbench_q": 0.6243270646673437
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip"
+    },
+    {
+      "request_index": 0,
+      "uuid": "sunflower-to-tulip-target-000",
+      "pair_id": "sunflower-to-tulip",
+      "prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "model": "Wan2.2",
+      "method": "chorus2",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 50,
+      "latency_s": 239.19268142106012,
+      "end_to_end_seconds": 239.19268142106012,
+      "denoising_seconds": 203.11529687326401,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus2/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/chorus2/videos/target.mp4",
+      "actual_gpu": 6,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338287200,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus2/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/chorus2",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "33b3e1da4b624671aeb422f4bfe3d62d6021eee743cf6a7b33726b1c435668e5",
+        "cache/source_dense/latents_step_049.pt": "1316610201235f0310e762193cc0bb421a0c9136e4265189c908365abd65979a",
+        "cache/source_dense/fusion_masks/masks.pt": "4b27b15c7dc2a7d5586db301b58a87444bfe321e1790ea7be4ed724146772f94",
+        "cache/source_dense/outer_block_masks/metadata.json": "74159d578b477c41b012f75a65084205ee3182f5bb57082768138294b37b1ee9",
+        "videos/source_dense.mp4": "39c5612cae095ca4dff4ee20163d657804e80cc65cb75fc78825c1f82c874a1c"
+      },
+      "speedup_vs_dense": 1.3561114130650211,
+      "speedup_end_to_end_vs_dense": 1.284461684980566,
+      "clip_t": 0.31640625,
+      "vbench_q": 0.627499701373342,
+      "vbench_dimensions": {
+        "subject_consistency": 0.989199319978555,
+        "background_consistency": 0.9910563151041667,
+        "motion_smoothness": 0.9923369811056723,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6951698064804077,
+        "imaging_quality": 0.6614462359089497,
+        "vbench_q": 0.627499701373342
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip"
+    },
+    {
+      "request_index": 0,
+      "uuid": "sunflower-to-tulip-target-000",
+      "pair_id": "sunflower-to-tulip",
+      "prompt": "a tulip is swaying in a garden, focus on the tulip",
+      "model": "Wan2.2",
+      "method": "carnator_boundary_b5",
+      "seed": 20260218,
+      "cache_match": {
+        "hit": true,
+        "kind": "shared_dense"
+      },
+      "executed_steps": 40,
+      "latency_s": 187.4731176518835,
+      "end_to_end_seconds": 187.4731176518835,
+      "denoising_seconds": 157.21333110518754,
+      "status": "ok",
+      "output_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/videos/target.mp4",
+      "quality_input_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/carnator_boundary_b5/videos/target.mp4",
+      "actual_gpu": 7,
+      "source_cache_pruned": true,
+      "source_cache_bytes_freed": 6338288150,
+      "source_cache_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/carnator_boundary_b5/cache",
+      "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/carnator_boundary_b5",
+      "source_fingerprint": {
+        "cache/source_dense/latents_initial.pt": "9acc3f68cd1d36e9fc05a130a578e290c4d771164af8de79c84a264e810354a1",
+        "cache/source_dense/latents_step_009.pt": "33b3e1da4b624671aeb422f4bfe3d62d6021eee743cf6a7b33726b1c435668e5",
+        "cache/source_dense/latents_step_049.pt": "1316610201235f0310e762193cc0bb421a0c9136e4265189c908365abd65979a",
+        "cache/source_dense/fusion_masks/masks.pt": "4b27b15c7dc2a7d5586db301b58a87444bfe321e1790ea7be4ed724146772f94",
+        "cache/source_dense/outer_block_masks/metadata.json": "74159d578b477c41b012f75a65084205ee3182f5bb57082768138294b37b1ee9",
+        "videos/source_dense.mp4": "39c5612cae095ca4dff4ee20163d657804e80cc65cb75fc78825c1f82c874a1c"
+      },
+      "speedup_vs_dense": 1.7520586220110597,
+      "speedup_end_to_end_vs_dense": 1.6388154123708192,
+      "clip_t": 0.210205078125,
+      "vbench_q": 0.624612208206399,
+      "vbench_dimensions": {
+        "subject_consistency": 0.9858841980497043,
+        "background_consistency": 0.9765299479166667,
+        "motion_smoothness": 0.9910592941130051,
+        "dynamic_degree": 0.0,
+        "aesthetic_quality": 0.6428484320640564,
+        "imaging_quality": 0.7217335428285204,
+        "vbench_q": 0.624612208206399
+      },
+      "pair_root": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip"
+    }
+  ]
+}

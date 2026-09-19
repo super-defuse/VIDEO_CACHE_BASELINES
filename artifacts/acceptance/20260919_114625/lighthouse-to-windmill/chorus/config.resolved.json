@@ -1,0 +1,11 @@
+{
+  "method": "chorus",
+  "source_prompt": "a lighthouse is standing on a rocky coast, focus on the lighthouse",
+  "target_prompt": "a windmill is standing on a rocky coast, focus on the windmill",
+  "seed": 20260218,
+  "shared_cache_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/_sources/chorus/cache/shared_dense/manifest.json",
+  "chorus_k1": 10,
+  "chorus_k2": 30,
+  "chorus_gamma_k": 1.5,
+  "chorus_gamma_o": 1.5
+}

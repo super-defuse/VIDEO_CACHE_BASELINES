@@ -57,7 +57,8 @@
 | chorus2 | ❌ 全部立即失败 | `KeyError: 'chorus2'` |
 | carnator | ❌ 全部失败 | `KeyError: 'chorus'` |
 
-**根因**：`scripts/run_5baselines_10samples*.py` 的配置拼装错误——
+**根因**：`run_5baselines_10samples*.py`（已归档到
+`_archive/superseded-scripts/`）的配置拼装错误——
 ① 对 chorus2 误用 `"chorus"` 作为配置键；② 为 carnator 漏配其当时依赖的 `"chorus"` 键。
 
 **已修复**：配置键改用 `method` 变量本身。同时 Carnator 不再依赖 `chorus` 配置
@@ -173,7 +174,8 @@ cogvideo 环境的 0.35.2，而 0.40.0 在该环境连 pipeline 都 import 不�
 正好把这条路关掉了。Wan/LTX 没有这个问题，因为它们的整条链路都跑在 `wan` 环境里，而该环境
 自带 `supervision` 0.22.0。
 
-> 9 月 9 日那版 `run_5baselines_10samples` 里 chorus 能跑通，是因为当时**没有**设
+> 9 月 9 日那版 `run_5baselines_10samples`（现已在
+> `_archive/superseded-scripts/`）里 chorus 能跑通，是因为当时**没有**设
 > `PYTHONNOUSERSITE`，`supervision` 从 `~/.local` 溜了进来（旧日志里能同时看到
 > `~/.local/.../timm/` 和 `conda_envs/cogvideo/.../torch/` 两条路径）。换成正式的
 > `PYTHONNOUSERSITE=1` 口径后这个隐式依赖才暴露出来。

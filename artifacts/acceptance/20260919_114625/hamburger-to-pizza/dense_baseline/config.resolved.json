@@ -1,0 +1,8 @@
+{
+  "method": "dense_baseline",
+  "source_prompt": "a hamburger is resting on a white plate, focus on the hamburger",
+  "target_prompt": "a pizza is resting on a white plate, focus on the pizza",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "model_dtype": "fp16"
+}

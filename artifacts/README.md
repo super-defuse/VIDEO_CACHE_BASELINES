@@ -6,14 +6,15 @@
 
 ## 当前验收
 
-`acceptance/` 下的四轮 Wan2.2-TI2V-5B 验收：
+`acceptance/` 下的五轮 Wan2.2-TI2V-5B 验收：
 
 | 运行 | Prompt 对 | 协议 | 口径 |
 | --- | ---: | --- | --- |
 | `wan22-ti2v-5b-dog-to-cat/` | 1（dog→cat） | 共享 source cache、单卡串行 | 18 条 baseline 的冻结参考表，见 [docs/ACCEPTANCE.md](../docs/ACCEPTANCE.md) |
 | `20260902_174245/` | 1（dog→cat） | 共享 source cache、单卡（GPU0） | 六基线，含 TeaCache；旧布局 |
 | `20260918_172444/` | 1（dog→cat） | 每条基线各自 source、GPU3--7 并发 | 五基线；新布局的单 pair 对齐 |
-| `20260918_183809/` | 5 | 每条基线各自 source、GPU3--7 并发 | 五基线；均值表见 [docs/ACCEPTANCE.md](../docs/ACCEPTANCE.md) |
+| `20260918_183809/` | 5（动物） | 每条基线各自 source、GPU3--7 并发 | 五基线；均值表见 [docs/ACCEPTANCE.md](../docs/ACCEPTANCE.md) |
+| `20260919_114625/` | 5（非动物） | 每条基线各自 source、GPU3--7 并发 | 五基线；prompt 为 `configs/experiments/acceptance_prompt_pairs_nonanimal.jsonl` |
 
 编排入口是 [scripts/run/run_acceptance_experiment.py](../scripts/run/run_acceptance_experiment.py)，
 协议见 [docs/ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md](../docs/ACCEPTANCE_MULTI_PROMPT_RUNNER_PLAN.md)。

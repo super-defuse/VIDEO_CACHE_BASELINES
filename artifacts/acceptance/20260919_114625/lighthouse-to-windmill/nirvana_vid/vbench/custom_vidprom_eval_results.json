@@ -1,0 +1,58 @@
+{
+    "subject_consistency": [
+        0.9955742135643959,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": 0.9955742135643959
+            }
+        ]
+    ],
+    "background_consistency": [
+        0.9931986490885417,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": 0.9931986490885417,
+                "video_sim": 119.183837890625,
+                "cnt_per_video": 120
+            }
+        ]
+    ],
+    "motion_smoothness": [
+        0.993817679441667,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": 0.993817679441667
+            }
+        ]
+    ],
+    "dynamic_degree": [
+        0.0,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": false
+            }
+        ]
+    ],
+    "aesthetic_quality": [
+        0.6170057654380798,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": 0.6170057654380798
+            }
+        ]
+    ],
+    "imaging_quality": [
+        0.7843128116071716,
+        [
+            {
+                "video_path": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/lighthouse-to-windmill/nirvana_vid/vbench/input_videos_21ac520aa0d94555/0000_target-000.mp4",
+                "video_results": 78.43128116071716
+            }
+        ]
+    ]
+}

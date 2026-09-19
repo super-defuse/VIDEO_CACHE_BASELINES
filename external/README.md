@@ -38,7 +38,8 @@ by `scripts/create_environments.sh` into the `vbench` environment.
 `wan2.2` and `Wan2.1` are patched forks, not upstream checkouts, because the
 baselines depend on local changes to the model runtime. For `Wan2.1` the patch
 is a single commit on top of upstream `9737cba`: `masks_like` in
-`wan/utils/utils.py` (imported by `scripts/dev/check_wan21_preflight.py`) and a
+`wan/utils/utils.py` (imported by `carnator/adapters/wan21_native.py` and
+`carnator/adapters/wan_ti2v_5b.py`) and a
 position reshape in `wan/modules/model.py`. Do not repoint these entries at the
 upstream URLs, or a fresh clone silently loses the patches.
 

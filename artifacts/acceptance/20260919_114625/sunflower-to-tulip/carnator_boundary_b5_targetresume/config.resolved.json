@@ -1,0 +1,13 @@
+{
+  "method": "carnator_boundary_b5_targetresume",
+  "source_prompt": "a sunflower is swaying in a garden, focus on the sunflower",
+  "target_prompt": "a tulip is swaying in a garden, focus on the tulip",
+  "seed": 20260218,
+  "model_path": "/home/tangxuebin/models/Wan2.2-TI2V-5B",
+  "latent_injection_mode": "boundary-blend",
+  "baseline": "B5",
+  "boundary_alpha_function": "smoothstep",
+  "source_run_dir": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/_sources/carnator_boundary_b5_targetresume",
+  "target_dense_manifest": "/home/tangxuebin/project/VIDEO_CACHE_BASELINES/artifacts/acceptance/20260919_114625/sunflower-to-tulip/dense_baseline/cache/target_dense/manifest.json",
+  "target_resume_from_target_prefix": true
+}
